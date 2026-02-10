@@ -1,0 +1,1348 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Bài 1b: Giới thiệu về học máy</title>
+
+  <link rel="stylesheet" href="revealjs/dist/reset.css" />
+  <link rel="stylesheet" href="revealjs/dist/reveal.css" />
+  <link rel="stylesheet" href="revealjs/dist/theme/white.css" />
+  <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+  <link rel="stylesheet" href="lecture-style.css" />
+</head>
+
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- Trang bìa -->
+      <section>
+        <section>
+          <h1>Học máy</h1>
+          <h3>Bài 1b: Giới thiệu về học máy</h3>
+          <p>Trường ĐH Công nghệ – Đại học Quốc gia Hà Nội</p>
+        </section>
+
+        <section>
+          <h2>Nội dung</h2>
+          <ol>
+            <li>Học máy (Machine Learning) là gì? <a href="#hoc-may-la-gi">→</a></li>
+            <li>Bài toán học <a href="#bai-toan-hoc">→</a></li>
+            <li>Dự đoán (Prediction) vs. Diễn giải (Inference) <a href="#du-doan-vs-dien-giai">→</a></li>
+            <li>Chọn mô hình <a href="#chon-mo-hinh">→</a></li>
+            <li>Các kiểu học <a href="#cac-kieu-hoc">→</a></li>
+            <li>Đánh giá mô hình học máy <a href="#danh-gia-mo-hinh-hoc-may">→</a></li>
+            <li>Bias–Variance <a href="#bias-variance">→</a></li>
+            <li>Phát triển và triển khai mô hình học máy <a href="#phat-trien-va-trien-khai-mo-hinh-hoc-may">→</a></li>
+            <li>Khi nào dùng học máy? <a href="#khi-nao-dung-hoc-may">→</a></li>
+          </ol>
+        </section>
+      </section>
+
+      <!-- 1. ML là gì? -->
+      <section>
+        <section id="hoc-may-la-gi">
+          <h1>
+            <span class="text-light">1.</span><br />
+            Học máy là gì?
+          </h1>
+        </section>
+
+        <section>
+          <h2>2016/2017</h2>
+          <h4>Học máy đánh bại nhà vô địch Cờ vây thế giới</h4>
+          <img src="img/lec01b/nha-vo-dich-co-vay-giai-nghe-vi-AI.png" alt="Nhà vô địch Cờ vây giải nghệ vì AI"
+            style="width: 40%; border: 1px solid black; border-radius: 5px;" />
+        </section>
+
+        <section>
+          <h2>2018/2019</h2>
+          <h4>Học máy đánh bại game thủ StarCraft</h4>
+          <img src="img/lec01b/game-thu-starcraft-2-dai-bai-truoc-AI-google.png"
+            alt="Game thủ StarCraft 2 đại bại trước AI Google"
+            style="width: 40%; border: 1px solid black; border-radius: 5px;" />
+        </section>
+
+        <section>
+          <h2>2020</h2>
+          <h4>Học máy phát hiện ra kháng sinh</h4>
+          <img src="img/lec01b/ai-phat-hien-khang-sinh.png" alt="AI phát hiện kháng sinh"
+            style="width: 100%; border: 1px solid black; border-radius: 5px;" />
+        </section>
+
+        <section>
+          <h2>2020</h2>
+          <h4>Học máy sinh văn bản có ngôn ngữ mạch lạc</h4>
+          <img src="img/lec01b/robot-viet-bao.png" alt="Robot viết báo"
+            style="width: 50%; border: 1px solid black; border-radius: 5px;" />
+          <p style="text-align: right; font-size: .5em; color: gray;">(Brown et al., 2020)</p>
+        </section>
+
+        <section>
+          <h2>2022</h2>
+          <h4>Học máy tạo hình ảnh từ mô tả văn bản</h4>
+          <!-- Two columns -->
+          <div style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+            <div>
+              <img src="img/lec01b/anh-dalle-2.png" alt="Ảnh DALL·E 2" style="width: 60%;" />
+            </div>
+            <div>
+              <em>"Leonardo da Vinci early sketches of a cyborg"</em>
+            </div>
+          </div>
+          <p style="text-align: right; font-size: .5em; color: gray;">(Stokes et al., 2022)</p>
+        </section>
+
+        <section>
+          <h2>Từ năm 2022 đến nay</h2>
+          <h4>Mô hình ngôn ngữ lớn</h4>
+          <img src="img/lec01b/gemini-3-expl.png" alt="Gemini 3 Explains"
+            style="width: 60%; border: 1px solid black; border-radius: 5px;" />
+        </section>
+
+        <section>
+          <h2>Học máy là gì?</h2>
+          <ul>
+            <li>Thay vì các luật cứng (if/else) → <strong>học từ dữ liệu</strong>.</li>
+            <li>Đầu ra: <strong>dự đoán</strong>, <strong>phân loại</strong>, <strong>ra quyết định</strong>.</li>
+            <li>Học máy = <strong>mô hình</strong> + <strong>dữ liệu</strong> + <strong>đánh giá</strong>.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Thuật toán Học máy</h2>
+          <ul>
+            <li>\(T\) <strong>(Task):</strong> nhiệm vụ cần làm.</li>
+            <li>\(P\) <strong>(Performance):</strong> độ đo hiệu năng.</li>
+            <li>\(E\) <strong>(Experience):</strong> kinh nghiệm/dữ liệu.</li>
+          </ul>
+          <p>
+            Thuật toán \(\mathcal{A}\) “học” từ kinh nghiệm \(E\) khi \(P\) của \(\mathcal{A}\) tăng trên \(T\) nhờ
+            \(E\).
+          </p>
+        </section>
+
+        <section>
+          <img src="img/lec01b/t-p-e-chart.png" alt="T-P-E Chart" style="width: 100%;" />
+        </section>
+
+        <section>
+          <h2>Ví dụ: <strong>Phân loại email</strong></h2>
+          <ul>
+            <li>\(T\) <strong>(Task):</strong> phân loại email spam/không spam.</li>
+            <li>\(P\) <strong>(Performance):</strong> độ chính xác, precision/recall.</li>
+            <li>\(E\) <strong>(Experience):</strong> email đã gán nhãn.</li>
+          </ul>
+          <p>⭐️ Khi dữ liệu thay đổi → mô hình cần <strong>cập nhật</strong>.</p>
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ: <strong>MNIST</strong></h2>
+          <ul>
+            <li>\(T\) <strong>(Task):</strong> nhận dạng chữ số 0–9 từ ảnh.</li>
+            <li>\(P\) <strong>(Performance):</strong> độ chính xác.</li>
+            <li>\(E\) <strong>(Experience):</strong> ảnh chữ số đã gán nhãn.</li>
+          </ul>
+          <p>⭐️ MNIST được xem là “<strong>Hello World</strong>” của ML.</p>
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ: <strong>MNIST</strong></h2>
+          <img src="img/lec01b/MNIST_dataset_example.png" alt="MNIST Sample" style="width: 100%;" />
+        </section>
+
+        <section>
+          <h2>Vì sao học máy phát triển?</h2>
+          <ul>
+            <li><strong>Dữ liệu</strong> lớn hơn.</li>
+            <li><strong>Tính toán</strong> mạnh hơn (GPU/TPU).</li>
+            <li><strong>Mô hình</strong> &amp; thuật toán tốt hơn.</li>
+          </ul>
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ứng dụng của học máy</h2>
+          <h4>Ứng dụng tiêu biểu</h4>
+          <ul>
+            <li><strong>Tìm kiếm</strong> / <strong>gợi ý</strong> / <strong>quảng cáo</strong></li>
+            <li><strong>Thị giác</strong>: nhận dạng ảnh/khuôn mặt</li>
+            <li><strong>Ngôn ngữ</strong>: dịch, hỏi–đáp, trợ lý ảo</li>
+            <li><strong>Y tế</strong>, <strong>tài chính</strong>, <strong>an ninh</strong></li>
+          </ul>
+        </section>
+
+        <section data-auto-animate style="font-size: 0.6em;">
+          <h2>Ứng dụng của học máy</h2>
+
+          <!-- Two columns -->
+          <div style="display:grid;grid-template-columns:1fr .8fr;gap:16px;margin-top:12px;">
+            <div>
+              <h4>Dữ liệu <strong>tiền lương</strong></h4>
+              <ul>
+                <li>Đầu ra <strong>liên tục</strong> → bài toán <strong>hồi quy</strong></li>
+                <li><strong>Dữ liệu:</strong> 3000 bản ghi tiền lương của nam giới tại Mỹ</li>
+                <li><strong>Mục tiêu:</strong> hiểu mối liên hệ giữa <strong>tuổi</strong>, <strong>trình độ học
+                    vấn</strong>,
+                  <strong>năm</strong> và <strong>tiền lương</strong>
+                </li>
+              </ul>
+
+              <h4>Nhận xét</h4>
+              <ul>
+                <li>Tiền lương <strong>tăng theo tuổi</strong> trước <strong>60</strong>, và <strong>giảm theo
+                    tuổi</strong> sau
+                  <strong>60</strong>
+                </li>
+              </ul>
+            </div>
+
+            <div style="text-align: center;">
+              <div>
+                <img src="img/lec01b/age-wage-plot.png" alt="Age vs Wage Plot" style="width: 70%;" />
+              </div>
+              <p style="font-size: 0.8em; margin-top: 0.5em;">
+                <em>Trục dọc:</em> <strong>Tiền lương (nghìn $)</strong>
+                <br>
+                <em>Trục ngang:</em> <strong>Tuổi (năm)</strong><br />
+                <em>Biểu đồ phân tán</em>
+                <br>
+                <em>Đường màu xanh: trung bình làm trơn</em>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-auto-animate style="font-size: 0.6em;">
+          <h2>Ứng dụng của học máy</h2>
+
+          <!-- Two columns -->
+          <div style="display:grid;grid-template-columns:1fr .8fr;gap:16px;margin-top:12px;">
+            <div>
+              <h4>Dữ liệu <strong>tiền lương</strong></h4>
+              <ul>
+                <li>Đầu ra <strong>liên tục</strong> → bài toán <strong>hồi quy</strong></li>
+                <li><strong>Dữ liệu:</strong> 3000 bản ghi tiền lương của nam giới tại Mỹ</li>
+                <li><strong>Mục tiêu:</strong> hiểu mối liên hệ giữa <strong>tuổi</strong>, <strong>trình độ học
+                    vấn</strong>,
+                  <strong>năm</strong> và <strong>tiền lương</strong>
+                </li>
+              </ul>
+
+              <h4>Nhận xét</h4>
+              <ul>
+                <li>Tiền lương <strong>tăng theo tuổi</strong> trước <strong>60</strong>, và <strong>giảm theo
+                    tuổi</strong> sau
+                  <strong>60</strong>
+                </li>
+                <li>Tiền lương <strong>tăng nhẹ theo thời gian</strong> (<strong>~$10,000</strong> trong <strong>6
+                    năm</strong>)
+                </li>
+              </ul>
+            </div>
+
+            <div style="text-align: center;">
+              <div>
+                <img src="img/lec01b/year-wage-plot.png" alt="Year vs Wage Plot" style="width: 70%;" />
+              </div>
+              <p style="font-size: 0.8em; margin-top: 0.5em;">
+                <em>Trục dọc:</em> <strong>Tiền lương (nghìn $)</strong>
+                <br>
+                <em>Trục ngang:</em> <strong>Năm</strong><br />
+                <em>Biểu đồ phân tán</em>
+                <br>
+                <em>Đường màu xanh: hồi quy tuyến tính</em>
+              </p>
+            </div>
+          </div>
+        </section>
+        <section data-auto-animate style="font-size: 0.6em;">
+          <h2>Ứng dụng của học máy</h2>
+
+          <!-- Two columns -->
+          <div style="display:grid;grid-template-columns:1fr .8fr;gap:16px;margin-top:12px;">
+            <div>
+              <h4>Dữ liệu <strong>tiền lương</strong></h4>
+              <ul>
+                <li>Đầu ra <strong>liên tục</strong> → bài toán <strong>hồi quy</strong></li>
+                <li><strong>Dữ liệu:</strong> 3000 bản ghi tiền lương của nam giới tại Mỹ</li>
+                <li><strong>Mục tiêu:</strong> hiểu mối liên hệ giữa <strong>tuổi</strong>, <strong>trình độ học
+                    vấn</strong>,
+                  <strong>năm</strong> và <strong>tiền lương</strong>
+                </li>
+              </ul>
+
+              <h4>Nhận xét</h4>
+              <ul>
+                <li>Tiền lương <strong>tăng theo tuổi</strong> trước <strong>60</strong>, và <strong>giảm theo
+                    tuổi</strong> sau
+                  <strong>60</strong>
+                </li>
+                <li>Tiền lương <strong>tăng nhẹ theo thời gian</strong> (<strong>~$10,000</strong> trong <strong>6
+                    năm</strong>)
+                </li>
+                <li>Tiền lương <strong>tăng theo trình độ học vấn</strong></li>
+              </ul>
+
+              <p style="margin-top:10px;">
+                Có thể dự đoán tiền lương tốt nhất khi dùng <strong>đồng thời 3 đặc trưng</strong>
+              </p>
+            </div>
+
+            <div style="text-align: center;">
+              <div>
+                <img src="img/lec01b/edu-wage-boxplot.png" alt="Education level vs Wage (Boxplot)"
+                  style="width: 75%;" />
+              </div>
+              <p style="font-size: 0.8em; margin-top: 0.5em;">
+                <em>Trục dọc:</em> <strong>Tiền lương (nghìn $)</strong>
+                <br>
+                <em>Trục ngang:</em> <strong>Mức học vấn</strong><br />
+                <em>Biểu đồ hộp</em>
+                <br>
+                <em>Hộp:</em> <strong>25–75%</strong> · <em>Râu:</em> <strong>5–95%</strong>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-auto-animate style="font-size: 0.6em;">
+          <h2>Ứng dụng của học máy</h2>
+
+          <!-- Two columns -->
+          <div style="display:grid;grid-template-columns:1fr .8fr;gap:16px;margin-top:12px;">
+            <div>
+              <h4>Dữ liệu <strong>thị trường chứng khoán</strong></h4>
+              <ul>
+                <li>Đầu ra <strong>rời rạc</strong> → bài toán <strong>phân loại</strong></li>
+                <li><strong>Dữ liệu:</strong> 1250 quan sát xu hướng thị trường (2001–2005)</li>
+                <li><strong>Mục tiêu:</strong> dự đoán thị trường <strong>tăng</strong> hay <strong>giảm</strong></li>
+              </ul>
+
+              <h4>Nhận xét</h4>
+              <ul>
+                <li>Thị trường <strong>tăng</strong> <strong>648</strong> ngày, <strong>giảm</strong>
+                  <strong>602</strong> ngày
+                </li>
+                <li>Dựa vào dữ liệu <strong>hôm qua</strong>: <strong>không dự đoán</strong> được…</li>
+              </ul>
+            </div>
+
+            <div style="text-align: center;">
+              <div>
+                <img src="img/lec01b/stock-yesterday-boxplot.png" alt="Yesterday vs Today's Direction (Boxplot)"
+                  style="width: 72%;" />
+              </div>
+              <p style="font-size: 0.8em; margin-top: 0.5em;">
+                <em>Trục dọc:</em> <strong>% thay đổi của chỉ số S&amp;P</strong>
+                <br>
+                <em>Trục ngang:</em> <strong>Hướng đi hôm nay</strong> (Down/Up)<br />
+                <em>Biểu đồ hộp</em>
+                <br>
+                <em>So sánh phân bố “Yesterday” giữa 2 lớp</em>
+              </p>
+            </div>
+          </div>
+        </section>
+        <!-- Stock: Two Days Previous -->
+        <section data-auto-animate style="font-size: 0.6em;">
+          <h2>Ứng dụng của học máy</h2>
+
+          <div style="display:grid;grid-template-columns:1fr .8fr;gap:16px;margin-top:12px;">
+            <div>
+              <h4>Dữ liệu <strong>thị trường chứng khoán</strong></h4>
+              <ul>
+                <li>Đầu ra <strong>rời rạc</strong> → bài toán <strong>phân loại</strong></li>
+                <li><strong>Dữ liệu:</strong> 1250 quan sát xu hướng thị trường (2001–2005)</li>
+                <li><strong>Mục tiêu:</strong> dự đoán thị trường <strong>tăng</strong> hay <strong>giảm</strong></li>
+              </ul>
+
+              <h4>Nhận xét</h4>
+              <ul>
+                <li>Thị trường <strong>tăng</strong> <strong>648</strong> ngày, <strong>giảm</strong>
+                  <strong>602</strong> ngày
+                </li>
+                <li>Dựa vào dữ liệu <strong>hôm qua</strong> hoặc <strong>2 ngày trước</strong>:
+                  <strong>không dự đoán</strong> được…
+                </li>
+              </ul>
+            </div>
+
+            <div style="text-align: center;">
+              <div>
+                <img src="img/lec01b/stock-two-days-prev-boxplot.png"
+                  alt="Two Days Previous vs Today's Direction (Boxplot)" style="width: 72%;" />
+              </div>
+              <p style="font-size: 0.8em; margin-top: 0.5em;">
+                <em>Trục dọc:</em> <strong>% thay đổi của chỉ số S&amp;P</strong>
+                <br>
+                <em>Trục ngang:</em> <strong>Hướng đi hôm nay</strong> (Down/Up)<br />
+                <em>Biểu đồ hộp</em>
+                <br>
+                <em>So sánh “2 ngày trước” giữa 2 lớp</em>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Stock: Three Days Previous -->
+        <section data-auto-animate style="font-size: 0.6em;">
+          <h2>Ứng dụng của học máy</h2>
+
+          <div style="display:grid;grid-template-columns:1fr .8fr;gap:16px;margin-top:12px;">
+            <div>
+              <h4>Dữ liệu <strong>thị trường chứng khoán</strong></h4>
+              <ul>
+                <li>Đầu ra <strong>rời rạc</strong> → bài toán <strong>phân loại</strong></li>
+                <li><strong>Dữ liệu:</strong> 1250 quan sát xu hướng thị trường (2001–2005)</li>
+                <li><strong>Mục tiêu:</strong> dự đoán thị trường <strong>tăng</strong> hay <strong>giảm</strong></li>
+              </ul>
+
+              <h4>Nhận xét</h4>
+              <ul>
+                <li>Thị trường <strong>tăng</strong> <strong>648</strong> ngày, <strong>giảm</strong>
+                  <strong>602</strong> ngày
+                </li>
+                <li>Dựa vào dữ liệu <strong>hôm qua</strong>, <strong>2 ngày</strong>, hay <strong>3 ngày trước</strong>
+                  → tín hiệu <strong>rất yếu</strong>…</li>
+              </ul>
+            </div>
+
+            <div style="text-align: center;">
+              <div>
+                <img src="img/lec01b/stock-three-days-prev-boxplot.png"
+                  alt="Three Days Previous vs Today's Direction (Boxplot)" style="width: 72%;" />
+              </div>
+              <p style="font-size: 0.8em; margin-top: 0.5em;">
+                <em>Trục dọc:</em> <strong>% thay đổi của chỉ số S&amp;P</strong>
+                <br>
+                <em>Trục ngang:</em> <strong>Hướng đi hôm nay</strong> (Down/Up)<br />
+                <em>Biểu đồ hộp</em>
+                <br>
+                <em>So sánh “3 ngày trước” giữa 2 lớp</em>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Stock: Refined method -->
+        <section data-auto-animate style="font-size: 0.6em;">
+          <h2>Ứng dụng của học máy</h2>
+
+          <div style="display:grid;grid-template-columns:1fr .8fr;gap:16px;margin-top:12px;">
+            <div>
+              <h4>Dữ liệu <strong>thị trường chứng khoán</strong></h4>
+              <ul>
+                <li>Đầu ra <strong>rời rạc</strong> → bài toán <strong>phân loại</strong></li>
+                <li><strong>Dữ liệu:</strong> 1250 quan sát xu hướng thị trường (2001–2005)</li>
+                <li><strong>Mục tiêu:</strong> dự đoán thị trường <strong>tăng</strong> hay <strong>giảm</strong></li>
+              </ul>
+
+              <h4>Nhận xét</h4>
+              <ul>
+                <li>Tín hiệu từ vài ngày gần nhất rất <strong>yếu</strong> → khó dự đoán bằng “mắt thường”</li>
+                <li>Dùng phương pháp <strong>phức tạp hơn</strong> có thể phát hiện <strong>xu hướng yếu</strong></li>
+              </ul>
+
+              <p style="margin-top:10px;">
+                Có thể đạt dự đoán chính xác khoảng <strong>60%</strong> (!)
+              </p>
+            </div>
+
+            <div style="text-align: center;">
+              <div>
+                <img src="img/lec01b/stock-qda-pred-prob-boxplot.png" alt="Predicted Probability of Decrease (QDA)"
+                  style="width: 72%;" />
+              </div>
+              <p style="font-size: 0.8em; margin-top: 0.5em;">
+                <em>Trục dọc:</em> <strong>Xác suất dự đoán giảm</strong>
+                <br>
+                <em>Trục ngang:</em> <strong>Hướng đi hôm nay</strong> (Down/Up)<br />
+                <em>Biểu đồ hộp</em>
+                <br>
+                <em>Mô hình:</em> <strong>QDA</strong> (Quadratic Discriminant Analysis)
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Gene expression: Unsupervised -->
+        <section data-auto-animate style="font-size: 0.6em;">
+          <h2>Ứng dụng của học máy</h2>
+
+          <div style="display:grid;grid-template-columns:1fr .8fr;gap:16px;margin-top:12px;">
+            <div>
+              <h4>Dữ liệu <strong>biểu hiện gen</strong></h4>
+              <ul>
+                <li>Không có biến đầu ra → <strong>học không giám sát</strong></li>
+                <li><strong>Dữ liệu:</strong> 64 dòng tế bào, <strong>6830</strong> biểu hiện gen mỗi dòng</li>
+                <li><strong>Mục tiêu:</strong> tìm các nhóm dòng tế bào có <strong>hồ sơ biểu hiện</strong> tương tự
+                </li>
+              </ul>
+
+              <h4>Nhận xét</h4>
+              <ul>
+                <li>Một cách tự nhiên, có thể nhóm thành <strong>4 cụm</strong></li>
+                <li>Chọn <strong>số cụm</strong> phù hợp thường <strong>khó</strong></li>
+              </ul>
+            </div>
+
+            <div style="text-align: center;">
+              <div>
+                <img src="img/lec01b/gene-pca-clusters.png" alt="Gene expression clustering (PCA plot)"
+                  style="width: 78%;" />
+              </div>
+              <p style="font-size: 0.8em; margin-top: 0.5em;">
+                <em>Hai trục chính đầu tiên:</em> <strong>Z<sub>1</sub></strong>, <strong>Z<sub>2</sub></strong>
+                <br>
+                <em>Màu sắc:</em> <strong>nhóm (clusters)</strong>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Gene expression: EDA -->
+        <section data-auto-animate style="font-size: 0.6em;">
+          <h2>Ứng dụng của học máy</h2>
+
+          <div style="display:grid;grid-template-columns:1fr .8fr;gap:16px;margin-top:12px;">
+            <div>
+              <h4>Dữ liệu <strong>biểu hiện gen</strong></h4>
+              <ul>
+                <li>Không có biến đầu ra → <strong>học không giám sát</strong></li>
+                <li><strong>Dữ liệu:</strong> 64 dòng tế bào, <strong>6830</strong> biểu hiện gen mỗi dòng</li>
+                <li><strong>Mục tiêu:</strong> tìm các nhóm dòng tế bào có <strong>hồ sơ biểu hiện</strong> tương tự
+                </li>
+              </ul>
+
+              <h4>Nhận xét</h4>
+              <ul>
+                <li>Một cách tự nhiên, có thể nhóm thành <strong>4 cụm</strong></li>
+                <li>Chọn <strong>số cụm</strong> phù hợp thường <strong>khó</strong></li>
+              </ul>
+
+              <p style="margin-top:10px;">
+                Học không giám sát hỗ trợ <strong>phân tích khám phá dữ liệu</strong>
+              </p>
+            </div>
+
+            <div style="text-align: center;">
+              <div>
+                <img src="img/lec01b/gene-pca-cancer-types.png" alt="Gene expression PCA (shapes = cancer types)"
+                  style="width: 78%;" />
+              </div>
+              <p style="font-size: 0.8em; margin-top: 0.5em;">
+                <em>Hai trục chính đầu tiên:</em> <strong>Z<sub>1</sub></strong>, <strong>Z<sub>2</sub></strong>
+                <br>
+                <em>Hình dạng:</em> <strong>loại ung thư</strong> · <em>Màu sắc:</em> <strong>nhóm</strong>
+              </p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- 2. Bài toán học -->
+      <section>
+        <section id="bai-toan-hoc">
+          <h1>
+            <span class="text-light">2.</span><br />
+            Bài toán học
+          </h1>
+        </section>
+
+        <section>
+          <h2>Khung bài toán chung</h2>
+          <ul>
+            <li>Đầu vào <strong>\(X\)</strong>: Đặc trưng (features/predictors).</li>
+            <li>Đầu ra <strong>\(Y\)</strong>: Dự đoán/nhãn (response/label).</li>
+            <li>Mô hình hoá: Giả sử <strong>\(Y = f(X) + \varepsilon\)</strong>.</li>
+            <li>Trong đó: \(\varepsilon\) là nhiễu (noise) ngẫu nhiên.</li>
+            <li>Mục tiêu: Học hàm <strong>\(\hat{f}\)</strong> từ dữ liệu <strong>\((x_i, y_i)\)</strong>.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Ý nghĩa của nhiễu</h2>
+          <ul>
+            <li>Do yếu tố chưa quan sát / đo đạc sai / ngẫu nhiên.</li>
+            <li>Nhiễu luôn tồn tại → không thể có mô hình dự đoán hoàn hảo.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2><span class="keyword">Đặc trưng</span> là gì?</h2>
+          <ul>
+            <li>Biểu diễn dữ liệu thành các “tín hiệu” hữu ích cho mô hình.</li>
+            <li>Ví dụ:</li>
+            <ul>
+              <li>Ảnh → pixel/embedding</li>
+              <li>Văn bản → bag-of-words/embedding</li>
+              <li>Thời gian → thống kê cửa sổ</li>
+            </ul>
+          </ul>
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ</h2>
+          <h4>Quảng cáo → Doanh số</h4>
+          <ul>
+            <li>\(X\): Ngân sách quảng cáo trên kênh Đài/Báo/TV.</li>
+            <li>\(Y\): Doanh số bán hàng.</li>
+          </ul>
+          <p>Câu hỏi: Kênh quảng cáo nào <strong>tác động</strong> mạnh? Dự đoán doanh số thế nào?</p>
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ</h2>
+          <h4>Quảng cáo → Doanh số</h4>
+          <img src="img/lec01b/advertising-example.png" alt="Advertising Example" style="width: 75%;" />
+          <div style="font-size: .5em; color: gray;">
+            Đơn vị tính bằng nghìn đô la.
+            <br>
+            Nhìn chung càng quảng cáo nhiều càng bán được nhiều hàng.
+            <br>
+            Đường màu xanh là kết quả của hồi quy tuyến tính với lỗi bình phương tối thiểu (least squares) cho từng
+            biến.
+          </div>
+        </section>
+
+        <section data-auto-animate style="font-size: 0.6em;">
+          <h2>Ví dụ</h2>
+          <h4>Thu nhập vs. Trình độ học vấn</h4>
+
+          <!-- Two columns -->
+          <div style="display:grid;grid-template-columns:1fr .9fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Mối quan hệ giữa <strong>thu nhập</strong> và <strong>số năm học</strong> là <strong>không tuyến
+                    tính</strong></li>
+                <li>Hình bên là ví dụ <strong>mô phỏng</strong> (được sinh ra từ một hàm số)</li>
+                <li>Đường màu xanh: <strong>hàm thật</strong> (true functional relationship)</li>
+                <li>Trong thực tế, hàm thật thường <strong>không biết trước</strong> → phải <strong>ước lượng</strong>
+                </li>
+              </ul>
+            </div>
+
+            <div style="text-align:center;">
+              <div>
+                <img src="img/lec01b/income-education-nonlinear.png" alt="Income vs Years of Education (nonlinear)"
+                  style="width: 78%;" />
+              </div>
+              <p style="font-size: 0.8em; margin-top: 0.5em;">
+                <em>Trục dọc:</em> <strong>Thu nhập</strong>
+                <br>
+                <em>Trục ngang:</em> <strong>Số năm học</strong><br />
+                <em>Chấm:</em> dữ liệu quan sát · <em>Đường xanh:</em> <strong>hàm thật</strong>
+              </p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- 3. Dự đoán vs Diễn giải -->
+      <section>
+        <section id="du-doan-vs-dien-giai">
+          <h1>
+            <span class="text-light">3.</span><br />
+            Dự đoán <br> vs. <br> Diễn giải
+          </h1>
+        </section>
+
+        <section>
+          <h2>Mục tiêu của học máy</h2>
+
+          <p>Dự đoán chính xác nhất <strong>không đồng nghĩa</strong> với hiểu biết sâu sắc nhất về dữ liệu.</p>
+
+          <p>Hai mục tiêu chính:</p>
+
+          <ul>
+            <li><strong>Dự đoán</strong>: Tối ưu độ chính xác của \(\hat{Y} = \hat{f}(X)\).</li>
+            <li><strong>Diễn giải</strong>: Hiểu quan hệ giữa \(X\) và \(Y\).</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Dự đoán (prediction)</h2>
+          <ul>
+            <li>Đầu ra: \(\hat{Y} = \hat{f}(X)\).</li>
+            <li>Ưu tiên: <strong>độ chính xác</strong> trên dữ liệu chưa thấy (test/unseen data).</li>
+            <li>Có thể chấp nhận mô hình như <strong>hộp đen</strong> (black box).</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>Sai số trong mô hình dự đoán</h2>
+
+          <p>Kỳ vọng của sai số bình phương của \(\hat{Y}\) trên dữ liệu huấn luyện:
+            \[
+            \mathbb{E}\!\left[(Y-\hat{Y})^{2}\right] \\
+            = \mathbb{E}\!\left[\bigl(f(X)+\varepsilon - \hat{f}(X)\bigr)^{2}\right] \\
+            = \underbrace{\mathbb{E}\!\left[\bigl(f(X)-\hat{f}(X)\bigr)^{2}\right]}_{\color{red}{\text{reducible
+            error}}}
+            + \underbrace{\mathrm{Var}(\varepsilon)}_{\color{red}{\text{irreducible error}}}
+            \]
+          </p>
+
+          <ul>
+            <li><strong>Reducible error</strong>: giảm được bằng cách chọn mô hình tốt.</li>
+            <li><strong>Irreducible error</strong>: do \(\varepsilon\), không thể loại bỏ hoàn toàn.</li>
+          </ul>
+
+        </section>
+
+        <section>
+          <h2>Diễn giải (inference)</h2>
+          <p><strong>Mục tiêu của diễn giải:</strong></p>
+          <ul>
+            <li>Biến nào <strong>quan trọng</strong> trong việc dự đoán?</li>
+            <li>Quan hệ <strong>tuyến tính</strong> hay <strong>phi tuyến</strong>?</li>
+          </ul>
+
+          <p><strong>Ví dụ: Quảng cáo → Doanh thu</strong></p>
+
+          <ul>
+            <li>Các kênh quảng cáo <strong>ảnh hưởng thế nào</strong> đến doanh thu? Kênh nào ảnh hưởng mạnh nhất?</li>
+            <li>Quan hệ giữa ngân sách và doanh thu là <strong>tuyến tính</strong> hay <strong>phi tuyến</strong>?</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Prediction vs. Inference</h2>
+          <p>Luôn có sự đánh đổi giữa <strong>độ chính xác</strong> và <strong>khả năng diễn giải</strong>.</p>
+          <ul>
+            <li>Mô hình càng phức tạp → độ chính xác càng cao, khả năng diễn giải càng thấp.</li>
+            <li>Mô hình càng đơn giản → khả năng diễn giải càng cao, độ chính xác càng thấp.</li>
+          </ul>
+          <p>⭐️ Thực tế: Cả hai mục tiêu đều quan trọng, tuỳ theo ứng dụng.</p>
+        </section>
+      </section>
+
+      <!-- 4. Chọn mô hình -->
+      <section>
+        <section id="chon-mo-hinh">
+          <h1>
+            <span class="text-light">4.</span><br />
+            Chọn mô hình
+          </h1>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>Bài toán</h2>
+          <div style="display: grid; grid-template-columns: .8fr 1fr; gap: 16px; align-items: center;">
+            <div>
+              <ul>
+                <li>Ta có một tập dữ liệu huấn luyện gồm <strong>n</strong> cặp đã quan sát được \((x_1, y_1), (x_2,
+                  y_2),
+                  \ldots, (x_n, y_n)\)</li>
+                <li>Mục tiêu: Tìm hàm <strong>\(\hat{f}\)</strong> sao cho với mọi cặp \((X, Y)\) ta có <strong>\(Y
+                    \approx
+                    \hat{f}(X)\)</strong></li>
+              </ul>
+            </div>
+            <div style="text-align: center;">
+              <img src="img/lec01b/modeling.png" alt="Modeling Diagram" style="width: 100%;" />
+              <div style="font-size: 0.8em; margin-top: 0;">
+                <em>Dữ liệu phi tuyến</em>
+                <br>
+                <em>Màu xanh dương: Hàm thực \(f\)</em>
+              </div>
+            </div>
+        </section>
+
+        <section>
+          <h2>Hai loại mô hình chính</h2>
+          <ul>
+            <li><strong>Parametric</strong>: giả định dạng hàm, học tham số.</li>
+            <li><strong>Nonparametric</strong>: ít giả định, linh hoạt hơn.</li>
+          </ul>
+          <p>Hai loại mô hình này có <strong>đặc điểm khác biệt</strong> về <strong>độ linh hoạt</strong> (flexibility)
+            và
+            <strong>khả
+              năng diễn giải</strong> (interpretability).
+          </p>
+        </section>
+
+        <section data-auto-animate="">
+          <h2>Mô hình <span class="keyword">có tham số</span></h2>
+          <h4>Parametric Models</h4>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: center;">
+            <div style="font-size: 0.7em;">
+              <ul>
+                <li>Giả sử hàm có dạng \(f\), đơn giản nhất là hàm tuyến tính:
+                  <br>
+                  \(f(X) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \ldots +
+                  \beta_p X_p\)
+                </li>
+                <li>Học mô hình = Ước lượng các tham số \(\beta_0, \beta_1, \ldots,
+                  \beta_p\) từ dữ liệu \((x_1, y_1), (x_2, y_2), \ldots, (x_n, y_n)\)</li>
+              </ul>
+            </div>
+
+            <div style="text-align: center;">
+              <img src="img/lec01b/linear-modeling.png" alt="Parametric Modeling Diagram" style="width: 100%;" />
+              <div style="font-size: 0.8em; margin-top: 0;">
+                <em>Mô hình tuyến tính</em>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-auto-animate="">
+          <h2>Mô hình <span class="keyword">có tham số</span></h2>
+          <h4>Parametric Models</h4>
+
+          <p><strong>Đặc điểm:</strong></p>
+          <ul>
+            <li>Ưu điểm: đơn giản, nhanh, tính diễn giải cao</li>
+            <li>Rủi ro: kém linh hoạt (dễ <strong>underfit</strong>), giả định sai</li>
+          </ul>
+        </section>
+
+        <section data-auto-animate="">
+          <h2>Mô hình <span class="keyword">Phi tham số</span></h2>
+          <h4>Nonparametric Models</h4>
+
+          <div style="display: grid; grid-template-columns: 1fr 0.6fr; gap: 16px; align-items: center;">
+            <div style="font-size: 0.8em;">
+              <ul>
+                <li>Không giả định dạng hàm cho \(f\)</li>
+                <li>Học dạng thực sự của \(f\)</li>
+                <li>Cần nhiều tham số hơn → khó hơn</li>
+              </ul>
+            </div>
+
+            <div style="text-align: center;">
+              <img src="img/lec01b/modeling.png" alt="Modeling Diagram" style="width: 100%;" />
+              <div style="font-size: 0.6em; margin-top: 0;">
+                <em>Dữ liệu phi tuyến</em>
+                <br>
+                <em>Màu xanh dương: Hàm thực \(f\)</em>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-auto-animate="">
+          <h2>Mô hình <span class="keyword">Phi tham số</span></h2>
+          <h4>Nonparametric Models</h4>
+
+          <div style="display: grid; grid-template-columns: 1fr 0.6fr; gap: 16px; align-items: center;">
+            <div style="font-size: 0.8em;">
+              <ul>
+                <li>Không giả định dạng hàm cho \(f\)</li>
+                <li>Học dạng thực sự của \(f\)</li>
+                <li>Cần nhiều tham số hơn → khó hơn</li>
+              </ul>
+            </div>
+
+            <div style="text-align: center;">
+              <img src="img/lec01b/nonparametric-modeling.png" alt="Modeling Diagram" style="width: 100%;" />
+              <div style="font-size: 0.6em; margin-top: 0;">
+                <em>Mô hình phi tham số</em>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-auto-animate="">
+          <h2>Mô hình <span class="keyword">Phi tham số</span></h2>
+          <h4>Nonparametric Models</h4>
+
+          <p><strong>Đặc điểm:</strong></p>
+          <ul>
+            <li>Ưu điểm: Mô tả được quan hệ phức tạp</li>
+            <li>Rủi ro: Cần <strong>nhiều dữ liệu</strong>, dễ <strong>overfit</strong></li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>Độ chính xác vs. Khả năng diễn giải</h2>
+          <img src="img/lec01b/flexibility-vs-interpretability.png" alt="Flexibility vs Interpretability"
+            style="width: 100%;" />
+        </section>
+
+        <section data-auto-animate style="font-size: 0.8em;">
+          <h2>Độ chính xác vs. Khả năng diễn giải</h2>
+
+          <p>
+            Vì sao có khi ta <strong>cần mô hình đơn giản</strong> thay vì mô hình <strong>linh hoạt</strong>?
+          </p>
+          <strong>Mô hình linh hoạt thường có <span class="keyword">nhiều tham số</span></strong>:
+          <ol>
+            <li>Ước lượng nhiều tham số → <strong>tính toán tốn kém</strong> hơn.</li>
+            <li>Mô hình phức tạp → <strong>khó giải thích</strong>.
+            </li>
+            <li>Dữ liệu ít → ước lượng kém tin cậy → dễ bị <strong>overfitting</strong>.</li>
+          </ol>
+        </section>
+
+      </section>
+
+      <!-- 5. Các kiểu học -->
+      <section>
+        <section id="cac-kieu-hoc">
+          <h1>
+            <span class="text-light">5.</span><br />
+            Các kiểu học
+          </h1>
+        </section>
+
+        <section>
+          <h2>Tổng quan</h2>
+          <p>Các kiểu học máy chính:</p>
+          <ul>
+            <li><strong>Học có giám sát</strong> (supervised learning): Dữ liệu có nhãn.</li>
+            <li><strong>Học không giám sát</strong> (unsupervised learning): Dữ liệu không nhãn.</li>
+            <li><strong>Học bán giám sát</strong> (semi-supervised learning): Một phần dữ liệu có nhãn.</li>
+            <li><strong>Học tăng cường</strong> (reinforcement learning).</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Học <span class="keyword">có giám sát</span></h2>
+          <h4>Supervised learning</h4>
+          <ul>
+            <li>Dữ liệu có nhãn: cặp \((x_i, y_i)\).</li>
+            <li>Mục tiêu: học hàm \(f\) để dự đoán \(Y\) từ \(X\).</li>
+            <li>Hai dạng chính: <strong>phân lớp</strong> (classification) &amp; <strong>hồi quy</strong> (regression).
+            </li>
+            <li>Ví dụ: phân loại thư rác (phân lớp), quảng cáo → doanh thu (hồi quy).</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Phân lớp vs. Hồi quy</h2>
+          <ul>
+            <li><strong>Phân lớp</strong>: \(Y\) rời rạc (0/1, nhiều hơn 2 lớp).</li>
+            <li><strong>Hồi quy</strong>: \(Y\) liên tục.</li>
+            <li>Độ đo đánh giá khác nhau: accuracy/F1 vs. MSE/MAE.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Học <span class="keyword">không giám sát</span></h2>
+          <ul>
+            <li>Dữ liệu không nhãn: chỉ có \(x_i\).</li>
+            <li>Mục tiêu: tìm <strong>cấu trúc</strong>, <strong>mẫu</strong> (patterns) trong dữ liệu.</li>
+            <li>Ví dụ: <strong>phân cụm</strong> (clustering), <strong>giảm chiều</strong> (dimension reduction).</li>
+          </ul>
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ: <strong>Phân cụm</strong></h2>
+          <ul>
+            <li>Mục tiêu: Nhóm dữ liệu theo <strong>độ tương đồng</strong>.</li>
+            <li>Thách thức chính: Các cụm <strong>chồng lấn</strong>, cách chọn <strong>số cụm</strong>.</li>
+          </ul>
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ: <strong>Phân cụm</strong></h2>
+          <img src="img/lec01b/clustering-ex-1.png" alt="Clustering Example" style="width: 80%;" />
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ: <strong>Phân cụm</strong></h2>
+          <img src="img/lec01b/clustering-ex-2.png" alt="Clustering Example" style="width: 80%;" />
+        </section>
+
+        <section>
+          <h2>Học <span class="keyword">bán giám sát</span></h2>
+          <h4>Semi-supervised learning</h4>
+          <ul>
+            <li>Dữ liệu \(x_i\) với \(i = 1, \ldots, n\), trong đó chỉ một phần có nhãn \(y_i\).</li>
+            <li>Mục tiêu: Tận dụng dữ liệu không nhãn để cải thiện mô hình.</li>
+            <li>Ứng dụng: khi nhãn khó/đắt để thu thập.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Học <span class="keyword">tăng cường</span></h2>
+          <h4>Reinforcement learning</h4>
+          <ul>
+            <li>Tác tử (agent) tương tác với môi trường (environment).</li>
+            <li>Mục tiêu: Học chiến lược (policy) để tối đa hoá phần thưởng (reward).</li>
+            <li>Ứng dụng: chơi game, điều khiển robot.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Các kỹ thuật thường dùng</h2>
+          <ul>
+            <li>Học đa nhiệm vụ (multi-task learning)</li>
+            <li>Học chủ động (active learning)</li>
+            <li>Học trực tuyến (online learning)</li>
+            <li>Học chuyển đổi (transfer learning)</li>
+            <li>Học kết hợp (ensemble learning)</li>
+          </ul>
+          <p>⭐️ Đọc thêm tại Mục 1.4.5 trong Giáo trình "Học máy thống kê".</p>
+        </section>
+      </section>
+
+      <!-- 6. Đánh giá mô hình học máy -->
+      <section>
+        <section id="danh-gia-mo-hinh-hoc-may">
+          <h1>
+            <span class="text-light">6.</span><br />
+            Đánh giá mô hình học máy
+          </h1>
+        </section>
+
+        <section>
+          <h2>Mục tiêu đánh giá</h2>
+          <ul>
+            <li>Hiệu năng quan trọng nhất là ở trên <span class="keyword">dữ liệu chưa thấy</span>.</li>
+            <li>Không đánh giá mô hình bằng dữ liệu đã dùng để huấn luyện.</li>
+            <li>Cần tách <strong>tập huấn luyện</strong> (training) / <strong>kiểm thử</strong> (test) (và có thể
+              <strong>tập
+                xác thực</strong> (validation)).
+            </li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.7em;">
+          <h2>Đánh giá mô hình hồi quy</h2>
+          <p>Thường sử dụng Lỗi Bình phương Trung bình (Mean Squared Error - MSE).</p>
+          <ul>
+            <li>Trên dữ liệu huấn luyện (MSE = training error):
+              \[
+              \text{MSE} = \frac{1}{n} \sum_{i=1}^n (y_i - \hat{f}(x_i))^2
+              \]
+            </li>
+            <li>Ta quan tâm chủ yếu đến MSE trên dữ liệu kiểm thử (test data), hay dữ liệu chưa thấy (unseen
+              data):
+              \[
+              \text{Test MSE} = \text{avg}(y_0 - \hat{f}(x_0))^2
+              \]
+            </li>
+          </ul>
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ</h2>
+          <h4>Dữ liệu gần tuyến tính</h4>
+          <img src="img/lec01b/almost-linear-data.png" alt="Almost Linear Data" style="width: 75%;" />
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ</h2>
+          <h4>Dữ liệu tương đối phi tuyến</h4>
+          <img src="img/lec01b/moderately-nonlinear-data.png" alt="Moderately Nonlinear Data" style="width: 75%;" />
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ</h2>
+          <h4>Dữ liệu rất phi tuyến</h4>
+          <img src="img/lec01b/highly-nonlinear-data.png" alt="Highly Nonlinear Data" style="width: 75%;" />
+        </section>
+
+        <section data-auto-animate style="font-size: 0.7em;">
+          <h2>Đánh giá mô hình Phân loại</h2>
+
+          <ul>
+            <li>Đánh giá <strong>chất lượng</strong> bộ phân loại bằng <strong>hàm mất mát</strong> (loss function).
+            </li>
+            <li>Thường dùng <strong>misclassification error</strong> (tỷ lệ phân loại sai).</li>
+            <li>Gọi \(I(\cdot)\) là <strong>hàm chỉ thị</strong>:
+              \(I(p)=1\) nếu \(p\) <strong>đúng</strong>, và \(I(p)=0\) nếu <strong>sai</strong>.
+            </li>
+            <li><strong>Lỗi huấn luyện</strong> trên \(n\) mẫu:
+              \[
+              \frac{1}{n}\sum_{i=1}^{n} I\!\left(y_i \neq \hat{y}_i\right)
+              \]
+            </li>
+            <li><strong>Lỗi kiểm tra</strong> (kỳ vọng trên dữ liệu kiểm thử/chưa thấy):
+              \[
+              \mathrm{avg}\!\left(I\!\left(y_0 \neq \hat{y}_0\right)\right)
+              \]
+            </li>
+          </ul>
+        </section>
+
+        <section data-auto-animate style="font-size: 0.7em;">
+          <h2>Bộ phân loại <span class="keyword">Bayes</span></h2>
+
+          <p>Ta có thể <strong>cực tiểu hoá lỗi kiểm thử</strong> (test error) bằng bộ phân loại rất đơn giản:</p>
+
+          \[
+          \arg\max_{j=1,\ldots,k}\Pr\!\left(Y=j \mid X=x_0\right)
+          \]
+
+          <p style="margin-top:8px;">
+            cho bài toán phân loại với <strong>\(k\)</strong> lớp \((1,\ldots,k)\).
+          </p>
+
+          <ul>
+            <li>Bộ phân loại này gọi là <strong>bộ phân loại Bayes</strong>.</li>
+            <li>Tính được khi biết <strong>phân phối xác suất thật</strong> (ví dụ: dữ liệu <strong>mô phỏng</strong>).
+            </li>
+            <li>Với dữ liệu thực, ta chỉ có thể <strong>ước lượng</strong> gần đúng.</li>
+          </ul>
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ</h2>
+          <h4>Phân loại nhị phân</h4>
+
+          <div style="display:grid;grid-template-columns:1fr .9fr;gap:16px;margin-top:12px;align-items:start;">
+            <div style="font-size: 0.6em;">
+              <ul>
+                <li><strong>Dữ liệu:</strong> 100 quan sát thuộc <strong>2 nhóm</strong></li>
+
+                <li>
+                  <strong>Biên quyết định Bayes</strong>:
+                  các điểm mà
+                  \[
+                  \Pr(Y=1\mid X=x_0)=0.5
+                  \]
+                  (vẽ bằng <strong>đường nét đứt</strong>)
+                </li>
+
+                <li>
+                  <strong>Tỷ lệ lỗi Bayes</strong> (sai số không thể giảm, <strong>irreducible error</strong>):
+                  \[
+                  1-\mathbb{E}\!\left(\max_{j=1,2}\Pr(Y=j\mid X)\right)
+                  \]
+                </li>
+
+                <li>Trong ví dụ này: <strong>Bayes error rate = 0.1304</strong></li>
+              </ul>
+            </div>
+
+            <div style="text-align:center;">
+              <div>
+                <img src="img/lec01b/binary-bayes-boundary.png" alt="Binary classification with Bayes decision boundary"
+                  style="width: 70%;" />
+              </div>
+              <p style="font-size:0.5em;margin-top:0.5em;">
+                <em>Trục:</em> \(X_1\), \(X_2\) · <em>Màu nền:</em> vùng dự đoán · <em>Nét đứt:</em> <strong>biên
+                  Bayes</strong>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ</h2>
+          <h4><strong>k</strong>-láng giềng gần nhất (<strong>kNN</strong>)</h4>
+
+          <div style="display:grid;grid-template-columns:1fr .9fr;gap:16px;margin-top:12px;align-items:start;">
+            <div style="font-size: 0.6em;">
+              <ul>
+                <li>Gán nhãn cho điểm \(x_0\) theo <strong>đa số</strong> trong <strong>\(k\)</strong> láng giềng gần
+                  nhất.</li>
+                <li>Công thức (bỏ phiếu đa số):</li>
+              </ul>
+
+              \[
+              \arg\max_{j=1,\ldots,k}\;\frac{1}{k}\sum_{i\in \mathcal{N}_0} I(y_i=j)
+              \]
+
+              <p style="margin-top:8px;">
+                với \(\mathcal{N}_0\) là tập <strong>\(k\)</strong> điểm dữ liệu gần \(x_0\) nhất.
+              </p>
+            </div>
+
+            <div style="text-align:center;">
+              <div>
+                <img src="img/lec01b/knn-k1-boundary.png" alt="kNN with k=1 decision boundary" style="width: 70%;" />
+              </div>
+              <p style="font-size:0.5em;margin-top:0.5em;">
+                <em>kNN với</em> <strong>k = 1</strong> · <strong>biên quyết định</strong> rất ngoằn ngoèo →
+                <strong>overfitting</strong> (mô hình quá phức tạp)
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ</h2>
+          <h4>Số lượng láng giềng ảnh hưởng thế nào?</h4>
+          <img src="img/lec01b/knn-number-of-neighbors-1.png" alt="kNN with different number of neighbors"
+            style="width: 100%;" />
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ</h2>
+          <h4>Số lượng láng giềng ảnh hưởng thế nào?</h4>
+          <img src="img/lec01b/knn-number-of-neighbors-2.png" alt="kNN with different number of neighbors"
+            style="width: 50%;" />
+        </section>
+
+      </section>
+
+      <!-- 7. Bias–Variance -->
+      <section>
+        <section id="bias-variance">
+          <h1>
+            <span class="text-light">7.</span><br />
+            Đánh đổi
+            <br>
+            Bias–Variance
+          </h1>
+        </section>
+
+        <section style="font-size: 0.6em;">
+          <h2>Đánh đổi Bias–Variance</h2>
+
+          <p style="margin-top:10px;">
+            Đường cong của <strong>test error</strong> đến từ một đánh đổi cơ bản trong <strong>MSE</strong>:
+          </p>
+
+          \[
+          \mathbb{E}\!\left( y_0-\hat{f}(x_0)\right)^2
+          = \mathrm{Var}\!\left(\hat{f}(x_0)\right)
+          + \left[\mathrm{Bias}\!\left(\hat{f}(x_0)\right)\right]^2
+          + \mathrm{Var}(\varepsilon)
+          \]
+
+          <p style="font-size:0.85em;margin-top:6px;">
+            \(\mathbb{E}\): kỳ vọng trên <strong>mọi tập huấn luyện có thể</strong>
+          </p>
+
+          <ul>
+            <li>
+              <strong>Bias</strong> (độ chệch): Sai lệch <strong>có hệ thống</strong> so với giá trị thật.
+              \[
+              \mathrm{Bias}\!\left(\hat{f}(x_0)\right)
+              = \mathbb{E}\!\left(\hat{f}(x_0)\right) - y_0
+              \]
+            </li>
+
+            <li>
+              <strong>Variance</strong> (độ biến thiên): Mức độ mô hình thay đổi giữa các <strong>tập huấn luyện khác
+                nhau</strong>.
+              \[
+              \mathrm{Var}\!\left(\hat{f}(x_0)\right)
+              = \mathbb{E}\!\left(\hat{f}(x_0)-\mathbb{E}\!\left(\hat{f}(x_0)\right)\right)^2
+              \]
+            </li>
+          </ul>
+        </section>
+
+        <section style="font-size: .6em;">
+          \[
+          \begin{aligned}
+          \mathbb{E}\!\left( y_0-\hat f(x_0) \right)^2
+          &= \mathbb{E}\!\left( f(x_0)+\varepsilon-\hat f(x_0) \right)^2 \\
+          &= \mathbb{E}\!\left( f(x_0)-\hat f(x_0) \right)^2
+          + 2\,\mathbb{E}\!\left[\varepsilon\,(f(x_0)-\hat f(x_0))\right]
+          + \mathbb{E}\!\left(\varepsilon^2\right) \\
+          &= \mathbb{E}\!\left( f(x_0)-\hat f(x_0) \right)^2 + \mathrm{Var}(\varepsilon) \\
+          &= \underbrace{\mathrm{Var}\!\left(\hat f(x_0)\right)}_{\text{variance}}
+          + \underbrace{\left[\mathrm{Bias}\!\left(\hat f(x_0)\right)\right]^2}_{\text{bias}^2}
+          + \underbrace{\mathrm{Var}(\varepsilon)}_{\text{noise}}
+          \end{aligned}
+          \]
+        </section>
+
+        <section>
+          <h2>Phân rã Bias-Variance</h2>
+          <img src="img/lec01b/bias-variance-decomposition.png" alt="Bias-Variance Decomposition"
+            style="width: 100%;" />
+        </section>
+
+      </section>
+
+      <!-- 8. Phát triển và triển khai mô hình học máy -->
+      <section>
+        <section id="phat-trien-va-trien-khai-mo-hinh-hoc-may">
+          <h1>
+            <span class="text-light">8.</span><br />
+            Phát triển và triển khai mô hình học máy
+          </h1>
+        </section>
+
+        <section>
+          <img src="img/lec01b/vong-doi-ml.png" alt="Machine Learning Lifecycle" style="width: 100%;" />
+          <div style="font-size: 0.7em; margin-top: 8px; text-align: center; color: gray;">
+            <em>Đọc thêm tại Mục 1.5 trong Giáo trình "Học máy thống kê".</em>
+          </div>
+        </section>
+      </section>
+
+      <!-- 9. Khi nào dùng ML? -->
+      <section>
+        <section id="khi-nao-dung-ml">
+          <h1>
+            <span class="text-light">9.</span><br />
+            Khi nào dùng <br> học máy?
+          </h1>
+        </section>
+
+        <section>
+          <h2>Nên dùng khi…</h2>
+          <ul>
+            <li>Không thể viết luật đầy đủ (bài toán <strong>phức tạp</strong>).</li>
+            <li>Môi trường thay đổi (cần <strong>thích nghi</strong>).</li>
+            <li>Bài toán cần “nhận thức”: <strong>ảnh</strong>, <strong>giọng nói</strong>, <strong>ngôn ngữ</strong>.
+            </li>
+            <li>Có đủ dữ liệu để học.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Không nên dùng khi…</h2>
+          <ul>
+            <li>Nếu luật đơn giản &amp; ổn định → phương pháp dựa trên luật (rule-based) có thể tốt hơn.</li>
+            <li>Nếu dữ liệu ít/khó tin cậy → học máy dễ sai.</li>
+            <li>Nếu cần giải thích chặt chẽ → ưu tiên mô hình <strong>dễ diễn giải</strong>.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Chi phí cần cân nhắc</h2>
+          <ul>
+            <li><strong>Dữ liệu</strong>: thu thập, làm sạch, gán nhãn.</li>
+            <li><strong>Huấn luyện</strong>: thời gian, hạ tầng, thử nghiệm.</li>
+            <li><strong>Vận hành</strong>: triển khai, giám sát, cập nhật.</li>
+          </ul>
+        </section>
+      </section>
+
+      <!-- 9. Tổng kết -->
+      <section>
+        <section>
+          <h2>Tổng kết</h2>
+          <ul>
+            <li>Học máy: Tối ưu \(P\) cho \(T\) trên dữ liệu \(E\).</li>
+            <li>Bài toán học: \(Y = f(X) + \varepsilon\) với nhiễu \(\varepsilon\).</li>
+            <li><strong>Prediction</strong> vs <strong>Inference</strong> → chọn mô hình khác nhau.</li>
+            <li>Đánh giá đúng: <strong>train/test</strong>, tránh <strong>overfitting</strong>.</li>
+            <li>Hiểu <strong>bias–variance</strong> để ra quyết định mô hình.</li>
+            <li>Phân biệt supervised/unsupervised/semi-supervised/RL.</li>
+          </ul>
+        </section>
+
+        <section>
+          Slides có tham khảo từ một số nguồn, trong đó có
+          bài giảng của môn
+          "Elements of Machine Learning" &mdash; Krikamol Muandet và Jilles Vreeken @ Saarland University; Giáo trình
+          "Học máy thống kê" &mdash; Trần Quốc Long và Tạ Việt Cường; với sự hỗ trợ từ AI.
+        </section>
+      </section>
+
+      <div class="footer">
+        Học máy (Học kỳ 2 2025-2026) §1b: Giới thiệu về học máy
+      </div>
+    </div>
+  </div>
+  <script src="revealjs/dist/reveal.js"></script>
+  <script src="plugin/notes/notes.js"></script>
+  <script src="plugin/markdown/markdown.js"></script>
+  <script src="plugin/highlight/highlight.js"></script>
+  <script src="plugin/math/math.js"></script>
+  <script>
+    Reveal.initialize({
+      controlsLayout: "edges",
+      slideNumber: true,
+      hashOneBasedIndex: true,
+      hash: true,
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX],
+    });
+  </script>
+</body>
+
+</html>
