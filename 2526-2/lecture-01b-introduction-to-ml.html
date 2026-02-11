@@ -29,9 +29,9 @@
         <section>
           <h2>Nội dung</h2>
           <ol>
-            <li>Học máy (Machine Learning) là gì? <a href="#hoc-may-la-gi">→</a></li>
+            <li>Học máy là gì? <a href="#hoc-may-la-gi">→</a></li>
             <li>Bài toán học <a href="#bai-toan-hoc">→</a></li>
-            <li>Dự đoán (Prediction) vs. Diễn giải (Inference) <a href="#du-doan-vs-dien-giai">→</a></li>
+            <li>Dự đoán vs. Diễn giải <a href="#du-doan-vs-dien-giai">→</a></li>
             <li>Chọn mô hình <a href="#chon-mo-hinh">→</a></li>
             <li>Các kiểu học <a href="#cac-kieu-hoc">→</a></li>
             <li>Đánh giá mô hình học máy <a href="#danh-gia-mo-hinh-hoc-may">→</a></li>
@@ -558,7 +558,8 @@
             <li>Đầu vào <strong>\(X\)</strong>: Đặc trưng (features/predictors).</li>
             <li>Đầu ra <strong>\(Y\)</strong>: Dự đoán/nhãn (response/label).</li>
             <li>Mô hình hoá: Giả sử <strong>\(Y = f(X) + \varepsilon\)</strong>.</li>
-            <li>Trong đó: \(\varepsilon\) là nhiễu (noise) ngẫu nhiên.</li>
+            <li>Trong đó: \(\varepsilon\) là nhiễu (noise) ngẫu nhiên không phụ thuộc vào \(X\) và có kỳ vọng
+              \(\mathbb{E}[\varepsilon] = 0\).</li>
             <li>Mục tiêu: Học hàm <strong>\(\hat{f}\)</strong> từ dữ liệu <strong>\((x_i, y_i)\)</strong>.</li>
           </ul>
         </section>
@@ -569,6 +570,9 @@
             <li>Do yếu tố chưa quan sát / đo đạc sai / ngẫu nhiên.</li>
             <li>Nhiễu luôn tồn tại → không thể có mô hình dự đoán hoàn hảo.</li>
           </ul>
+
+          <p>⚠️ Lưu ý: Ta giả sử nhiễu có kỳ vọng \(\mathbb{E}[\varepsilon] = 0\). Đọc thêm về Central Limit Theorem
+            (Định lý giới hạn trung tâm) để hiểu hơn về giả thiết này.</p>
         </section>
 
         <section>
