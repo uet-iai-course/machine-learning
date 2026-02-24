@@ -1,0 +1,1899 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Bài 2: Hồi quy tuyến tính</title>
+  <link rel="stylesheet" href="revealjs/dist/reset.css" />
+  <link rel="stylesheet" href="revealjs/dist/reveal.css" />
+  <link rel="stylesheet" href="revealjs/dist/theme/white.css" />
+  <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+  <link rel="stylesheet" href="lecture-style.css" />
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section>
+        <section>
+          <h1>Học máy</h1>
+          <h3>Bài 2: Hồi quy tuyến tính</h3>
+          <p>Trường ĐH Công nghệ – Đại học Quốc gia Hà Nội</p>
+        </section>
+        <section>
+          <h2>Nội dung</h2>
+          <ol>
+            <li>Hồi quy tuyến tính đơn <a href="#hoi-quy-don">→</a></li>
+            <li>Độ chính xác của ước lượng <a href="#do-chinh-xac">→</a></li>
+            <li>Hồi quy tuyến tính bội <a href="#hoi-quy-boi">→</a></li>
+            <li>Vượt ra khỏi đơn &amp; cộng tính <a href="#vuot-ra-ngoai">→</a></li>
+            <li>Các “cạm bẫy” trong hồi quy <a href="#cam-bay">→</a></li>
+            <li>\(k\)-NN regression vs. hồi quy tuyến tính <a href="#knn-vs-linear">→</a></li>
+          </ol>
+        </section>
+      </section>
+      <!-- 1. Hồi quy tuyến tính đơn -->
+      <section>
+        <section id="hoi-quy-don">
+          <h1>
+            <span class="text-light">1.</span><br />
+            Hồi quy tuyến tính đơn
+          </h1>
+        </section>
+        <section style="font-size: 0.75em;">
+          <h2>Tìm quan hệ tuyến tính</h2>
+          <div>Dữ liệu ngân sách quảng cáo → <strong>doanh thu</strong>.</div>
+          <div style="text-align:center;">
+            <img src="img/lec01b/advertising-example.png" alt="Advertising example"
+              style="max-width: 80%; height: auto;" />
+            <div style="font-size: 0.6em; color: gray; margin-top: 0;">
+              <em>Ghi chú:</em> Các giá trị tiền ở đơn vị <strong>nghìn đô</strong>.
+            </div>
+          </div>
+          <div>
+            <ul>
+              <li>Quan sát: Ngân sách tăng ⇒ doanh thu có xu hướng tăng.</li>
+              <li>Đường xanh: Hồi quy tuyến tính đơn (bình phương tối thiểu).</li>
+            </ul>
+          </div>
+        </section>
+        <section style="font-size: 0.8em;">
+          <h2>Câu hỏi liên quan</h2>
+          <ol>
+            <li>Có mối quan hệ giữa ngân sách quảng cáo và doanh thu không?</li>
+            <li>Mối quan hệ mạnh đến mức nào (dự đoán được tốt không)?</li>
+            <li>Kênh nào đóng góp vào doanh thu (TV/Đài/Báo)?</li>
+            <li>Ước lượng hiệu ứng của một kênh <strong>chính xác</strong> đến đâu?</li>
+            <li>Dự đoán doanh thu tương lai chính xác đến đâu?</li>
+            <li>Quan hệ có thực sự <strong>tuyến tính</strong> không?</li>
+            <li>Có <strong>hiệu ứng cộng hưởng</strong> giữa các kênh quảng cáo không?</li>
+          </ol>
+        </section>
+        <section style="font-size: 0.8em;">
+          <h2>Hồi quy tuyến tính đơn</h2>
+          <div>Ta <span class="keyword">giả sử</span> \(X\) và \(Y\) có mối liên hệ: \(Y \approx \beta_0 + \beta_1 X\)
+          </div>
+          <ul>
+            <li>Ví dụ: \(\text{sales} \approx \beta_0 + \beta_1 \times \text{TV}\)</li>
+            <li>Dự đoán của \(Y\) khi \( X=x_i \) là \(\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i\)</li>
+            <li>\(\beta_0\) (hệ số chặn), \(\beta_1\) (hệ số góc) là <strong>tham số</strong> của mô hình
+            </li>
+          </ul>
+          <p>➡️ <strong>Đầu vào:</strong> Dữ liệu huấn luyện: \((x_1,y_1),\ldots,(x_n,y_n)\)</p>
+          <p>🎯 <strong>Mục tiêu:</strong> Ước lượng tham số \(\hat{\beta}_0,\hat{\beta}_1\) sao cho
+            \[
+            y_i \approx \hat{\beta}_0 + \hat{\beta}_1 x_i
+            \]
+            với mọi \(i=1,\ldots,n\) và các giá trị mới của \(X\).
+          </p>
+        </section>
+        <section style="font-size: 0.7em;" data-auto-animate>
+          <h2>Ước lượng tham số</h2>
+          <h4>Phương pháp: Bình phương tối thiểu (Least Squares)</h4>
+          <ul>
+            <li>Sai số tại điểm dữ liệu \(i\) là \(e_i = y_i - \hat{y}_i\).</li>
+            <li>Với bài toán hồi quy, ta thường dùng <strong>tổng bình phương sai số</strong> (Residual Sum of
+              Squares, RSS) để đánh giá độ phù hợp của mô hình:
+              \[
+              RSS = e_{1}^{2} + e_{2}^{2} + \cdots + e_{n}^{2} \\
+              = (y_1 - \hat{\beta}_0 - \hat{\beta}_1 x_1)^2 + (y_2 - \hat{\beta}_0 - \hat{\beta}_1 x_2)^2 + \cdots +
+              (y_n - \hat{\beta}_0 - \hat{\beta}_1 x_n)^2 \\
+              \]
+            </li>
+            <li><strong>Mục tiêu:</strong> Chọn \(\hat{\beta}_0,\hat{\beta}_1\) để <strong>tối thiểu hoá</strong>
+              \(RSS\).</li>
+          </ul>
+        </section>
+        <section data-auto-animate style="font-size: 0.7em;">
+          <h2>Ước lượng tham số</h2>
+          <h4>Phương pháp: Bình phương tối thiểu (Least Squares)</h4>
+          <div style="text-align:center;">
+            <img src="img/lec02/rss-plots.png" alt="RSS plots" style="max-width: 80%; height: auto;" />
+          </div>
+        </section>
+        <section data-auto-animate style="font-size: 0.7em;">
+          <h2>Ước lượng tham số</h2>
+          <h4>Phương pháp: Bình phương tối thiểu (Least Squares)</h4>
+          <p>Hàm RSS là hàm bậc hai theo \(\hat{\beta}_0,\hat{\beta}_1\) ⇒ có nghiệm duy nhất.</p>
+          <ul>
+            <li>
+              \(\hat{\beta}_1 = \frac{\sum_{i=1}^{n}(x_i-\bar{x})(y_i-\bar{y})}{\sum_{i=1}^{n}(x_i-\bar{x})^2}\)
+            </li>
+            <li>
+              \(\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}\)
+            </li>
+          </ul>
+          <p>Trong đó \(\bar{x}=\frac{1}{n}\sum_{i=1}^{n}x_i\), \(\bar{y}=\frac{1}{n}\sum_{i=1}^{n}y_i\).</p>
+          <p>Đường hồi quy luôn đi qua \((\bar{x},\bar{y})\).</p>
+        </section>
+        <section data-auto-animate style="font-size: 0.7em;">
+          <h2>Ước lượng tham số</h2>
+          <h4>Phương pháp: Bình phương tối thiểu (Least Squares)</h4>
+          <div style="text-align:center;">
+            <img src="img/lec02/least-squares-estimate.png" alt="Least squares estimate"
+              style="max-width: 60%; height: auto;" />
+            <div style="font-size: 0.6em; color: gray; margin-top: 0;">
+              <em>Đường hồi quy tuyến tính có vẻ phù hợp với dữ liệu, ngoại trừ một số điểm có ngân sách quảng cáo thấp
+                nhất.</em>
+            </div>
+          </div>
+        </section>
+      </section>
+      <!-- 2. Độ chính xác của ước lượng -->
+      <section>
+        <section id="do-chinh-xac">
+          <h1>
+            <span class="text-light">2.</span><br />
+            Độ chính xác của ước lượng
+          </h1>
+        </section>
+        <section data-auto-animate style="font-size: 0.6em;">
+          <h2>Tổng quan</h2>
+          <div style="display: grid; grid-template-columns: 1fr .5fr; gap: 16px; margin-top: 12px; align-items: start;">
+            <div>
+              <p>Ta giả sử quan hệ “thật sự” có nhiễu (<strong>độc lập</strong> với quan sát):</p>
+              <p style="text-align:center;">
+                \[
+                Y=\beta_0+\beta_1X+\epsilon \quad
+                \]
+              </p>
+              <p><span class="keyword">Đường hồi quy quần thể</span> \(y = \beta_0 + \beta_1 x\) là xấp xỉ
+                tuyến tính tốt nhất giữa \(X\)
+                và \(Y\).</p>
+              <ul>
+                <li>Thường <strong>không quan sát được</strong> trực tiếp.</li>
+              </ul>
+              <p><span class="keyword">Đường hồi quy tuyến tính (bình phương tối thiểu)</span> trên dữ liệu huấn luyện:
+              </p>
+              <p style="text-align:center;">
+                \[
+                \hat{y}=\hat{\beta}_0+\hat{\beta}_1x
+                \]
+              </p>
+              <ul>
+                <li>Phụ thuộc vào bộ dữ liệu huấn luyện (hữu hạn).</li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec02/acc-of-coef-est-1.png" alt="Accuracy of coefficient estimates"
+                style="max-width: 100%; height: auto;" />
+              <div style="font-size: 0.6em; color: gray; margin-top: 0;">
+                <em>Đỏ: Đường hồi quy quần thể với dữ liệu \(Y = 2 + 3X + \epsilon\), trong đó nhiễu theo phân phối
+                  Gaussian.</em><br />
+                <em>Xanh: Đường hồi quy tuyến tính</em>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section data-auto-animate style="font-size: 0.6em;">
+          <h2>Tổng quan</h2>
+          <div style="display: grid; grid-template-columns: 1fr .5fr; gap: 16px; margin-top: 12px; align-items: start;">
+            <div>
+              <p>Ta giả sử quan hệ “thật sự” có nhiễu (<strong>độc lập</strong> với quan sát):</p>
+              <p style="text-align:center;">
+                \[
+                Y=\beta_0+\beta_1X+\epsilon \quad
+                \]
+              </p>
+              <p><span class="keyword">Đường hồi quy quần thể</span> \(y = \beta_0 + \beta_1 x\) là xấp xỉ
+                tuyến tính tốt nhất giữa \(X\)
+                và \(Y\).</p>
+              <ul>
+                <li>Thường <strong>không quan sát được</strong> trực tiếp.</li>
+              </ul>
+              <p><span class="keyword">Đường hồi quy tuyến tính (bình phương tối thiểu)</span> trên dữ liệu huấn luyện:
+              </p>
+              <p style="text-align:center;">
+                \[
+                \hat{y}=\hat{\beta}_0+\hat{\beta}_1x
+                \]
+              </p>
+              <ul>
+                <li>Phụ thuộc vào bộ dữ liệu huấn luyện (hữu hạn).</li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec02/acc-of-coef-est-2.png" alt="Accuracy of coefficient estimates"
+                style="max-width: 100%; height: auto;" />
+              <div style="font-size: 0.6em; color: gray; margin-top: 0;">
+                <em>Đường hồi quy tuyến tính (bình phương tối thiểu) trên 10 bộ dữ liệu huấn luyện khác nhau được chọn
+                  ngẫu nhiên.</em>
+              </div>
+            </div>
+        </section>
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>Ước lượng không chệch</h2>
+          <p>Cách ước lượng trung bình \(\mu\) của biến ngẫu nhiên \(Y\)?</p>
+          <ul>
+            <li>Ước lượng từ mẫu hữu hạn là <strong>trung bình mẫu</strong>:</li>
+          </ul>
+          <p style="text-align:center;">
+            \[
+            \mathrm{avg}(y_1,y_2,\ldots,y_n)=\frac{1}{n}\sum_{i=1}^{n}y_i=\bar{y}
+            \]
+          </p>
+          <ul>
+            <li>Trung bình theo nhiều lần lấy mẫu: \(\mathbb{E}[\bar{y}]=\mu\).</li>
+            <li>Theo định nghĩa, \(\bar{y}\) là một ước lượng <strong>không chệch</strong> của \(\mu\).</li>
+          </ul>
+        </section>
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>Ước lượng không chệch</h2>
+          <ul>
+            <li>
+              Đường hồi quy tuyến tính (bình phương tối thiểu) là ước lượng <strong>không chệch</strong> cho <span
+                class="keyword">đường hồi quy quần thể</span>.
+            </li>
+            <li>Trong các ước lượng tuyến tính không chệch, đường này có <strong>phương sai
+                nhỏ nhất</strong>.</li>
+          </ul>
+          <p>⭐️ Đây là nội dung của Định lý <strong>Gauss–Markov</strong>.</p>
+        </section>
+        <section style="font-size: 0.9em;" data-auto-animate>
+          <h2>Độ chính xác của ước lượng</h2>
+          <p>\(\hat{\mu}\) (ước lượng của \(\mu\)) chính xác đến đâu?</p>
+          <ul>
+            <li>Giả sử các mẫu độc lập ⇒ <strong>standard error</strong> của \(\hat{\mu}\):</li>
+          </ul>
+          <p style="text-align:center;">
+            \[
+            SE(\hat{\mu})=\sqrt{\mathrm{Var}(\hat{\mu})}=\sqrt{\sigma^2/n}
+            \]
+          </p>
+          <ul>
+            <li>\(n\): số mẫu, \(\sigma\): độ lệch chuẩn quần thể.</li>
+            <li><span class="keyword">Nhiều mẫu hơn</span> ⇒ <span class="keyword">SE nhỏ hơn</span>.</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.9em;" data-auto-animate>
+          <h2>Độ chính xác của ước lượng</h2>
+          <p style="margin-top:14px;">
+            Standard errors của \(\hat{\beta}_0,\hat{\beta}_1\):
+          </p>
+          <p style="text-align:center;">
+            \[
+            SE(\hat{\beta}_0)^2=\sigma^2\left[\frac{1}{n}+\frac{\bar{x}^2}{\sum_{i=1}^{n}(x_i-\bar{x})^2}\right]
+            \]
+            \[
+            SE(\hat{\beta}_1)^2=\frac{\sigma^2}{\sum_{i=1}^{n}(x_i-\bar{x})^2}
+            \]
+          </p>
+          <p>Ta tiếp tục giả sử errors độc lập, không tương quan, và có phương sai chung
+            \(\sigma^2=\mathrm{Var}(\epsilon)\).</p>
+        </section>
+        <section style="font-size: 0.9em;" data-auto-animate>
+          <h2>Độ chính xác của ước lượng</h2>
+          <div style="display: grid; grid-template-columns: 1fr .5fr; gap: 16px; margin-top: 12px; align-items: start;">
+            <div>
+              <ol>
+                <li><strong>\(SE(\hat{\beta}_1)\)</strong> giảm khi các \(x_i\) “trải rộng” hơn ⇒ hệ số góc dễ ước lượng
+                  hơn.</li>
+                <li><strong>\(SE(\hat{\beta}_0)=SE(\hat{\mu})\)</strong> nếu \(\bar{x}=0\); khi đó
+                  \(\hat{\beta}_0=\bar{y}\).</li>
+                <li>\(\sigma\) thường không biết ⇒ ước lượng từ mẫu bằng <strong>RSE</strong>.</li>
+              </ol>
+              <p style="text-align:center;margin-top:10px;">
+                \[
+                RSE=\sqrt{RSS/(n-2)}
+                \]
+              </p>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec02/tv-vs-sales-plot.png" alt="TV vs Sales plot" style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+        </section>
+        <section style="font-size: 0.65em;" data-auto-animate>
+          <h2>Khoảng tin cậy</h2>
+          <div style="display: grid; grid-template-columns: 1fr .5fr; gap: 16px; margin-top: 12px; align-items: start;">
+            <div>
+              <p><strong>Khoảng tin cậy 95%</strong>:</p>
+              <ul>
+                <li>Khoảng “chứa” giá trị thật với xác suất 95% khi lặp lại lấy mẫu.</li>
+                <li>Ta tính cận từ dữ liệu huấn luyện (training data).</li>
+              </ul>
+              <p>Với \(\hat{\beta}_0\):
+                \(\left[\hat{\beta}_0-2\cdot SE(\hat{\beta}_0),\;\hat{\beta}_0+2\cdot SE(\hat{\beta}_0)\right]\)
+              </p>
+              <p>Với \(\hat{\beta}_1\):
+                \(\left[\hat{\beta}_1-2\cdot SE(\hat{\beta}_1),\;\hat{\beta}_1+2\cdot SE(\hat{\beta}_1)\right]\)
+              </p>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec02/pmf-gaussian.png" alt="PMF of Gaussian" style="max-width: 100%; height: auto;" />
+              <div style="font-size: 0.6em; color: gray; margin-top: 0;">
+                <em>Phân phối Gaussian</em>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p><strong>Vì sao?</strong></p>
+            <ul>
+              <li>Giả sử sai số \(\epsilon\) theo phân phối Gaussian ⇒ \(Y\) cũng Gaussian.</li>
+              <li>Khi đó \(\hat{\beta}_0\) và \(\hat{\beta}_1\) cũng Gaussian.</li>
+            </ul>
+          </div>
+        </section>
+        <section>
+          <h2>Ví dụ</h2>
+          <h4>Dữ liệu ngân sách quảng cáo TV</h4>
+          <div>
+            <img src="img/lec02/advertising-CI.png" alt="Advertising confidence intervals"
+              style="max-width: 70%; height: auto;" />
+          </div>
+        </section>
+        <section style="font-size: 0.6em;" data-auto-animate>
+          <h2>Kiểm định giả thuyết</h2>
+          <div>
+            <p>Khi nào kết luận có mối quan hệ “đáng kể” giữa \(X\) và \(Y\)?</p>
+            <ul>
+              <li>Ta kiểm định giả thuyết \(H_0\) (không có mối liên hệ) vs. \(H_a\) (có mối liên hệ).</li>
+              <li>Trong hồi quy tuyến tính đơn: \(H_0:\beta_1=0\) vs. \(H_a:\beta_1\neq 0\).</li>
+            </ul>
+            <p style="margin-top:10px;">Làm sao biết \(\beta_1\) “đủ xa 0”?</p>
+            <ul>
+              <li>Phụ thuộc vào độ chính xác của \(\hat{\beta}_1\), tức là \(SE(\hat{\beta}_1)\).</li>
+            </ul>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr .8fr; gap: 16px; margin-top: 12px; align-items: start;">
+            <div>
+              <p style="margin-top:10px;">
+                <strong>t-statistic</strong> là độ lệch “chuẩn hoá” của \(\hat{\beta}_1\) khỏi 0:
+              </p>
+              <p style="text-align:center;">
+                \[
+                t=\frac{\hat{\beta}_1-0}{SE(\hat{\beta}_1)}
+                \]
+              </p>
+              <ul>
+                <li>Cũng gần giống “z-score”; có dạng chuông.</li>
+                <li>Với \(n&gt;30\), khá gần phân phối chuẩn.</li>
+              </ul>
+            </div>
+            <div>
+              <img src="img/lec02/t-distribution.png" alt="t-distribution" style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+        </section>
+        <section style="font-size: 0.6em;" data-auto-animate>
+          <h2>Kiểm định giả thuyết</h2>
+          <div style="display: grid; grid-template-columns: 1fr .8fr; gap: 16px; margin-top: 12px; align-items: start;">
+            <div>
+              <p>Ta có thể tính xác suất \(|t|\) vượt một giá trị nào đó.</p>
+              <ul>
+                <li>Ví dụ: \(|t|&gt;2\) thì xấp xỉ <strong>5%</strong>.</li>
+                <li>Xác suất này gọi là <strong>\(p\)-value</strong>.</li>
+              </ul>
+              <p style="margin-top:10px;">
+                Nếu \(p\)-value <strong>nhỏ</strong> ⇒ khó tin rằng mối liên hệ quan sát được chỉ do ngẫu nhiên.
+              </p>
+              <ul>
+                <li>\(p=5\%\): nếu \(H_0\) đúng, kết quả “tốt ngang hoặc tốt hơn” xảy ra tối đa 5% bộ dữ liệu.</li>
+                <li>Bác bỏ \(H_0\) ở mức ý nghĩa \(\alpha\) nếu \(p \le \alpha\).</li>
+              </ul>
+              <p style="margin-top:10px;">Mức ý nghĩa thường dùng: \(\alpha=5\%\) hoặc \(1\%\).</p>
+            </div>
+            <div>
+              <img src="img/lec02/pmf-gaussian.png" alt="PMF of Gaussian" style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+        </section>
+        <section>
+          <h2>Ví dụ</h2>
+          <div style="display: grid; grid-template-columns: 1fr .3fr; gap: 16px; margin-top: 12px; align-items: start;">
+            <div style="font-size: .6em;">
+              <!-- Table 1: Sales ~ TV -->
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Coefficient</th>
+                    <th>Std. error</th>
+                    <th><em>t</em>-statistic</th>
+                    <th><em>p</em>-value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>intercept</th>
+                    <td>7.0325</td>
+                    <td>0.4578</td>
+                    <td>15.36</td>
+                    <td>&lt;0.0001</td>
+                  </tr>
+                  <tr>
+                    <th>TV</th>
+                    <td>0.0475</td>
+                    <td>0.0027</td>
+                    <td>17.67</td>
+                    <td>&lt;0.0001</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <br />
+
+              <!-- Table 2: Sales ~ Radio -->
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Coefficient</th>
+                    <th>Std. error</th>
+                    <th><em>t</em>-statistic</th>
+                    <th><em>p</em>-value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>intercept</th>
+                    <td>9.312</td>
+                    <td>0.563</td>
+                    <td>16.54</td>
+                    <td>&lt;0.0001</td>
+                  </tr>
+                  <tr>
+                    <th>Radio</th>
+                    <td>0.203</td>
+                    <td>0.020</td>
+                    <td>9.92</td>
+                    <td>&lt;0.0001</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <br />
+
+              <!-- Table 3: Sales ~ newspaper -->
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Coefficient</th>
+                    <th>Std. error</th>
+                    <th><em>t</em>-statistic</th>
+                    <th><em>p</em>-value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>intercept</th>
+                    <td>12.351</td>
+                    <td>0.621</td>
+                    <td>19.88</td>
+                    <td>&lt;0.0001</td>
+                  </tr>
+                  <tr>
+                    <th>Newspaper</th>
+                    <td>0.055</td>
+                    <td>0.017</td>
+                    <td>3.30</td>
+                    <td>&lt;0.0001</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <img src="img/lec02/linear-regression-vertical-plots.png" alt="Sales vs TV/Radio/Newspaper"
+                style="max-width: 70%; height: auto;" />
+            </div>
+          </div>
+        </section>
+        <section>
+          <h1>Các độ đo khác</h1>
+        </section>
+        <section>
+          <h2>\(R^2\)-statistic</h2>
+          <div>
+            \[
+            R^2 = \frac{TSS - RSS}{TSS} = 1 - \frac{RSS}{TSS}
+            \]
+          </div>
+          <ul>
+            <li>\(R^2 \in [0,1]\), không phụ thuộc thang đo của \(Y\).</li>
+            <li>\(TSS = \sum_{i=1}^{n}(y_i-\bar{y})^2\): tổng phương sai của \(Y\).</li>
+            <li>\(TSS - RSS\): phần phương sai “giải thích” bởi hồi quy.</li>
+          </ul>
+        </section>
+        <section style="font-size: 0.9em;">
+          <h2>RSE</h2>
+          <h4>Residual Standard Error</h4>
+          <ul>
+            <li>
+              \[
+              RSE = \sqrt{\frac{1}{n-2}RSS} = \sqrt{\frac{1}{n-2}\sum_{i=1}^{n}(y_i-\hat{y}_i)^2}
+              \]
+            </li>
+            <li>Đo lỗi theo <strong>đơn vị của \(Y\)</strong> (thước đo tuyệt đối).</li>
+            <li>Trực giác: “độ lệch trung bình” quanh đường hồi quy.</li>
+            <li>Ví dụ quảng cáo: \(RSE=3.26\), mean sales ≈ 14 ⇒ sai số khoảng 23%.</li>
+          </ul>
+        </section>
+        <section style="font-size: 0.9em;">
+          <h2>Hệ số tương quan</h2>
+          <h4>Correlation</h4>
+          <div>
+            \[
+            \mathrm{Cor}(X,Y) =
+            \frac{\sum_{i=1}^{n}(x_i-\bar{x})(y_i-\bar{y})}
+            {\sqrt{\sum_{i=1}^{n}(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^{n}(y_i-\bar{y})^2}}
+            \]
+          </div>
+          <ul>
+            <li>Tương quan mẫu đo mức “tuyến tính” giữa \(X\) và \(Y\).</li>
+            <li>Trong hồi quy tuyến tính đơn: \(\mathrm{Cor}(X,Y)^2 = R^2\).</li>
+            <li><span class="keyword">Không</span> đúng với hồi quy bội, và không đúng với mô hình không dùng bình
+              phương tối thiểu.</li>
+          </ul>
+        </section>
+      </section>
+      <!-- 3. Hồi quy tuyến tính bội -->
+      <section>
+        <section id="hoi-quy-boi">
+          <h1>
+            <span class="text-light">3.</span><br />
+            Hồi quy tuyến tính bội
+          </h1>
+        </section>
+        <section>
+          <h2>Mô hình nhiều biến</h2>
+          <ul>
+            <li>Ta giả sử \(Y\) có mối liên hệ tuyến tính với nhiều biến đầu vào \(X_1,X_2,\ldots,X_p\):
+              \[
+              Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p + \epsilon
+              \]
+            </li>
+            <li>Ví dụ quảng cáo: \(sales = \beta_0 + \beta_1 \times TV + \beta_2 \times radio + \beta_3 \times newspaper
+              + \epsilon\).</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Dạng vector</h2>
+          <div>
+            \[
+            Y = \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \epsilon \\
+            = \beta_0 + \sum_{j=1}^{p} \beta_j X_j + \epsilon
+            = \mathbf{X} \boldsymbol{\beta} + \epsilon
+            \]
+          </div>
+          <div>
+            Trong đó \(\boldsymbol{\beta}=(\beta_0,\beta_1,\ldots,\beta_p)\) và
+            \(\mathbf{X}=(1, X_1, \ldots, X_p)\) là các vector.
+          </div>
+        </section>
+        <section>
+          <h2>Tổng bình phương sai số</h2>
+          <div>
+            \[
+            RSS = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \sum_{i=1}^{n} (y_i - \mathbf{x}_i^T \hat{\boldsymbol{\beta}})^2
+            \\
+            = (\mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}})^T (\mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}})
+            \]
+          </div>
+          <ul>
+            <li>\(\mathbf{x}_i\) là vector đầu vào của mẫu \(i\).</li>
+            <li>Ta chọn \(\hat{\boldsymbol{\beta}}\) để tối thiểu hoá \(RSS\).</li>
+          </ul>
+        </section>
+        <section style="font-size: 0.7em;" data-auto-animate>
+          <h2>Ước lượng tham số</h2>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:center;">
+            <div style="text-align:center;">
+              <p style="margin:0;">\[
+                \frac{\partial RSS}{\partial \hat{\boldsymbol{\beta}}} = -2X^T\big(Y - X\hat{\boldsymbol{\beta}}\big)
+                \]</p>
+            </div>
+            <div style="text-align:center;">
+              <p style="margin:0;">\[
+                \frac{\partial^2 RSS}{\partial \hat{\boldsymbol{\beta}}\,\partial \hat{\boldsymbol{\beta}}^T} = 2X^TX
+                \]</p>
+            </div>
+          </div>
+
+          <ul style="margin-top:12px;">
+            <li>Giả sử \(X\) có <strong>hạng cột đầy đủ</strong> ⇒ \(X^TX\) <em>xác định dương</em><sup>*</sup>.
+            </li>
+            <li>Khi đó \(RSS\) có <strong>một nghiệm tối thiểu duy nhất</strong> (tại đó đạo hàm bậc nhất bằng 0).</li>
+          </ul>
+
+          <p style="margin-top:14px;">Đặt
+            \(2X^T\big(Y - X\hat{\boldsymbol{\beta}}\big)=0\).
+            Suy ra
+            \(
+            \hat{\boldsymbol{\beta}}=(X^TX)^{-1}X^TY
+            \).
+          </p>
+          <p>Tổng quát, ta có:
+            \(
+            \hat{\mathbf{Y}}=X\hat{\boldsymbol{\beta}}=\underbrace{X(X^TX)^{-1}X^T}_{\color{red}{\text{hat matrix
+            }H}}\,\mathbf{Y}
+            \).
+          </p>
+
+          <p style="font-size:0.75em;color:gray;margin-top:10px;">
+            <sup>*</sup> Ma trận \(A\) là <em>xác định dương</em> nếu với mọi vector \(x\neq 0\) ta có \(x^TAx > 0\).
+            0\).
+          </p>
+        </section>
+        <section style="font-size: 0.7em;" data-auto-animate>
+          <h2>Diễn giải hồi quy tuyến tính bội</h2>
+
+          <div style="display:grid;grid-template-columns:0.7fr 1fr;gap:18px;margin-top:12px;align-items:center;">
+            <div style="text-align:center;">
+              <img src="img/lec02/interpret-1.png" alt="Geometric interpretation 1"
+                style="max-width: 100%; height: auto;" />
+              <p style="font-size:0.75em;color:gray;margin-top:8px;">
+                Trực quan trong không gian \(\mathbb{R}^p\) do \(p\) đặc trưng sinh ra.
+              </p>
+            </div>
+
+
+            <div>
+              <h3 style="margin:0 0 8px 0;">Diễn giải hình học 1</h3>
+              <ul>
+                <li>\(p\) đặc trưng cùng nhau tạo nên một không gian \(p\)-chiều, nơi \(n\) quan sát “nằm” trong đó.
+                </li>
+                <li><span class="keyword">Mặt phẳng hồi quy</span> là mặt phẳng “ôm” các điểm tốt nhất.</li>
+                <li>“Tốt nhất” được đo bằng cực tiểu hoá:
+                  \[
+                  RSS(\hat{\boldsymbol{\beta}})=\|Y-X\hat{\boldsymbol{\beta}}\|^2
+                  \]
+                </li>
+              </ul>
+            </div>
+
+
+          </div>
+        </section>
+
+        <section style="font-size: 0.7em;" data-auto-animate>
+          <h2>Diễn giải hồi quy tuyến tính bội</h2>
+
+          <div style="display:grid;grid-template-columns:0.7fr 1fr;gap:18px;margin-top:12px;align-items:center;">
+            <div style="text-align:center;">
+              <img src="img/lec02/interpret-2.png" alt="Geometric interpretation 2"
+                style="max-width: 100%; height: auto;" />
+              <p style="font-size:0.75em;color:gray;margin-top:8px;">
+                Trực quan trong không gian \(\mathbb{R}^n\) do \(n\) dữ liệu quan sát sinh ra.
+              </p>
+            </div>
+
+
+            <div>
+              <h3 style="margin:0 0 8px 0;">Diễn giải hình học 2</h3>
+              <ul>
+                <li>\(x_0,\ldots,x_p\) (với \(x_0\equiv 1\)) sinh ra một không gian con \(p\)-chiều trong
+                  \(\mathbb{R}^n\).</li>
+                <li>Cực tiểu hoá \(\|Y-X\hat{\boldsymbol{\beta}}\|^2\) tương đương <strong>chiếu vuông góc</strong>
+                  vector \(y\) lên không
+                  gian con này.</li>
+                <li>⇒ \(H\) còn gọi là <em>ma trận chiếu</em> (projection matrix).</li>
+              </ul>
+            </div>
+
+
+          </div>
+        </section>
+
+        <section style="font-size: 0.75em;" data-auto-animate>
+          <h2>Tính không chệch</h2>
+
+          <p style="text-align:center;margin:6px 0;">
+            \[
+            \hat{\beta}=(X^TX)^{-1}X^TY
+            \qquad
+            Y=X\beta+\epsilon
+            \]
+          </p>
+
+          <p style="text-align:center;margin:6px 0;">
+            \[
+            \hat{\beta}=(X^TX)^{-1}X^T(X\beta+\epsilon)
+            =(X^TX)^{-1}X^TX\beta+(X^TX)^{-1}X^T\epsilon \\
+            =\beta+(X^TX)^{-1}X^T\epsilon
+            \]
+          </p>
+
+          <p style="text-align:center;margin:6px 0;">
+            \[
+            \mathbb{E}[\hat{\beta}\mid X]
+            =\mathbb{E}\!\left[\beta+(X^TX)^{-1}X^T\epsilon\mid X\right]
+            =\beta+(X^TX)^{-1}X^T\mathbb{E}[\epsilon\mid X]
+            =\beta
+            \]
+          </p>
+
+          <p style="font-size:0.8em;color:gray;margin-top:8px;">
+            <em>Ghi chú:</em> Dùng \(\mathbb{E}[\epsilon\mid X]=0\) và giả định nhiễu \(\epsilon\) độc lập với \(X\).
+          </p>
+
+          <div style="margin-top:10px;border-radius:10px;border:1px solid #e3c66a;background:#fff6d6;padding:10px;">
+            <strong>Định lý Gauss–Markov:</strong> Trong các ước lượng tuyến tính không chệch, least-squares có
+            <strong>phương
+              sai nhỏ nhất</strong>.
+          </div>
+        </section>
+
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:12px;align-items:start;">
+            <div>
+              <h3 style="margin:0 0 8px 0;">Hồi quy đơn</h3>
+              <ul>
+                <li>Với mỗi giá trị input đang xét, ta <span class="keyword">bỏ qua</span> các đặc trưng còn lại.</li>
+              </ul>
+
+
+              <div style="margin-top:10px;">
+                <img src="img/lec01b/advertising-example.png" alt="Advertising example"
+                  style="max-width: 100%; height: auto;" />
+              </div>
+            </div>
+
+            <div>
+              <h3 style="margin:0 0 8px 0;">Hồi quy bội</h3>
+              <ul>
+                <li>Với mỗi giá trị input đang xét, ta <span class="keyword">giữ cố định</span> các đặc trưng còn lại.
+                </li>
+              </ul>
+
+              <div style="margin-top:10px;text-align:center;font-size:0.7em;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Coefficient</th>
+                      <th>Std. error</th>
+                      <th>t-statistic</th>
+                      <th>p-value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>intercept</th>
+                      <td>2.939</td>
+                      <td>0.3119</td>
+                      <td>9.42</td>
+                      <td>&lt;0.0001</td>
+                    </tr>
+                    <tr>
+                      <th>TV</th>
+                      <td>0.046</td>
+                      <td>0.0014</td>
+                      <td>32.81</td>
+                      <td>&lt;0.0001</td>
+                    </tr>
+                    <tr>
+                      <th>radio</th>
+                      <td>0.189</td>
+                      <td>0.0086</td>
+                      <td>21.89</td>
+                      <td>&lt;0.0001</td>
+                    </tr>
+                    <tr>
+                      <th>newspaper</th>
+                      <td><span class="keyword">-0.001</span></td>
+                      <td><span class="keyword">0.0059</span></td>
+                      <td><span class="keyword">-0.18</span></td>
+                      <td><span class="keyword">0.8599</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.7em;" data-auto-animate>
+          <h2>Diễn giải</h2>
+          <p>Vì sao <span class="keyword">newspaper</span> có ý nghĩa ở mô hình đơn nhưng không ở mô hình bội?</p>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Tương quan giữa <strong>newspaper</strong> và <strong>radio</strong> khoảng \(0.35\): Nơi chi nhiều
+                  cho
+                  newspaper thường cũng chi nhiều cho radio.</li>
+                <li>Trong hồi quy đơn, ta “gán” một phần doanh số cho newspaper mà thực ra có thể do radio tạo ra.</li>
+                <li>Nói cách khác: <strong>newspaper</strong> là đại diện (surrogate) cho
+                  <strong>radio</strong>.
+                </li>
+              </ul>
+            </div>
+            <div style="text-align:center;font-size:0.7em;">
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>TV</th>
+                    <th>radio</th>
+                    <th>newspaper</th>
+                    <th>sales</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>TV</th>
+                    <td>1.0000</td>
+                    <td>0.0548</td>
+                    <td>0.0567</td>
+                    <td>0.7822</td>
+                  </tr>
+                  <tr>
+                    <th>radio</th>
+                    <td></td>
+                    <td>1.0000</td>
+                    <td><span class="keyword">0.3541</span></td>
+                    <td>0.5762</td>
+                  </tr>
+                  <tr>
+                    <th>newspaper</th>
+                    <td></td>
+                    <td></td>
+                    <td>1.0000</td>
+                    <td>0.2283</td>
+                  </tr>
+                  <tr>
+                    <th>sales</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>1.0000</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="font-size:1em;color:gray;margin-top:8px;">
+                <em>Bảng tương quan giữa các đặc trưng.</em>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>Tương quan \(\neq\) nhân quả</h2>
+
+          <p>Vì sao các tương quan “kỳ lạ” vẫn xảy ra?</p>
+          <ul>
+            <li>Số lượng <strong>chim cò</strong> tương quan cao với số lượng <strong>trẻ sơ sinh</strong>.</li>
+            <li>Số lượng <strong>cây xăng</strong> tương quan cao với số lượng <strong>ly hôn</strong>.</li>
+          </ul>
+
+          <p style="margin-top:12px;">
+            Trong các ví dụ này, có một <strong>yếu tố khác</strong> mới thật sự gây ra cả hai đại lượng.
+          </p>
+          <ul>
+            <li>Nếu yếu tố đó <span class="keyword">có trong dữ liệu</span>, mô hình bội có thể giúp ta tìm ra.</li>
+            <li>Nếu không, đó là <strong>yếu tố nhiễu (hidden confounder)</strong> ⇒ dễ khiến ta suy luận sai quan hệ
+              nhân quả.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>4 câu hỏi quan trọng</h2>
+          <ol>
+            <li>Có ít nhất một biến dự báo hữu ích không?</li>
+            <li>Tập biến nào là hữu ích?</li>
+            <li>Mô hình khớp dữ liệu tốt đến đâu?</li>
+            <li>Dự đoán chính xác đến mức nào?</li>
+          </ol>
+        </section>
+
+        <section style="font-size:0.8em;">
+          <h2>Câu hỏi 1: Có biến nào hữu ích?</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.5fr;gap:18px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Kiểm định:
+                  \(
+                  H_0:\beta_1=\beta_2=\cdots=\beta_p=0
+                  \quad \text{vs.}\quad
+                  H_a:\text{tồn tại }\beta_j\neq 0
+                  \)
+                </li>
+                <li>Dùng <strong>F-statistic</strong>:
+                  \[
+                  F=\frac{(TSS-RSS)/p}{RSS/(n-p-1)}
+                  \]
+                </li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec02/f-distribution.svg" alt="F-distribution" style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+          <ul>
+            <li>Nếu \(H_0\) đúng ⇒ \(F\approx 1\); nếu sai ⇒ \(F&gt;1\).</li>
+            <li>Với dữ liệu quảng cáo: \(F=570\).</li>
+            <li>Nhìn chung \(F\) tuân theo <strong>Phân phối F</strong> (F-distribution).</li>
+          </ul>
+        </section>
+
+        <section style="font-size:0.8em;">
+          <h2>Câu hỏi 2: Tập con biến nào hữu ích?</h2>
+          <ul>
+            <li>Kiểm định xem \(q\) biến “cuối” có thêm thông tin không:
+              <br>
+              \(
+              H_0:\beta_{p-q+1}=\cdots=\beta_p=0
+              \)
+            </li>
+            <li>F-statistic tương ứng:
+              \(
+              F=\frac{(RSS_0-RSS)/q}{RSS/(n-p-1)}
+              \)
+              với \(RSS_0\) là RSS của mô hình <strong>không</strong> gồm \(q\) biến đó.
+            </li>
+            <li><strong>t-statistic</strong> trong bảng = căn bậc hai của \(F\) (trường hợp 1 biến).</li>
+            <li>Ví dụ: <strong>newspaper</strong> không hữu ích khi đã có <strong>TV</strong> và <strong>radio</strong>.
+            </li>
+          </ul>
+
+
+          <div style="margin-top:10px;text-align:center;font-size:0.7em;">
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Coefficient</th>
+                  <th>Std. error</th>
+                  <th>t-statistic</th>
+                  <th>p-value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>intercept</th>
+                  <td>2.939</td>
+                  <td>0.3119</td>
+                  <td>9.42</td>
+                  <td>&lt;0.0001</td>
+                </tr>
+                <tr>
+                  <th>TV</th>
+                  <td>0.046</td>
+                  <td>0.0014</td>
+                  <td>32.81</td>
+                  <td>&lt;0.0001</td>
+                </tr>
+                <tr>
+                  <th>radio</th>
+                  <td>0.189</td>
+                  <td>0.0086</td>
+                  <td>21.89</td>
+                  <td>&lt;0.0001</td>
+                </tr>
+                <tr>
+                  <th>newspaper</th>
+                  <td><span class="keyword">-0.001</span></td>
+                  <td><span class="keyword">0.0059</span></td>
+                  <td><span class="keyword">-0.18</span></td>
+                  <td><span class="keyword">0.8599</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section style="font-size:0.8em;">
+          <h2>Nhiều biến dự báo</h2>
+          <h4>Rủi ro đa kiểm định (multiple testing)</h4>
+          <ul>
+            <li>Khi có nhiều biến, không nên chỉ nhìn <b>p-value từng biến</b>.</li>
+            <li>Giả sử <b>không có liên hệ thật</b>:
+              \(H_0:\beta_1=\cdots=\beta_p=0\) (vd <b>p=100</b>), và \(Y\) ngẫu nhiên.
+              <ul>
+                <li><b>Multiple testing</b>: đặt ngưỡng 0.05 ⇒ ~5% p-value &lt; 0.05 do may mắn
+                  ⇒ với 100 biến dễ có vài biến “có ý nghĩa” giả.</li>
+              </ul>
+            </li>
+            <li><b>t-test</b> không “phạt” vì thử nhiều biến; <b>F-test</b> kiểm định <b>cả mô hình</b> và <b>tính đến
+                số lượng biến</b>.</li>
+            <li>Nếu \(p > n\): OLS/t-test/F-test cổ điển không ổn ⇒ sẽ cần các phương pháp khác.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Preview: Chọn đặc trưng</h2>
+          <ul>
+            <li>Thực tế, đầu ra thường chỉ phụ thuộc vào <strong>một vài</strong> đặc trưng (biến).</li>
+            <li>Bài toán tìm các biến đó gọi là <strong>variable/feature selection</strong>.</li>
+            <li>Sẽ học kỹ ở phần sau; ở đây chỉ “preview”.</li>
+          </ul>
+        </section>
+
+        <section style="font-size:0.75em;">
+          <h2>Tìm tập con đặc trưng tốt nhất</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.5fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Thử mọi tập con đặc trưng. Ví dụ:
+                  <ul>
+                    <li>p=3: {TV, radio, newspaper} ⇒ 8 mô hình (đầy đủ, TV+radio, TV+newspaper, radio+newspaper, TV,
+                      radio,
+                      newspaper, rỗng).</li>
+                  </ul>
+                </li>
+                <li>Có \(2^p\) mô hình; nếu \(p=30\) thì \(2^{30}=1{,}073{,}741{,}824\) mô hình.</li>
+                <li>Đánh giá mô hình <strong>không</strong> dựa vào training error → cần ước lượng <strong>test
+                    error</strong>.</li>
+              </ul>
+            </div>
+
+            <div style="margin-top:10px;text-align:center;">
+              <img src="img/lec02/train-vs-test-error.png" alt="Train vs Test error"
+                style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size:0.65em;">
+          <h2>Forward / Backward / Mixed selection</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;">
+            <div>
+              <h4>Forward selection</h4>
+              <ul>
+                <li>Bắt đầu từ mô hình rỗng.</li>
+                <li>Fit \(p\) mô hình (mỗi mô hình 1 biến), chọn RSS nhỏ nhất.</li>
+                <li>Thử thêm từng biến còn lại, chọn RSS nhỏ nhất.</li>
+                <li>Lặp đến khi đạt tiêu chí dừng.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Backward selection</h4>
+              <ul>
+                <li>Bắt đầu từ mô hình đầy đủ.</li>
+                <li>Loại biến có \(p\)-value lớn nhất (theo F-statistic).</li>
+                <li>Lặp đến khi đạt tiêu chí dừng.</li>
+              </ul>
+            </div>
+          </div>
+
+
+          <div style="margin-top:10px;">
+            <h4>Mixed selection</h4>
+            <ul>
+              <li>Bắt đầu từ mô hình rỗng.</li>
+              <li>Thêm biến đến khi biến thêm vào trở nên không còn ý nghĩa.</li>
+              <li>Loại biến đến khi không còn biến “không ý nghĩa”.</li>
+              <li>Lặp đến khi: biến trong mô hình đều “có ý nghĩa”, biến ngoài thì không.</li>
+            </ul>
+          </div>
+
+
+        </section>
+
+        <section style="font-size:0.75em;">
+          <h2>Câu hỏi 3: Mô hình khớp dữ liệu tốt đến đâu?</h2>
+
+          <div style="display:grid;grid-template-columns:1fr 0.5fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Thước đo phổ biến: <strong>RSE</strong> và <strong>\(R^2\)</strong>.
+                  <ul>
+                    <li>Hồi quy đơn:
+                      \(
+                      R^2=\mathrm{Cor}(X,\hat{Y})^2
+                      \)
+                    </li>
+                    <li>Hồi quy bội:
+                      \(
+                      R^2=\mathrm{Cor}(Y,\hat{Y})^2
+                      \)
+                    </li>
+                  </ul>
+                </li>
+                <li>Trong các mô hình tuyến tính, mô hình “tuyến tính đầy đủ” tối đa hoá tương quan giữa \(Y\) và
+                  \(\hat{Y}\) ⇒ có \(R^2\) cao nhất.</li>
+                <li>\(R^2\) tăng đơn điệu khi thêm biến (kể cả biến yếu) → cần xem <strong>test error</strong>.</li>
+              </ul>
+            </div>
+
+            <div style="margin-top:10px;text-align:center;">
+              <img src="img/lec02/tv-radio-sales.png" alt="TV, radio, sales" style="max-width: 100%; height: auto;" />
+              <div style="font-size:0.75em;color:gray;margin-top:8px;">
+                <em>Xem xét dữ liệu ta thấy có mối quan hệ phi tuyến giữa TV, radio và sales.</em>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size:0.65em;">
+          <h2>Câu hỏi 4: Dự đoán chính xác đến đâu?</h2>
+          <ul>
+            <li>Dù biết quan hệ thật, vẫn luôn có <strong>irreducible error</strong> (nhiễu \(\varepsilon\)).</li>
+            <li><strong>Confidence interval</strong>: biến thiên của ước lượng qua nhiều mẫu.</li>
+            <li><strong>Prediction interval</strong>: biến thiên của dự đoán cho một input cụ thể.</li>
+            <li>Vì thế: prediction interval luôn <strong>rộng hơn</strong> confidence interval.</li>
+          </ul>
+          <p>Ví dụ Quảng cáo: TV=\(\$100{,}000\), radio=\(\$20{,}000\)</p>
+          <ul>
+            <li>95% CI: \(\text{sales}\in[10985,11528]\)</li>
+            <li>95% PI: \(\text{sales}\in[7930,14580]\)</li>
+          </ul>
+          <div style="font-size:0.8em;">
+            <p>
+              \[
+              y=\hat{y}\pm
+              t_{\alpha/2,n-p-1}\sqrt{MSE\left(\frac{1}{n}+\frac{(x_0-\bar{x})^2}{\sum_{i=1}^{n}(x_i-\bar{x})^2}\right)}
+              \]
+            </p>
+            <p>
+              \[
+              y=\hat{y}\pm
+              t_{\alpha/2,n-p-1}\sqrt{MSE\left(1+\frac{1}{n}+\frac{(x_0-\bar{x})^2}{\sum_{i=1}^{n}(x_i-\bar{x})^2}\right)}
+              \]
+            </p>
+          </div>
+        </section>
+      </section>
+
+      <section id="vuot-ra-ngoai">
+        <section>
+          <h1>
+            <span class="text-light">4.</span><br />
+            Biến định tính và tương tác
+          </h1>
+        </section>
+
+        <section style="font-size:0.75em;">
+          <h2>Thêm biến định tính</h2>
+          <h4>Ví dụ dữ liệu tín dụng (\(n=400\))</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Output: <strong>số dư tín dụng</strong></li>
+                <li><strong>Biến định lượng:</strong> tuổi, số lượng thẻ, số năm được giáo dục, thu nhập (K$), hạn mức,
+                  xếp hạng</li>
+                <li><strong>Biến định tính:</strong> giới tính (nam/nữ), là sinh viên (có/không), tình trạng hôn nhân,
+                  khu vực (3 giá trị)
+                </li>
+              </ul>
+            </div>
+
+            <div style="margin-top:10px;text-align:center;">
+              <img src="img/lec02/predictor-matrix.png" alt="Predictor matrix" style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+
+        </section>
+
+        <section style="font-size:0.75em;">
+          <h2>Biến nhị phân: dummy variable</h2>
+          <ul>
+            <li>Thêm một dummy, ví dụ gender:
+              \[
+              x_i=
+              \begin{cases}
+              1 & \text{nếu người thứ }i\text{ là nam}\\
+              0 & \text{nếu người thứ }i\text{ là nữ}
+              \end{cases}
+              \]
+            </li>
+            <li>Mô hình:
+              \(
+              y_i=\beta_0+\beta_1 x_i+\epsilon_i
+              \)
+              <ul>
+                <li>\(\beta_0\): số dư trung bình của nam.</li>
+                <li>\(\beta_0+\beta_1\): số dư trung bình của nữ.</li>
+              </ul>
+            </li>
+            <li>Có thể mã hoá bằng \(-1/1\) thay vì \(0/1\). Tuy nhiên cách mã hoá chỉ thay đổi diễn giải của hệ số,
+              không đổi kết quả hồi quy.</li>
+          </ul>
+        </section>
+
+        <section style="font-size:0.75em;">
+          <h2>Biến nhiều mức: dùng nhiều dummy</h2>
+          <ul>
+            <li>“Ít hơn 1 dummy so với số giá trị”.</li>
+            <li>Ví dụ khu vực có 3 giá trị (Đông, Nam, Tây) → dùng 2 dummy:
+              \[
+              x_{i1}=
+              \begin{cases}
+              1 & \text{Nam}\\
+              0 & \text{khác Nam}
+              \end{cases}
+              \qquad
+              x_{i2}=
+              \begin{cases}
+              1 & \text{Tây}\\
+              0 & \text{khác Tây}
+              \end{cases}
+              \]
+            </li>
+            <li>Mô hình:
+              \(
+              y_i=\beta_0+\beta_1 x_{i1}+\beta_2 x_{i2}+\epsilon_i
+              \)
+              <ul>
+                <li>\(\beta_0\): trung bình phía Đông</li>
+                <li>\(\beta_0+\beta_1\): trung bình phía Nam</li>
+                <li>\(\beta_0+\beta_2\): trung bình phía Tây</li>
+              </ul>
+            </li>
+            <li>Kiểm định \(H_0:\beta_1=\beta_2=0\) bằng <strong>F-statistic</strong>.</li>
+          </ul>
+        </section>
+
+        <section style="font-size:0.75em;">
+          <h2>Biến Tương tác</h2>
+          <div style="display:grid;grid-template-columns:1fr .75fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Có thể có mối quan hệ phức tạp hơn tuyến tính giữa input và output.
+                  <ul>
+                    <li>Ví dụ: Radio có thể làm tăng hiệu quả quảng cáo TV.</li>
+                  </ul>
+                </li>
+                <li>Thêm biến tương tác:
+                  \(
+                  Y=\beta_0+\beta_1X_1+\beta_2X_2+\beta_3\color{red}{X_1X_2}\color{black}+\epsilon
+                  \)
+                </li>
+                <li>Khi TV hoặc radio thấp, sales có thể thấp hơn dự đoán tuyến tính → biến tương tác giúp ta “bắt” được
+                  hiệu ứng đó.
+                </li>
+              </ul>
+            </div>
+
+            <div style="margin-top:10px;text-align:center;">
+              <img src="img/lec02/tv-radio-sales.png" alt="TV, radio, sales" style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size:0.6em;" data-auto-animate>
+          <h2>Ví dụ</h2>
+          <h4>Dữ liệu quảng cáo</h4>
+          <div>
+            \[
+            \text{sales}=\beta_0+\beta_1\text{TV}+\beta_2\text{radio}+\beta_3(\text{TV}\times\text{radio})+\epsilon
+            \]
+          </div>
+          <div>
+            <div>
+              <ul>
+                <li>Bằng chứng mạnh cho \(H_a:\beta_3\neq 0\).</li>
+                <li>\(\beta_3\): mức tăng “hiệu quả TV” khi radio tăng 1 đơn vị.</li>
+                <li>\(R^2=89.7\%\) (không tương tác) → \(R^2=96.8\%\) (có tương tác).</li>
+                <li>
+                  \(
+                  \frac{96.8-89.7}{100-89.7}=69\%
+                  \)
+                  phần biến thiên “chưa giải thích” được giải thích bởi tương tác.
+                </li>
+                <li>Tất cả các biến đều có ý nghĩa.</li>
+              </ul>
+            </div>
+            <div style="text-align: center;font-size: .7em;">
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Coefficient</th>
+                    <th>Std. error</th>
+                    <th>t-statistic</th>
+                    <th>p-value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>intercept</th>
+                    <td>6.7502</td>
+                    <td>0.248</td>
+                    <td>27.23</td>
+                    <td>&lt;0.0001</td>
+                  </tr>
+                  <tr>
+                    <th>TV</th>
+                    <td>0.0191</td>
+                    <td>0.002</td>
+                    <td>12.70</td>
+                    <td>&lt;0.0001</td>
+                  </tr>
+                  <tr>
+                    <th>radio</th>
+                    <td>0.0289</td>
+                    <td>0.009</td>
+                    <td>3.24</td>
+                    <td>0.0014</td>
+                  </tr>
+                  <tr>
+                    <th>TV×radio</th>
+                    <td>0.0011</td>
+                    <td>0.000</td>
+                    <td>20.73</td>
+                    <td>&lt;0.0001</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ</h2>
+          <h4>Dữ liệu tín dụng</h4>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
+            <div style="font-size: .6em;">
+              <p>Đầu ra là <strong>số dư (balance)</strong>; đầu vào bao
+                gồm <strong>thu nhập (income)</strong> và biến định tính <strong>là sinh viên (có/không)</strong>.</p>
+              <p><strong>Mô hình cơ sở</strong>: Tạo ra hai đường thẳng song song.</p>
+              <div style="font-size: .7em;">
+                \[
+                \text{balance}_i=\beta_0+\beta_1\cdot \text{income}_i+
+                \begin{cases}
+                \beta_2 & \text{nếu người thứ } i \text{ là sinh viên}\\
+                0 & \text{ngược lại}
+                \end{cases} \\
+                = \beta_1\cdot \text{income}_i+
+                \begin{cases}
+                \beta_0+\beta_2 & \text{nếu sinh viên}\\
+                \beta_0 & \text{nếu không sinh viên}
+                \end{cases}
+                \]
+              </div>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec02/income_balance.svg" alt="Income vs Balance" style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+
+        </section>
+
+        <section data-auto-animate>
+          <h2>Ví dụ</h2>
+          <h4>Dữ liệu tín dụng</h4>
+
+          <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
+            <div style="font-size: .7em;">
+              <p>Đầu ra là <strong>số dư (balance)</strong>; đầu vào bao
+                gồm <strong>thu nhập (income)</strong> và biến định tính <strong>là sinh viên (có/không)</strong>.</p>
+              <p><strong>Mô hình tương tác</strong>: hai đường có độ dốc khác nhau.</p>
+            </div>
+            <div style="margin-top:10px;text-align:center;">
+              <img src="img/lec02/income_balance_2.svg" alt="Income vs Balance with interaction"
+                style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+          <div style="font-size: .4em;">
+            \[
+            \text{balance}_i=\beta_0+\beta_1\cdot \text{income}_i+
+            \begin{cases}
+            \beta_2+\beta_3\cdot \text{income}_i & \text{nếu người thứ } i \text{ là sinh viên}\\
+            0 & \text{ngược lại}
+            \end{cases} \\
+            = \begin{cases}
+            (\beta_0+\beta_2)+(\beta_1+\beta_3)\cdot \text{income}_i & \text{nếu người thứ } i \text{ là sinh viên}\\
+            \beta_0+\beta_1\cdot \text{income}_i & \text{ngược lại}
+            \end{cases}
+            \]
+          </div>
+        </section>
+
+        <section data-auto-animate>
+          <h2>Quan hệ phi tuyến</h2>
+          <ul>
+            <li>Thêm <strong>hàm phi tuyến của đầu vào</strong> làm đặc trưng.
+            </li>
+            <li>Các hàm này gọi là <strong>hàm cơ sở (base functions)</strong>.</li>
+            <li>Hồi quy đa thức: dùng \(X^2, X^3,\ldots\) làm đặc trưng.</li>
+          </ul>
+        </section>
+
+        <section data-auto-animate style="font-size:0.8em;">
+          <h2>Quan hệ phi tuyến</h2>
+          <h4>Ví dụ</h4>
+          <div style="display:grid;grid-template-columns:1fr 0.5fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <strong>Dữ liệu:</strong> 397 mẫu
+              <ul>
+                <li><strong>Đầu vào:</strong> công suất (mã lực - horsepower)</li>
+                <li><strong>Đầu ra:</strong> số dặm trên gallon (mpg)</li>
+              </ul>
+            </div>
+            <div>
+              <img src="img/lec02/mpg-data.png" alt="MPG vs Horsepower" style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+          <div style="margin-top:10px;font-size:0.65em;">
+            <div>
+              \(
+              \text{mpg}=\beta_0+\beta_1\cdot \text{horsepower}+\beta_2\cdot \text{horsepower}^2+\epsilon
+              \)
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 0.5fr;gap:16px;margin-top:12px;">
+              <div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Coefficient</th>
+                      <th>Std. error</th>
+                      <th>t-statistic</th>
+                      <th>p-value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>intercept</th>
+                      <td>56.9001</td>
+                      <td>1.8004</td>
+                      <td>31.6</td>
+                      <td>&lt;0.0001</td>
+                    </tr>
+                    <tr>
+                      <th>horsepower</th>
+                      <td>-0.4662</td>
+                      <td>0.0311</td>
+                      <td>-15.0</td>
+                      <td>&lt;0.0001</td>
+                    </tr>
+                    <tr>
+                      <th>horsepower<sup>2</sup></th>
+                      <td>0.0012</td>
+                      <td>0.0001</td>
+                      <td>10.1</td>
+                      <td>&lt;0.0001</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Chỉ số \(R^2\)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>Tuyến tính</th>
+                      <td>0.606</td>
+                    </tr>
+                    <tr>
+                      <th>Đa thức bậc 2</th>
+                      <td><strong>0.688</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section id="cam-bay">
+        <section>
+          <h1>
+            <span class="text-light">5.</span><br />
+            Các “cạm bẫy” trong hồi quy
+          </h1>
+        </section>
+
+        <section style="font-size:0.75em;" data-auto-animate>
+          <h2>Vấn đề 1: Phi tuyến</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.6fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Nếu quan hệ thật phi tuyến, mô hình tuyến tính sẽ không chính xác → diễn giải sai.</li>
+                <li><strong>Biểu đồ dư (residual plot)</strong> giúp phát hiện phi tuyến.</li>
+                <li>Biểu đồ dư dạng <strong>chữ U</strong> gợi ý rằng có mối quan hệ phi tuyến giữa
+                  đầu vào và đầu ra.</li>
+              </ul>
+            </div>
+
+            <div style="margin-top:10px;text-align:center;">
+              <img src="img/lec02/residual-1.png" alt="Residual plot" style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+
+        </section>
+
+        <section style="font-size:0.75em;" data-auto-animate>
+          <h2>Vấn đề 1: Phi tuyến</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.6fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Mô hình đa thức bậc 2: thêm \(X^2\) làm đặc trưng.
+                </li>
+                <li>Biểu đồ dư nhìn “phẳng hơn” → khớp dữ liệu tốt hơn.</li>
+                <li>Tuy nhiên nếu chưa hoàn hảo → có thể thử hàm cơ sở khác.</li>
+              </ul>
+            </div>
+
+            <div style="margin-top:10px;text-align:center;">
+              <img src="img/lec02/residual-2.png" alt="Residual plot after polynomial fit"
+                style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+
+        </section>
+
+        <section style="font-size:0.7em;">
+          <h2>Vấn đề 2: Tương quan giữa nhiễu</h2>
+          <ul>
+            <li>Các mô hình tuyến tính thường giả sử nhiễu \(\epsilon_1,\epsilon_2,\ldots,\epsilon_n\) <strong>không
+                tương quan</strong>.</li>
+            <li>Nếu các nhiễu này tương quan: standard errors thực tế lớn hơn công thức.</li>
+            <li>⇒ confidence/prediction intervals phải rộng hơn; \(p\)-value cao hơn.</li>
+            <li>Ví dụ “nhân đôi dữ liệu”: bỏ qua tương quan, mẫu tăng lên \(2n\) → CI hẹp \(\sqrt{2}\) lần.
+              \[
+              SE(\hat{\mu})=\sqrt{\mathrm{Var}(\hat{\mu})}=\sqrt{\sigma^2/n}
+              \]
+            </li>
+            <li>Nhiễu thường tương quan dương trong dữ liệu theo thời gian (time series).</li>
+            <li>Kiểm tra bằng cách phân tích tương quan hoặc trực quan hoá.</li>
+          </ul>
+
+        </section>
+
+        <section style="font-size:0.75em;" data-auto-animate>
+          <h2>Vấn đề 3: Phương sai thay đổi</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.6fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Giả định khác trong mô hình tuyến tính: \(\mathrm{Var}(\epsilon_i)=\sigma^2\) là hằng số.</li>
+                <li>Thực tế, phương sai của \(\epsilon_i\) có thể phụ thuộc vào \(Y\).</li>
+                <li>Phương sai thay đổi gọi là <strong>heteroscedasticity</strong>.</li>
+                <li>Nhìn biểu đồ dư thấy dạng “phễu”/không đồng đều.</li>
+              </ul>
+            </div>
+
+
+            <div style="margin-top:10px;text-align:center;">
+              <img src="img/lec02/heteroscedasticity-1.png" alt="Heteroscedasticity"
+                style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+
+
+        </section>
+
+        <section style="font-size:0.75em;" data-auto-animate>
+          <h2>Vấn đề 3: Phương sai thay đổi</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.6fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Có thể xử lý bằng cách biến đổi \(Y\) bằng hàm <strong>lõm</strong> (thường giúp “nén” phương sai).
+                </li>
+                <li>Nếu biết phương sai của nhiễu phụ thuộc \(Y\) thế nào, có thể <strong>gán trọng số</strong> để cân
+                  bằng
+                  (weighted
+                  LS).</li>
+              </ul>
+            </div>
+
+            <div style="margin-top:10px;text-align:center;">
+              <img src="img/lec02/heteroscedasticity-2.png" alt="Heteroscedasticity after transformation"
+                style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+
+
+        </section>
+
+        <section style="font-size:0.75em;">
+          <h2>Vấn đề 4: Các điểm ngoại lai</h2>
+          <ul>
+            <li><strong>Điểm ngoại lai (outlier)</strong>: điểm có output rất xa dự đoán.</li>
+            <li>Phần dư (residual) giúp nhận diện điểm ngoại lai.</li>
+            <li>Khi nào phần dư đủ lớn?
+              <ul>
+                <li><strong>Phần dư chuẩn hóa (studentized residual)</strong>: phần dư chia cho standard error ước lượng
+                  của nó.</li>
+                <li>Nếu \(|\text{studentized residual}|&gt;3\) thì coi là điểm ngoại lai.</li>
+              </ul>
+            </li>
+          </ul>
+
+
+          <div style="margin-top:10px;text-align:center;">
+            <img src="img/lec02/outliers.png" alt="Outlier detection" style="max-width: 70%; height: auto;" />
+          </div>
+        </section>
+
+        <section style="font-size:0.75em;" data-auto-animate>
+          <h2>Vấn đề 5: Các điểm có đòn bẩy cao</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.6fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Điểm có đòn bẩy cao (high leverage point): điểm có input \(x_i\) “lạ/hiếm”.</li>
+                <li>Ví dụ: điểm 41 trong hình.</li>
+                <li>Điểm có đòn bẩy cao có thể tác động mạnh lên đường hồi quy.</li>
+                <li>Cần kiểm tra xem có điểm nào như vậy không. Nếu cần thiết, có thể loại bỏ các điểm này.</li>
+              </ul>
+            </div>
+
+            <div style="margin-top:10px;text-align:center;">
+              <img src="img/lec02/high-leverage-1.png" alt="Leverage points" style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size:0.75em;" data-auto-animate>
+          <h2>Vấn đề 5: Các điểm có đòn bẩy cao</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.6fr;gap:16px;margin-top:12px;align-items:start;">
+            <div style="font-size: .8em;">
+              <ul>
+                <li>Trong không gian nhiều chiều, khó nhìn được đòn bẩy.</li>
+                <li>Dùng <strong>thống kê đòn bẩy (leverage statistic)</strong> để đo mức độ “lạ” của \(x_i\).</li>
+                <li>Hồi quy đơn:
+                  \[
+                  h_i=\frac{1}{n}+\frac{(x_i-\bar{x})^2}{\sum_{j=1}^{n}(x_j-\bar{x})^2}
+                  \]
+                </li>
+                <li>Hồi quy bội: \(h_{ii}\) là phần tử đường chéo thứ \(i\) của <strong>ma trận đòn bẩy (hat
+                    matrix)</strong> \(H\).</li>
+                <li>\(h_{ii}\) đo độ ảnh hưởng của \(y_i\) lên \(\hat{y}_i\).</li>
+              </ul>
+            </div>
+
+            <div style="margin-top:10px;text-align:center;">
+              <img src="img/lec02/high-leverage-2.png" alt="Leverage statistic"
+                style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size:0.75em;" data-auto-animate>
+          <h2>Vấn đề 5: Các điểm có đòn bẩy cao</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.6fr;gap:16px;margin-top:12px;align-items:start;">
+            <div style="font-size: .8em;">
+              <ul>
+                <li>Trong không gian nhiều chiều, khó nhìn được đòn bẩy.</li>
+                <li>Dùng <strong>thống kê đòn bẩy (leverage statistic)</strong> để đo mức độ “lạ” của \(x_i\).</li>
+                <li>Hồi quy đơn:
+                  \[
+                  h_i=\frac{1}{n}+\frac{(x_i-\bar{x})^2}{\sum_{j=1}^{n}(x_j-\bar{x})^2}
+                  \]
+                </li>
+                <li>Hồi quy bội: \(h_{ii}\) là phần tử đường chéo thứ \(i\) của <strong>ma trận đòn bẩy (hat
+                    matrix)</strong> \(H\).</li>
+                <li>\(h_{ii}\) đo độ ảnh hưởng của \(y_i\) lên \(\hat{y}_i\).</li>
+              </ul>
+            </div>
+
+            <div style="margin-top:10px;text-align:center;">
+              <img src="img/lec02/high-leverage-3.png" alt="Leverage statistic"
+                style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size:0.75em;" data-auto-animate>
+          <h2>Vấn đề 6: Đồng tuyến tính</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.8fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Hai đặc trưng liên quan mạnh gọi là <strong>đồng tuyến tính (collinear)</strong>.</li>
+                <li>Chúng có thể “thay thế” nhau → hệ số trao đổi phần đóng góp.</li>
+                <li>Hệ quả: phương sai hệ số lớn → mô hình kém ổn định.</li>
+                <li>Ví dụ dữ liệu tín dụng: <strong>rating</strong> và <strong>limit</strong> đồng tuyến;
+                  <strong>age</strong> và limit
+                  thì không.
+                </li>
+              </ul>
+            </div>
+
+            <div style="margin-top:10px;text-align:center;">
+              <img src="img/lec02/collinearity.png" alt="Correlation matrix" style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size:0.75em;" data-auto-animate>
+          <h2>Vấn đề 6: Đồng tuyến tính</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.4fr;gap:16px;margin-top:12px;align-items:start;">
+            <div style="font-size: .75em;">
+              <ul>
+                <li>Nhìn ma trận tương quan chỉ thấy đồng tuyến tính theo cặp; có thể có đồng tuyến tính giữa nhiều biến
+                  mà không thấy trong ma trận tương quan.
+                </li>
+                <li>Phân rã phương sai:
+                  \(
+                  \mathrm{Var}(\hat{\beta}_j)=\frac{\sigma^2}{(n-1)\mathrm{Var}(X_j)}\,VIF(\hat{\beta}_j)
+                  \)
+                </li>
+                <li>Trong đó
+                  \(
+                  VIF(\hat{\beta}_j)=\frac{1}{1-R_{X_j|X_{-j}}^2}
+                  \)
+                  với \(R_{X_j|X_{-j}}^2\) là \(R^2\) khi hồi quy \(X_j\) theo các \(X\) còn lại.
+                </li>
+                <li>\(VIF=1\) nếu không đồng tuyến; \(VIF\ge 5\) hoặc \(VIF\ge 10\) thường báo động.</li>
+                <li>Xử lý: (1) bỏ biến gây vấn đề; (2) gộp các biến đồng tuyến (ví dụ lấy trung bình).</li>
+              </ul>
+            </div>
+
+            <div style="margin-top:10px;text-align:center;font-size: .7em;">
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>VIF</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>age</th>
+                    <td>1.01</td>
+                  </tr>
+                  <tr>
+                    <th>rating</th>
+                    <td>160.67</td>
+                  </tr>
+                  <tr>
+                    <th>limit</th>
+                    <td>160.59</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+      </section>
+
+      <section id="knn-vs-linear">
+        <section>
+          <h1>
+            <span class="text-light">3.</span><br />
+            Hồi quy k láng giềng gần nhất vs. hồi quy tuyến tính
+          </h1>
+        </section>
+
+        <section style="font-size:0.7em;" data-auto-animate>
+          <h2>Hồi quy k láng giềng gần nhất</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.6fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Dự đoán \(\hat{f}(x_0)\) bằng cách lấy trung bình \(y_i\) của \(k\) điểm gần nhất với \(x_0\).
+                  \[
+                  \hat{f}(x_0)=\frac{1}{k}\sum_{i\in\mathcal{N}_0} y_i
+                  \]
+                </li>
+                <li>Chọn \(k\) tối ưu phụ thuộc <strong>bias–variance tradeoff</strong>.</li>
+                <li>\(k\) nhỏ → mô hình phức tạp: <strong>variance cao</strong> (một điểm ảnh hưởng mạnh).</li>
+              </ul>
+            </div>
+
+            <div style="margin-top:12px;text-align:center;">
+              <img src="img/lec02/knn-ex.png" alt="k-NN regression" style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size:0.7em;" data-auto-animate>
+          <h2>Hồi quy k láng giềng gần nhất</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.6fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>\(k\) nhỏ → dễ <strong>overfit</strong> (variance cao).</li>
+                <li>\(k\) lớn → mô hình đơn giản: <strong>bias cao</strong> (quá mượt) → dễ <strong>underfit</strong>.
+                </li>
+                <li>Chọn \(k\) bằng cách ước lượng <strong>test error</strong> (sẽ học sau).</li>
+              </ul>
+            </div>
+
+            <div style="margin-top:12px;text-align:center;">
+              <img src="img/lec02/knn-2.png" alt="k-NN bias-variance tradeoff" style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+
+        </section>
+
+        <section style="font-size:0.75em;">
+          <h2>So sánh \(k\)-NN và mô hình tuyến tính</h2>
+          <p>Chọn mô hình mô phỏng dữ liệu thực tế tốt nhất.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;">
+            <div>
+              <h4>Mô hình tuyến tính</h4>
+              <ul>
+                <li>Giả sử thế giới tuyến tính (có tham số - parametric).</li>
+                <li>Dễ diễn giải, có \(p\)-values.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>\(k\)-NN</h4>
+              <ul>
+                <li>Giả sử “cục bộ gần như hằng số”.</li>
+                <li>Phi tham số - non-parametric (nhất là khi \(k\) nhỏ).</li>
+                <li>\(k\)-NN “nhạy với nhiễu” hơn mô hình tuyến tính.</li>
+                <li>Khi số chiều lớn: Mọi điểm đều xa → <strong>curse of dimensionality</strong>.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size:0.8em;">
+          <h2>\(k\)-NN vs mô hình tuyến tính trên dữ liệu tuyến tính</h2>
+          <div>
+            <img src="img/lec02/on-linear-data.png" alt="k-NN vs Linear on linear data"
+              style="max-width: 100%; height: auto;" />
+          </div>
+        </section>
+
+        <section style="font-size:0.8em;">
+          <h2>\(k\)-NN vs mô hình tuyến tính trên dữ liệu hơi phi tuyến</h2>
+          <div>
+            <img src="img/lec02/on-mildly-nonlinear-data.png" alt="k-NN vs Linear on slightly non-linear data"
+              style="max-width: 100%; height: auto;" />
+          </div>
+        </section>
+
+        <section style="font-size:0.8em;">
+          <h2>\(k\)-NN vs mô hình tuyến tính trên dữ liệu phi tuyến</h2>
+          <div>
+            <img src="img/lec02/on-nonlinear-data.png" alt="k-NN vs Linear on non-linear data"
+              style="max-width: 100%; height: auto;" />
+          </div>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h2>Tổng kết</h2>
+          <ul>
+            <li>Hồi quy tuyến tính: đơn giản nhưng hiệu quả.</li>
+            <li>Mở rộng được cho biến định tính, tương tác, phi tuyến.</li>
+            <li>Cần kiểm tra giả định & xử lý: phi tuyến, tự tương quan, phương sai thay đổi, ngoại lai/đòn bẩy cao,
+              đồng tuyến.</li>
+            <li>KNN hồi quy: linh hoạt, nhưng nhạy nhiễu và kém khi số chiều lớn.</li>
+          </ul>
+        </section>
+        <section>
+          Slides có tham khảo từ một số nguồn, trong đó có
+          bài giảng của môn
+          "Elements of Machine Learning" &mdash; Krikamol Muandet và Jilles Vreeken @ Saarland University; Giáo trình
+          "Học máy thống kê" &mdash; Trần Quốc Long và Tạ Việt Cường; với sự hỗ trợ từ AI.
+        </section>
+      </section>
+
+      <div class="footer">
+        Học máy (Học kỳ 2 2025-2026) §2: Hồi quy tuyến tính
+      </div>
+    </div>
+  </div>
+  <script src="revealjs/dist/reveal.js"></script>
+  <script src="plugin/notes/notes.js"></script>
+  <script src="plugin/markdown/markdown.js"></script>
+  <script src="plugin/highlight/highlight.js"></script>
+  <script src="plugin/math/math.js"></script>
+  <script>
+    Reveal.initialize({
+      controlsLayout: "edges",
+      slideNumber: true,
+      hashOneBasedIndex: true,
+      hash: true,
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX],
+    });
+  </script>
+</body>
+
+</html>
