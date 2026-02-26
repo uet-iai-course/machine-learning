@@ -557,7 +557,7 @@
             <li>Đầu ra <strong>\(Y\)</strong>: Dự đoán/nhãn (response/label).</li>
             <li>Mô hình hoá: Giả sử <strong>\(Y = f(X) + \varepsilon\)</strong>.</li>
             <li>Trong đó: \(\varepsilon\) là nhiễu (noise) ngẫu nhiên không phụ thuộc vào \(X\) và có kỳ vọng
-              \(\mathbb{E}[\varepsilon] = 0\).</li>
+              \(\mathbb{E}[\varepsilon | X] = 0\).</li>
             <li>Mục tiêu: Học hàm <strong>\(\hat{f}\)</strong> từ dữ liệu <strong>\((x_i, y_i)\)</strong>.</li>
           </ul>
         </section>
@@ -569,8 +569,9 @@
             <li>Nhiễu luôn tồn tại → không thể có mô hình dự đoán hoàn hảo.</li>
           </ul>
 
-          <p>⚠️ Lưu ý: Ta giả sử nhiễu có kỳ vọng \(\mathbb{E}[\varepsilon] = 0\). Đọc thêm về Central Limit Theorem
-            (Định lý giới hạn trung tâm) để hiểu hơn về giả thiết này.</p>
+          <p>⚠️ Lưu ý: Ta giả sử nhiễu có kỳ vọng \(\mathbb{E}[\varepsilon | X] = 0\).
+            Giả thuyết này thường hợp lý và giúp đơn giản hoá mô hình.
+          </p>
         </section>
 
         <section>
