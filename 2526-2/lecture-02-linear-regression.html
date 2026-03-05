@@ -80,8 +80,8 @@
             <li>\(\beta_0\) (hệ số chặn), \(\beta_1\) (hệ số góc) là <strong>tham số</strong> của mô hình
             </li>
           </ul>
-          <p>➡️ <strong>Đầu vào:</strong> Dữ liệu huấn luyện: \((x_1,y_1),\ldots,(x_n,y_n)\)</p>
-          <p>🎯 <strong>Mục tiêu:</strong> Ước lượng tham số \(\hat{\beta}_0,\hat{\beta}_1\) sao cho
+          <p class="fragment">➡️ <strong>Đầu vào:</strong> Dữ liệu huấn luyện: \((x_1,y_1),\ldots,(x_n,y_n)\)</p>
+          <p class="fragment">🎯 <strong>Mục tiêu:</strong> Ước lượng tham số \(\hat{\beta}_0,\hat{\beta}_1\) sao cho
             \[
             y_i \approx \hat{\beta}_0 + \hat{\beta}_1 x_i
             \]
@@ -158,21 +158,26 @@
                 Y=\beta_0+\beta_1X+\epsilon \quad
                 \]
               </p>
+            </div>
+            <div style="text-align:center;">
+            </div>
+          </div>
+        </section>
+        <section data-auto-animate style="font-size: 0.6em;">
+          <h2>Tổng quan</h2>
+          <div style="display: grid; grid-template-columns: 1fr .5fr; gap: 16px; margin-top: 12px; align-items: start;">
+            <div>
+              <p>Ta giả sử quan hệ “thật sự” có nhiễu (<strong>độc lập</strong> với quan sát):</p>
+              <p style="text-align:center;">
+                \[
+                Y=\beta_0+\beta_1X+\epsilon \quad
+                \]
+              </p>
               <p><span class="keyword">Đường hồi quy quần thể</span> \(y = \beta_0 + \beta_1 x\) là xấp xỉ
                 tuyến tính tốt nhất giữa \(X\)
                 và \(Y\).</p>
               <ul>
-                <li>Thường <strong>không quan sát được</strong> trực tiếp.</li>
-              </ul>
-              <p><span class="keyword">Đường hồi quy tuyến tính (bình phương tối thiểu)</span> trên dữ liệu huấn luyện:
-              </p>
-              <p style="text-align:center;">
-                \[
-                \hat{y}=\hat{\beta}_0+\hat{\beta}_1x
-                \]
-              </p>
-              <ul>
-                <li>Phụ thuộc vào bộ dữ liệu huấn luyện (hữu hạn).</li>
+                <li>Thực tế <strong>không quan sát được</strong> trực tiếp.</li>
               </ul>
             </div>
             <div style="text-align:center;">
@@ -200,7 +205,7 @@
                 tuyến tính tốt nhất giữa \(X\)
                 và \(Y\).</p>
               <ul>
-                <li>Thường <strong>không quan sát được</strong> trực tiếp.</li>
+                <li>Thực tế <strong>không quan sát được</strong> trực tiếp.</li>
               </ul>
               <p><span class="keyword">Đường hồi quy tuyến tính (bình phương tối thiểu)</span> trên dữ liệu huấn luyện:
               </p>
@@ -225,17 +230,17 @@
         <section style="font-size: 0.8em;" data-auto-animate>
           <h2>Ước lượng không chệch</h2>
           <p>Cách ước lượng trung bình \(\mu\) của biến ngẫu nhiên \(Y\)?</p>
-          <ul>
-            <li>Ước lượng từ mẫu hữu hạn là <strong>trung bình mẫu</strong>:</li>
-          </ul>
-          <p style="text-align:center;">
-            \[
-            \mathrm{avg}(y_1,y_2,\ldots,y_n)=\frac{1}{n}\sum_{i=1}^{n}y_i=\bar{y}
-            \]
-          </p>
-          <ul>
+          <div class="fragment">
+            <p>\(\to\) Ước lượng bằng <strong>trung bình</strong> của mẫu hữu hạn:</p>
+            <p style="text-align:center;">
+              \[
+              \mathrm{avg}(y_1,y_2,\ldots,y_n)=\frac{1}{n}\sum_{i=1}^{n}y_i=\bar{y}
+              \]
+            </p>
+          </div>
+          <ul class="fragment">
             <li>Trung bình theo nhiều lần lấy mẫu: \(\mathbb{E}[\bar{y}]=\mu\).</li>
-            <li>Theo định nghĩa, \(\bar{y}\) là một ước lượng <strong>không chệch</strong> của \(\mu\).</li>
+            <li>Theo định nghĩa, \(\bar{y}\) là một <span class="keyword">ước lượng không chệch</span> của \(\mu\).</li>
           </ul>
         </section>
         <section style="font-size: 0.8em;" data-auto-animate>
@@ -253,15 +258,14 @@
         <section style="font-size: 0.9em;" data-auto-animate>
           <h2>Độ chính xác của ước lượng</h2>
           <p>\(\hat{\mu}\) (ước lượng của \(\mu\)) chính xác đến đâu?</p>
-          <ul>
-            <li>Giả sử các mẫu độc lập ⇒ <strong>standard error</strong> của \(\hat{\mu}\):</li>
-          </ul>
-          <p style="text-align:center;">
-            \[
-            SE(\hat{\mu})=\sqrt{\mathrm{Var}(\hat{\mu})}=\sqrt{\sigma^2/n}
-            \]
-          </p>
-          <ul>
+          <ul class="fragment">
+            <li>Giả sử các mẫu độc lập ⇒ <strong>standard error</strong> của \(\hat{\mu}\):
+              <p style="text-align:center;">
+                \[
+                SE(\hat{\mu})=\sqrt{\mathrm{Var}(\hat{\mu})}=\sqrt{\sigma^2/n}
+                \]
+              </p>
+            </li>
             <li>\(n\): số mẫu, \(\sigma\): độ lệch chuẩn quần thể.</li>
             <li><span class="keyword">Nhiều mẫu hơn</span> ⇒ <span class="keyword">SE nhỏ hơn</span>.</li>
           </ul>
@@ -280,7 +284,7 @@
             SE(\hat{\beta}_1)^2=\frac{\sigma^2}{\sum_{i=1}^{n}(x_i-\bar{x})^2}
             \]
           </p>
-          <p>Ta tiếp tục giả sử errors độc lập, không tương quan, và có phương sai chung
+          <p>Ta tiếp tục giả sử nhiễu độc lập, không tương quan với đầu vào, và có phương sai chung
             \(\sigma^2=\mathrm{Var}(\epsilon)\).</p>
         </section>
         <section style="font-size: 0.9em;" data-auto-animate>
@@ -292,12 +296,13 @@
                   hơn.</li>
                 <li><strong>\(SE(\hat{\beta}_0)=SE(\hat{\mu})\)</strong> nếu \(\bar{x}=0\); khi đó
                   \(\hat{\beta}_0=\bar{y}\).</li>
-                <li>\(\sigma\) thường không biết ⇒ ước lượng từ mẫu bằng <strong>RSE</strong>.</li>
+                <li>\(\sigma\) thường không biết ⇒ ước lượng từ mẫu bằng <strong>RSE</strong>:</li>
               </ol>
               <p style="text-align:center;margin-top:10px;">
                 \[
                 RSE=\sqrt{RSS/(n-2)}
                 \]
+                <span style="font-size: 0.8em; color: gray;">(Tại sao chia cho \(n-2\) ?)</span>
               </p>
             </div>
             <div style="text-align:center;">
@@ -305,21 +310,15 @@
             </div>
           </div>
         </section>
-        <section style="font-size: 0.65em;" data-auto-animate>
+        <section data-auto-animate>
           <h2>Khoảng tin cậy</h2>
-          <div style="display: grid; grid-template-columns: 1fr .5fr; gap: 16px; margin-top: 12px; align-items: start;">
+          <div style="display: grid; grid-template-columns: 1fr .8fr; gap: 16px; margin-top: 12px; align-items: start;">
             <div>
-              <p><strong>Khoảng tin cậy 95%</strong>:</p>
+              <p><strong>Khoảng tin cậy 95%</strong> (CI 95%):</p>
               <ul>
                 <li>Khoảng “chứa” giá trị thật với xác suất 95% khi lặp lại lấy mẫu.</li>
                 <li>Ta tính cận từ dữ liệu huấn luyện (training data).</li>
               </ul>
-              <p>Với \(\hat{\beta}_0\):
-                \(\left[\hat{\beta}_0-2\cdot SE(\hat{\beta}_0),\;\hat{\beta}_0+2\cdot SE(\hat{\beta}_0)\right]\)
-              </p>
-              <p>Với \(\hat{\beta}_1\):
-                \(\left[\hat{\beta}_1-2\cdot SE(\hat{\beta}_1),\;\hat{\beta}_1+2\cdot SE(\hat{\beta}_1)\right]\)
-              </p>
             </div>
             <div style="text-align:center;">
               <img src="img/lec02/pmf-gaussian.png" alt="PMF of Gaussian" style="max-width: 100%; height: auto;" />
@@ -328,10 +327,25 @@
               </div>
             </div>
           </div>
+        </section>
+
+        <section data-auto-animate>
+          <h2>Khoảng tin cậy</h2>
+          <div>
+            <div>
+              <p>Với \(\hat{\beta}_0\):
+                \(\left[\hat{\beta}_0-2\cdot SE(\hat{\beta}_0),\;\hat{\beta}_0+2\cdot SE(\hat{\beta}_0)\right]\)
+              </p>
+              <p>Với \(\hat{\beta}_1\):
+                \(\left[\hat{\beta}_1-2\cdot SE(\hat{\beta}_1),\;\hat{\beta}_1+2\cdot SE(\hat{\beta}_1)\right]\)
+              </p>
+            </div>
+          </div>
           <div>
             <p><strong>Vì sao?</strong></p>
             <ul>
-              <li>Giả sử sai số \(\epsilon\) theo phân phối Gaussian ⇒ \(Y\) cũng Gaussian.</li>
+              <li>Giả sử sai số \(\epsilon\) theo phân phối Gaussian (Định lý Giới hạn Trung tâm) ⇒ \(Y\) cũng Gaussian.
+              </li>
               <li>Khi đó \(\hat{\beta}_0\) và \(\hat{\beta}_1\) cũng Gaussian.</li>
             </ul>
           </div>
@@ -344,20 +358,23 @@
               style="max-width: 70%; height: auto;" />
           </div>
         </section>
-        <section style="font-size: 0.6em;" data-auto-animate>
+        <section style="font-size: 0.8em;" data-auto-animate>
           <h2>Kiểm định giả thuyết</h2>
           <div>
             <p>Khi nào kết luận có mối quan hệ “đáng kể” giữa \(X\) và \(Y\)?</p>
             <ul>
-              <li>Ta kiểm định giả thuyết \(H_0\) (không có mối liên hệ) vs. \(H_a\) (có mối liên hệ).</li>
-              <li>Trong hồi quy tuyến tính đơn: \(H_0:\beta_1=0\) vs. \(H_a:\beta_1\neq 0\).</li>
+              <li>Kiểm định giả thuyết \(H_0\) (không có mối liên hệ) vs. \(H_a\) (có mối liên hệ).</li>
+              <li>Hồi quy tuyến tính đơn: \(H_0:\beta_1=0\) vs. \(H_a:\beta_1\neq 0\).</li>
             </ul>
             <p style="margin-top:10px;">Làm sao biết \(\beta_1\) “đủ xa 0”?</p>
             <ul>
               <li>Phụ thuộc vào độ chính xác của \(\hat{\beta}_1\), tức là \(SE(\hat{\beta}_1)\).</li>
             </ul>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr .8fr; gap: 16px; margin-top: 12px; align-items: start;">
+        </section>
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>Kiểm định giả thuyết</h2>
+          <div>
             <div>
               <p style="margin-top:10px;">
                 <strong>t-statistic</strong> là độ lệch “chuẩn hoá” của \(\hat{\beta}_1\) khỏi 0:
@@ -372,12 +389,12 @@
                 <li>Với \(n&gt;30\), khá gần phân phối chuẩn.</li>
               </ul>
             </div>
-            <div>
-              <img src="img/lec02/t-distribution.png" alt="t-distribution" style="max-width: 100%; height: auto;" />
+            <div style="text-align:center;">
+              <img src="img/lec02/t-distribution.png" alt="t-distribution" style="max-width: 60%; height: auto;" />
             </div>
           </div>
         </section>
-        <section style="font-size: 0.6em;" data-auto-animate>
+        <section style="font-size: 0.8em;" data-auto-animate>
           <h2>Kiểm định giả thuyết</h2>
           <div style="display: grid; grid-template-columns: 1fr .8fr; gap: 16px; margin-top: 12px; align-items: start;">
             <div>
@@ -386,18 +403,24 @@
                 <li>Ví dụ: \(|t|&gt;2\) thì xấp xỉ <strong>5%</strong>.</li>
                 <li>Xác suất này gọi là <strong>\(p\)-value</strong>.</li>
               </ul>
-              <p style="margin-top:10px;">
-                Nếu \(p\)-value <strong>nhỏ</strong> ⇒ khó tin rằng mối liên hệ quan sát được chỉ do ngẫu nhiên.
-              </p>
-              <ul>
-                <li>\(p=5\%\): nếu \(H_0\) đúng, kết quả “tốt ngang hoặc tốt hơn” xảy ra tối đa 5% bộ dữ liệu.</li>
-                <li>Bác bỏ \(H_0\) ở mức ý nghĩa \(\alpha\) nếu \(p \le \alpha\).</li>
-              </ul>
-              <p style="margin-top:10px;">Mức ý nghĩa thường dùng: \(\alpha=5\%\) hoặc \(1\%\).</p>
             </div>
             <div>
               <img src="img/lec02/pmf-gaussian.png" alt="PMF of Gaussian" style="max-width: 100%; height: auto;" />
             </div>
+          </div>
+        </section>
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>Kiểm định giả thuyết</h2>
+          <div>
+            <p style="margin-top:10px;">
+              Nếu \(p\)-value <strong>nhỏ</strong> ⇒ khó tin rằng mối liên hệ quan sát được chỉ do ngẫu nhiên (khó tin
+              \(H_0: \beta_1 = 0\) đúng).
+            </p>
+            <ul>
+              <li>\(p=5\%\): nếu \(H_0\) đúng, kết quả “tốt ngang hoặc tốt hơn” xảy ra tối đa 5% bộ dữ liệu.</li>
+              <li>Bác bỏ \(H_0\) ở mức ý nghĩa \(\alpha\) nếu \(p \le \alpha\).</li>
+            </ul>
+            <p style="margin-top:10px;">Mức ý nghĩa thường dùng: \(\alpha=5\%\) hoặc \(1\%\).</p>
           </div>
         </section>
         <section>
@@ -405,19 +428,19 @@
           <div style="display: grid; grid-template-columns: 1fr .3fr; gap: 16px; margin-top: 12px; align-items: start;">
             <div style="font-size: .6em;">
               <!-- Table 1: Sales ~ TV -->
-              <table>
+              <table style="width: 100%;">
                 <thead>
                   <tr>
-                    <th></th>
-                    <th>Coefficient</th>
-                    <th>Std. error</th>
+                    <th style="width: 20%;"></th>
+                    <th>Hệ số</th>
+                    <th>Sai số chuẩn</th>
                     <th><em>t</em>-statistic</th>
                     <th><em>p</em>-value</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <th>intercept</th>
+                    <th>Chặn</th>
                     <td>7.0325</td>
                     <td>0.4578</td>
                     <td>15.36</td>
@@ -436,19 +459,19 @@
               <br />
 
               <!-- Table 2: Sales ~ Radio -->
-              <table>
+              <table style="width: 100%;">
                 <thead>
                   <tr>
-                    <th></th>
-                    <th>Coefficient</th>
-                    <th>Std. error</th>
+                    <th style="width: 20%;"></th>
+                    <th>Hệ số</th>
+                    <th>Sai số chuẩn</th>
                     <th><em>t</em>-statistic</th>
                     <th><em>p</em>-value</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <th>intercept</th>
+                    <th>Chặn</th>
                     <td>9.312</td>
                     <td>0.563</td>
                     <td>16.54</td>
@@ -467,19 +490,19 @@
               <br />
 
               <!-- Table 3: Sales ~ newspaper -->
-              <table>
+              <table style="width: 100%;">
                 <thead>
                   <tr>
-                    <th></th>
-                    <th>Coefficient</th>
-                    <th>Std. error</th>
+                    <th style="width: 20%;"></th>
+                    <th>Hệ số</th>
+                    <th>Sai số chuẩn</th>
                     <th><em>t</em>-statistic</th>
                     <th><em>p</em>-value</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <th>intercept</th>
+                    <th>Chặn</th>
                     <td>12.351</td>
                     <td>0.621</td>
                     <td>19.88</td>
@@ -504,7 +527,7 @@
         <section>
           <h1>Các độ đo khác</h1>
         </section>
-        <section>
+        <section style="font-size: 0.9em;">
           <h2>\(R^2\)-statistic</h2>
           <div>
             \[
@@ -517,20 +540,20 @@
             <li>\(TSS - RSS\): phần phương sai “giải thích” bởi hồi quy.</li>
           </ul>
         </section>
-        <section style="font-size: 0.9em;">
-          <h2>RSE</h2>
+        <!-- <section style="font-size: 0.9em;">
+          <h2>RSE: Lỗi chuẩn dư</h2>
           <h4>Residual Standard Error</h4>
+          <div>
+            \[
+            RSE = \sqrt{\frac{1}{n-2}RSS} = \sqrt{\frac{1}{n-2}\sum_{i=1}^{n}(y_i-\hat{y}_i)^2}
+            \]
+          </div>
           <ul>
-            <li>
-              \[
-              RSE = \sqrt{\frac{1}{n-2}RSS} = \sqrt{\frac{1}{n-2}\sum_{i=1}^{n}(y_i-\hat{y}_i)^2}
-              \]
-            </li>
             <li>Đo lỗi theo <strong>đơn vị của \(Y\)</strong> (thước đo tuyệt đối).</li>
             <li>Trực giác: “độ lệch trung bình” quanh đường hồi quy.</li>
             <li>Ví dụ quảng cáo: \(RSE=3.26\), mean sales ≈ 14 ⇒ sai số khoảng 23%.</li>
           </ul>
-        </section>
+        </section> -->
         <section style="font-size: 0.9em;">
           <h2>Hệ số tương quan</h2>
           <h4>Correlation</h4>
@@ -597,7 +620,7 @@
             <li>Ta chọn \(\hat{\boldsymbol{\beta}}\) để tối thiểu hoá \(RSS\).</li>
           </ul>
         </section>
-        <section style="font-size: 0.7em;" data-auto-animate>
+        <section style="font-size: 0.9em;" data-auto-animate>
           <h2>Ước lượng tham số</h2>
 
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:center;">
@@ -619,8 +642,18 @@
             <li>Khi đó \(RSS\) có <strong>một nghiệm tối thiểu duy nhất</strong> (tại đó đạo hàm bậc nhất bằng 0).</li>
           </ul>
 
+          <p style="font-size:0.75em;color:gray;margin-top:10px;">
+            <sup>*</sup> Ma trận \(A\) là <em>xác định dương</em> nếu với mọi vector \(x\neq 0\) ta có \(x^TAx > 0\).
+            0\).
+          </p>
+        </section>
+        <section style="font-size: 0.9em;" data-auto-animate>
+          <h2>Ước lượng tham số</h2>
+
           <p style="margin-top:14px;">Đặt
-            \(2X^T\big(Y - X\hat{\boldsymbol{\beta}}\big)=0\).
+            \(\frac{\partial RSS}{\partial \hat{\boldsymbol{\beta}}} = -2X^T\big(Y - X\hat{\boldsymbol{\beta}}\big)=0\).
+          </p>
+          <p>
             Suy ra
             \(
             \hat{\boldsymbol{\beta}}=(X^TX)^{-1}X^TY
@@ -628,14 +661,9 @@
           </p>
           <p>Tổng quát, ta có:
             \(
-            \hat{\mathbf{Y}}=X\hat{\boldsymbol{\beta}}=\underbrace{X(X^TX)^{-1}X^T}_{\color{red}{\text{hat matrix
+            \hat{\mathbf{Y}}=X\hat{\boldsymbol{\beta}}=\underbrace{X(X^TX)^{-1}X^T}_{\color{red}{\text{ma trận chiếu
             }H}}\,\mathbf{Y}
             \).
-          </p>
-
-          <p style="font-size:0.75em;color:gray;margin-top:10px;">
-            <sup>*</sup> Ma trận \(A\) là <em>xác định dương</em> nếu với mọi vector \(x\neq 0\) ta có \(x^TAx > 0\).
-            0\).
           </p>
         </section>
         <section style="font-size: 0.7em;" data-auto-animate>
@@ -764,15 +792,15 @@
                   <thead>
                     <tr>
                       <th></th>
-                      <th>Coefficient</th>
-                      <th>Std. error</th>
+                      <th>Hệ số</th>
+                      <th>Sai số chuẩn</th>
                       <th>t-statistic</th>
                       <th>p-value</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <th>intercept</th>
+                      <th>Chặn</th>
                       <td>2.939</td>
                       <td>0.3119</td>
                       <td>9.42</td>
@@ -865,7 +893,7 @@
                 </tbody>
               </table>
               <div style="font-size:1em;color:gray;margin-top:8px;">
-                <em>Bảng tương quan giữa các đặc trưng.</em>
+                <em>Bảng tương quan (correlation) giữa các đặc trưng.</em>
               </div>
             </div>
           </div>
@@ -956,15 +984,15 @@
               <thead>
                 <tr>
                   <th></th>
-                  <th>Coefficient</th>
-                  <th>Std. error</th>
+                  <th>Hệ số</th>
+                  <th>Sai số chuẩn</th>
                   <th>t-statistic</th>
                   <th>p-value</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <th>intercept</th>
+                  <th>Chặn</th>
                   <td>2.939</td>
                   <td>0.3119</td>
                   <td>9.42</td>
@@ -997,14 +1025,13 @@
         </section>
 
         <section style="font-size:0.8em;">
-          <h2>Nhiều biến dự báo</h2>
-          <h4>Rủi ro đa kiểm định (multiple testing)</h4>
+          <h2>Rủi ro đa kiểm định</h2>
           <ul>
             <li>Khi có nhiều biến, không nên chỉ nhìn <b>p-value từng biến</b>.</li>
-            <li>Giả sử <b>không có liên hệ thật</b>:
+            <li>Giả sử dữ liệu <b>không có liên hệ thật</b>:
               \(H_0:\beta_1=\cdots=\beta_p=0\) (vd <b>p=100</b>), và \(Y\) ngẫu nhiên.
               <ul>
-                <li><b>Multiple testing</b>: đặt ngưỡng 0.05 ⇒ ~5% p-value &lt; 0.05 do may mắn
+                <li><b>Đa kiểm định</b>: đặt ngưỡng 0.05 ⇒ ~5% p-value &lt; 0.05 do may mắn
                   ⇒ với 100 biến dễ có vài biến “có ý nghĩa” giả.</li>
               </ul>
             </li>
@@ -1018,7 +1045,7 @@
           <h2>Preview: Chọn đặc trưng</h2>
           <ul>
             <li>Thực tế, đầu ra thường chỉ phụ thuộc vào <strong>một vài</strong> đặc trưng (biến).</li>
-            <li>Bài toán tìm các biến đó gọi là <strong>variable/feature selection</strong>.</li>
+            <li>Bài toán tìm các biến đó gọi là <strong>lựa chọn đặc trưng</strong> (variable/feature selection).</li>
             <li>Sẽ học kỹ ở phần sau; ở đây chỉ “preview”.</li>
           </ul>
         </section>
@@ -1035,7 +1062,7 @@
                       newspaper, rỗng).</li>
                   </ul>
                 </li>
-                <li>Có \(2^p\) mô hình; nếu \(p=30\) thì \(2^{30}=1{,}073{,}741{,}824\) mô hình.</li>
+                <li>Có \(2^p\) mô hình; nếu \(p=30\) thì \(2^{30}=1{,}073{,}741{,}824\) mô hình. (!!!)</li>
                 <li>Đánh giá mô hình <strong>không</strong> dựa vào training error → cần ước lượng <strong>test
                     error</strong>.</li>
               </ul>
@@ -1119,14 +1146,18 @@
           </div>
         </section>
 
-        <section style="font-size:0.65em;">
+        <section style="font-size:0.8em;" data-auto-animate>
           <h2>Câu hỏi 4: Dự đoán chính xác đến đâu?</h2>
           <ul>
             <li>Dù biết quan hệ thật, vẫn luôn có <strong>irreducible error</strong> (nhiễu \(\varepsilon\)).</li>
-            <li><strong>Confidence interval</strong>: biến thiên của ước lượng qua nhiều mẫu.</li>
-            <li><strong>Prediction interval</strong>: biến thiên của dự đoán cho một input cụ thể.</li>
+            <li><strong>Khoảng tin cậy (Confidence interval)</strong>: biến thiên của ước lượng qua nhiều mẫu.</li>
+            <li><strong>Khoảng dự đoán (Prediction interval)</strong>: biến thiên của dự đoán cho một input cụ thể.</li>
             <li>Vì thế: prediction interval luôn <strong>rộng hơn</strong> confidence interval.</li>
           </ul>
+        </section>
+
+        <section style="font-size:0.8em;" data-auto-animate>
+          <h2>Câu hỏi 4: Dự đoán chính xác đến đâu?</h2>
           <p>Ví dụ Quảng cáo: TV=\(\$100{,}000\), radio=\(\$20{,}000\)</p>
           <ul>
             <li>95% CI: \(\text{sales}\in[10985,11528]\)</li>
@@ -1158,7 +1189,7 @@
         </section>
 
         <section style="font-size:0.75em;">
-          <h2>Thêm biến định tính</h2>
+          <h2>Biến định tính</h2>
           <h4>Ví dụ dữ liệu tín dụng (\(n=400\))</h4>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
@@ -1182,7 +1213,7 @@
         <section style="font-size:0.75em;">
           <h2>Biến nhị phân: dummy variable</h2>
           <ul>
-            <li>Thêm một dummy, ví dụ gender:
+            <li>Thêm một dummy, ví dụ <strong>giới tính</strong>:
               \[
               x_i=
               \begin{cases}
@@ -1196,11 +1227,12 @@
               y_i=\beta_0+\beta_1 x_i+\epsilon_i
               \)
               <ul>
-                <li>\(\beta_0\): số dư trung bình của nam.</li>
-                <li>\(\beta_0+\beta_1\): số dư trung bình của nữ.</li>
+                <li>\(\beta_0\): số dư (balance) trung bình của nam.</li>
+                <li>\(\beta_0+\beta_1\): số dư (balance) trung bình của nữ.</li>
               </ul>
             </li>
-            <li>Có thể mã hoá bằng \(-1/1\) thay vì \(0/1\). Tuy nhiên cách mã hoá chỉ thay đổi diễn giải của hệ số,
+            <li>Có thể mã hoá bằng \(-1/1\) thay vì \(0/1\).</li>
+            <li>Cách mã hoá chỉ thay đổi cách diễn giải của hệ số,
               không đổi kết quả hồi quy.</li>
           </ul>
         </section>
@@ -1208,8 +1240,8 @@
         <section style="font-size:0.75em;">
           <h2>Biến nhiều mức: dùng nhiều dummy</h2>
           <ul>
-            <li>“Ít hơn 1 dummy so với số giá trị”.</li>
-            <li>Ví dụ khu vực có 3 giá trị (Đông, Nam, Tây) → dùng 2 dummy:
+            <li>Nếu biến có \(k\) giá trị → dùng \(k-1\) dummy.</li>
+            <li>Ví dụ biến <strong>khu vực</strong> có 3 giá trị (Đông, Nam, Tây) → dùng 2 dummy:
               \[
               x_{i1}=
               \begin{cases}
@@ -1293,15 +1325,15 @@
                 <thead>
                   <tr>
                     <th></th>
-                    <th>Coefficient</th>
-                    <th>Std. error</th>
+                    <th>Hệ số</th>
+                    <th>Sai số chuẩn</th>
                     <th>t-statistic</th>
                     <th>p-value</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <th>intercept</th>
+                    <th>Chặn</th>
                     <td>6.7502</td>
                     <td>0.248</td>
                     <td>27.23</td>
@@ -1432,15 +1464,15 @@
                   <thead>
                     <tr>
                       <th></th>
-                      <th>Coefficient</th>
-                      <th>Std. error</th>
+                      <th>Hệ số</th>
+                      <th>Sai số chuẩn</th>
                       <th>t-statistic</th>
                       <th>p-value</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <th>intercept</th>
+                      <th>Chặn</th>
                       <td>56.9001</td>
                       <td>1.8004</td>
                       <td>31.6</td>
