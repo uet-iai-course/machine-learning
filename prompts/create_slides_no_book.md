@@ -11,12 +11,12 @@ Optional:
 3) An image manifest (list of available image filenames under the image folder prefix).
 
 Optional metadata (if provided):
-- Course title: <<...>> (default: "Học máy")
+- Course title: <<Học máy>>
 - Lecture title: <<...>>
 - Lecture number: <<...>>
-- Target duration: <<...>>
-- Image folder prefix: <<e.g., img/lec02/>>
-- Required major parts (if provided): exact list of {id, Vietnamese title} in order.
+- Target duration: <<90 minutes>>
+- Image folder prefix: <<e.g., img/lec03/>>
+- Required major parts (if provided): exact list of {id, Vietnamese title} in order
 
 ---
 
@@ -71,10 +71,10 @@ Produce Vietnamese slides that:
 
   * claims, definitions, formulas, examples, narrative order
 * Do NOT reorder ideas.
-* Allowed edits:
-
-  1. Split a too-dense slide into 2–3 slides *immediately adjacent* (same title), using `data-auto-animate` when it’s a progressive reveal.
-  2. Merge micro-slides ONLY if they are truly redundant and the flow stays identical.
+* Do NOT skip ideas.
+* Keep all content that appears in English slides, even if it seems redundant or too detailed.
+* Keep all examples, datasets, numbers, results, and figures that appear in English slides.
+* Allowed edits: Split a too-dense slide into 2–3 slides *immediately adjacent* (same title), using `data-auto-animate` when it’s a progressive reveal.
 * Do NOT invent new numbers, results, datasets, or examples.
 
 ### D) Vietnamese writing rules
@@ -101,7 +101,7 @@ You MUST infer and reuse the reference deck’s layout atoms instead of inventin
 
 ### F) Math rules
 
-* Keep formulas EXACTLY as in the English slides.
+* Keep all math formulas EXACTLY as in the English slides (do NOT re-derive or re-format).
 * Inline: `\( ... \)`; Display: `\[ ... \]`.
 
 ### G) Figures, charts, placeholders
@@ -139,4 +139,4 @@ You MUST infer and reuse the reference deck’s layout atoms instead of inventin
 
 ## Deliverable
 
-Return ONLY the `<section>` HTML blocks (the entire deck body). No commentary outside HTML.
+Return ONLY the `<section>` HTML blocks (the entire deck body) wrapped in a ```html``` block. No commentary outside HTML.
