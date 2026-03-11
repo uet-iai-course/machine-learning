@@ -136,10 +136,11 @@
           </div>
         </section>
         <section style="font-size: 0.8em;" data-auto-animate>
-          <h2>Hàm Logistic (Sigmoid)</h2>
+          <h2>Hàm logistic</h2>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
-              <p>Để đảm bảo \(p(X) \in [0, 1]\), ta sử dụng hàm <span class="keyword">logistic</span>:</p>
+              <p>Để đảm bảo \(p(X) \in [0, 1]\), ta sử dụng <span class="keyword">hàm logistic</span> (còn gọi là hàm
+                sigmoid):</p>
               <p style="text-align:center;">
                 \[
                 p(X) = \frac{e^{\beta_0 + \beta_1 X}}{1 + e^{\beta_0 + \beta_1 X}}
@@ -156,14 +157,14 @@
           </div>
         </section>
         <section style="font-size: 0.8em;">
-          <h2>Odds và Log-odds</h2>
+          <h2>Tỷ lệ chênh và logit</h2>
           <ul>
-            <li><strong>Tỷ lệ chênh (Odds):</strong> \(\frac{p(X)}{1-p(X)} = e^{\beta_0 + \beta_1 X}\)
+            <li><strong>Tỷ lệ chênh:</strong> \(\frac{p(X)}{1-p(X)} = e^{\beta_0 + \beta_1 X}\)
               <ul>
                 <li>Chỉ số này có giá trị từ \(0\) đến \(\infty\).</li>
               </ul>
             </li>
-            <li><strong>Log-odds (Logit):</strong> \(\log\left(\frac{p(X)}{1-p(X)}\right) = \beta_0 + \beta_1 X\)
+            <li><strong>Logit:</strong> \(\log\left(\frac{p(X)}{1-p(X)}\right) = \beta_0 + \beta_1 X\)
               <ul>
                 <li>Hàm logit có mối liên hệ <strong>tuyến tính</strong> với \(X\).</li>
               </ul>
@@ -171,12 +172,12 @@
           </ul>
         </section>
         <section style="font-size: 0.8em;">
-          <h2>Diễn giải mô hình Logistic</h2>
+          <h2>Diễn giải mô hình logistic</h2>
           <ul>
             <li>Khi tăng \(X\) thêm 1 đơn vị:
               <ul>
-                <li>Cộng thêm \(\beta_1\) vào <strong>log-odds</strong>.</li>
-                <li>Nhân <strong>odds</strong> thêm một lượng \(e^{\beta_1}\).</li>
+                <li>Cộng thêm \(\beta_1\) vào <strong>logit</strong>.</li>
+                <li>Nhân <strong>tỷ lệ chênh</strong> với \(e^{\beta_1}\).</li>
               </ul>
             </li>
             <li>Ảnh hưởng lên \(p(X)\) là <strong>phi tuyến</strong>:
@@ -188,37 +189,36 @@
           </ul>
         </section>
         <section style="font-size: 0.6em;">
-          <h2>Hợp lý cực đại (Maximum Likelihood Estimation - MLE)</h2>
+          <h2>Ước lượng hợp lý cực đại</h2>
           <ul>
-            <li><strong>Mục tiêu:</strong> Tìm các hệ số sao cho mô hình "ít ngạc nhiên" nhất khi thấy dữ liệu hiện có.
+            <li><strong>Mục tiêu:</strong> Tìm các hệ số sao cho dữ liệu quan sát được có xác suất xuất hiện lớn nhất
+              theo mô hình.
             </li>
-            <li>Hàm hợp lý (Likelihood):
+            <li><span class="keyword">Hàm hợp lý</span> (Likelihood) cho mô hình logistic:
               \[
               \begin{aligned}
               L(\beta_0, \beta_1)
               &= Pr[Y_1=y_1, \ldots, Y_n=y_n | X_1=x_1, \ldots, X_n=x_n; \beta_0, \beta_1]
               \\
-              &= p(x_1, \ldots, x_n | \beta_0, \beta_1)
-              \\
-              &= \prod_{i:y_i=1} p(x_i) \prod_{i:y_i=0} (1 - p(x_i))
+              &= \prod_{i=1}^{n} p(x_i)^{y_i}(1-p(x_i))^{1-y_i}
               \end{aligned}
               \]
             </li>
-            <li>Trong thực tế, ta cực đại hóa <strong>log-likelihood</strong> hoặc cực tiểu hóa <strong>NLL</strong>
-              (Negative Log-Likelihood):
+            <li>Thực tế: ta cực đại hóa <strong>log-likelihood</strong> hoặc cực tiểu hóa <strong>âm
+                log-likelihood</strong> (NLL):
               \[
-              NLL = -\sum_{i:y_i=1} \log p(x_i) - \sum_{i:y_i=0} \log (1 - p(x_i))
+              -\ell(\beta_0,\beta_1) = -\sum_{i=1}^{n}\left[y_i\log p(x_i) + (1-y_i)\log(1-p(x_i))\right]
               \]
             </li>
-            <li>Giải bằng phương pháp số: <span class="keyword">Newton-Raphson</span>.</li>
+            <li>Thường giải bằng các phương pháp tối ưu số như <strong>Newton-Raphson</strong> (ESL, mục 4.4.1).</li>
           </ul>
         </section>
         <section style="font-size: 0.7em;">
           <h2>Ví dụ: Một biến liên tục</h2>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
-              <p>Dự đoán vỡ nợ (default) dựa trên số dư (balance):</p>
-              <div class="fragment" style="margin-top:10px;font-size: .7em;">
+              <p>Dự đoán vỡ nợ dựa trên số dư tài khoản (balance):</p>
+              <div style="margin-top:10px;font-size: .7em;">
                 <ul>
                   <li>\(\hat{p}(1000) = \frac{e^{-10.65 + 0.0055 \times 1000}}{1 + e^{-10.65 + 0.0055 \times 1000}}
                     \approx
@@ -261,7 +261,7 @@
         </section>
         <section style="font-size: 0.75em;">
           <h2>Ví dụ: Một biến nhị phân</h2>
-          <p>Dự đoán vỡ nợ dựa trên trạng thái sinh viên (student=Yes/No):</p>
+          <p>Dự đoán vỡ nợ dựa trên trạng thái sinh viên (student = Yes/No):</p>
           <table style="width: 100%;">
             <thead>
               <tr>
@@ -293,11 +293,11 @@
           </ul>
         </section>
         <section style="font-size: 0.8em;">
-          <h2>Hồi quy Logistic bội</h2>
+          <h2>Hồi quy logistic bội</h2>
           <p style="text-align:center;">
             \[ \log\left(\frac{p(X)}{1-p(X)}\right) = \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p \]
           </p>
-          <p><strong>Kết quả trên dữ liệu Default:</strong></p>
+          <p><strong>Kết quả trên bộ dữ liệu Default:</strong></p>
           <table style="font-size: .8em;">
             <tr>
               <th>Biến</th>
@@ -314,7 +314,7 @@
               <td>&lt;0.0001</td>
             </tr>
             <tr>
-              <td>Số dư (balance) \( (\beta_1) \)</td>
+              <td>Số dư tài khoản (balance) \( (\beta_1) \)</td>
               <td>0.0057</td>
               <td>0.0002</td>
               <td>24.74</td>
@@ -351,47 +351,13 @@
         <section style="font-size: 0.7em;">
           <h2>Hiện tượng gây nhiễu (Confounding)</h2>
           <ul>
-            <li>Sinh viên thường có <strong>số dư (balance) cao hơn</strong> người đi làm.</li>
+            <li>Sinh viên thường có <strong>số dư tài khoản (balance) cao hơn</strong> người đi làm.</li>
             <li>Balance cao dẫn đến xác suất vỡ nợ cao.</li>
             <li>Nếu cố định balance, sinh viên thực tế <strong>ít rủi ro hơn</strong> người không phải sinh viên.
             </li>
-            <li>Mô hình đơn (univariate) bị nhiễu bởi sự tương quan giữa Student và Balance.</li>
+            <li>Mô hình một biến bị nhiễu bởi sự tương quan giữa student và balance.</li>
           </ul>
         </section>
-        <!-- <section style="font-size: 0.7em;">
-          <h2>Mô hình Phân biệt vs. Sinh trưởng</h2>
-          <table style="width:100%;">
-            <thead>
-              <tr style="background-color: #f2f2f2;">
-                <th>Đặc điểm</th>
-                <th>Mô hình Phân biệt (Discriminative)</th>
-                <th>Mô hình Sinh trưởng (Generative)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Mục tiêu</strong></td>
-                <td>Ước lượng ranh giới phân lớp \(\hat{g}(x)\)</td>
-                <td>Ước lượng phân phối xác suất \(\{p_g(x)\}\)</td>
-              </tr>
-              <tr>
-                <td><strong>Ý tưởng chính</strong></td>
-                <td>Phân biệt trực tiếp giữa các lớp</td>
-                <td>Học cách "sinh ra" dữ liệu cho từng lớp</td>
-              </tr>
-              <tr>
-                <td><strong>Độ đo hiệu năng</strong></td>
-                <td>Hàm mất mát (ví dụ: 0-1 loss)</td>
-                <td>Độ hợp lý (Likelihood)</td>
-              </tr>
-              <tr>
-                <td><strong>Ví dụ</strong></td>
-                <td>Logistic Regression, SVM</td>
-                <td>Naive Bayes, LDA, GMM</td>
-              </tr>
-            </tbody>
-          </table>
-        </section> -->
       </section>
 
       <section>
@@ -403,7 +369,7 @@
         </section>
         <section style="font-size: 0.8em;">
           <h2>Công thức Bayes</h2>
-          <p>Xác định xác suất hậu nghiệm (posterior) từ xác suất tiền nghiệm (prior) và mật độ lớp (class density):</p>
+          <p>Xác định xác suất hậu nghiệm từ xác suất tiền nghiệm và mật độ lớp:</p>
           \[
           Pr(Y|X) = \frac{Pr(X|Y)Pr(Y)}{Pr(X)}
           \]
@@ -429,9 +395,9 @@
         </section>
         <section style="font-size: 0.8em;">
           <h2>Phân tích định biệt tuyến tính (LDA)</h2>
-          <div>Các giả định của <strong>Linear Discriminant Analysis (LDA)</strong>:</div>
+          <div>Các giả định của <strong>phân tích định biệt tuyến tính (LDA)</strong>:</div>
           <ul>
-            <li>Mọi lớp đều tuân theo <strong>phân phối Gaussian</strong>.</li>
+            <li>Mọi lớp đều tuân theo <strong>phân phối chuẩn</strong>.</li>
             <li>Tất cả các lớp có <strong>cùng phương sai</strong>: \(\sigma_1^2 = \sigma_2^2 = \dots = \sigma_K^2 =
               \sigma^2\).</li>
           </ul>
@@ -442,7 +408,7 @@
           </div>
         </section>
         <section style="font-size: 0.75em;">
-          <h2>Hàm định biệt (Discriminant function)</h2>
+          <h2>Hàm định biệt</h2>
           <p>Bằng cách lấy log của tử số và loại bỏ các thành phần không phụ thuộc vào lớp \(k\), ta có hàm định biệt
             tuyến tính:</p>
           \[
@@ -469,7 +435,7 @@
               </p>
               <p>Đường quyết định Bayes là điểm mà hai mật độ bằng nhau:
                 \[
-                x = \frac{\mu_1^2 - \mu_2^2}{2(\mu_1 -\mu_2)} = \frac{\mu_1 + \mu_2}{2} = 0
+                x = \frac{\mu_1^2 - \mu_2^2}{2(\mu_1 -\mu_2)} = \frac{\mu_1 + \mu_2}{2}
                 \]
               </p>
             </div>
@@ -501,8 +467,8 @@
           </div>
         </section>
         <section style="font-size: 0.75em;">
-          <h2>LDA đa biến (Multivariate LDA)</h2>
-          <p>Giả định mỗi lớp tuân theo phân phối Gaussian đa biến với cùng ma trận hiệp phương sai \(\Sigma\):</p>
+          <h2>LDA đa biến</h2>
+          <p>Giả định mỗi lớp tuân theo phân phối chuẩn đa biến với cùng ma trận hiệp phương sai \(\Sigma\):</p>
           \[
           f_k(x) = \frac{1}{(2\pi)^{D/2}|\Sigma|^{1/2}} \exp\left(-\frac{1}{2}(x-\mu_k)^T \Sigma^{-1} (x-\mu_k)\right)
           \]
@@ -529,21 +495,21 @@
         <section id="danh-gia-hieu-nang">
           <h1>
             <span class="text-light">4.</span><br />
-            Đánh giá hiệu năng
+            Đánh giá <br /> hiệu năng
           </h1>
         </section>
         <section style="font-size: 0.8em;">
           <h2>Vấn đề khi chỉ sử dụng sai số</h2>
-          <p>Ví dụ <strong>phân loại vỡ nợ (default)</strong> với các đầu vào <strong>balance và student</strong>:</p>
+          <p>Ví dụ <strong>phân loại vỡ nợ</strong> với hai đầu vào <strong>balance và student</strong>:</p>
           <ul>
-            <li>Sai số huấn luyện LDA là 2.75% (sai 275 trên 10,000 dự đoán).</li>
-            <li>Tuy nhiên: Dữ liệu huấn luyện rất <span class="keyword">mất cân bằng</span> (chỉ 3.33% là vỡ nợ -
-              default=yes).</li>
+            <li>Sai số huấn luyện LDA là 2.75% (sai 275 trên 10.000 dự đoán).</li>
+            <li>Tuy nhiên: dữ liệu huấn luyện rất <span class="keyword">mất cân bằng</span> (chỉ 3.33% thuộc lớp vỡ
+              nợ).</li>
             <li>Nếu chỉ <strong>dự đoán tất cả là không vỡ nợ</strong>, ta đã đạt sai số 3.33%.</li>
           </ul>
         </section>
-        <section style="font-size: 0.6em;">
-          <h2>Ma trận nhầm lẫn (Confusion Matrix)</h2>
+        <section style="font-size: 0.5em;">
+          <h2>Ma trận nhầm lẫn</h2>
           <div style="text-align: center;">
             <table style="width:60%;font-size:0.8em;">
               <thead>
@@ -554,20 +520,20 @@
                 </tr>
                 <tr>
                   <th>Dự đoán</th>
-                  <th>No (-)</th>
-                  <th>Yes (+)</th>
+                  <th>Không (-)</th>
+                  <th>Có (+)</th>
                   <th>Tổng</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <th>No (-)</th>
+                  <th>Không (-)</th>
                   <td>9,644 (<strong style="color:green;">TN</strong>)</td>
                   <td>252 (<strong style="color:red;">FN</strong>)</td>
                   <td>9,896</td>
                 </tr>
                 <tr>
-                  <th>Yes (+)</th>
+                  <th>Có (+)</th>
                   <td>23 (<strong style="color:violet;">FP</strong>)</td>
                   <td>81 (<strong style="color:green;">TP</strong>)</td>
                   <td>104</td>
@@ -585,36 +551,50 @@
             </div>
             <div
               style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;font-size:.75em">
-              <div><strong style="color:violet">Lỗi Loại 1 (Type-1 error)</strong>: Dương tính giả (False positive).
+              <div><strong style="color:violet">Lỗi loại I</strong>: dương tính giả.
               </div>
-              <div><strong style="color:red">Lỗi Loại 2 (Type-2 error)</strong>: Âm tính giả (False negative).</div>
+              <div><strong style="color:red">Lỗi loại II</strong>: âm tính giả.</div>
             </div>
           </div>
           <hr />
           <div style="font-size:.9em">
             <div>
-              <p><strong>Độ nhạy (Sensitivity)</strong>: Tỷ lệ dương tính được dự đoán đúng.</p>
+              <p><strong>Độ nhạy</strong>: tỷ lệ mẫu dương tính được dự đoán đúng.</p>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
                 <div>
                   LDA:
                   \(Sens = \frac{TP}{TP + FN} = \frac{81}{333} \approx 24.3\%\)
                 </div>
                 <div>
-                  Dự đoán tất cả là No:
+                  Dự đoán tất cả là Không:
                   \(Sens = \frac{0}{333} = 0\%\)
                 </div>
               </div>
             </div>
             <div>
-              <p><strong>Độ đặc hiệu (Specificity)</strong>: Tỷ lệ âm tính được dự đoán đúng.</p>
+              <p><strong>Độ đặc hiệu</strong>: tỷ lệ mẫu âm tính được dự đoán đúng.</p>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
                 <div>
                   LDA:
                   \(Spec = \frac{TN}{TN + FP} = \frac{9644}{9667} \approx 99.8\%\)
                 </div>
                 <div>
-                  Dự đoán tất cả là No:
+                  Dự đoán tất cả là Không:
                   \(Spec = \frac{9667}{9667} = 100\%\)
+                </div>
+              </div>
+            </div>
+            <div>
+              <p><strong>Độ chính xác dương tính</strong>: trong các mẫu dự đoán là dương tính, bao nhiêu mẫu thực sự
+                dương tính.</p>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
+                <div>
+                  LDA:
+                  \(Prec = \frac{TP}{TP + FP} = \frac{81}{104} \approx 77.9\%\)
+                </div>
+                <div>
+                  Dự đoán tất cả là Không:
+                  không xác định vì không có dự đoán dương tính.
                 </div>
               </div>
             </div>
@@ -625,9 +605,9 @@
             <img src="img/lec03/types-of-errors.png" alt="Types of errors" style="width:80%;" />
           </div>
         </section>
-        <section style="font-size: 0.7em;" data-auto-animate>
+        <section style="font-size: 0.6em;" data-auto-animate>
           <h2>Thay đổi ngưỡng quyết định</h2>
-          <p>LDA mặc định dùng ngưỡng \(0.5\) để tối thiểu hóa sai số tổng thể:
+          <p>Nếu xem hai loại lỗi có chi phí như nhau, ngưỡng \(0.5\) là lựa chọn tự nhiên để ra quyết định:
             \[
             \hat{y} = \begin{cases}
             1 & \text{nếu } p_1(x) > 0.5 \Leftrightarrow \log\left( \frac{p_1(x)}{1 - p_1(x)} \right) > 0
@@ -637,38 +617,40 @@
             \]
           </p>
           <p>
-            Tuy nhiên, ta có thể thay đổi ngưỡng để đánh
-            đổi giữa độ nhạy và độ đặc hiệu:</p>
+            Tuy nhiên, ta có thể thay đổi ngưỡng để đánh đổi giữa độ nhạy và độ đặc hiệu, hoặc để phản ánh chi phí sai
+            lầm khác nhau:</p>
           <ul>
-            <li>Ngưỡng = \(0.5\): \(Sens = 24.3\%\), \(Spec = 99.8\%\), \(Error = 2.75\%\)</li>
-            <li>Ngưỡng = \(0.2\): \(Sens = 58.6\%\), \(Spec = 97.6\%\), \(Error = 3.73\%\)</li>
+            <li>Ngưỡng = \(0.5\): \(Sens = 24.3\%\), \(Spec = 99.8\%\), sai số = 2.75\%</li>
+            <li>Ngưỡng = \(0.2\): \(Sens = 58.6\%\), \(Spec = 97.6\%\), sai số = 3.73\%</li>
           </ul>
           <p>Ngưỡng = \(0.2\): \(\hat{y} = 1\) nếu \(p_1(x) > 0.2 \Leftrightarrow \log\left( \frac{p_1(x)}{1 - p_1(x)}
             \right) > \log\left( \frac{0.2}{0.8} \right) \Leftrightarrow \delta_1(x) - \delta_0(x) > \log\left(
             \frac{0.2}{0.8} \right) \)</p>
         </section>
-        <section style="font-size: 0.7em;" data-auto-animate>
+        <section style="font-size: 0.6em;" data-auto-animate>
           <h2>Thay đổi ngưỡng quyết định</h2>
-          <p>Khi thay đổi ngưỡng quyết định, sai số cũng thay đổi theo.</p>
+          <p>Khi thay đổi ngưỡng quyết định, độ nhạy, độ đặc hiệu và sai số đều thay đổi theo.</p>
           <div style="text-align:center">
             <img src="img/lec03/error_rates.svg" alt="Sensitivity and Specificity vs Threshold" style="width:50%;" />
           </div>
         </section>
-        <section style="font-size: 0.7em;">
-          <h2>Đường cong ROC và AUC</h2>
+        <section style="font-size: 0.6em;">
+          <h2>Đường cong ROC và diện tích dưới đường cong</h2>
           <div style="display:grid;grid-template-columns:1fr .5fr;gap:16px;align-items:center;">
             <div>
               <ul>
-                <li><strong>Đường cong ROC</strong>: Vẽ biểu đồ Sensitivity (True Positive Rate) đối với 1 - Specificity
-                  (False Positive Rate) cho mọi ngưỡng.</li>
-                <li><strong>AUC (Area Under Curve)</strong>: Diện tích dưới đường cong, đo lường chất lượng bộ phân lớp
+                <li><strong>Đường cong ROC</strong>: biểu diễn độ nhạy theo tỉ lệ dương tính giả \((1-\text{độ đặc
+                  hiệu})\) khi thay đổi ngưỡng.</li>
+                <li><strong>Diện tích dưới đường cong (AUC)</strong>: đo lường chất lượng bộ phân lớp
                   không phụ thuộc vào ngưỡng.
                   <ul>
                     <li>Lý tưởng: \(AUC = 1\).</li>
                     <li>Phân loại ngẫu nhiên: \(AUC = 0.5\).</li>
                   </ul>
                 </li>
-                <li>Đường cong ROC không bị ảnh hưởng bởi sự mất cân bằng dữ liệu.</li>
+                <li>ROC/AUC thường ít nhạy với mất cân bằng lớp hơn sai số tổng thể, nhưng khi dữ liệu rất lệch lớp thì
+                  nên xem thêm đường cong precision-recall (PR), tức đường cong giữa độ chính xác dương tính và độ nhạy.
+                </li>
               </ul>
             </div>
             <div style="text-align:center;">
@@ -712,7 +694,7 @@
         <section style="font-size: 0.8em;">
           <h2>Đặc điểm của QDA</h2>
           <ul>
-            <li>Biên quyết định là các đường <strong>bậc hai</strong> (quadratic curves).</li>
+            <li>Biên quyết định là các đường <strong>bậc hai</strong>.</li>
             <li>Ta cần khớp ma trận hiệp phương sai riêng cho từng lớp.</li>
             <li>Số lượng tham số cần ước lượng lớn hơn so với LDA:
               <ul>
@@ -722,7 +704,7 @@
             </li>
             <li><strong>LDA vs QDA:</strong>
               <ul>
-                <li>Nếu \(\Sigma_1 = \Sigma_2\): QDA dễ bị quá khớp (overtrain).</li>
+                <li>Nếu \(\Sigma_1 = \Sigma_2\): QDA dễ bị quá khớp.</li>
                 <li>Nếu \(\Sigma_1 \neq \Sigma_2\): LDA bị chệch cao (bias), không khớp được dữ liệu.</li>
               </ul>
             </li>
@@ -732,7 +714,7 @@
           <h2>Ước lượng tham số mô hình LDA và QDA</h2>
           <div style="display:grid;grid-template-columns:1fr 1.1fr;gap:20px;align-items:start;">
             <div>
-              <h4>Ước lượng từ mẫu (Sample estimates)</h4>
+              <h4>Ước lượng từ mẫu</h4>
               <ul>
                 <li><strong>Trung bình lớp:</strong> \(\hat{\mu}_{k}=\frac{1}{n_{k}}\sum_{i:y_{i}=k}x_{i}\)
                 </li>
@@ -746,7 +728,7 @@
                 </li>
                 <li><strong>Xác suất tiền nghiệm:</strong> \(\hat{\pi}_{k}=n_{k}/n\) </li>
               </ul>
-              <h4 style="margin-top:10px;">Phân rã giá trị riêng (Eigenvalue decomposition)</h4>
+              <h4 style="margin-top:10px;">Phân rã giá trị riêng</h4>
               <p>Để đơn giản hóa việc tính toán ma trận hiệp phương sai: \(\hat{\Sigma}_{k}=U_{k}D_{k}U_{k}^{T}\)</p>
               <ul>
                 <li>\(U_{k}\): Ma trận trực giao (orthonormal) kích thước \(p \times p\) </li>
@@ -765,11 +747,11 @@
               </ul>
               <h4 style="margin-top:10px;">Quy trình ước lượng LDA</h4>
               <ol>
-                <li><strong>Bước 1:</strong> Chuẩn hóa \(X\) về hiệp phương sai dạng cầu (spherical covariance):
+                <li><strong>Bước 1:</strong> Chuẩn hóa \(X\) để hiệp phương sai có dạng cầu:
                   <p style="text-align:center;">\(X^{*} \leftarrow D^{-1/2}U^{T}X\) </p>
                 </li>
                 <li><strong>Bước 2:</strong> Phân lớp vào tâm cụm (centroid) gần nhất trong không gian đã biến đổi.</li>
-                <li><strong>Lưu ý:</strong> Khoảng cách được điều chỉnh (weighted) bởi xác suất tiền nghiệm của lớp
+                <li><strong>Lưu ý:</strong> Khoảng cách được điều chỉnh có trọng số bởi xác suất tiền nghiệm của lớp
                   \(\pi_{k}\).</li>
               </ol>
               <div style="margin-top: 20px; font-size: 0.8em; color: gray;">
@@ -789,29 +771,29 @@
         </section>
 
         <section style="font-size: 0.75em;">
-          <h2>LDA và Hồi quy Logistic</h2>
+          <h2>LDA và hồi quy logistic</h2>
           <ul>
-            <li>Phân lớp nhị phân đơn biến: log-odds của LDA chính là hiệu của hai hàm định biệt tuyến tính.
+            <li>Phân lớp nhị phân đơn biến: logit của LDA chính là hiệu của hai hàm định biệt tuyến tính.
             </li>
             <li>Cả hai phương pháp đều cho ra mô hình tuyến tính: \( \log\frac{p_1(x)}{1-p_1(x)} = \beta_0 + \beta_1 x
               \). </li>
             <li><strong>Khác biệt nằm ở cách ước lượng:</strong>
               <ul>
-                <li>Hồi quy logistic sử dụng ước lượng hợp lệ tối đa (MLE). </li>
-                <li>LDA sử dụng trung bình và phương sai ước lượng từ phân phối Gaussian. </li>
+                <li>Hồi quy logistic sử dụng ước lượng hợp lý cực đại. </li>
+                <li>LDA sử dụng trung bình và phương sai ước lượng từ giả định phân phối chuẩn. </li>
               </ul>
             </li>
-            <li>LDA đưa ra các giả định mạnh hơn về dữ liệu so với Hồi quy logistic. </li>
+            <li>LDA đưa ra các giả định mạnh hơn về dữ liệu so với hồi quy logistic. </li>
           </ul>
         </section>
 
         <section style="font-size: 0.75em;">
           <h2>LDA, QDA và \(k\)-NN</h2>
           <ul>
-            <li>LDA và QDA là các phương pháp mô hình hóa tham số (parametric), trong khi \(k\)-NN là phương pháp không
-              mô hình hóa (non-parametric).
+            <li>LDA và QDA là các phương pháp <strong>có tham số</strong>, trong khi \(k\)-NN là phương pháp <strong>phi
+                tham số</strong>.
             </li>
-            <li>\(k\)-NN không đưa ra giả định về phân phối dữ liệu, nhưng có thể bị ảnh hưởng bởi nhiễu (noise) và dữ
+            <li>\(k\)-NN không đưa ra giả định về phân phối dữ liệu, nhưng có thể bị ảnh hưởng bởi nhiễu và dữ
               liệu không cân bằng.
             </li>
             <li>LDA và QDA có thể hoạt động tốt hơn khi giả định của chúng được đáp ứng, nhưng có thể bị giảm hiệu năng
@@ -826,13 +808,13 @@
             <div>
               <ul>
                 <li><strong>Thiết lập:</strong> 2 biến dự báo, 2 lớp, mỗi lớp 20 điểm dữ liệu. </li>
-                <li>Các biến dự báo là phân phối chuẩn, không tương quan và có cùng phương sai (Spherical Gaussian).
+                <li>Các biến dự báo là phân phối chuẩn, không tương quan và có cùng phương sai.
                 </li>
                 <li><strong>Quan sát hiệu năng:</strong>
                   <ul>
                     <li>LDA hoạt động rất tốt do dữ liệu khớp hoàn toàn với giả định. </li>
                     <li>Hồi quy logistic chỉ kém hơn một chút. </li>
-                    <li>\(k\)-NN và QDA có xu hướng quá khớp (overtrain). </li>
+                    <li>\(k\)-NN và QDA có xu hướng quá khớp. </li>
                   </ul>
                 </li>
               </ul>
@@ -845,7 +827,7 @@
 
         <section style="font-size: 0.7em;">
           <h2>Kịch bản 2</h2>
-          <h4>Dữ liệu Gaussian có tương quan</h4>
+          <h4>Dữ liệu chuẩn có tương quan</h4>
           <div style="display:grid;grid-template-columns:1fr .5fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <ul>
@@ -873,11 +855,11 @@
             <div>
               <ul>
                 <li><strong>Thiết lập:</strong> Dữ liệu được sinh ra từ phân phối t (t-distribution). </li>
-                <li>Phân phối này có nhiều điểm cực trị (ngoại lai) hơn phân phối Gaussian. </li>
+                <li>Phân phối này có nhiều điểm cực trị (ngoại lai) hơn phân phối chuẩn. </li>
                 <li><strong>Quan sát hiệu năng:</strong>
                   <ul>
                     <li>Đường biên quyết định vẫn là tuyến tính, nhưng giả định của LDA bị vi phạm. </li>
-                    <li><strong>Hồi quy Logistic</strong> cho kết quả tốt nhất. </li>
+                    <li><strong>Hồi quy logistic</strong> cho kết quả tốt nhất. </li>
                     <li>QDA bị giảm sút hiệu năng đáng kể do dữ liệu không chuẩn. </li>
                   </ul>
                 </li>
@@ -923,8 +905,8 @@
                 <li><strong>Quan sát hiệu năng:</strong>
                   <ul>
                     <li><strong>QDA</strong> hoạt động tốt nhất. </li>
-                    <li>\(k\)-NN (CV) theo sát nút. </li>
-                    <li>Các phương pháp tuyến tính (LDA, Logistic) thất bại trong việc mô phỏng dữ liệu. </li>
+                    <li>\(k\)-NN (có đánh giá chéo) theo sát nút. </li>
+                    <li>Các phương pháp tuyến tính (LDA, hồi quy logistic) thất bại trong việc mô phỏng dữ liệu. </li>
                   </ul>
                 </li>
               </ul>
@@ -946,10 +928,10 @@
                 <li>Ngay cả QDA cũng không thể mô hình hóa tốt loại dữ liệu này. </li>
                 <li><strong>Quan sát hiệu năng:</strong>
                   <ul>
-                    <li><strong>\(k\)-NN (với Cross-Validation)</strong> vượt qua tất cả các phương pháp có tham số.
+                    <li><strong>\(k\)-NN (với đánh giá chéo)</strong> vượt qua tất cả các phương pháp có tham số.
                     </li>
                     <li>\(k\)-NN với \(k=1\) có xu hướng quá khớp. </li>
-                    <li>Việc lựa chọn độ mượt (smoothness) trong \(k\)-NN là cực kỳ quan trọng. </li>
+                    <li>Việc lựa chọn độ mượt trong \(k\)-NN là cực kỳ quan trọng. </li>
                   </ul>
                 </li>
               </ul>
@@ -970,11 +952,13 @@
             <div>
               <h4>Đặc điểm cốt lõi</h4>
               <ul>
-                <li><strong>Hồi quy Logistic</strong>: ít giả định về phân phối dữ liệu.</li>
-                <li><strong>LDA</strong>: Giả định Gaussian + Hiệp phương sai chung \(\Sigma\) \(\rightarrow\) Biên
+                <li><strong>Hồi quy logistic</strong>: ít giả định về phân phối dữ liệu.</li>
+                <li><strong>LDA</strong>: Giả định phân phối chuẩn + hiệp phương sai chung \(\Sigma\) \(\rightarrow\)
+                  Biên
                   <strong>tuyến tính</strong>.
                 </li>
-                <li><strong>QDA</strong>: Giả định Gaussian + Hiệp phương sai riêng \(\Sigma_k\) \(\rightarrow\) Biên
+                <li><strong>QDA</strong>: Giả định phân phối chuẩn + hiệp phương sai riêng \(\Sigma_k\) \(\rightarrow\)
+                  Biên
                   <strong>bậc hai</strong>.
                 </li>
                 <li><strong>k-NN</strong>: Phi tham số, linh hoạt nhất cho các kịch bản phi tuyến phức tạp.</li>
@@ -993,14 +977,14 @@
                 <tbody>
                   <tr>
                     <td>Biên quyết định thẳng</td>
-                    <td><strong>LDA / Logistic</strong> </td>
+                    <td><strong>LDA / Hồi quy logistic</strong> </td>
                   </tr>
                   <tr>
                     <td>Dữ liệu không chuẩn</td>
-                    <td><strong>Logistic / k-NN</strong> </td>
+                    <td><strong>Hồi quy logistic / k-NN</strong> </td>
                   </tr>
                   <tr>
-                    <td>Biên cong / \(n\) lớn</td>
+                    <td>Biên cong, dữ liệu đủ lớn</td>
                     <td><strong>QDA</strong> </td>
                   </tr>
                   <tr>
