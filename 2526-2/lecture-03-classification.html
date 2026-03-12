@@ -404,7 +404,7 @@
           <div>Các giả định của <strong>phân tích định biệt tuyến tính (LDA)</strong>:</div>
           <ul>
             <li>Mọi lớp đều tuân theo <strong>phân phối chuẩn</strong>.</li>
-            <li>Tất cả các lớp có <strong>cùng phương sai</strong>: \(\sigma_1^2 = \sigma_2^2 = \dots = \sigma_K^2 =
+            <li>Tất cả các lớp có <strong>cùng phương sai</strong>: \(\sigma_1^2 = \dots = \sigma_K^2 =
               \sigma^2\).</li>
           </ul>
           <div style="margin-top: 20px;">
@@ -474,7 +474,8 @@
         </section>
         <section style="font-size: 0.75em;">
           <h2>LDA đa biến</h2>
-          <p>Giả định mỗi lớp tuân theo phân phối chuẩn đa biến với cùng ma trận hiệp phương sai \(\Sigma\):</p>
+          <p>Giả định mỗi lớp tuân theo phân phối chuẩn đa biến với <strong>cùng ma trận hiệp phương sai</strong>
+            \(\Sigma\):</p>
           \[
           f_k(x) = \frac{1}{(2\pi)^{D/2}|\Sigma|^{1/2}} \exp\left(-\frac{1}{2}(x-\mu_k)^T \Sigma^{-1} (x-\mu_k)\right)
           \]
@@ -514,10 +515,10 @@
             <li>Nếu chỉ <strong>dự đoán tất cả là không vỡ nợ</strong>, ta đã đạt sai số 3.33%.</li>
           </ul>
         </section>
-        <section style="font-size: 0.5em;">
+        <section style="font-size: 0.8em;" data-auto-animate="">
           <h2>Ma trận nhầm lẫn</h2>
           <div style="text-align: center;">
-            <table style="width:60%;font-size:0.8em;">
+            <table style="width:80%;">
               <thead>
                 <tr>
                   <th></th>
@@ -555,14 +556,16 @@
             <div style="font-size:0.8em;color:gray;">
               Ma trận nhầm lẫn: Kết quả dự đoán của LDA.
             </div>
-            <div
-              style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;font-size:.75em">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
               <div><strong style="color:violet">Lỗi loại I</strong>: dương tính giả.
               </div>
               <div><strong style="color:red">Lỗi loại II</strong>: âm tính giả.</div>
             </div>
           </div>
-          <hr />
+        </section>
+
+        <section style="font-size: 0.8em;" data-auto-animate="">
+          <h2>Ma trận nhầm lẫn</h2>
           <div style="font-size:.9em">
             <div>
               <p><strong>Độ nhạy</strong>: tỷ lệ mẫu dương tính được dự đoán đúng.</p>
@@ -813,7 +816,8 @@
           <div style="display:grid;grid-template-columns:1fr .5fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <ul>
-                <li><strong>Thiết lập:</strong> 2 biến dự báo, 2 lớp, mỗi lớp 20 điểm dữ liệu. </li>
+                <li><strong>Thiết lập:</strong>100 bộ dữ liệu huấn luyện ngẫu nhiên, mỗi bộ có 2 biến dự báo, 2 lớp, mỗi
+                  lớp 20 điểm dữ liệu. </li>
                 <li>Các biến dự báo là phân phối chuẩn, không tương quan và có cùng phương sai.
                 </li>
                 <li><strong>Quan sát hiệu năng:</strong>
@@ -884,10 +888,11 @@
             <div>
               <ul>
                 <li><strong>Thiết lập:</strong> Mỗi lớp có ma trận hiệp phương sai khác nhau. </li>
-                <li>Lớp 1 có tương quan \(0.5\), Lớp 2 có tương quan \(-0.5\) với các đặc trưng. </li>
+                <li>Lớp 1 có tương quan \(0.5\), Lớp 2 có tương quan \(-0.5\) giữa các biến. </li>
                 <li><strong>Quan sát hiệu năng:</strong>
                   <ul>
-                    <li>Giả định của QDA được đáp ứng, trong khi LDA thì không. </li>
+                    <li>Giả định của QDA được đáp ứng (tương quan khác nhau giữa các lớp, nên ma trận hiệp phương sai
+                      khác nhau), trong khi LDA thì không. </li>
                     <li><strong>QDA</strong> vượt trội hơn hẳn tất cả các phương pháp khác. </li>
                   </ul>
                 </li>
