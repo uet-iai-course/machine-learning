@@ -48,7 +48,7 @@
             <li>Trong bài toán <span class="keyword">phân lớp</span>, chúng ta muốn dự đoán các đầu ra định tính
               (categorical outputs).</li>
             <li><strong>Ví dụ:</strong> Một khách hàng có hoàn trả khoản vay hay không? (Có / Không)</li>
-            <li><strong>Dữ liệu đầu vào:</strong> Thu nhập hàng năm, số dư hàng tháng, trạng thái sinh viên.</li>
+            <li><strong>Dữ liệu đầu vào:</strong> Thu nhập, số dư nợ thẻ tín dụng, trạng thái sinh viên.</li>
           </ul>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
             <div style="text-align:center;">
@@ -118,7 +118,7 @@
             Hồi quy logistic
           </h1>
         </section>
-        <section style="font-size: 0.8em;" data-auto-animate>
+        <section style="font-size: 0.8em;">
           <h2>Vấn đề của Hồi quy tuyến tính</h2>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
@@ -135,7 +135,7 @@
             </div>
           </div>
         </section>
-        <section style="font-size: 0.8em;" data-auto-animate>
+        <section style="font-size: 0.8em;">
           <h2>Hàm logistic</h2>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
@@ -156,22 +156,22 @@
             </div>
           </div>
         </section>
-        <section style="font-size: 0.8em;">
+        <section>
           <h2>Tỷ lệ chênh và logit</h2>
           <ul>
-            <li><strong>Tỷ lệ chênh:</strong> \(\frac{p(X)}{1-p(X)} = e^{\beta_0 + \beta_1 X}\)
+            <li><strong>Tỷ lệ chênh</strong> (odds): \(\frac{p(X)}{1-p(X)} = e^{\beta_0 + \beta_1 X}\)
               <ul>
                 <li>Chỉ số này có giá trị từ \(0\) đến \(\infty\).</li>
               </ul>
             </li>
-            <li><strong>Logit:</strong> \(\log\left(\frac{p(X)}{1-p(X)}\right) = \beta_0 + \beta_1 X\)
+            <li><strong>Logit</strong> (log-odds): \(\log\left(\frac{p(X)}{1-p(X)}\right) = \beta_0 + \beta_1 X\)
               <ul>
                 <li>Hàm logit có mối liên hệ <strong>tuyến tính</strong> với \(X\).</li>
               </ul>
             </li>
           </ul>
         </section>
-        <section style="font-size: 0.8em;">
+        <section>
           <h2>Diễn giải mô hình logistic</h2>
           <ul>
             <li>Khi tăng \(X\) thêm 1 đơn vị:
@@ -188,7 +188,7 @@
             </li>
           </ul>
         </section>
-        <section style="font-size: 0.6em;">
+        <section data-auto-animate="" style="font-size: .7em;">
           <h2>Ước lượng hợp lý cực đại</h2>
           <ul>
             <li><strong>Mục tiêu:</strong> Tìm các hệ số sao cho dữ liệu quan sát được có xác suất xuất hiện lớn nhất
@@ -204,6 +204,12 @@
               \end{aligned}
               \]
             </li>
+          </ul>
+        </section>
+
+        <section data-auto-animate="" style="font-size: .7em;">
+          <h2>Ước lượng hợp lý cực đại</h2>
+          <ul>
             <li>Thực tế: ta cực đại hóa <strong>log-likelihood</strong> hoặc cực tiểu hóa <strong>âm
                 log-likelihood</strong> (NLL):
               \[
@@ -217,7 +223,7 @@
           <h2>Ví dụ: Một biến liên tục</h2>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
-              <p>Dự đoán vỡ nợ dựa trên số dư tài khoản (balance):</p>
+              <p>Dự đoán vỡ nợ dựa trên số dư nợ thẻ tín dụng (balance):</p>
               <div style="margin-top:10px;font-size: .7em;">
                 <ul>
                   <li>\(\hat{p}(1000) = \frac{e^{-10.65 + 0.0055 \times 1000}}{1 + e^{-10.65 + 0.0055 \times 1000}}
@@ -250,7 +256,7 @@
                 <td>&lt; 0.0001</td>
               </tr>
               <tr>
-                <td>Số dư (\(\beta_1\))</td>
+                <td>Số dư nợ thẻ tín dụng (\(\beta_1\))</td>
                 <td>0.0055</td>
                 <td>0.0002</td>
                 <td>24.9</td>
@@ -314,7 +320,7 @@
               <td>&lt;0.0001</td>
             </tr>
             <tr>
-              <td>Số dư tài khoản (balance) \( (\beta_1) \)</td>
+              <td>Số dư nợ thẻ tín dụng (balance) \( (\beta_1) \)</td>
               <td>0.0057</td>
               <td>0.0002</td>
               <td>24.74</td>
@@ -351,7 +357,7 @@
         <section style="font-size: 0.7em;">
           <h2>Hiện tượng gây nhiễu (Confounding)</h2>
           <ul>
-            <li>Sinh viên thường có <strong>số dư tài khoản (balance) cao hơn</strong> người đi làm.</li>
+            <li>Sinh viên thường có <strong>số dư nợ thẻ tín dụng (balance) cao hơn</strong> người đi làm.</li>
             <li>Balance cao dẫn đến xác suất vỡ nợ cao.</li>
             <li>Nếu cố định balance, sinh viên thực tế <strong>ít rủi ro hơn</strong> người không phải sinh viên.
             </li>
