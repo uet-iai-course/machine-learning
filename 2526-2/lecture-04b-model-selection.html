@@ -20,8 +20,8 @@
       <section>
         <section>
           <h1>Học máy</h1>
-          <h3>Bài 7: Lựa chọn mô hình</h3>
-          <p>ISLR 6, ESL 3</p>
+          <h3>Bài 4b: Lựa chọn mô hình</h3>
+          <p>Trường ĐH Công nghệ – Đại học Quốc gia Hà Nội</p>
         </section>
         <section style="font-size: 0.9em;">
           <h2>Nội dung</h2>
@@ -95,28 +95,10 @@
 
         <section style="font-size: 0.75em;">
           <h2>Ví dụ: Lựa chọn tập con tốt nhất</h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
-            <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:18px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Lựa chọn tập con tốt nhất trên dữ liệu Credit – sai số huấn luyện đo bằng
-                RSS<br />
-                <strong>Ý nghĩa:</strong> RSS giảm đơn điệu khi thêm biến
-              </div>
-              <p style="font-size:0.8em;color:#666;"><em>Lựa chọn tập con tốt nhất – RSS</em></p>
-            </div>
-            <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:18px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Lựa chọn tập con tốt nhất trên dữ liệu Credit – sai số huấn luyện đo bằng
-                R²<br />
-                <strong>Ý nghĩa:</strong> R² tăng đơn điệu khi thêm biến
-              </div>
-              <p style="font-size:0.8em;color:#666;"><em>Lựa chọn tập con tốt nhất – R²</em></p>
-            </div>
+          <div style="text-align:center;margin-top:12px;">
+            <img src="img/lec04b/best-subset-rss-r2.png" alt="Best subset selection: RSS and R² on Credit data" style="max-width:88%;" />
           </div>
-          <p><strong>Nhận xét:</strong> Sai số <em>huấn luyện</em> không phản ánh sai số <em>kiểm tra</em> — cần phương
-            pháp đánh giá riêng.</p>
+          <p style="margin-top:8px;"><strong>Nhận xét:</strong> Sai số <em>huấn luyện</em> không phản ánh sai số <em>kiểm tra</em> — cần phương pháp đánh giá riêng.</p>
         </section>
 
         <section style="font-size: 0.8em;">
@@ -159,12 +141,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Sai số tập kiểm định theo số biến dự đoán (dữ liệu Credit)<br />
-                <strong>Ý nghĩa:</strong> Xác định mô hình tối ưu qua đường cong hình chữ U
-              </div>
-              <p style="font-size:0.8em;color:#666;"><em>Sai số tập kiểm định theo số biến</em></p>
+              <img src="img/lec04b/validation-set-error.png" alt="Validation set error vs number of predictors" style="max-width:100%;" />
             </div>
           </div>
         </section>
@@ -183,11 +160,7 @@
                 chuẩn<br />của mô hình tốt nhất</p>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Sai số CV theo số biến – dữ liệu Credit (10-fold)<br />
-                <strong>Ý nghĩa:</strong> Đường cong phẳng sau \(p=3\), điểm tối ưu được đánh dấu ×
-              </div>
+              <img src="img/lec04b/cv-error-vs-predictors.png" alt="10-fold CV error vs number of predictors" style="max-width:100%;" />
             </div>
           </div>
         </section>
@@ -206,13 +179,8 @@
                 chuẩn<br />của mô hình tốt nhất</p>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Ứng dụng quy tắc 1-SE trên tập dữ liệu khác (ESL tr.62) – đường dashed nằm ngang
-                thể hiện ngưỡng 1-SE<br />
-                <strong>Ý nghĩa:</strong> Chọn mô hình nhỏ hơn thay vì mô hình tối ưu tuyệt đối
-              </div>
-              <p style="font-size:0.8em;color:#666;"><em>Ứng dụng quy tắc 1-SE (ESL tr. 62)</em></p>
+              <img src="img/lec04b/one-se-rule-esl.png" alt="One-standard-error rule applied on another dataset (ESL p.62)" style="max-width:100%;" />
+              <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>Ứng dụng quy tắc 1-SE (ESL tr. 62)</em></p>
             </div>
           </div>
         </section>
@@ -231,13 +199,8 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Adjusted R² trên dữ liệu Credit<br />
-                <strong>Ý nghĩa:</strong> Mô hình tốt nhất gồm: income, limit, rating, cards, age, student, gender
-              </div>
-              <p style="font-size:0.8em;color:#666;"><em>Adjusted R² – dữ liệu Credit<br /><strong>Mô hình tốt
-                    nhất:</strong> income, limit, rating, cards, age, student, gender</em></p>
+              <img src="img/lec04b/adjusted-r2.png" alt="Adjusted R² vs number of predictors on Credit data" style="max-width:100%;" />
+              <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>Adjusted R² – dữ liệu Credit<br /><strong>Tốt nhất:</strong> income, limit, rating, cards, age, student, gender</em></p>
             </div>
           </div>
         </section>
@@ -259,13 +222,8 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Thống kê C_p trên dữ liệu Credit<br />
-                <strong>Ý nghĩa:</strong> Mô hình tốt nhất: income, limit, rating, cards, age, student
-              </div>
-              <p style="font-size:0.8em;color:#666;"><em>\(C_p\) – dữ liệu Credit<br /><strong>Tốt nhất:</strong>
-                  income, limit, rating, cards, age, student</em></p>
+              <img src="img/lec04b/cp-statistic.png" alt="Cp statistic vs number of predictors on Credit data" style="max-width:100%;" />
+              <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>\(C_p\) – dữ liệu Credit<br /><strong>Tốt nhất:</strong> income, limit, rating, cards, age, student</em></p>
             </div>
           </div>
         </section>
@@ -289,13 +247,8 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Thống kê AIC trên dữ liệu Credit<br />
-                <strong>Ý nghĩa:</strong> Mô hình tốt nhất: income, limit, rating, cards, age, student
-              </div>
-              <p style="font-size:0.8em;color:#666;"><em>AIC – dữ liệu Credit<br /><strong>Tốt nhất:</strong> income,
-                  limit, rating, cards, age, student</em></p>
+              <img src="img/lec04b/aic-statistic.png" alt="AIC vs number of predictors on Credit data" style="max-width:100%;" />
+              <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>AIC – dữ liệu Credit<br /><strong>Tốt nhất:</strong> income, limit, rating, cards, age, student</em></p>
             </div>
           </div>
         </section>
@@ -335,13 +288,8 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Thống kê BIC trên dữ liệu Credit<br />
-                <strong>Ý nghĩa:</strong> Mô hình tốt nhất: income, limit, cards, student (nhỏ hơn AIC)
-              </div>
-              <p style="font-size:0.8em;color:#666;"><em>BIC – dữ liệu Credit<br /><strong>Tốt nhất:</strong> income,
-                  limit, cards, student</em></p>
+              <img src="img/lec04b/bic-statistic.png" alt="BIC vs number of predictors on Credit data" style="max-width:100%;" />
+              <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>BIC – dữ liệu Credit<br /><strong>Tốt nhất:</strong> income, limit, cards, student</em></p>
             </div>
           </div>
         </section>
@@ -402,11 +350,8 @@
               <p>\[ \tilde{x}_{ij} = \frac{x_{ij}}{\sqrt{\frac{1}{n}\sum_{i=1}^{n}(x_{ij}-\bar{x}_j)^2}} \]</p>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Hệ số Ridge chuẩn hóa theo \(\lambda\) và theo tỉ số chuẩn L2<br />
-                <strong>Ý nghĩa:</strong> Hệ số co về không khi \(\lambda\) lớn
-              </div>
+              <img src="img/lec04b/ridge-coef-vs-lambda.png" alt="Standardized Ridge coefficients vs λ" style="max-width:100%;margin-bottom:6px;" />
+              <img src="img/lec04b/ridge-coef-vs-l2norm.png" alt="Standardized Ridge coefficients vs L2 norm ratio" style="max-width:100%;" />
             </div>
           </div>
         </section>
@@ -451,11 +396,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> MSE, Bias², Variance theo \(\lambda\) (trên) và theo tỉ số chuẩn L2 (dưới)<br />
-                <strong>Ý nghĩa:</strong> MSE tối thiểu ở \(\lambda\) trung gian — Ridge thắng bình phương tối thiểu
-              </div>
+              <img src="img/lec04b/ridge-mse-bias-variance.png" alt="Ridge MSE, Bias², Variance vs λ and vs L2 norm ratio" style="max-width:100%;" />
             </div>
           </div>
         </section>
@@ -478,14 +419,10 @@
 
         <section style="font-size: 0.72em;">
           <h2>Ví dụ: Ridge và Lasso trên dữ liệu Credit</h2>
-          <div class="placeholder" style="border:1px dashed #999;padding:18px;border-radius:8px;text-align:center;">
-            <em>[Figure placeholder]</em><br />
-            <strong>Mô tả:</strong> 4 biểu đồ (2×2): hệ số Ridge theo \(\lambda\) và theo tỉ số chuẩn L2; hệ số Lasso
-            theo \(\lambda\) và theo tỉ số chuẩn L1<br />
-            <strong>Ý nghĩa:</strong> Ridge co về 0 từ từ; Lasso đặt nhiều hệ số về đúng 0
+          <div style="text-align:center;">
+            <img src="img/lec04b/ridge-lasso-credit-4panel.png" alt="Ridge and Lasso coefficients: 4-panel comparison on Credit data" style="max-width:88%;" />
+            <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>So sánh Ridge và Lasso – dữ liệu Credit</em></p>
           </div>
-          <p style="font-size:0.8em;color:#666;text-align:center;"><em>So sánh Ridge Regression và Lasso – dữ liệu
-              Credit</em></p>
         </section>
 
         <section style="font-size: 0.75em;">
@@ -505,12 +442,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Minh họa hình học 2D: đường đồng mức RSS và miền ràng buộc hình cầu (Ridge) và
-                hình thoi (Lasso)<br />
-                <strong>Ý nghĩa:</strong> Giải thích tại sao Lasso cho nghiệm thưa
-              </div>
+              <img src="img/lec04b/ridge-lasso-geometry.png" alt="Geometric intuition: Ridge (sphere) and Lasso (diamond) constraints" style="max-width:100%;" />
             </div>
           </div>
         </section>
@@ -531,12 +463,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Đồ thị ước lượng Ridge và Lasso theo \(y_j\) so với đường bình phương tối
-                thiểu<br />
-                <strong>Ý nghĩa:</strong> Ridge co đều, Lasso đặt về 0 khi \(|y_j|\) nhỏ
-              </div>
+              <img src="img/lec04b/ridge-lasso-soft-thresholding.png" alt="Ridge and Lasso coefficient estimates vs yj (soft thresholding)" style="max-width:100%;" />
             </div>
           </div>
         </section>
@@ -553,11 +480,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> MSE (Bias, Variance, MSE) của Lasso và Ridge theo R² trên tập huấn luyện<br />
-                <strong>Ý nghĩa:</strong> Lasso thắng khi mô hình thực thưa
-              </div>
+              <img src="img/lec04b/lasso-ridge-sparse-mse.png" alt="Lasso vs Ridge MSE on sparse simulation (2/45 relevant features)" style="max-width:100%;" />
             </div>
           </div>
         </section>
@@ -580,11 +503,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> MSE của Ridge và Lasso khi tất cả hệ số thực khác 0<br />
-                <strong>Ý nghĩa:</strong> Ridge thắng khi mô hình thực dày đặc
-              </div>
+              <img src="img/lec04b/lasso-ridge-dense-mse.png" alt="Lasso vs Ridge MSE on dense simulation (all 45 features relevant)" style="max-width:100%;" />
             </div>
           </div>
         </section>
@@ -605,35 +524,16 @@
                 tra của mô hình kết quả trên bất kỳ phần dữ liệu huấn luyện nào!</p>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Sai số CV (LOOCV) và hệ số theo \(\lambda\) – dữ liệu Credit, Ridge<br />
-                <strong>Ý nghĩa:</strong> Không cần co rút nhiều; \(\lambda\) tối ưu gần 0
-              </div>
+              <img src="img/lec04b/ridge-loocv-error.png" alt="Ridge LOOCV error vs λ on Credit data" style="max-width:100%;margin-bottom:6px;" />
+              <img src="img/lec04b/ridge-coef-optimal-lambda.png" alt="Ridge standardized coefficients with optimal λ marked" style="max-width:100%;" />
             </div>
           </div>
         </section>
 
         <section style="font-size: 0.75em;">
           <h2>Chọn \(\lambda\) — Lasso trên dữ liệu thưa</h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
-            <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Sai số CV (LOOCV) theo tỉ số chuẩn L1 – dữ liệu thưa (chỉ 2/45 biến liên
-                quan)<br />
-                <strong>Ý nghĩa:</strong> Cần co rút nhiều để loại biến không liên quan
-              </div>
-              <p style="font-size:0.8em;color:#666;"><em>Cần co rút nhiều để lọc biến</em></p>
-            </div>
-            <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Hệ số Lasso theo tỉ số chuẩn L1 – mô hình đầy đủ chỉ xác định 1 biến<br />
-                <strong>Ý nghĩa:</strong> Lasso tại điểm tối ưu giữ lại đúng 2 biến
-              </div>
-              <p style="font-size:0.8em;color:#666;"><em>Mô hình đầy đủ chỉ nhận ra 1 biến</em></p>
-            </div>
+          <div style="text-align:center;margin-top:12px;">
+            <img src="img/lec04b/lasso-sparse-cv-coef.png" alt="Lasso on sparse data: LOOCV error and coefficients vs L1 norm ratio" style="max-width:92%;" />
           </div>
         </section>
       </section>
@@ -675,12 +575,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Hai đồ thị: \(n=20, p=1\) và \(n=2, p=1\) — minh họa overfit khi \(n\) nhỏ so
-                với \(p\)<br />
-                <strong>Ý nghĩa:</strong> Ít dữ liệu hơn → mô hình fit hoàn hảo nhưng vô nghĩa
-              </div>
+              <img src="img/lec04b/high-dim-overfitting.png" alt="Overfitting in high dimensions: n=20 p=1 vs n=2 p=1" style="max-width:100%;" />
             </div>
           </div>
         </section>
@@ -700,10 +595,10 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <div class="placeholder" style="border:1px dashed #999;padding:14px;border-radius:8px;">
-                <em>[Figure placeholder]</em><br />
-                <strong>Mô tả:</strong> Ba đồ thị: R² trên training, Training MSE, và Test MSE theo số biến<br />
-                <strong>Ý nghĩa:</strong> R² và Training MSE "cải thiện" giả tạo; Test MSE tăng vọt
+              <div style="display:flex;gap:4px;justify-content:center;">
+                <img src="img/lec04b/high-dim-r2-training.png" alt="R² on training vs number of variables" style="width:32%;" />
+                <img src="img/lec04b/high-dim-training-mse.png" alt="Training MSE vs number of variables" style="width:32%;" />
+                <img src="img/lec04b/high-dim-test-mse.png" alt="Test MSE vs number of variables" style="width:32%;" />
               </div>
             </div>
           </div>
@@ -711,6 +606,8 @@
 
         <section style="font-size: 0.8em;">
           <h2>Hồi quy trong không gian nhiều chiều — Phương pháp</h2>
+          <div style="display:grid;grid-template-columns:1fr .7fr;gap:16px;align-items:start;">
+          <div>
           <p>Các phương pháp <strong>ít linh hoạt hơn</strong> lại rất phù hợp với dữ liệu nhiều chiều:</p>
           <p><strong>Ví dụ mô phỏng:</strong> Lasso, \(n=100\), \(p \in \{20, 50, 2000\}\), chỉ 20 đặc trưng thực sự
             liên quan</p>
@@ -724,6 +621,11 @@
             <li>Sai số kiểm tra tăng theo số biến <em>không liên quan</em> đến đầu ra — <span class="keyword">lời nguyền
                 chiều</span> (curse of dimensionality)</li>
           </ol>
+          </div>
+          <div style="text-align:center;">
+            <img src="img/lec04b/lasso-high-dim-test-error.png" alt="Lasso test error for p=20, 50, 2000 with n=100" style="max-width:100%;" />
+          </div>
+          </div>
         </section>
 
         <section style="font-size: 0.8em;">
