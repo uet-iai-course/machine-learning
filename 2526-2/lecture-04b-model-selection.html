@@ -455,7 +455,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/ridge-mse-bias-variance.svg"
+              <img src="img/lec04b/ridge-mse-bias-variance.png"
                 alt="Ridge MSE, Bias², Variance vs λ and vs L2 norm ratio" style="max-width:100%;" />
             </div>
           </div>
@@ -475,7 +475,7 @@
 
         <section style="font-size: 0.9em;">
           <h2>Trực giác: Ridge vs. Lasso</h2>
-          <div style="display:grid;grid-template-columns:1fr .3fr;gap:16px;margin-top:12px;align-items:start;">
+          <div style="display:grid;grid-template-columns:1fr .4fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <p><strong>Ridge:</strong> \(\min RSS\) sao cho \(\sum\beta_j^2 \le s\)</p>
               <ul>
@@ -505,7 +505,7 @@
         <section style="font-size: 0.7em;" data-auto-animate>
           <h2>Ridge vs. Lasso</h2>
           <h4>Trường hợp đơn giản</h4>
-          <div style="display:grid;grid-template-columns:1fr .5fr;gap:16px;margin-top:12px;align-items:start;">
+          <div style="display:grid;grid-template-columns:1fr .4fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <p>\(n=p\), \(\mathbf{X}=\mathbf{I}\), \(\beta_0=0\)</p>
               <ul>
@@ -536,7 +536,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/lasso-ridge-sparse-mse.svg"
+              <img src="img/lec04b/lasso-ridge-sparse-mse.png"
                 alt="Lasso vs Ridge MSE on sparse simulation (2/45 relevant features)" style="max-width:100%;" />
             </div>
           </div>
@@ -560,7 +560,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/lasso-ridge-dense-mse.svg"
+              <img src="img/lec04b/lasso-ridge-dense-mse.png"
                 alt="Lasso vs Ridge MSE on dense simulation (all 45 features relevant)" style="max-width:100%;" />
             </div>
           </div>
@@ -626,7 +626,7 @@ print(f"Lasso: số hệ số khác 0 = {(lasso.coef_ != 0).sum()}")</code></pre
             <img src="img/lec04b/lasso-sparse-cv-coef.svg"
               alt="Lasso on sparse data: LOOCV error and coefficients vs L1 norm ratio" style="max-width:92%;" />
             <div
-              style="display:flex;justify-content:space-around;margin-top:6px;font-size:0.82em;color:#555;font-style:italic;">
+              style="display:flex;justify-content:space-around;margin-top:6px;font-size:0.6em;color:#555;font-style:italic;">
               <span>Cần co rút mạnh để loại bỏ các đặc trưng không liên quan</span>
               <span>Mô hình tối ưu xác định đúng 2 đặc trưng thật sự</span>
             </div>
@@ -660,7 +660,7 @@ print(f"Lasso: số hệ số khác 0 = {(lasso.coef_ != 0).sum()}")</code></pre
 
         <section>
           <h2>Vấn đề trong không gian nhiều chiều</h2>
-          <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <ul>
                 <li>OLS khớp hoàn hảo — nhưng overfit nghiêm trọng</li>
@@ -676,7 +676,7 @@ print(f"Lasso: số hệ số khác 0 = {(lasso.coef_ != 0).sum()}")</code></pre
 
         <section style="font-size: 0.8em;">
           <h2>Ví dụ: Hồi quy nhiều chiều</h2>
-          <div style="display:grid;grid-template-columns:1fr .8fr;gap:16px;margin-top:12px;align-items:start;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <p>OLS, \(n=20\), 1–20 đặc trưng <strong>không liên quan</strong> đến đầu ra</p>
               <ul>
@@ -709,7 +709,7 @@ print(f"Lasso: số hệ số khác 0 = {(lasso.coef_ != 0).sum()}")</code></pre
             </ul>
           </div>
           <div style="text-align:center;">
-            <img src="img/lec04b/lasso-high-dim-test-error.svg" alt="Lasso test error for p=20, 50, 2000 with n=100"
+            <img src="img/lec04b/lasso-high-dim-test-error.png" alt="Lasso test error for p=20, 50, 2000 with n=100"
               style="max-width:80%;" />
           </div>
         </section>
@@ -723,7 +723,7 @@ print(f"Lasso: số hệ số khác 0 = {(lasso.coef_ != 0).sum()}")</code></pre
             <li>Sai số kiểm tra tăng theo số biến vô ích — <span class="keyword">lời nguyền chiều</span></li>
           </ol>
           <div style="text-align:center;">
-            <img src="img/lec04b/lasso-high-dim-test-error.svg" alt="Lasso test error for p=20, 50, 2000 with n=100"
+            <img src="img/lec04b/lasso-high-dim-test-error.png" alt="Lasso test error for p=20, 50, 2000 with n=100"
               style="max-width:80%;" />
           </div>
         </section>
