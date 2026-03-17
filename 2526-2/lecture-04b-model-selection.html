@@ -23,13 +23,27 @@
           <h3>Bài 4b: Lựa chọn mô hình</h3>
           <p>Trường ĐH Công nghệ – Đại học Quốc gia Hà Nội</p>
         </section>
-        <section style="font-size: 0.9em;">
+        <section>
           <h2>Nội dung</h2>
-          <ol>
-            <li>Giới thiệu &amp; Lựa chọn tập con <a href="#gioi-thieu">→</a></li>
-            <li>Chọn mô hình tối ưu <a href="#chon-mo-hinh">→</a></li>
-            <li>Phương pháp co rút hệ số <a href="#co-rut">→</a></li>
-            <li>Dữ liệu nhiều chiều <a href="#cao-chieu">→</a></li>
+          <ol style="line-height:1.4em;">
+            <li>Lựa chọn tập con <a href="#gioi-thieu">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Best subset, forward stepwise, backward
+                stepwise</span>
+            </li>
+            <li>Chọn mô hình tối ưu <a href="#chon-mo-hinh">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Validation set, CV, \(C_p\), AIC, BIC,
+                Adjusted \(R^2\)</span>
+            </li>
+            <li>Phương pháp co rút hệ số <a href="#co-rut">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Ridge (L2), Lasso (L1), trực giác hình học,
+                chọn
+                \(\lambda\)</span>
+            </li>
+            <li>Dữ liệu nhiều chiều <a href="#cao-chieu">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Curse of dimensionality; cạm bẫy và cách báo
+                cáo sai
+                số</span>
+            </li>
           </ol>
         </section>
       </section>
@@ -39,25 +53,20 @@
         <section id="gioi-thieu">
           <h1>
             <span class="text-light">1.</span><br />
-            Giới thiệu &amp; Lựa chọn tập con
+            Lựa chọn tập con
           </h1>
         </section>
 
         <section style="font-size: 0.8em;">
           <h2>Giới thiệu</h2>
-          <p>Mô hình tuyến tính cơ bản:</p>
-          <p style="text-align:center;">\[ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p + \varepsilon
-            \]</p>
+          <p style="text-align:center;">\[ Y = \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \varepsilon \]</p>
           <ul>
-            <li><strong>Tăng tính linh hoạt:</strong> thêm hàm cơ sở phi tuyến (Chương 7), hoặc rời bỏ mô hình tuyến
-              tính (Chương 8)</li>
-            <li><strong>Giảm tính linh hoạt:</strong>
+            <li><strong>Tăng linh hoạt:</strong> hàm cơ sở phi tuyến (Ch.7), phi tuyến (Ch.8)</li>
+            <li><strong>Giảm linh hoạt</strong> — bài học này:
               <ul>
-                <li><span class="keyword">Lựa chọn tập con</span> (subset selection): chỉ dùng một tập con biến</li>
-                <li><span class="keyword">Co rút</span> (shrinkage): phạt các mô hình có hệ số lớn hoặc nhiều hệ số khác
-                  không</li>
-                <li><span class="keyword">Giảm chiều</span> (dimensionality reduction): chiếu dữ liệu vào không gian con
-                  chiều thấp</li>
+                <li><span class="keyword">Lựa chọn tập con:</span> chỉ dùng tập con biến</li>
+                <li><span class="keyword">Co rút:</span> phạt hệ số lớn hoặc khác 0</li>
+                <li><span class="keyword">Giảm chiều:</span> chiếu vào không gian chiều thấp</li>
               </ul>
             </li>
           </ul>
@@ -65,60 +74,71 @@
 
         <section style="font-size: 0.8em;">
           <h2>Tại sao cần mô hình đơn giản hơn?</h2>
-          <p><strong>Định lý Gauss–Markov:</strong> mô hình tuyến tính đầy đủ là ước lượng không thiên chệch tuyến tính
-            có phương sai nhỏ nhất.</p>
-          <p>Nhưng ta có đánh đổi độ lệch – phương sai:</p>
+          <p><strong>Gauss–Markov:</strong> OLS = BLUE — không phải lúc nào cũng tối ưu.</p>
           <p style="text-align:center;">\[ E(\hat{f}(x_0) - f(x_0))^2 = \mathrm{Var}(\hat{f}(x_0)) +
             \left[\mathrm{Bias}(\hat{f}(x_0))\right]^2 + \mathrm{Var}(\varepsilon) \]</p>
           <ul>
-            <li>Hạn chế hệ số → <strong>giảm mạnh phương sai</strong> với chi phí tăng độ lệch không đáng kể</li>
-            <li>Nếu \(p > n\): không còn nghiệm bình phương tối thiểu duy nhất</li>
-            <li>Mô hình nhỏ hơn → dễ diễn giải hơn</li>
+            <li>Hạn chế hệ số → phương sai giảm (độ lệch tăng nhỏ)</li>
+            <li>\(p > n\): không có nghiệm OLS duy nhất</li>
+            <li>Mô hình nhỏ → dễ diễn giải</li>
           </ul>
         </section>
 
         <section style="font-size: 0.8em;">
-          <h2>Lựa chọn tập con tốt nhất <span style="font-size:0.8em;">(Best Subset Selection)</span></h2>
+          <h2>Lựa chọn tập con tốt nhất</h2>
           <ul>
-            <li>Tìm mô hình tốt nhất cho <strong>mọi tập con</strong> có thể của các biến dự đoán — tổng cộng \(2^p\) mô
-              hình</li>
-            <li>Đánh giá sai số kiểm tra của từng mô hình, rồi chọn mô hình tốt nhất</li>
+            <li>Duyệt tất cả \(2^p\) tập con → đánh giá sai số kiểm tra → chọn tốt nhất</li>
             <li>Khả thi đến \(p \approx 30\)</li>
           </ul>
-          <p style="margin-top:12px;">Các phương pháp ước tính sai số kiểm tra:</p>
+          <p style="margin-top:12px;"><strong>Ước tính sai số kiểm tra:</strong></p>
           <ul>
-            <li><strong>Kiểm chứng chéo</strong> (cross-validation): dựa trên lấy mẫu lại</li>
-            <li><strong>Công thức phân tích:</strong> ước tính sai số kiểm tra bằng sai số huấn luyện cộng số hiệu chỉnh
-              — \(C_p\), AIC, BIC, Adjusted \(R^2\)</li>
+            <li><span class="keyword">Kiểm định chéo</span> (CV): lấy mẫu lại</li>
+            <li><span class="keyword">Công thức phân tích:</span> sai số train + số hiệu chỉnh — \(C_p\), AIC, BIC,
+              Adjusted \(R^2\)</li>
           </ul>
         </section>
 
         <section style="font-size: 0.75em;">
           <h2>Ví dụ: Lựa chọn tập con tốt nhất</h2>
           <div style="text-align:center;margin-top:12px;">
-            <img src="img/lec04b/best-subset-rss-r2.png" alt="Best subset selection: RSS and R² on Credit data" style="max-width:88%;" />
+            <img src="img/lec04b/best-subset-rss-r2.svg" alt="Best subset selection: RSS and R² on Credit data"
+              style="max-width:100%;" />
+            <div
+              style="display:flex;justify-content:space-around;margin-top:6px;font-size:0.82em;color:#555;font-style:italic;">
+              <span>Lựa chọn tập con tốt nhất — dữ liệu Credit<br>Sai số huấn luyện đo bằng RSS</span>
+              <span>Lựa chọn tập con tốt nhất — dữ liệu Credit<br>Sai số huấn luyện đo bằng R²</span>
+            </div>
           </div>
-          <p style="margin-top:8px;"><strong>Nhận xét:</strong> Sai số <em>huấn luyện</em> không phản ánh sai số <em>kiểm tra</em> — cần phương pháp đánh giá riêng.</p>
         </section>
 
-        <section style="font-size: 0.8em;">
-          <h2>Lựa chọn từng bước <span style="font-size:0.8em;">(Stepwise Selection)</span></h2>
-          <p><strong>Phương pháp tham lam (greedy):</strong></p>
+        <section style="font-size: 0.9em;">
+          <h2>Lựa chọn bước tiến</h2>
           <ol>
-            <li>Bắt đầu với mô hình rỗng \(\mathcal{M}_0\) (chỉ có hệ số chặn)</li>
-            <li>Lặp: thêm biến cải thiện mô hình nhiều nhất* → mô hình \(\mathcal{M}_k\)</li>
-            <li>Chọn mô hình tốt nhất trong \(\mathcal{M}_0, \mathcal{M}_1, \ldots, \mathcal{M}_p\) dựa trên ước tính
-              sai số kiểm tra</li>
+            <li>Bắt đầu từ \(\mathcal{M}_0\) (chỉ hệ số chặn)</li>
+            <li>Thêm biến tốt nhất* → \(\mathcal{M}_k\)</li>
+            <li>Chọn tốt nhất trong \(\mathcal{M}_0,\ldots,\mathcal{M}_p\) theo sai số kiểm tra</li>
           </ol>
           <ul>
-            <li>Chỉ cần tính \(p(p+1)/2\) mô hình — hiệu quả hơn nhiều so với \(2^p\)</li>
-            <li>Bước 2: so sánh mô hình cùng số biến → dùng sai số huấn luyện</li>
-            <li>Bước 3: so sánh mô hình khác số biến → <strong>phải dùng sai số kiểm tra</strong></li>
-            <li><strong>Lựa chọn ngược</strong> (backward): bắt đầu từ mô hình đầy đủ, loại dần biến ít quan trọng nhất
-            </li>
-            <li>Tồn tại cách tiếp cận <strong>hỗn hợp</strong> kết hợp cả hai hướng</li>
+            <li>\(p(p+1)/2\) mô hình (thay vì \(2^p\))</li>
+            <li>Bước 2: cùng số biến → dùng sai số <em>huấn luyện</em></li>
+            <li>Bước 3: khác số biến → <strong>phải dùng sai số kiểm tra</strong></li>
           </ul>
-          <p style="font-size:0.8em;color:#555;">* theo tiêu chí RSS nhỏ nhất hoặc R² lớn nhất</p>
+          <p style="font-size:0.8em;color:#555;">* RSS nhỏ nhất hoặc R² lớn nhất</p>
+        </section>
+
+        <section style="font-size: 0.9em;">
+          <h2>Lựa chọn bước lùi</h2>
+          <ol>
+            <li>Bắt đầu từ \(\mathcal{M}_p\) (mô hình đầy đủ)</li>
+            <li>Loại biến đóng góp ít nhất → \(\mathcal{M}_k\)</li>
+            <li>Chọn tốt nhất theo sai số kiểm tra</li>
+          </ol>
+          <p style="margin-top:10px;"><strong>So sánh với bước tiến:</strong></p>
+          <ul>
+            <li>Cả hai tham lam — không đảm bảo tối ưu toàn cục</li>
+            <li>Tập con tốt nhất: \(p \lesssim 30\); bước tiến/lùi: \(p\) lớn hơn</li>
+          </ul>
+          <p style="margin-top:10px;"><strong>Hỗn hợp:</strong> kết hợp thêm và loại biến</p>
         </section>
       </section>
 
@@ -127,59 +147,64 @@
         <section id="chon-mo-hinh">
           <h1>
             <span class="text-light">2.</span><br />
-            Chọn mô hình tối ưu
+            Chọn mô hình <br /> tối ưu
           </h1>
         </section>
 
-        <section style="font-size: 0.75em;">
-          <h2>1. Tập kiểm định (Validation Set)</h2>
+        <section>
+          <h2>1. Tập kiểm định</h2>
           <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <ul>
-                <li>Ví dụ: dùng 3/4 dữ liệu để huấn luyện, 1/4 để kiểm tra</li>
-                <li>Chọn số biến dự đoán tối ưu dựa trên sai số tập kiểm định</li>
+                <li>3/4 train, 1/4 test</li>
+                <li>Chọn số biến theo sai số kiểm định</li>
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/validation-set-error.png" alt="Validation set error vs number of predictors" style="max-width:100%;" />
+              <img src="img/lec04b/validation-set-error.png" alt="Validation set error vs number of predictors"
+                style="max-width:100%;" />
             </div>
           </div>
         </section>
 
-        <section style="font-size: 0.75em;">
-          <h2>2. Kiểm chứng chéo (Cross-Validation)</h2>
+        <section data-auto-animate>
+          <h2>2. Kiểm chứng chéo</h2>
           <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <ul>
                 <li>Ví dụ: 10-fold CV</li>
-                <li>Đường cong rất phẳng với \(p > 3\) biến — chỉ học nhiễu thêm</li>
-                <li>Không nên chọn mô hình "tốt nhất" một cách cơ học</li>
+                <li>Đường sai số rất phẳng khi \(p > 3\) — chỉ học nhiễu</li>
+                <li>Không thể chọn theo cực tiểu</li>
               </ul>
-              <p style="margin-top:12px;color:#2563a8;"><strong>Quy tắc một độ lệch chuẩn:</strong></p>
-              <p style="font-style:italic;text-align:center;">Chọn mô hình đơn giản nhất<br />nằm trong một độ lệch
-                chuẩn<br />của mô hình tốt nhất</p>
+              <div>
+                <strong>Quy tắc 1-SE:</strong> chọn mô hình <em>đơn giản nhất</em> trong vòng 1 sai số chuẩn của
+                mô hình tốt nhất
+              </div>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/cv-error-vs-predictors.png" alt="10-fold CV error vs number of predictors" style="max-width:100%;" />
+              <img src="img/lec04b/cv-error-vs-predictors.png" alt="10-fold CV error vs number of predictors"
+                style="max-width:100%;" />
             </div>
           </div>
         </section>
 
-        <section style="font-size: 0.75em;" data-auto-animate>
-          <h2>2. Kiểm chứng chéo — Ví dụ quy tắc 1-SE</h2>
+        <section data-auto-animate>
+          <h2>2. Kiểm chứng chéo</h2>
           <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <ul>
                 <li>Ví dụ: 10-fold CV</li>
-                <li>Đường cong rất phẳng với \(p > 3\) biến</li>
-                <li>Quy tắc 1-SE: chọn mô hình đơn giản nhất trong vòng 1 độ lệch chuẩn</li>
+                <li>Đường sai số rất phẳng khi \(p > 3\) — chỉ học nhiễu</li>
+                <li>Không thể chọn theo cực tiểu</li>
               </ul>
-              <p style="margin-top:12px;color:#2563a8;"><strong>Quy tắc một độ lệch chuẩn:</strong></p>
-              <p style="font-style:italic;text-align:center;">Chọn mô hình đơn giản nhất<br />nằm trong một độ lệch
-                chuẩn<br />của mô hình tốt nhất</p>
+              <div>
+                <strong>Quy tắc 1-SE:</strong> chọn mô hình <em>đơn giản nhất</em> trong vòng 1 sai số chuẩn của
+                mô hình tốt nhất
+              </div>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/one-se-rule-esl.png" alt="One-standard-error rule applied on another dataset (ESL p.62)" style="max-width:100%;" />
+              <img src="img/lec04b/one-se-rule-esl.png"
+                alt="One-standard-error rule applied on another dataset (ESL p.62)" style="max-width:100%;" />
               <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>Ứng dụng quy tắc 1-SE (ESL tr. 62)</em></p>
             </div>
           </div>
@@ -191,70 +216,70 @@
             <div>
               <p>\[ \text{Adjusted } R^2 = 1 - \frac{RSS/(n-d-1)}{TSS/(n-1)} \]</p>
               <ul>
-                <li>\(R^2\) thông thường tăng đơn điệu khi thêm biến — cần hiệu chỉnh</li>
-                <li>Tối đa hóa Adjusted \(R^2\) tương đương tối thiểu hóa \(RSS/(n-d-1)\)</li>
-                <li><strong>Lý do:</strong> sau khi đưa hết biến có thông tin vào, thêm biến nhiễu sẽ giảm RSS nhưng
-                  không giảm \(RSS/(n-d-1)\)</li>
-                <li>Adjusted \(R^2\) không có nền tảng thống kê vững chắc</li>
+                <li>\(R^2\) thường tăng đơn điệu → cần hiệu chỉnh</li>
+                <li>Tối đa adj. \(R^2\) ⟺ tối thiểu \(RSS/(n-d-1)\)</li>
+                <li>Biến nhiễu giảm RSS nhưng không giảm \(RSS/(n-d-1)\)</li>
+                <li>Nền tảng lý thuyết yếu</li>
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/adjusted-r2.png" alt="Adjusted R² vs number of predictors on Credit data" style="max-width:100%;" />
-              <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>Adjusted R² – dữ liệu Credit<br /><strong>Tốt nhất:</strong> income, limit, rating, cards, age, student, gender</em></p>
+              <img src="img/lec04b/adjusted-r2.png" alt="Adjusted R² vs number of predictors on Credit data"
+                style="max-width:100%;" />
+              <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>Adjusted R² – dữ liệu Credit<br /><strong>Tốt
+                    nhất:</strong> income, limit, rating, cards, age, student, gender</em></p>
             </div>
           </div>
         </section>
 
         <section style="font-size: 0.75em;">
-          <h2>4. Thống kê \(C_p\) <span style="font-size:0.85em;">(cho mô hình bình phương tối thiểu)</span></h2>
+          <h2>4. Thống kê \(C_p\)</h2>
           <div style="display:grid;grid-template-columns:1fr .5fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <p>\[ C_p = \frac{1}{n}(RSS + 2d\hat{\sigma}^2) \]</p>
               <ul>
-                <li><strong>Phạt</strong> tăng theo số biến \(d\) và phương sai sai số không thể tránh \(\sigma^2\)</li>
-                <li>Kiểm soát khả năng overfit tăng theo độ phức tạp mô hình</li>
-              </ul>
-              <p style="margin-top:8px;"><strong>Trực giác:</strong></p>
-              <ul>
-                <li>\(C_p\) đo lường sai số trong mẫu (in-sample error)</li>
-                <li>Nếu \(\hat{\sigma}^2\) là ước lượng không thiên chệch của \(\sigma^2\) thì \(C_p\) là ước lượng
-                  không thiên chệch của sai số trong mẫu</li>
+                <li>Phạt tăng theo \(d\) (số biến) và \(\hat{\sigma}^2\)</li>
+                <li>Ước lượng sai số trong mẫu (in-sample error)</li>
+                <li>\(C_p\) không thiên chệch khi \(\hat{\sigma}^2\) không thiên chệch</li>
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/cp-statistic.png" alt="Cp statistic vs number of predictors on Credit data" style="max-width:100%;" />
-              <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>\(C_p\) – dữ liệu Credit<br /><strong>Tốt nhất:</strong> income, limit, rating, cards, age, student</em></p>
+              <img src="img/lec04b/cp-statistic.png" alt="Cp statistic vs number of predictors on Credit data"
+                style="max-width:100%;" />
+              <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>\(C_p\) – dữ liệu Credit<br /><strong>Tốt
+                    nhất:</strong> income, limit, rating, cards, age, student</em></p>
             </div>
           </div>
         </section>
 
         <section style="font-size: 0.75em;">
-          <h2>5. Tiêu chí thông tin Akaike <span style="font-size:0.85em;">(AIC)</span></h2>
+          <h2>5. Tiêu chí AIC</h2>
           <div style="display:grid;grid-template-columns:1fr .5fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
-              <p>\[ AIC = -\frac{1}{n}\log\ell + \frac{k}{n} \]</p>
-              <p style="font-size:0.85em;color:#555;">(Thực tế thường bỏ chia \(n\): \(AIC = \log\ell + k\))</p>
+              <p style="margin-bottom:2px;"><strong>Định nghĩa gốc</strong> (tối thiểu hóa):</p>
+              <p>\[ AIC = -2\log\ell + 2k \]</p>
               <ul>
-                <li>Với mô hình bình phương tối thiểu và sai số Gauss, hợp lý cực đại và bình phương tối thiểu là tương
-                  đương</li>
-                <li>Log-likelihood có thể viết lại theo RSS</li>
+                <li>OLS + sai số Gauss: MLE ≡ OLS</li>
+                <li>Log-likelihood viết lại được theo RSS</li>
               </ul>
-              <p style="margin-top:8px;"><strong>Dạng tương đương với \(C_p\):</strong></p>
+              <p style="margin-top:8px;"><strong>Dạng tương đương \(C_p\)</strong>:</p>
               <p>\[ AIC = \frac{1}{n\hat{\sigma}^2}(RSS + 2d\hat{\sigma}^2) \]</p>
               <ul>
-                <li>AIC tỉ lệ với \(C_p\) → cho cùng đường cong</li>
-                <li>Có thể bỏ hằng số cộng thêm vì không ảnh hưởng đến tối thiểu hóa</li>
+                <li>\(AIC \propto C_p\) → cùng mô hình được chọn</li>
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/aic-statistic.png" alt="AIC vs number of predictors on Credit data" style="max-width:100%;" />
-              <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>AIC – dữ liệu Credit<br /><strong>Tốt nhất:</strong> income, limit, rating, cards, age, student</em></p>
+              <img src="img/lec04b/aic-statistic.png" alt="AIC vs number of predictors on Credit data"
+                style="max-width:100%;" />
+              <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>AIC – dữ liệu Credit<br /><strong>Tốt
+                    nhất:</strong> income, limit, rating, cards, age, student</em></p>
             </div>
           </div>
         </section>
 
-        <section style="font-size: 0.72em;">
-          <h2>Tại sao bình phương tối thiểu Gauss ≡ hợp lý cực đại?</h2>
+        <section style="font-size: 0.5em;">
+          <h2>OLS Gauss ≡ hợp lý cực đại? <span
+              style="font-size:0.75em;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;vertical-align:middle;">Xem
+              thêm</span></h2>
           <ul>
             <li><strong>Mô hình bình phương tối thiểu với sai số Gauss cộng:</strong>
               \[ Y = f_{\theta}(X) + \varepsilon, \quad \varepsilon \sim \mathcal{N}(0, \sigma^2) \]
@@ -273,26 +298,68 @@
         </section>
 
         <section style="font-size: 0.75em;">
-          <h2>6. Tiêu chí thông tin Bayes <span style="font-size:0.85em;">(BIC)</span></h2>
+          <h2>6. Tiêu chí BIC</h2>
           <div style="display:grid;grid-template-columns:1fr .5fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
-              <p>\[ BIC = \frac{1}{n}\log\ell + \frac{k}{2n}\log n \]</p>
-              <p style="font-size:0.85em;color:#555;">(Thực tế: \(BIC = \log\ell + \frac{k}{2}\log n\), ESL 7.7)</p>
-              <p><strong>Dạng tương đương:</strong></p>
               <p>\[ BIC = \frac{1}{n}(RSS + \log(n)\cdot d\hat{\sigma}^2) \]</p>
+              <p style="font-size:0.85em;color:#555;">(Dạng đầy đủ: \(BIC = \log\ell + \frac{k}{2}\log n\), ESL 7.7)</p>
               <ul>
-                <li>Xuất phát từ góc nhìn Bayes, đặt phạt nặng hơn lên mô hình phức tạp khi \(\log(n) > 2\), tức \(n >
-                  7\)</li>
-                <li>Tương tự AIC, log-likelihood có thể viết lại theo RSS</li>
-                <li>BIC thường chọn mô hình nhỏ hơn so với AIC/\(C_p\)</li>
+                <li>Gốc Bayes; phạt nặng hơn AIC khi \(n > 7\) (vì \(\log n > 2\))</li>
+                <li>BIC → mô hình nhỏ hơn AIC/\(C_p\)</li>
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/bic-statistic.png" alt="BIC vs number of predictors on Credit data" style="max-width:100%;" />
-              <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>BIC – dữ liệu Credit<br /><strong>Tốt nhất:</strong> income, limit, cards, student</em></p>
+              <img src="img/lec04b/bic-statistic.png" alt="BIC vs number of predictors on Credit data"
+                style="max-width:100%;" />
+              <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>BIC – dữ liệu Credit<br /><strong>Tốt
+                    nhất:</strong> income, limit, cards, student</em></p>
             </div>
           </div>
         </section>
+        <section style="font-size: 0.65em;">
+          <h2>So sánh các tiêu chí chọn mô hình</h2>
+          <table style="width:100%;border-collapse:collapse;margin-top:12px;">
+            <thead>
+              <tr style="background:#1a1a6e;color:white;">
+                <th style="padding:8px 10px;text-align:left;">Tiêu chí</th>
+                <th style="padding:8px 10px;text-align:left;">Cơ sở</th>
+                <th style="padding:8px 10px;text-align:left;">Ưu điểm</th>
+                <th style="padding:8px 10px;text-align:left;">Hạn chế</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:#f8f8f8;">
+                <td style="padding:7px 10px;"><strong>Validation Set / CV</strong></td>
+                <td style="padding:7px 10px;">Lấy mẫu lại</td>
+                <td style="padding:7px 10px;">Không giả thiết; linh hoạt</td>
+                <td style="padding:7px 10px;">Tốn tính toán; phụ thuộc phân chia ngẫu nhiên</td>
+              </tr>
+              <tr>
+                <td style="padding:7px 10px;"><strong>Adjusted \(R^2\)</strong></td>
+                <td style="padding:7px 10px;">Hiệu chỉnh thống kê</td>
+                <td style="padding:7px 10px;">Đơn giản, trực quan</td>
+                <td style="padding:7px 10px;">Nền tảng lý thuyết yếu; không dùng khi \(p \ge n\)</td>
+              </tr>
+              <tr style="background:#f8f8f8;">
+                <td style="padding:7px 10px;"><strong>\(C_p\) / AIC</strong></td>
+                <td style="padding:7px 10px;">Hợp lý cực đại</td>
+                <td style="padding:7px 10px;">Nhanh; tương đương với mô hình OLS</td>
+                <td style="padding:7px 10px;">Cần ước lượng tốt \(\hat{\sigma}^2\); không dùng khi \(p \ge n\)</td>
+              </tr>
+              <tr>
+                <td style="padding:7px 10px;"><strong>BIC</strong></td>
+                <td style="padding:7px 10px;">Xác suất Bayes</td>
+                <td style="padding:7px 10px;">Phạt mạnh hơn AIC; nhất quán (consistent)</td>
+                <td style="padding:7px 10px;">Xu hướng chọn mô hình nhỏ hơn thực tế; không dùng khi \(p \ge n\)</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin-top:14px;text-align:center;color:#555;">
+            <strong>Khuyến nghị:</strong> dùng <strong>CV</strong> khi có đủ tài nguyên tính toán;
+            dùng <strong>BIC</strong> khi ưu tiên mô hình đơn giản và \(n\) đủ lớn.
+          </p>
+        </section>
+
       </section>
 
       <!-- PART 3: Phương pháp co rút hệ số -->
@@ -300,64 +367,61 @@
         <section id="co-rut">
           <h1>
             <span class="text-light">3.</span><br />
-            Phương pháp co rút hệ số
+            Phương pháp <br /> co rút hệ số
           </h1>
         </section>
 
-        <section style="font-size: 0.8em;">
+        <section>
           <h2>Giới thiệu co rút hệ số</h2>
           <ul>
-            <li>Thay vì đặt hệ số về 0 (lựa chọn tập con), <strong>co rút</strong> làm cho hệ số nhỏ dần</li>
-            <li>Hai phương pháp chính: <span class="keyword">Ridge regression</span> và <span
-                class="keyword">Lasso</span></li>
-            <li>Cả hai đều yêu cầu chọn <strong>tham số điều chỉnh</strong> \(\lambda\) bằng kiểm chứng chéo</li>
+            <li>Lựa chọn tập con: hệ số = 0; <strong>co rút:</strong> hệ số nhỏ dần</li>
+            <li>Hai phương pháp: <span class="keyword">Ridge</span> và <span class="keyword">Lasso</span></li>
+            <li>Cả hai: chọn \(\lambda\) bằng CV</li>
           </ul>
         </section>
 
-        <section style="font-size: 0.72em;">
-          <h2>Hồi quy Ridge <span style="font-size:0.85em;">(Ridge Regression)</span></h2>
-          <p>Bài toán tối ưu:</p>
-          <p>\[ \min_{\beta} \; RSS + \lambda\sum_{j=1}^{p}\beta_j^2 = \sum_{i=1}^{n}\!\left(y_i - \beta_0 -
-            \sum_{j=1}^{p}\beta_j x_{ij}\right)^{\!2} + \lambda\sum_{j=1}^{p}\beta_j^2 \]</p>
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>Hồi quy Ridge</h2>
+          <p>\[ \min_{\beta} \; RSS + \lambda\sum_{j=1}^{p}\beta_j^2 \]</p>
           <ul>
-            <li>Tham số điều chỉnh \(\lambda\) cân bằng giữa khớp dữ liệu và phạt hệ số</li>
-            <li><strong>Phạt</strong> các mô hình có hệ số lớn (chuẩn L2)</li>
-            <li>Không phạt hệ số chặn; nếu chuẩn hóa đầu vào thì: \(\hat{\beta}_0^R = \bar{y}\)</li>
-            <li>Nghiệm dạng ma trận: \(\hat{\beta}^R = (\mathbf{X}^T\mathbf{X} +
-              \lambda\mathbf{I})^{-1}\mathbf{X}^T\mathbf{y}\) — <em>luôn khả nghịch</em> (động cơ ban đầu của Ridge)
-            </li>
-            <li>\(\lambda = 0\): mô hình tuyến tính đầy đủ; \(\lambda \to \infty\): chỉ còn hệ số chặn</li>
-            <li><strong>Chọn \(\lambda\) là cốt lõi</strong>, thực hiện bằng đánh giá sai số kiểm tra (ví dụ: CV)</li>
+            <li>\(\lambda\): cân bằng khớp dữ liệu vs. phạt hệ số (chuẩn L2)</li>
+            <li>Không phạt \(\beta_0\); \(\hat{\beta}_0^R = \bar{y}\) (với đầu vào chuẩn hóa)</li>
+            <li>Nghiệm: \(\hat{\beta}^R = (\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^T\mathbf{y}\) —
+              luôn khả nghịch</li>
+            <li>\(\lambda = 0\): OLS đầy đủ; \(\lambda \to \infty\): chỉ còn \(\hat{\beta}_0\)</li>
+            <li><strong>Chọn \(\lambda\) bằng CV</strong> — bước quan trọng nhất</li>
           </ul>
         </section>
 
-        <section style="font-size: 0.75em;">
-          <h2>Hồi quy Ridge — Ứng dụng trên dữ liệu Credit</h2>
-          <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
+        <section style="font-size: 0.7em;" data-auto-animate>
+          <h2>Hồi quy Ridge</h2>
+          <div style="display:grid;grid-template-columns:1fr .4fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
+              <h4>Ứng dụng trên dữ liệu Credit</h4>
               <ul>
                 <li>Hệ số lớn nhất: <strong>income, limit, rating, student</strong></li>
-                <li>Khi \(\lambda\) tăng, tất cả hệ số đều dần về không</li>
-                <li>Một số hệ số có thể tăng tạm thời trước khi giảm</li>
+                <li>\(\lambda\) tăng → mọi hệ số dần về 0</li>
+                <li>Một số hệ số tăng tạm thời trước khi giảm</li>
               </ul>
-              <p style="margin-top:12px;"><strong>Bất biến tỉ lệ (scale equivariance):</strong></p>
+              <p style="margin-top:12px;"><strong>Chuẩn hóa đầu vào:</strong></p>
               <ul>
-                <li>Bình phương tối thiểu thông thường: bất biến tỉ lệ — nhân \(X_j\) với \(c\) thì \(\hat{\beta}_j\)
-                  chia cho \(c\)</li>
-                <li>Ridge <strong>không</strong> bất biến tỉ lệ → luôn <strong>chuẩn hóa đầu vào</strong> về
-                  \(\sigma=1\) trước khi áp dụng Ridge</li>
+                <li>OLS bất biến tỉ lệ; Ridge <strong>không</strong> → phải chuẩn hóa biến để \(\sigma = 1\)</li>
               </ul>
               <p>\[ \tilde{x}_{ij} = \frac{x_{ij}}{\sqrt{\frac{1}{n}\sum_{i=1}^{n}(x_{ij}-\bar{x}_j)^2}} \]</p>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/ridge-coef-vs-lambda.png" alt="Standardized Ridge coefficients vs λ" style="max-width:100%;margin-bottom:6px;" />
-              <img src="img/lec04b/ridge-coef-vs-l2norm.png" alt="Standardized Ridge coefficients vs L2 norm ratio" style="max-width:100%;" />
+              <img src="img/lec04b/ridge-coef-vs-lambda.svg" alt="Standardized Ridge coefficients vs λ"
+                style="max-width:100%;" />
+              <img src="img/lec04b/ridge-coef-vs-l2norm.svg" alt="Standardized Ridge coefficients vs L2 norm ratio"
+                style="max-width:100%;" />
             </div>
           </div>
         </section>
 
-        <section style="font-size: 0.72em;">
-          <h2>Tính toán ước lượng Ridge — SVD</h2>
+        <section style="font-size: 0.6em;">
+          <h2>Ước lượng Ridge qua SVD <span
+              style="font-size:0.75em;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;vertical-align:middle;">Xem
+              thêm</span></h2>
           <ul>
             <li>Nếu đầu vào trực chuẩn: ước lượng Ridge là phiên bản co rút của bình phương tối thiểu: \(\hat{\beta}^R =
               \hat{\beta}/(1+\lambda)\)</li>
@@ -379,83 +443,74 @@
           </ul>
         </section>
 
-        <section style="font-size: 0.75em;">
-          <h2>Tại sao Ridge cải thiện mô hình tuyến tính đầy đủ?</h2>
-          <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
+        <section style="font-size: 0.9em;">
+          <h2>Tại sao Ridge cải thiện OLS?</h2>
+          <div style="display:grid;grid-template-columns:1fr .4fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
+              <p><strong>Mô phỏng:</strong> \(p=45, n=50\), tất cả biến đều liên quan đến đầu ra</p>
               <ul>
-                <li>Khai thác <strong>đánh đổi độ lệch – phương sai</strong></li>
-                <li>Đặc biệt hiệu quả khi \(p \approx n\)</li>
-              </ul>
-              <p style="margin-top:10px;"><strong>Ví dụ mô phỏng:</strong> \(p=45, n=50\), tất cả đầu vào đều liên quan
-                đến đầu ra</p>
-              <ul>
-                <li>Khi \(p > n\): bình phương tối thiểu không có nghiệm duy nhất — Ridge <strong>vẫn cho nghiệm duy
-                    nhất</strong></li>
-                <li>Ridge nhanh hơn lựa chọn tập con</li>
+                <li>Khai thác đánh đổi độ lệch – phương sai</li>
+                <li>\(p > n\): OLS vô nghiệm — Ridge <strong>vẫn hoạt động</strong></li>
+                <li>Nhanh hơn lựa chọn tập con</li>
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/ridge-mse-bias-variance.png" alt="Ridge MSE, Bias², Variance vs λ and vs L2 norm ratio" style="max-width:100%;" />
+              <img src="img/lec04b/ridge-mse-bias-variance.png"
+                alt="Ridge MSE, Bias², Variance vs λ and vs L2 norm ratio" style="max-width:100%;" />
             </div>
           </div>
         </section>
 
-        <section style="font-size: 0.75em;">
-          <h2>Lasso <span style="font-size:0.85em;">(Least Absolute Shrinkage and Selection Operator)</span></h2>
-          <p><strong>Vấn đề của Ridge:</strong> không loại biến thực sự (trừ khi \(\lambda=\infty\)) — nhiều hệ số khác
-            không → khó diễn giải</p>
-          <p style="margin-top:8px;">Bài toán tối ưu Lasso:</p>
-          <p>\[ \min_{\beta} \; RSS + \lambda\sum_{j=1}^{p}|\beta_j| = \sum_{i=1}^{n}\!\left(y_i - \beta_0 -
-            \sum_{j=1}^{p}\beta_j x_{ij}\right)^{\!2} + \lambda\sum_{j=1}^{p}|\beta_j| \]</p>
+        <section style="font-size: 0.9em;">
+          <h2>Lasso</h2>
+          <p><strong>Vấn đề của Ridge:</strong> không loại biến thực sự → khó diễn giải</p>
+          <p>\[ \min_{\beta} \; RSS + \lambda\sum_{j=1}^{p}|\beta_j| \]</p>
           <ul>
-            <li>Phạt bằng <strong>chuẩn L1</strong> thay vì chuẩn L2 (Ridge)</li>
-            <li>Tự nhiên cho mô hình <strong>thưa</strong> (sparse): nhiều hệ số về đúng bằng 0</li>
-            <li>Nhạy cảm với đa cộng tuyến (collinearity)</li>
-            <li>Tính toán phức tạp hơn (bài toán bậc hai), nhưng tồn tại biến thể chỉ dùng hồi quy tuyến tính (ESL 3.8)
-            </li>
+            <li>Phạt bằng <strong>chuẩn L1</strong> (thay vì L2)</li>
+            <li>Mô hình <span class="keyword">thưa</span> (sparse): nhiều hệ số = đúng 0</li>
+            <li>Nhạy cảm với đồng tuyến tính (collinearity)</li>
+            <li>Tính toán phức tạp hơn; có biến thể dùng chuỗi OLS (ESL 3.8)</li>
           </ul>
         </section>
 
-        <section style="font-size: 0.72em;">
-          <h2>Ví dụ: Ridge và Lasso trên dữ liệu Credit</h2>
-          <div style="text-align:center;">
-            <img src="img/lec04b/ridge-lasso-credit-4panel.png" alt="Ridge and Lasso coefficients: 4-panel comparison on Credit data" style="max-width:88%;" />
-            <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>So sánh Ridge và Lasso – dữ liệu Credit</em></p>
-          </div>
-        </section>
-
-        <section style="font-size: 0.75em;">
-          <h2>Trực giác hình học: Ridge vs. Lasso</h2>
-          <div style="display:grid;grid-template-columns:1fr .5fr;gap:16px;margin-top:12px;align-items:start;">
+        <section style="font-size: 0.9em;">
+          <h2>Trực giác: Ridge vs. Lasso</h2>
+          <div style="display:grid;grid-template-columns:1fr .3fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
-              <p><strong>Ridge:</strong> \(\min \sum(y_i - \beta_0 - \sum\beta_j x_{ij})^2\) sao cho \(\sum\beta_j^2 \le
-                s\)</p>
+              <p><strong>Ridge:</strong> \(\min RSS\) sao cho \(\sum\beta_j^2 \le s\)</p>
               <ul>
-                <li>Miền ràng buộc là <strong>hình cầu</strong> trong không gian hệ số</li>
+                <li>Ràng buộc: <strong>hình cầu</strong></li>
               </ul>
-              <p style="margin-top:10px;"><strong>Lasso:</strong> \(\min \sum(y_i - \beta_0 - \sum\beta_j x_{ij})^2\)
-                sao cho \(\sum|\beta_j| \le s\)</p>
+              <p style="margin-top:10px;"><strong>Lasso:</strong> \(\min RSS\) sao cho \(\sum|\beta_j| \le s\)</p>
               <ul>
-                <li>Miền ràng buộc là <strong>hình thoi</strong> (đa diện) — có góc nhọn tại trục tọa độ</li>
-                <li>Nghiệm thường tiếp xúc tại <strong>góc</strong> → hệ số về đúng 0</li>
+                <li>Ràng buộc: <strong>hình thoi</strong> — góc nhọn tại trục tọa độ</li>
+                <li>Nghiệm tiếp xúc tại <strong>góc</strong> → hệ số = 0</li>
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/ridge-lasso-geometry.png" alt="Geometric intuition: Ridge (sphere) and Lasso (diamond) constraints" style="max-width:100%;" />
+              <img src="img/lec04b/ridge-lasso-geometry.png"
+                alt="Geometric intuition: Ridge (sphere) and Lasso (diamond) constraints" style="max-width:100%;" />
             </div>
           </div>
         </section>
 
-        <section style="font-size: 0.72em;">
-          <h2>So sánh Ridge và Lasso — Trường hợp đơn giản</h2>
+        <section style="font-size: 0.8em;">
+          <h2>Ví dụ: Ridge vs. Lasso - Dữ liệu Credit</h2>
+          <div style="text-align:center;">
+            <img src="img/lec04b/ridge-lasso-credit-4panel.svg"
+              alt="Ridge and Lasso coefficients: 4-panel comparison on Credit data" style="max-width:70%;" />
+          </div>
+        </section>
+
+        <section style="font-size: 0.7em;" data-auto-animate>
+          <h2>Ridge vs. Lasso</h2>
+          <h4>Trường hợp đơn giản</h4>
           <div style="display:grid;grid-template-columns:1fr .5fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
-              <p>Giả sử \(n=p\), \(\mathbf{X}\) là ma trận đơn vị, hệ số chặn bằng 0:</p>
+              <p>\(n=p\), \(\mathbf{X}=\mathbf{I}\), \(\beta_0=0\)</p>
               <ul>
-                <li>Bình phương tối thiểu: tối thiểu hóa \(\sum(y_j-\beta_j)^2\), nghiệm \(\hat{\beta}_j=y_j\)</li>
-                <li><strong>Ridge:</strong> \(\sum(y_j-\beta_j)^2 + \lambda\sum\beta_j^2\), nghiệm \(\hat{\beta}_j^R =
-                  y_j/(1+\lambda)\) — co đều</li>
+                <li><strong>OLS:</strong> \(\hat{\beta}_j=y_j\)</li>
+                <li><strong>Ridge:</strong> \(\hat{\beta}_j^R = y_j/(1+\lambda)\) — co đều</li>
                 <li><strong>Lasso:</strong> \(\sum(y_j-\beta_j)^2 + \lambda\sum|\beta_j|\), nghiệm:
                   \[ \hat{\beta}_j^L = \begin{cases} y_j - \lambda/2 & \text{nếu } y_j > \lambda/2 \\ y_j + \lambda/2 &
                   \text{nếu } y_j < -\lambda/2 \\ 0 & \text{nếu } |y_j| \le \lambda \end{cases} \] (ngưỡng mềm — soft
@@ -463,77 +518,118 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/ridge-lasso-soft-thresholding.png" alt="Ridge and Lasso coefficient estimates vs yj (soft thresholding)" style="max-width:100%;" />
+              <img src="img/lec04b/ridge-lasso-soft-thresholding.png"
+                alt="Ridge and Lasso coefficient estimates vs yj (soft thresholding)" style="max-width:100%;" />
             </div>
           </div>
         </section>
 
-        <section style="font-size: 0.75em;">
-          <h2>So sánh Ridge và Lasso — Dữ liệu mô phỏng (thưa)</h2>
+        <section style="font-size: 0.9em;" data-auto-animate>
+          <h2>Ridge vs. Lasso</h2>
+          <h4>Mô phỏng thưa</h4>
           <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
-              <p><strong>Ví dụ mô phỏng:</strong> \(p=45, n=50\), <strong>chỉ 2 đầu vào</strong> liên quan đến đầu ra
-              </p>
+              <p>\(p=45, n=50\), <strong>chỉ 2 biến</strong> liên quan</p>
               <ul>
-                <li>Lasso hoạt động rõ ràng tốt hơn trong trường hợp này</li>
-                <li>Lasso loại bỏ được các biến không liên quan</li>
+                <li>Lasso tốt hơn rõ ràng</li>
+                <li>Loại được biến không liên quan</li>
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/lasso-ridge-sparse-mse.png" alt="Lasso vs Ridge MSE on sparse simulation (2/45 relevant features)" style="max-width:100%;" />
+              <img src="img/lec04b/lasso-ridge-sparse-mse.png"
+                alt="Lasso vs Ridge MSE on sparse simulation (2/45 relevant features)" style="max-width:100%;" />
             </div>
           </div>
         </section>
 
-        <section style="font-size: 0.75em;">
-          <h2>So sánh Ridge và Lasso — Dữ liệu mô phỏng (dày)</h2>
+        <section style="font-size: 0.8em;">
+          <h2>Ridge vs. Lasso</h2>
+          <h4>Mô phỏng dày</h4>
           <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
-              <p><strong>Ví dụ mô phỏng:</strong> \(p=45, n=50\), <strong>tất cả đầu vào</strong> đều liên quan đến đầu
-                ra</p>
+              <p>\(p=45, n=50\), <strong>tất cả biến</strong> đều liên quan</p>
               <ul>
-                <li>Ridge tốt hơn một chút trong trường hợp này</li>
-                <li>Mọi hệ số thực đều khác không — Lasso đặt sai một số hệ số về 0</li>
+                <li>Ridge tốt hơn một chút</li>
+                <li>Lasso đặt sai một số hệ số về 0</li>
               </ul>
-              <p style="margin-top:10px;"><strong>Nhận xét chung:</strong></p>
+              <p style="margin-top:10px;"><strong>Tóm lại:</strong></p>
               <ul>
-                <li>Nếu mô hình thực <strong>thưa</strong> (ít biến liên quan): Lasso tốt hơn</li>
-                <li>Nếu mô hình thực <strong>dày</strong> (nhiều biến liên quan): Ridge tốt hơn</li>
-                <li>Trong thực tế, dùng CV để chọn giữa hai phương pháp</li>
+                <li>Mô hình <strong>thưa</strong> → Lasso</li>
+                <li>Mô hình <strong>dày</strong> → Ridge</li>
+                <li>Thực tế: dùng CV để chọn</li>
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/lasso-ridge-dense-mse.png" alt="Lasso vs Ridge MSE on dense simulation (all 45 features relevant)" style="max-width:100%;" />
+              <img src="img/lec04b/lasso-ridge-dense-mse.png"
+                alt="Lasso vs Ridge MSE on dense simulation (all 45 features relevant)" style="max-width:100%;" />
             </div>
           </div>
         </section>
 
-        <section style="font-size: 0.75em;">
-          <h2>Chọn tham số điều chỉnh \(\lambda\)</h2>
+        <section style="font-size: 0.9em;">
+          <h2>Chọn tham số điều chỉnh</h2>
           <div style="display:grid;grid-template-columns:1fr .5fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
-              <p>Thực hiện bằng kiểm chứng chéo:</p>
               <ol>
-                <li>Chọn lưới các giá trị \(\lambda\)</li>
-                <li>Tính sai số CV cho mỗi giá trị</li>
-                <li>Chọn \(\lambda\) cho sai số CV nhỏ nhất, <em>hoặc</em> chọn \(\lambda\) lớn nhất trong vòng 1 độ
-                  lệch chuẩn</li>
-                <li>Huấn luyện lại mô hình trên toàn bộ dữ liệu với \(\lambda\) đã chọn</li>
+                <li>Chọn lưới \(\lambda\)</li>
+                <li>Tính sai số CV với mỗi giá trị của \(\lambda\)</li>
+                <li>\(\lambda^* =\) argmin CV, hoặc quy tắc 1-SE</li>
+                <li>Huấn luyện lại trên toàn bộ dữ liệu</li>
               </ol>
-              <p style="color:#c0392b;font-style:italic;margin-top:10px;">⚠️ Chỉ hợp lệ nếu không đánh giá sai số kiểm
-                tra của mô hình kết quả trên bất kỳ phần dữ liệu huấn luyện nào!</p>
+              <blockquote style="border-left:3px solid #c0392b;padding-left:10px;margin-top:10px;color:#c0392b;">
+                ⚠️ Không dùng dữ liệu train để đánh giá sai số mô hình cuối!
+              </blockquote>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/ridge-loocv-error.png" alt="Ridge LOOCV error vs λ on Credit data" style="max-width:100%;margin-bottom:6px;" />
-              <img src="img/lec04b/ridge-coef-optimal-lambda.png" alt="Ridge standardized coefficients with optimal λ marked" style="max-width:100%;" />
+              <img src="img/lec04b/ridge-loocv-error.png" alt="Ridge LOOCV error vs λ on Credit data"
+                style="max-width:100%;margin-bottom:6px;" />
+              <img src="img/lec04b/ridge-coef-optimal-lambda.png"
+                alt="Ridge standardized coefficients with optimal λ marked" style="max-width:100%;" />
             </div>
           </div>
         </section>
 
+        <section style="font-size: 0.72em;">
+          <h2>Thực hành: Ridge vs. Lasso</h2>
+          <pre><code class="language-python">from sklearn.linear_model import RidgeCV, LassoCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import KFold
+
+# Bước 1: Chuẩn hóa đầu vào (bắt buộc với Ridge/Lasso)
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled  = scaler.transform(X_test)
+
+cv = KFold(n_splits=10, shuffle=True, random_state=42)
+
+# Bước 2: Ridge — tự động chọn lambda tốt nhất qua CV
+ridge = RidgeCV(alphas=[0.01, 0.1, 1, 10, 100], cv=cv)
+ridge.fit(X_train_scaled, y_train)
+print(f"Ridge: lambda tối ưu = {ridge.alpha_:.3f}")
+
+# Bước 3: Lasso — tương tự
+lasso = LassoCV(alphas=[0.001, 0.01, 0.1, 1], cv=cv)
+lasso.fit(X_train_scaled, y_train)
+print(f"Lasso: lambda tối ưu = {lasso.alpha_:.3f}")
+print(f"Lasso: số hệ số khác 0 = {(lasso.coef_ != 0).sum()}")</code></pre>
+          <p style="margin-top:8px;font-size:0.85em;color:#555;">
+            ⚠️ <span class="inline-code">alpha</span> trong sklearn tương ứng với \(\lambda\) trong công thức.
+            Tham số <span class="inline-code">alphas</span> là lưới các giá trị để CV tìm kiếm.
+          </p>
+        </section>
+
         <section style="font-size: 0.75em;">
-          <h2>Chọn \(\lambda\) — Lasso trên dữ liệu thưa</h2>
+          <h2>Chọn tham số điều chỉnh</h2>
+          <h4>Lasso trên dữ liệu thưa</h4>
+          <p>2/45 đặc trưng liên quan đến đầu ra</p>
           <div style="text-align:center;margin-top:12px;">
-            <img src="img/lec04b/lasso-sparse-cv-coef.png" alt="Lasso on sparse data: LOOCV error and coefficients vs L1 norm ratio" style="max-width:92%;" />
+            <img src="img/lec04b/lasso-sparse-cv-coef.svg"
+              alt="Lasso on sparse data: LOOCV error and coefficients vs L1 norm ratio" style="max-width:92%;" />
+            <div
+              style="display:flex;justify-content:space-around;margin-top:6px;font-size:0.82em;color:#555;font-style:italic;">
+              <span>Cần co rút mạnh để loại bỏ các đặc trưng không liên quan</span>
+              <span>Mô hình tối ưu xác định đúng 2 đặc trưng thật sự</span>
+            </div>
           </div>
         </section>
       </section>
@@ -543,126 +639,186 @@
         <section id="cao-chieu">
           <h1>
             <span class="text-light">4.</span><br />
-            Dữ liệu nhiều chiều
+            Dữ liệu <br /> nhiều chiều
           </h1>
         </section>
 
-        <section style="font-size: 0.8em;">
+        <section>
           <h2>Bối cảnh dữ liệu nhiều chiều</h2>
           <ul>
-            <li><strong>Truyền thống:</strong> dữ liệu ít chiều — ít biến (vài biến) và nhiều quan sát (hàng chục đến
-              hàng nghìn)</li>
-            <li><strong>Hiện nay:</strong> công nghệ mới làm thay đổi hoàn toàn bức tranh
+            <li><strong>Truyền thống:</strong> \(p\) nhỏ, \(n\) lớn</li>
+            <li><strong>Hiện nay:</strong> \(p \gg n\) phổ biến
               <ul>
-                <li>Nửa triệu biến thể gen (SNPs) để hồi quy huyết áp trên ~200 người</li>
-                <li>Tất cả cụm từ tìm kiếm của người dùng để phục vụ marketing</li>
+                <li>500,000 biến thể gene (SNPs) dự đoán huyết áp (\(n \approx 200\) người)</li>
+                <li>Từ khóa tìm kiếm → marketing</li>
               </ul>
             </li>
-            <li>Bài toán <strong>nhiều chiều</strong> (high-dimensional): số đặc trưng vượt số quan sát (\(p \ge n\))
-            </li>
-            <li>Thực tế, những gì trình bày ở đây cũng áp dụng khi \(p\) chỉ nhỏ hơn \(n\) một chút</li>
+            <li><span class="keyword">Nhiều chiều</span> (High-dimensional): \(p \ge n\)</li>
+            <li>Cũng áp dụng khi \(p\) chỉ nhỏ hơn \(n\) một chút</li>
           </ul>
         </section>
 
-        <section style="font-size: 0.75em;">
+        <section>
           <h2>Vấn đề trong không gian nhiều chiều</h2>
-          <div style="display:grid;grid-template-columns:1fr .5fr;gap:16px;margin-top:12px;align-items:start;">
+          <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <ul>
-                <li>Trong không gian nhiều chiều, bình phương tối thiểu tìm được <strong>khớp hoàn hảo</strong> — nhưng
-                  overfit nghiêm trọng</li>
-                <li>Khi \(p \ge n\): luôn tồn tại một siêu phẳng đi qua tất cả điểm dữ liệu</li>
+                <li>OLS khớp hoàn hảo — nhưng overfit nghiêm trọng</li>
+                <li>\(p \ge n\): luôn tồn tại siêu phẳng qua mọi điểm</li>
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/high-dim-overfitting.png" alt="Overfitting in high dimensions: n=20 p=1 vs n=2 p=1" style="max-width:100%;" />
+              <img src="img/lec04b/high-dim-overfitting.png" alt="Overfitting in high dimensions: n=20 p=1 vs n=2 p=1"
+                style="max-width:100%;" />
             </div>
           </div>
         </section>
 
-        <section style="font-size: 0.75em;">
-          <h2>Ví dụ mô phỏng — Hồi quy trong không gian nhiều chiều</h2>
-          <div style="display:grid;grid-template-columns:1fr .5fr;gap:16px;margin-top:12px;align-items:start;">
+        <section style="font-size: 0.8em;">
+          <h2>Ví dụ: Hồi quy nhiều chiều</h2>
+          <div style="display:grid;grid-template-columns:1fr .8fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
-              <p>Hồi quy bình phương tối thiểu, \(n=20\) quan sát, 1 đến 20 đặc trưng <strong>hoàn toàn không liên
-                  quan</strong> đến đầu ra:</p>
+              <p>OLS, \(n=20\), 1–20 đặc trưng <strong>không liên quan</strong> đến đầu ra</p>
               <ul>
-                <li>Không có gì để học — nhưng \(R^2\) trên tập huấn luyện tăng đến 1 khi thêm biến</li>
-                <li>Sai số huấn luyện giảm về 0</li>
-                <li>Sai số kiểm tra chỉ ra các mô hình rất đơn giản là tốt nhất</li>
-                <li>\(C_p\), AIC, BIC <strong>không hoạt động tốt</strong> trong không gian nhiều chiều</li>
-                <li>Adjusted \(R^2\) thường tiến về 1 — không dùng được</li>
+                <li>Không có gì để học — \(R^2\) train → 1</li>
+                <li>Sai số train → 0</li>
+                <li>Sai số test: mô hình đơn giản nhất là tốt nhất</li>
+                <li>\(C_p\), AIC, BIC <strong>không hoạt động</strong></li>
+                <li>Adjusted \(R^2\) → 1 — không dùng được</li>
               </ul>
             </div>
             <div style="text-align:center;">
-              <div style="display:flex;gap:4px;justify-content:center;">
-                <img src="img/lec04b/high-dim-r2-training.png" alt="R² on training vs number of variables" style="width:32%;" />
-                <img src="img/lec04b/high-dim-training-mse.png" alt="Training MSE vs number of variables" style="width:32%;" />
-                <img src="img/lec04b/high-dim-test-mse.png" alt="Test MSE vs number of variables" style="width:32%;" />
+              <div>
+                <img src="img/lec04b/high-dim-r2-training.png" alt="R² on training vs number of variables"
+                  style="width:48%;" />
+                <img src="img/lec04b/high-dim-training-mse.png" alt="Training MSE vs number of variables"
+                  style="width:48%;" />
+                <img src="img/lec04b/high-dim-test-mse.png" alt="Test MSE vs number of variables" style="width:48%;" />
               </div>
             </div>
           </div>
         </section>
 
-        <section style="font-size: 0.8em;">
-          <h2>Hồi quy trong không gian nhiều chiều — Phương pháp</h2>
-          <div style="display:grid;grid-template-columns:1fr .7fr;gap:16px;align-items:start;">
+        <section style="font-size: 0.65em;" data-auto-animate>
+          <h2>Hồi quy nhiều chiều — Phương pháp</h2>
           <div>
-          <p>Các phương pháp <strong>ít linh hoạt hơn</strong> lại rất phù hợp với dữ liệu nhiều chiều:</p>
-          <p><strong>Ví dụ mô phỏng:</strong> Lasso, \(n=100\), \(p \in \{20, 50, 2000\}\), chỉ 20 đặc trưng thực sự
-            liên quan</p>
-          <ul>
-            <li>Khi \(p\) tăng, sai số kiểm tra tăng và cần nhiều bậc tự do hơn để đạt tối ưu</li>
-          </ul>
-          <p style="margin-top:10px;"><strong>Ba nhận xét quan trọng:</strong></p>
-          <ol>
-            <li><strong>Chính quy hóa</strong> (regularization) giúp kiểm soát vấn đề nhiều chiều</li>
-            <li><strong>Chọn mô hình phù hợp</strong> là cốt yếu</li>
-            <li>Sai số kiểm tra tăng theo số biến <em>không liên quan</em> đến đầu ra — <span class="keyword">lời nguyền
-                chiều</span> (curse of dimensionality)</li>
-          </ol>
+            <p>Dùng phương pháp <strong>ít linh hoạt</strong> hơn</p>
+            <p><strong>Mô phỏng:</strong> Lasso, \(n=100\), \(p \in \{20,50,2000\}\), 20 biến thực sự liên quan</p>
+            <ul>
+              <li>\(p\) ↑ → sai số kiểm tra ↑, cần nhiều bậc tự do hơn để đạt tối ưu</li>
+            </ul>
           </div>
           <div style="text-align:center;">
-            <img src="img/lec04b/lasso-high-dim-test-error.png" alt="Lasso test error for p=20, 50, 2000 with n=100" style="max-width:100%;" />
-          </div>
+            <img src="img/lec04b/lasso-high-dim-test-error.png" alt="Lasso test error for p=20, 50, 2000 with n=100"
+              style="max-width:80%;" />
           </div>
         </section>
 
-        <section style="font-size: 0.8em;">
-          <h2>Giải thích kết quả trong không gian nhiều chiều</h2>
+        <section style="font-size: 0.65em;" data-auto-animate>
+          <h2>Hồi quy nhiều chiều — Phương pháp</h2>
+          <p style="margin-top:10px;"><strong>Nhận xét:</strong></p>
+          <ol>
+            <li><strong>Chính quy hóa</strong> kiểm soát overfitting</li>
+            <li><strong>Chọn mô hình</strong> là cốt yếu</li>
+            <li>Sai số kiểm tra tăng theo số biến vô ích — <span class="keyword">lời nguyền chiều</span></li>
+          </ol>
+          <div style="text-align:center;">
+            <img src="img/lec04b/lasso-high-dim-test-error.png" alt="Lasso test error for p=20, 50, 2000 with n=100"
+              style="max-width:80%;" />
+          </div>
+        </section>
+
+        <section style="font-size: 0.7em;">
+          <h2>Giải thích kết quả nhiều chiều</h2>
           <ul>
-            <li><strong>Đa cộng tuyến</strong> cực độ: bất kỳ biến nào cũng là tổ hợp tuyến tính của các biến khác</li>
-            <li>Không bao giờ biết được biến nào thực sự liên quan — không tìm được hệ số tốt nhất</li>
-            <li>Chỉ có thể tìm hệ số lớn cho các biến <strong>tương quan mạnh</strong> với biến thực sự dự đoán</li>
+            <li><strong>Đồng tuyến cực độ:</strong> mọi biến là tổ hợp tuyến tính của các biến khác</li>
+            <li>Không biết biến nào thực sự liên quan</li>
+            <li>Chỉ tìm được hệ số lớn cho biến <strong>tương quan mạnh</strong></li>
           </ul>
-          <p style="margin-top:10px;"><strong>Ví dụ:</strong> Dự đoán huyết áp từ 500,000 SNPs</p>
+          <p style="margin-top:10px;"><strong>Ví dụ:</strong> 500,000 SNPs dự đoán huyết áp</p>
           <ul>
-            <li>Lựa chọn bước tiến xác định 17 SNPs cho mô hình dự đoán</li>
-            <li>Không có nghĩa 17 SNPs đó là tốt hơn bất kỳ tập 17 SNPs nào khác</li>
-            <li>Mô hình trên các tập dữ liệu khác nhau sẽ rất khác nhau</li>
-            <li>→ Mô hình <strong>có thể dự đoán</strong> nhưng <strong>không thể giải thích</strong></li>
+            <li>Bước tiến chọn 17 SNPs — không có nghĩa là tốt hơn các tập 17 SNPs khác</li>
+            <li>Kết quả thay đổi lớn giữa các tập dữ liệu</li>
+            <li>→ Mô hình <strong>dự đoán được</strong> nhưng <strong>không giải thích được</strong></li>
           </ul>
         </section>
 
         <section style="font-size: 0.8em;">
-          <h2>Báo cáo sai số trong không gian nhiều chiều</h2>
-          <p><strong>Tránh hoàn toàn:</strong></p>
+          <h2>Báo cáo sai số nhiều chiều</h2>
+          <p><strong>Tránh:</strong></p>
           <ul>
-            <li>Sử dụng ước tính sai số huấn luyện</li>
-            <li>Dùng AIC, BIC hoặc Adjusted \(R^2\)</li>
-            <li>Dùng thống kê p-value dựa trên dữ liệu huấn luyện</li>
+            <li>Sai số huấn luyện</li>
+            <li>AIC, BIC, Adjusted \(R^2\)</li>
+            <li>p-value từ dữ liệu huấn luyện</li>
           </ul>
           <p style="margin-top:10px;"><strong>Nên dùng:</strong></p>
           <ul>
-            <li>Ước tính sai số trên <strong>tập kiểm tra độc lập</strong> (thông qua RSE hoặc \(R^2\))</li>
-            <li>Hoặc dùng <strong>kiểm chứng chéo</strong></li>
+            <li><strong>Tập kiểm tra độc lập</strong> (RSE hoặc \(R^2\))</li>
+            <li><strong>Kiểm định chéo</strong></li>
           </ul>
         </section>
+      </section>
 
-        <section>
-          Slides tham khảo từ bài giảng của Krikamol Muandet và Jilles Vreeken (Saarland University), kết hợp giáo trình
-          ISLR và ESL.
+      <section>
+        <section style="font-size: 0.65em;">
+          <h2>Tổng kết</h2>
+          <table style="width:100%;border-collapse:collapse;margin-top:12px;">
+            <thead>
+              <tr style="background:#1a1a6e;color:white;">
+                <th style="padding:8px 10px;text-align:left;">Phương pháp</th>
+                <th style="padding:8px 10px;text-align:center;">Mô hình thưa?</th>
+                <th style="padding:8px 10px;text-align:center;">Dễ diễn giải?</th>
+                <th style="padding:8px 10px;text-align:center;">Hoạt động khi \(p \ge n\)?</th>
+                <th style="padding:8px 10px;text-align:left;">Lưu ý</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:#f8f8f8;">
+                <td style="padding:7px 10px;"><strong>Lựa chọn tập con tốt nhất</strong></td>
+                <td style="padding:7px 10px;text-align:center;">✓</td>
+                <td style="padding:7px 10px;text-align:center;">✓</td>
+                <td style="padding:7px 10px;text-align:center;">✗</td>
+                <td style="padding:7px 10px;">Chỉ khả thi với \(p \lesssim 30\)</td>
+              </tr>
+              <tr>
+                <td style="padding:7px 10px;"><strong>Lựa chọn bước tiến / bước lùi</strong></td>
+                <td style="padding:7px 10px;text-align:center;">✓</td>
+                <td style="padding:7px 10px;text-align:center;">✓</td>
+                <td style="padding:7px 10px;text-align:center;">Bước tiến: ✓</td>
+                <td style="padding:7px 10px;">Tham lam — không đảm bảo tối ưu toàn cục</td>
+              </tr>
+              <tr style="background:#f8f8f8;">
+                <td style="padding:7px 10px;"><strong>Ridge (L2)</strong></td>
+                <td style="padding:7px 10px;text-align:center;">✗</td>
+                <td style="padding:7px 10px;text-align:center;">✗</td>
+                <td style="padding:7px 10px;text-align:center;">✓</td>
+                <td style="padding:7px 10px;">Tốt khi nhiều biến đều có đóng góp nhỏ</td>
+              </tr>
+              <tr>
+                <td style="padding:7px 10px;"><strong>Lasso (L1)</strong></td>
+                <td style="padding:7px 10px;text-align:center;">✓</td>
+                <td style="padding:7px 10px;text-align:center;">✓</td>
+                <td style="padding:7px 10px;text-align:center;">✓</td>
+                <td style="padding:7px 10px;">Tốt khi chỉ vài biến thực sự liên quan</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin-top:14px;text-align:center;color:#555;">
+            Trong thực tế: dùng <strong>kiểm định chéo</strong> để chọn giữa các phương pháp và chọn \(\lambda\).
+          </p>
         </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>Tài liệu tham khảo</h2>
+          <ul style="list-style:none;padding:0;line-height:2.2em;">
+            <li>James, G., Witten, D., Hastie, T., Tibshirani, R. <em>An Introduction to Statistical Learning</em>
+              (ISLR), 2nd ed., Springer, 2021.</li>
+            <li>Hastie, T., Tibshirani, R., Friedman, J. <em>The Elements of Statistical Learning</em> (ESL), 2nd ed.,
+              Springer, 2009.</li>
+            <li>Muandet, K. &amp; Vreeken, J., Lecture slides, Saarland University.</li>
+          </ul>
+        </section>
+      </section>
       </section>
 
       <div class="footer">
