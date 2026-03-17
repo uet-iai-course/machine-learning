@@ -161,7 +161,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/validation-set-error.png" alt="Validation set error vs number of predictors"
+              <img src="img/lec04b/validation-set-error.svg" alt="Validation set error vs number of predictors"
                 style="max-width:100%;" />
             </div>
           </div>
@@ -182,7 +182,7 @@
               </div>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/cv-error-vs-predictors.png" alt="10-fold CV error vs number of predictors"
+              <img src="img/lec04b/cv-error-vs-predictors.svg" alt="10-fold CV error vs number of predictors"
                 style="max-width:100%;" />
             </div>
           </div>
@@ -203,7 +203,7 @@
               </div>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/one-se-rule-esl.png"
+              <img src="img/lec04b/one-se-rule-esl.svg"
                 alt="One-standard-error rule applied on another dataset (ESL p.62)" style="max-width:100%;" />
               <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>Ứng dụng quy tắc 1-SE (ESL tr. 62)</em></p>
             </div>
@@ -223,7 +223,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/adjusted-r2.png" alt="Adjusted R² vs number of predictors on Credit data"
+              <img src="img/lec04b/adjusted-r2.svg" alt="Adjusted R² vs number of predictors on Credit data"
                 style="max-width:100%;" />
               <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>Adjusted R² – dữ liệu Credit<br /><strong>Tốt
                     nhất:</strong> income, limit, rating, cards, age, student, gender</em></p>
@@ -243,7 +243,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/cp-statistic.png" alt="Cp statistic vs number of predictors on Credit data"
+              <img src="img/lec04b/cp-statistic.svg" alt="Cp statistic vs number of predictors on Credit data"
                 style="max-width:100%;" />
               <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>\(C_p\) – dữ liệu Credit<br /><strong>Tốt
                     nhất:</strong> income, limit, rating, cards, age, student</em></p>
@@ -268,7 +268,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/aic-statistic.png" alt="AIC vs number of predictors on Credit data"
+              <img src="img/lec04b/aic-statistic.svg" alt="AIC vs number of predictors on Credit data"
                 style="max-width:100%;" />
               <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>AIC – dữ liệu Credit<br /><strong>Tốt
                     nhất:</strong> income, limit, rating, cards, age, student</em></p>
@@ -309,7 +309,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/bic-statistic.png" alt="BIC vs number of predictors on Credit data"
+              <img src="img/lec04b/bic-statistic.svg" alt="BIC vs number of predictors on Credit data"
                 style="max-width:100%;" />
               <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>BIC – dữ liệu Credit<br /><strong>Tốt
                     nhất:</strong> income, limit, cards, student</em></p>
@@ -475,7 +475,7 @@
 
         <section style="font-size: 0.9em;">
           <h2>Trực giác: Ridge vs. Lasso</h2>
-          <div style="display:grid;grid-template-columns:1fr .3fr;gap:16px;margin-top:12px;align-items:start;">
+          <div style="display:grid;grid-template-columns:1fr .4fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <p><strong>Ridge:</strong> \(\min RSS\) sao cho \(\sum\beta_j^2 \le s\)</p>
               <ul>
@@ -488,7 +488,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/ridge-lasso-geometry.png"
+              <img src="img/lec04b/ridge-lasso-geometry.svg"
                 alt="Geometric intuition: Ridge (sphere) and Lasso (diamond) constraints" style="max-width:100%;" />
             </div>
           </div>
@@ -505,7 +505,7 @@
         <section style="font-size: 0.7em;" data-auto-animate>
           <h2>Ridge vs. Lasso</h2>
           <h4>Trường hợp đơn giản</h4>
-          <div style="display:grid;grid-template-columns:1fr .5fr;gap:16px;margin-top:12px;align-items:start;">
+          <div style="display:grid;grid-template-columns:1fr .4fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <p>\(n=p\), \(\mathbf{X}=\mathbf{I}\), \(\beta_0=0\)</p>
               <ul>
@@ -518,7 +518,7 @@
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/ridge-lasso-soft-thresholding.png"
+              <img src="img/lec04b/ridge-lasso-soft-thresholding.svg"
                 alt="Ridge and Lasso coefficient estimates vs yj (soft thresholding)" style="max-width:100%;" />
             </div>
           </div>
@@ -581,9 +581,9 @@
               </blockquote>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/ridge-loocv-error.png" alt="Ridge LOOCV error vs λ on Credit data"
+              <img src="img/lec04b/ridge-loocv-error.svg" alt="Ridge LOOCV error vs λ on Credit data"
                 style="max-width:100%;margin-bottom:6px;" />
-              <img src="img/lec04b/ridge-coef-optimal-lambda.png"
+              <img src="img/lec04b/ridge-coef-optimal-lambda.svg"
                 alt="Ridge standardized coefficients with optimal λ marked" style="max-width:100%;" />
             </div>
           </div>
@@ -626,7 +626,7 @@ print(f"Lasso: số hệ số khác 0 = {(lasso.coef_ != 0).sum()}")</code></pre
             <img src="img/lec04b/lasso-sparse-cv-coef.svg"
               alt="Lasso on sparse data: LOOCV error and coefficients vs L1 norm ratio" style="max-width:92%;" />
             <div
-              style="display:flex;justify-content:space-around;margin-top:6px;font-size:0.82em;color:#555;font-style:italic;">
+              style="display:flex;justify-content:space-around;margin-top:6px;font-size:0.6em;color:#555;font-style:italic;">
               <span>Cần co rút mạnh để loại bỏ các đặc trưng không liên quan</span>
               <span>Mô hình tối ưu xác định đúng 2 đặc trưng thật sự</span>
             </div>
@@ -660,7 +660,7 @@ print(f"Lasso: số hệ số khác 0 = {(lasso.coef_ != 0).sum()}")</code></pre
 
         <section>
           <h2>Vấn đề trong không gian nhiều chiều</h2>
-          <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <ul>
                 <li>OLS khớp hoàn hảo — nhưng overfit nghiêm trọng</li>
@@ -668,7 +668,7 @@ print(f"Lasso: số hệ số khác 0 = {(lasso.coef_ != 0).sum()}")</code></pre
               </ul>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec04b/high-dim-overfitting.png" alt="Overfitting in high dimensions: n=20 p=1 vs n=2 p=1"
+              <img src="img/lec04b/high-dim-overfitting.svg" alt="Overfitting in high dimensions: n=20 p=1 vs n=2 p=1"
                 style="max-width:100%;" />
             </div>
           </div>
@@ -676,7 +676,7 @@ print(f"Lasso: số hệ số khác 0 = {(lasso.coef_ != 0).sum()}")</code></pre
 
         <section style="font-size: 0.8em;">
           <h2>Ví dụ: Hồi quy nhiều chiều</h2>
-          <div style="display:grid;grid-template-columns:1fr .8fr;gap:16px;margin-top:12px;align-items:start;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <p>OLS, \(n=20\), 1–20 đặc trưng <strong>không liên quan</strong> đến đầu ra</p>
               <ul>
@@ -689,11 +689,11 @@ print(f"Lasso: số hệ số khác 0 = {(lasso.coef_ != 0).sum()}")</code></pre
             </div>
             <div style="text-align:center;">
               <div>
-                <img src="img/lec04b/high-dim-r2-training.png" alt="R² on training vs number of variables"
+                <img src="img/lec04b/high-dim-r2-training.svg" alt="R² on training vs number of variables"
                   style="width:48%;" />
-                <img src="img/lec04b/high-dim-training-mse.png" alt="Training MSE vs number of variables"
+                <img src="img/lec04b/high-dim-training-mse.svg" alt="Training MSE vs number of variables"
                   style="width:48%;" />
-                <img src="img/lec04b/high-dim-test-mse.png" alt="Test MSE vs number of variables" style="width:48%;" />
+                <img src="img/lec04b/high-dim-test-mse.svg" alt="Test MSE vs number of variables" style="width:48%;" />
               </div>
             </div>
           </div>
