@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Học máy | Bài tập về nhà #4</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <main class="container my-4">
+        <h1>Bài tập về nhà #4</h1>
+        <h2>Tổng quát hóa &amp; Lựa chọn mô hình</h2>
+        <hr>
+
+        <h2>Bài 1: Kiểm định chéo</h2>
+        <div class="q">
+            <p>Khi trả lời các câu hỏi sau, yêu cầu trình bày chính xác (ví dụ: sử dụng phương trình) và ngắn gọn.</p>
+            <ol>
+                <li>Giải thích tác động của giá trị \(k\) trong kiểm định chéo \(k\)-fold. Phương pháp \(k\)-fold CV nằm ở
+                    đâu giữa phương pháp tập kiểm định (validation set approach) và LOOCV, và ưu điểm của việc sử dụng
+                    nó là gì?</li>
+                <li>Giải thích cách một ngoại lệ (outlier) trong tập dữ liệu có thể ảnh hưởng đến điểm số của LOOCV.
+                    Trong trường hợp này, kiểm định chéo \(k\)-fold có thể khắc phục các nhược điểm của LOOCV không?</li>
+            </ol>
+        </div>
+
+        <hr class="my-5">
+
+        <h2>Bài 2: Lựa chọn mô hình trong Hồi quy Tuyến tính</h2>
+        <div class="q">
+            <p>
+                Cho một tập huấn luyện gồm các mẫu \(\mathbf{X} = (x_1, x_2, \ldots, x_N)^T\) với nhãn hồi quy tương
+                ứng \(\mathbf{y} = (y_1, y_2, \ldots, y_N)^T\), trong đó \(x_i \in \mathbb{R}^D\) và \(y_i \in
+                \mathbb{R}\). Alice khớp một mô hình hồi quy tuyến tính \(f(x_i) = \mathbf{w}^T x_i\) lên tập dữ liệu
+                bằng nghiệm dạng đóng của hồi quy tuyến tính (phương trình chuẩn).
+            </p>
+            <p>
+                Bob nghe nói rằng bằng cách biến đổi đầu vào \(x_i\) với một hàm vector \(\boldsymbol{\phi}\), anh có
+                thể khớp một hàm thay thế \(g(x_i) = \mathbf{v}^T \boldsymbol{\phi}(x_i)\) bằng cùng thủ tục (giải
+                phương trình chuẩn). Bob quyết định dùng phép biến đổi tuyến tính \(\boldsymbol{\phi}(x_i) =
+                \mathbf{A}^T x_i\), trong đó \(\mathbf{A} \in \mathbb{R}^{D \times D}\) có hạng đầy đủ.
+            </p>
+            <ol>
+                <li>Chứng minh rằng thủ tục của Bob sẽ khớp với cùng hàm số như thủ tục ban đầu của Alice, tức là
+                    \(f(x) = g(x)\) với mọi \(x \in \mathbb{R}^D\) (giả sử \(\mathbf{w}\) và \(\mathbf{v}\) tối thiểu
+                    hóa sai số trên tập huấn luyện).</li>
+                <li>Thủ tục của Bob có thể dẫn đến sai số huấn luyện thấp hơn của Alice không nếu ma trận \(\mathbf{A}\)
+                    không có hạng đầy đủ (tức là không khả nghịch)? Giải thích câu trả lời của bạn.</li>
+                <li>Giải thích xem Alice và Bob có khớp cùng một hàm số hay không trong trường hợp cả hai thực hiện hồi
+                    quy ridge với cùng cường độ điều chuẩn \(\lambda\).</li>
+            </ol>
+        </div>
+
+        <hr class="my-5">
+
+        <h2>Bài 3: Bootstrap</h2>
+        <div class="q">
+            <p>
+                Chúng ta sẽ tính xác suất để một quan sát bất kỳ xuất hiện trong một mẫu bootstrap kích thước \(n\).
+                Giả sử ta lấy một mẫu bootstrap từ tập gồm \(n\) quan sát.
+            </p>
+            <ol>
+                <li>Xác suất để phần tử bootstrap đầu tiên được chọn là quan sát thứ \(j\) trong mẫu gốc là bao nhiêu?
+                    Hãy giải thích.</li>
+                <li>Chứng minh rằng xác suất để một quan sát <em>không</em> xuất hiện trong mẫu bootstrap là \((1 -
+                    1/n)^n\).</li>
+                <li>Tính xác suất để một quan sát xuất hiện <em>đúng một lần</em> trong mẫu bootstrap kích thước
+                    \(n\).</li>
+                <li>Khi kích thước mẫu \(n\) tăng dần, xác suất để một quan sát không có trong mẫu bootstrap và xác
+                    suất để một quan sát xuất hiện đúng một lần thay đổi như thế nào? Nhận xét về kết quả này.</li>
+            </ol>
+        </div>
+
+        <hr class="my-5">
+
+        <h2>Bài 4: So sánh các mô hình Hồi quy Tuyến tính</h2>
+        <div class="q">
+            <h5>Phần 1: Biến đổi tỉ lệ đặc trưng</h5>
+            <p>
+                Xét bài toán hồi quy trên tập dữ liệu gồm \(N\) mẫu \(x_i \in \mathbb{R}^D\) với nhãn tương ứng \(y_i
+                \in \mathbb{R}\) (biểu diễn gọn là \(\mathbf{X} \in \mathbb{R}^{N \times D}\) và \(\mathbf{y} \in
+                \mathbb{R}^N\)). Giả sử ta đã khớp mô hình hồi quy tuyến tính có điều chuẩn \(\ell_2\) và thu được
+                vector trọng số tối ưu \(\mathbf{w}^* \in \mathbb{R}^D\) theo:
+                \[
+                \mathbf{w}^* = \operatorname*{argmin}_{\mathbf{w}} \frac{1}{2} \sum_{i=1}^N (\mathbf{w}^T x_i - y_i)^2
+                + \frac{\lambda}{2} \mathbf{w}^T \mathbf{w}
+                \]
+                Lưu ý không có hệ số điều chỉnh (bias). Bây giờ, giả sử ta thu được ma trận dữ liệu mới \(\mathbf{X}_{\text{new}}\)
+                bằng cách nhân tất cả các mẫu với cùng một hệ số dương \(a \in (0, \infty)\), tức là \(\mathbf{X}_{\text{new}}
+                = a\mathbf{X}\) (và tương ứng \(x_i^{\text{new}} = ax_i\)).
+            </p>
+            <ol type="a">
+                <li>Tìm vector trọng số \(\mathbf{w}_{\text{new}}\) sẽ cho ra cùng dự đoán trên \(\mathbf{X}_{\text{new}}\)
+                    như \(\mathbf{w}^*\) cho ra trên \(\mathbf{X}\).</li>
+                <li>Tìm hệ số điều chuẩn \(\lambda_{\text{new}} \in \mathbb{R}\) sao cho nghiệm \(\mathbf{w}^*_{\text{new}}\)
+                    của bài toán hồi quy tuyến tính có điều chuẩn \(\ell_2\) mới:
+                    \[
+                    \mathbf{w}^*_{\text{new}} = \operatorname*{argmin}_{\mathbf{w}} \frac{1}{2} \sum_{i=1}^N (\mathbf{w}^T
+                    x_i^{\text{new}} - y_i)^2 + \frac{\lambda_{\text{new}}}{2} \mathbf{w}^T \mathbf{w}
+                    \]
+                    sẽ cho ra cùng dự đoán trên \(\mathbf{X}_{\text{new}}\) như \(\mathbf{w}^*\) cho ra trên
+                    \(\mathbf{X}\). Cung cấp giải thích toán học cho câu trả lời của bạn.</li>
+            </ol>
+
+            <h5 class="mt-4">Phần 2: Dữ liệu có trọng số</h5>
+            <p>
+                Giả sử ta có tập dữ liệu trong đó mỗi điểm dữ liệu \((x_i, y_i)\) được gán một hệ số trọng số vô
+                hướng \(a_i \in \mathbb{R}_+\) (tức là \(a_i > 0\) với mọi \(i\)). Khi đó hàm tổng bình phương sai số
+                có dạng:
+                \[
+                E_{\text{weighted}}(\mathbf{w}) = \frac{1}{2} \sum_{i=1}^N a_i \left(\mathbf{w}^T \boldsymbol{\phi}(x_i)
+                - y_i\right)^2
+                \]
+            </p>
+            <ol type="a">
+                <li>Tìm phương trình nghiệm \(\mathbf{w}\) tối thiểu hóa hàm sai số này.</li>
+                <li>Giải thích ý nghĩa của hệ số trọng số \(a_i\) theo góc độ phương sai của nhiễu trên dữ liệu và
+                    trong trường hợp có các bản sao chính xác của một điểm dữ liệu trong tập dữ liệu.
+                    <br>
+                    <em>Gợi ý: Bình phương tối thiểu thông thường có thể được mô hình hóa trong bối cảnh xác suất là
+                        các biến ngẫu nhiên i.i.d. \(y_i \sim \mathcal{N}(\mathbf{w}^T \boldsymbol{\phi}(x_i),
+                        \beta^{-1})\) với độ chính xác nhiễu chung là \(\beta\).</em>
+                </li>
+            </ol>
+        </div>
+    </main>
+</body>
+
+</html>
