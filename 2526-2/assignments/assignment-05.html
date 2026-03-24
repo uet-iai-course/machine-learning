@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Học máy | Bài tập về nhà #5</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <style>
+        .hint {
+            background: #f8f9fa;
+            border-left: 3px solid #6c757d;
+            padding: 8px 14px;
+            margin-top: 10px;
+            font-size: 0.93em;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container my-4">
+        <h1>Bài tập về nhà #5</h1>
+        <h2>Mô hình phi tuyến</h2>
+        <hr>
+
+        <!-- ── BÀI 1 ── -->
+        <h2>Bài 1 — Tham số hay Phi tham số?</h2>
+        <div class="q">
+            <ol>
+                <li>
+                    Bằng lời của riêng bạn, hãy mô tả sự khác nhau giữa phương pháp <em>tham số</em>
+                    và phương pháp <em>phi tham số</em>.
+                </li>
+                <li>
+                    Với mỗi phương pháp dưới đây, hãy cho biết nó là tham số hay phi tham số và
+                    <em>giải thích lý do</em>:
+                    <ul class="mt-2">
+                        <li>LASSO</li>
+                        <li>Smoothing Splines</li>
+                        <li>Hồi quy cục bộ (Local Regression)</li>
+                        <li>Mô hình cộng tổng quát (GAM)</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <hr class="my-5">
+
+        <!-- ── BÀI 2 ── -->
+        <h2>Bài 2 — Mô hình cộng tổng quát (GAM)</h2>
+        <div class="q">
+            <p>
+                Trong mô hình cộng tổng quát (GAM), ta dự đoán biến mục tiêu \(Y \in \mathbb{R}\)
+                từ các biến \(X_1, \ldots, X_p\) theo công thức:
+                \[
+                    g(Y) = \alpha + \sum_{j=1}^{p} f_j(X_j),
+                \]
+                với giả thiết \(\mathbb{E}[f_j(X_j)] = 0\) với mọi \(j\). Trong bài tập này, giả sử
+                \(g = \mathrm{id}\) (hàm đồng nhất) và số chiều \(p = 2\).
+            </p>
+            <ol>
+                <li>
+                    Không cần chứng minh: việc lặp thuật toán backfitting có cho kết quả trùng với một
+                    phương pháp nào bạn đã học không? Giải thích lý do.
+                </li>
+                <li>
+                    Trong điều kiện nào thì kết quả của thuật toán backfitting với toán tử làm mượt
+                    \(\mathcal{S}_\lambda\) <em>phụ thuộc</em> vào thứ tự cập nhật \(\hat{f}_j\)?
+                </li>
+                <li>
+                    Viết ra toán tử làm mượt \(\mathcal{S}_\lambda\) dựa trên <em>cubic smoothing splines</em>.
+                </li>
+            </ol>
+        </div>
+
+        <hr class="my-5">
+
+        <!-- ── BÀI 3 ── -->
+        <h2>Bài 3 — Phụ thuộc tuyến tính</h2>
+        <div class="q">
+            <p>
+                Xét ví dụ nhỏ với \(p = 2\) biến dự báo và \(n = 2\) mẫu.
+                Giả sử \(x_{11} = x_{12}\) và \(x_{21} = x_{22}\).
+                Hơn nữa, giả sử:
+                \[
+                    y_1 + y_2 = 0, \qquad x_{11} + x_{21} = 0, \qquad x_{12} + x_{22} = 0,
+                \]
+                sao cho ước lượng hệ số chặn trong mô hình bình phương tối thiểu là
+                \(\hat{\beta}_0 = 0\).
+            </p>
+            <ol>
+                <li>
+                    Nghiệm hồi quy tuyến tính \(\hat{\boldsymbol{\beta}}\) trong trường hợp này là gì?
+                </li>
+                <li>
+                    Bạn nhận thấy vấn đề gì?
+                </li>
+            </ol>
+        </div>
+
+        <hr class="my-5">
+
+        <!-- ── BÀI 4 ── -->
+        <h2>Bài 4 — Hồi quy đa thức &amp; Spline</h2>
+        <div class="q">
+            <ol>
+                <li>
+                    Hồi quy đa thức <em>tuyến tính</em> theo nghĩa nào?
+                    <em>Phi tuyến</em> theo nghĩa nào?
+                </li>
+
+                <li>
+                    Cho tập hàm cơ sở
+                    \(\mathcal{B}_n = \bigl\{a_i x^i \mid a_i \in \mathbb{R}\bigr\}_{i=0}^{n}\)
+                    dùng cho hồi quy đa thức bậc \(n \in \mathbb{N}\).
+                    Hãy đưa ra <strong>4 hàm</strong> không thể biểu diễn bằng \(\mathcal{B}_n\)
+                    và giải thích tại sao.
+                </li>
+
+                <li>
+                    Xét Hình 1 dưới đây.
+                    <figure class="my-3">
+                        <img src="img/05/fig1.svg" alt="Hình 1: hàm số cho Bài 4.3" style="max-width:340px;">
+                        <figcaption class="text-muted mt-1"><em>Hình 1: Hàm số cho Bài 4.3.</em></figcaption>
+                    </figure>
+                    <ol type="a">
+                        <li>Xác định một <strong>spline</strong> với bậc phù hợp mô tả hàm trong Hình 1.</li>
+                        <li>Xác định một <strong>đa thức từng mảnh</strong> mô tả hàm trong Hình 1.</li>
+                    </ol>
+                </li>
+
+                <li>
+                    Trong bài giảng, ta định nghĩa cubic spline là hàm có dạng:
+                    \[
+                        f_L(x) = a + bx + cx^2 + dx^3 + e(x - \zeta)_+^3.
+                    \]
+                    Ngoài ra, cubic spline còn có thể được xây dựng bằng cách dùng đa thức bậc 3
+                    định nghĩa từng mảnh với điều kiện tại nút đa thức liên tục khả vi hai lần.
+                    Với định nghĩa này, cubic spline có dạng:
+                    \[
+                        f_I(x) = \begin{cases}
+                            \alpha_1 + \beta_1 x + \gamma_1 x^2 + \delta_1 x^3 & x \le \zeta \\
+                            \alpha_2 + \beta_2 x + \gamma_2 x^2 + \delta_2 x^3 & x > \zeta
+                        \end{cases}.
+                    \]
+                    Chứng minh rằng cả hai cách biểu diễn đều biểu diễn cùng một không gian hàm —
+                    tức là mỗi cách có thể chuyển đổi sang cách kia:
+                    <ol type="a" class="mt-2">
+                        <li>
+                            Cho hàm \(f_L(x)\), xây dựng \(f_I(x)\) tương đương.
+                        </li>
+                        <li>
+                            Cho hàm \(f_I(x)\), xây dựng \(f_L(x)\) tương đương.
+                            <div class="hint">
+                                <strong>Gợi ý:</strong> Khai thác việc \(f_I(x)\) liên tục khả vi hai lần,
+                                và \(f_L(x)\) có thể viết lại thành:
+                                \[
+                                    f_L(x) = \alpha_1 + \beta_1 x + \gamma_1 x^2 + \delta_1 x^3
+                                             + (\delta_2 - \delta_1)(x - \zeta)_+^3.
+                                \]
+                            </div>
+                        </li>
+                    </ol>
+                </li>
+
+                <li>
+                    Đưa ra một ví dụ hàm số mà ở đó <em>yêu cầu liên tục</em> gây ra vấn đề.
+                    Dùng đồ thị của hàm để lập luận tại sao điều này xảy ra.
+                </li>
+            </ol>
+        </div>
+
+    </main>
+</body>
+
+</html>
