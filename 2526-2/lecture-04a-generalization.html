@@ -71,7 +71,7 @@
             <li>Cách đơn giản nhất: chia ngẫu nhiên thành hai tập:
               <ul>
                 <li><strong>Tập huấn luyện</strong> (training set): khớp mô hình.</li>
-                <li><strong>Tập kiểm tra</strong> (test set): ước lượng <span class="keyword">lỗi tổng quát hoá</span>.
+                <li><strong>Tập kiểm tra</strong> (test set): ước lượng <strong>lỗi tổng quát hoá</strong>.
                 </li>
               </ul>
             </li>
@@ -81,16 +81,40 @@
         <section style="font-size: 0.85em;" data-auto-animate>
           <h2>Đánh giá tổng quát hoá?</h2>
           <p style="margin-top:10px;">Ví dụ: chia 50–50 ngẫu nhiên trên \(n\) mẫu.</p>
-          <div style="text-align:center;">
-            <img src="img/lec04a/01.png" alt="Train/Test Split" style="max-width:70%;" />
+          <div style="width:65%;margin:20px auto;font-family:monospace;font-size:0.95em;">
+            <!-- Full dataset -->
+            <div
+              style="border:2px solid #333;border-radius:6px;padding:10px 18px;display:flex;justify-content:space-between;">
+              <span>1 &nbsp;2 &nbsp;3 &nbsp;…</span><span>… <em>n</em></span>
+            </div>
+            <!-- Arrow -->
+            <div style="text-align:center;padding:6px 0;font-size:1.6em;color:#4a7cc7;">↓</div>
+            <!-- Train / Test -->
+            <div style="display:flex;gap:4px;">
+              <div style="flex:1;background:#6b9bd2;border-radius:6px;padding:10px 18px;color:white;">
+                7 &nbsp;22 &nbsp;13 &nbsp;…
+              </div>
+              <div style="flex:1;background:#e8967a;border-radius:6px;padding:10px 18px;color:white;text-align:right;">
+                … 91
+              </div>
+            </div>
+            <!-- Labels below boxes -->
+            <div style="display:flex;gap:4px;font-family:sans-serif;font-size:0.8em;margin-top:6px;">
+              <div style="flex:1;text-align:center;color:#4a7cc7;font-weight:600;">Tập huấn luyện</div>
+              <div style="flex:1;text-align:center;color:#c0603a;font-weight:600;">Tập kiểm tra</div>
+            </div>
           </div>
         </section>
 
         <section>
           <h2>Ví dụ: Kiểm định</h2>
           <div style="text-align: center;">
-            <img src="img/lec04a/02.png" alt="Validation Example" style="max-width:100%;" />
+            <img src="img/lec04a/auto-polynomial-validation.svg" alt="Auto dataset: polynomial fits and validation MSE"
+              style="max-width:100%;" />
           </div>
+          <p style="font-size:0.75em;color:#666;text-align:center;margin-top:6px;">
+            Lỗi kiểm định cho <strong>một lần chia ngẫu nhiên 50–50</strong>.
+          </p>
         </section>
 
         <section style="font-size: 0.8em;" data-auto-animate>
@@ -103,10 +127,12 @@
                 <li>Bậc 2 cải thiện rõ rệt.</li>
                 <li>Bậc cao hơn không mang lại lợi ích.</li>
               </ol>
-              <p style="margin-top:10px;color:#555;font-size:0.9em;">Mỗi đường = một lần chia ngẫu nhiên.</p>
             </div>
             <div style="text-align: center;">
-              <img src="img/lec04a/03.png" alt="Validation Variability" style="max-width:100%;" />
+              <img src="img/lec04a/auto-validation-variability.svg" alt="Validation variability across splits"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:5px;">Mỗi đường là một lần chia 50–50 ngẫu nhiên khác
+                nhau.</p>
             </div>
           </div>
         </section>
@@ -124,7 +150,10 @@
               </p>
             </div>
             <div style="text-align: center;">
-              <img src="img/lec04a/03.png" alt="Validation Variability" style="max-width:100%;" />
+              <img src="img/lec04a/auto-validation-variability.svg" alt="Validation variability across splits"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:5px;">Mỗi đường là một lần chia 50–50 ngẫu nhiên khác
+                nhau.</p>
             </div>
           </div>
         </section>
@@ -153,8 +182,35 @@
                 <li>Kết quả <strong>tất định</strong> — không phụ thuộc ngẫu nhiên.</li>
               </ul>
             </div>
-            <div style="text-align: center;">
-              <img src="img/lec04a/04.png" alt="LOOCV Example" style="max-width:100%;" />
+            <!-- LOOCV diagram -->
+            <div style="font-family:monospace;font-size:0.82em;width:100%;">
+              <!-- Full dataset -->
+              <div style="border:2px solid #333;border-radius:4px;padding:5px 10px;margin-bottom:6px;">
+                1 &nbsp;2 &nbsp;3 &nbsp;…
+              </div>
+              <div style="text-align:center;color:#4a7cc7;font-size:1.3em;line-height:1.4;">↓</div>
+              <!-- Fold rows: observation i highlighted in orange -->
+              <div style="display:flex;flex-direction:column;gap:3px;margin-top:2px;">
+                <div
+                  style="background:#8899dd;border-radius:4px;padding:4px 10px;color:white;display:flex;justify-content:space-between;">
+                  <span><span style="background:#e8967a;color:white;border-radius:3px;padding:0 4px;">1</span> &nbsp;2
+                    &nbsp;3 &nbsp;…</span><span>47</span>
+                </div>
+                <div style="background:#8899dd;border-radius:4px;padding:4px 10px;color:white;">
+                  <span>1 &nbsp;<span style="background:#e8967a;color:white;border-radius:3px;padding:0 4px;">2</span>
+                    &nbsp;3 &nbsp;…</span>
+                </div>
+                <div style="background:#8899dd;border-radius:4px;padding:4px 10px;color:white;">
+                  <span>1 &nbsp;2 &nbsp;<span
+                      style="background:#e8967a;color:white;border-radius:3px;padding:0 4px;">3</span> &nbsp;…</span>
+                </div>
+                <div style="text-align:center;color:#555;letter-spacing:2px;">⋮</div>
+                <div
+                  style="background:#8899dd;border-radius:4px;padding:4px 10px;color:white;display:flex;justify-content:space-between;">
+                  <span>1 &nbsp;2 &nbsp;3 &nbsp;…</span><span><span
+                      style="background:#e8967a;color:white;border-radius:3px;padding:0 4px;font-style:italic;">n</span></span>
+                </div>
+              </div>
             </div>
           </div>
           <div>
@@ -173,56 +229,100 @@
                 <li>Chia ngẫu nhiên dữ liệu thành \(k\) <span class="keyword">fold</span>.</li>
                 <li>Dùng \(k-1\) fold để train, 1 fold để test.</li>
                 <li>Lặp \(k\) lần.</li>
+                <li>Ước lượng lỗi:
+                  \(
+                  \text{CV}_{(k)} = \frac{1}{k}\sum_{i=1}^{k}\text{MSE}_i
+                  \)
+                </li>
+                <li>Thực tế dùng \(k = 5\) hoặc \(k = 10\).</li>
+                <li>LOOCV = \(k\)-fold với \(k = n\).</li>
+                <li>Hiệu quả tính toán hơn LOOCV; độ chệch cao hơn một chút.</li>
               </ul>
             </div>
-            <div style="text-align: center;">
-              <img src="img/lec04a/06.png" alt="K-Fold CV Example" style="max-width:100%;" />
+            <!-- k-fold CV diagram (k=5) -->
+            <div style="font-family:monospace;font-size:0.55em;width:100%;">
+              <div style="border:2px solid #333;border-radius:4px;padding:5px 10px;margin-bottom:6px;">
+                1 &nbsp;2 &nbsp;3 &nbsp;…
+              </div>
+              <div style="text-align:center;color:#4a7cc7;font-size:1.3em;line-height:1.4;">↓</div>
+              <div style="display:flex;flex-direction:column;gap:3px;margin-top:2px;">
+                <!-- Each row: 5 equal segments, one orange -->
+                <div style="display:flex;border-radius:4px;overflow:hidden;">
+                  <div style="flex:1;background:#e8967a;padding:5px 6px;color:white;">fold 1</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 2</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 3</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 4</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;text-align:right;">fold 5</div>
+                </div>
+                <div style="display:flex;border-radius:4px;overflow:hidden;">
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 1</div>
+                  <div style="flex:1;background:#e8967a;padding:5px 6px;color:white;">fold 2</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 3</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 4</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;text-align:right;">fold 5</div>
+                </div>
+                <div style="display:flex;border-radius:4px;overflow:hidden;">
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 1</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 2</div>
+                  <div style="flex:1;background:#e8967a;padding:5px 6px;color:white;">fold 3</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 4</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;text-align:right;">fold 5</div>
+                </div>
+                <div style="display:flex;border-radius:4px;overflow:hidden;">
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 1</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 2</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 3</div>
+                  <div style="flex:1;background:#e8967a;padding:5px 6px;color:white;">fold 4</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;text-align:right;">fold 5</div>
+                </div>
+                <div style="display:flex;border-radius:4px;overflow:hidden;">
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 1</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 2</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 3</div>
+                  <div style="flex:1;background:#8899dd;padding:5px 6px;color:white;">fold 4</div>
+                  <div style="flex:1;background:#e8967a;padding:5px 6px;color:white;text-align:right;">fold 5</div>
+                </div>
+              </div>
+              <p style="font-size:0.85em;color:#888;margin-top:5px;font-family:sans-serif;">
+                <span style="color:#e8967a;">■</span> Tập kiểm định &nbsp;
+                <span style="color:#8899dd;">■</span> Tập huấn luyện
+              </p>
             </div>
           </div>
-          <ul>
-            <li>Ước lượng lỗi:
-              \(
-              \text{CV}_{(k)} = \frac{1}{k}\sum_{i=1}^{k}\text{MSE}_i
-              \)
-            </li>
-            <li>Thực tế dùng \(k = 5\) hoặc \(k = 10\).</li>
-            <li>LOOCV = \(k\)-fold với \(k = n\).</li>
-            <li>Hiệu quả tính toán hơn LOOCV; độ chệch cao hơn một chút.</li>
-          </ul>
         </section>
 
         <section style="font-size: 0.8em;">
-          <h2>\(k\)-fold CV — Giảm phương sai bằng cách lặp</h2>
-          <div style="display:grid;grid-template-columns:1fr .7fr;gap:16px;margin-top:12px;align-items:start;">
-            <div>
-              <ul>
-                <li>Lặp lại nhiều lần chia ngẫu nhiên rồi trung bình → <strong>giảm phương sai</strong> ước lượng.</li>
-              </ul>
-            </div>
-            <div style="text-align: center;">
-              <img src="img/lec04a/07.png" alt="Repeated CV Example" style="max-width:100%;" />
-            </div>
+          <h2>\(k\)-fold CV — Giảm phương sai</h2>
+          <div>
+            Lặp lại nhiều lần chia ngẫu nhiên rồi trung bình → <strong>giảm phương sai</strong> ước lượng.
+          </div>
+          <div style="text-align: center;">
+            <img src="img/lec04a/auto-cv-comparison.svg" alt="Validation set vs LOOCV vs 10-fold CV"
+              style="max-width:50%;" />
+            <p style="font-size:0.75em;color:#666;margin-top:5px;">10-fold CV trên 10 lần chia ngẫu nhiên khác nhau.</p>
           </div>
         </section>
 
         <section style="font-size: 0.75em;">
           <h2>Ví dụ: Dữ liệu gần tuyến tính</h2>
           <div style="text-align: center;">
-            <img src="img/lec04a/08.png" alt="Nearly Linear Data" style="max-width:100%;" />
+            <img src="img/lec04a/cv-nearly-linear-data.png" alt="Nearly Linear Data" style="max-width:100%;" />
           </div>
         </section>
 
         <section style="font-size: 0.75em;">
           <h2>Ví dụ: Dữ liệu phi tuyến vừa</h2>
           <div style="text-align: center;">
-            <img src="img/lec04a/09.png" alt="Moderately Nonlinear Data" style="max-width:100%;" />
+            <img src="img/lec04a/cv-moderately-nonlinear-data.png" alt="Moderately Nonlinear Data"
+              style="max-width:100%;" />
           </div>
         </section>
 
         <section style="font-size: 0.75em;">
           <h2>Ví dụ: Dữ liệu phi tuyến mạnh</h2>
           <div style="text-align: center;">
-            <img src="img/lec04a/10.png" alt="Strongly Nonlinear Data" style="max-width:100%;" />
+            <img src="img/lec04a/cv-strongly-nonlinear-data.png" alt="Strongly Nonlinear Data"
+              style="max-width:100%;" />
           </div>
         </section>
 
@@ -240,7 +340,7 @@
                   nhất</span> trong phạm vi <strong>1 SE</strong> từ điểm tối ưu.</p>
             </div>
             <div style="text-align: center;">
-              <img src="img/lec04a/11.png" alt="One Standard Error Rule" style="max-width:100%;" />
+              <img src="img/lec04a/cv-1se-rule-curve.png" alt="One Standard Error Rule" style="max-width:100%;" />
             </div>
           </div>
         </section>
@@ -259,7 +359,7 @@
                   nhất</span> trong phạm vi <strong>1 SE</strong> từ điểm tối ưu.</p>
             </div>
             <div style="text-align: center;">
-              <img src="img/lec04a/12.png" alt="One Standard Error Rule" style="max-width:100%;" />
+              <img src="img/lec04a/cv-all-subsets-1se-rule.png" alt="One Standard Error Rule" style="max-width:100%;" />
             </div>
           </div>
         </section>
@@ -283,14 +383,16 @@
         <section style="font-size: 0.72em;" data-auto-animate="">
           <h2>Ví dụ: CV cho Phân lớp</h2>
           <div style="text-align: center;">
-            <img src="img/lec04a/13.png" alt="CV for Classification Example" style="max-width:100%;" />
+            <img src="img/lec04a/cv-classification-logistic-boundaries.png" alt="CV for Classification Example"
+              style="max-width:100%;" />
           </div>
         </section>
 
         <section style="font-size: 0.72em;" data-auto-animate="">
           <h2>Ví dụ: CV cho Phân lớp</h2>
           <div style="text-align: center;">
-            <img src="img/lec04a/14.png" alt="CV for Classification Example" style="max-width:100%;" />
+            <img src="img/lec04a/cv-classification-error-logistic-knn.png" alt="CV for Classification Example"
+              style="max-width:100%;" />
           </div>
         </section>
 
@@ -326,11 +428,8 @@
           <p><strong>Nguyên nhân: <span class="keyword">rò rỉ dữ liệu</span> (data leakage)</strong></p>
           <ul>
             <li>Chọn đặc trưng trên <em>toàn bộ</em> dữ liệu → tập test đã bị "nhìn".</li>
-            <li>CV chia <em>sau</em> bước lọc → test set không còn độc lập.</li>
+            <li>CV chia <em>sau</em> bước lọc → tập test không còn độc lập.</li>
           </ul>
-          <blockquote style="border-left:3px solid #c0392b;padding-left:12px;margin-top:16px;">
-            <strong>Quy tắc vàng:</strong> CV bao trùm <span class="keyword">toàn bộ chuỗi các bước</span>.
-          </blockquote>
         </section>
 
         <section style="font-size: 0.9em;">
@@ -346,7 +445,8 @@
               <p style="margin-top:8px;">Tương quan trung bình = <strong>28%</strong> (thực tế = 0%).</p>
             </div>
             <div style="text-align: center;">
-              <img src="img/lec04a/15.png" alt="Wrong Way Example" style="max-width:100%;" />
+              <img src="img/lec04a/cv-wrong-way-variable-selection.png" alt="Wrong Way Example"
+                style="max-width:100%;" />
             </div>
           </div>
         </section>
@@ -370,25 +470,47 @@
               <p style="font-size:0.85em;color:#555;">Gom cụm không dùng nhãn: có thể thực hiện trước khi chia fold.</p>
             </div>
             <div style="text-align: center;">
-              <img src="img/lec04a/16.png" alt="Right Way Example" style="max-width:100%;" />
+              <img src="img/lec04a/cv-right-way-variable-selection.png" alt="Right Way Example"
+                style="max-width:100%;" />
             </div>
           </div>
         </section>
 
         <section style="font-size: 0.9em;">
           <h2>Mô hình Train – Validation – Test</h2>
-          <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
-            <div>
-              <p>Chia thành <strong>ba tập</strong>:</p>
-              <ol>
-                <li><strong>Tập huấn luyện</strong>: khớp mô hình.</li>
-                <li><strong>Tập kiểm định</strong>: chọn mô hình.</li>
-                <li><strong>Tập kiểm tra</strong>: đánh giá mô hình cuối.</li>
-              </ol>
-              <p style="margin-top:8px;">Tỷ lệ điển hình: <strong>50% / 25% / 25%</strong>.</p>
+          <div>
+            <p>Chia thành <strong>ba tập</strong>:</p>
+            <ol>
+              <li><strong>Tập huấn luyện</strong>: khớp mô hình.</li>
+              <li><strong>Tập kiểm định</strong>: chọn mô hình.</li>
+              <li><strong>Tập kiểm tra</strong>: đánh giá mô hình cuối.</li>
+            </ol>
+            <p style="margin-top:8px;">Tỷ lệ điển hình: <strong>50% / 25% / 25%</strong>.</p>
+          </div>
+          <div style="width:100%;font-family:sans-serif;font-size:.6em;">
+            <!-- Bar -->
+            <div style="display:flex;border-radius:6px;overflow:hidden;height:52px;">
+              <div
+                style="flex:2;background:#4a90d9;display:flex;align-items:center;justify-content:center;color:white;font-size:1em;">
+                Train</div>
+              <div
+                style="flex:1;background:#5aaa44;display:flex;align-items:center;justify-content:center;color:white;font-size:1em;">
+                Validate</div>
+              <div
+                style="flex:1;background:#e8732a;display:flex;align-items:center;justify-content:center;color:white;font-size:1em;">
+                Test</div>
             </div>
-            <div style="text-align: center;">
-              <img src="img/lec04a/17.png" alt="Train-Validation-Test Split" style="max-width:100%;" />
+            <!-- Percentages -->
+            <div style="display:flex;margin-top:6px;font-size:0.85em;color:#444;">
+              <div style="flex:2;text-align:center;">50%</div>
+              <div style="flex:1;text-align:center;">25%</div>
+              <div style="flex:1;text-align:center;">25%</div>
+            </div>
+            <!-- Roles -->
+            <div style="display:flex;margin-top:4px;font-size:0.78em;color:#666;font-style:italic;">
+              <div style="flex:2;text-align:center;">khớp tất cả mô hình</div>
+              <div style="flex:1;text-align:center;">chọn mô hình tốt nhất</div>
+              <div style="flex:1;text-align:center;">đánh giá mô hình tốt nhất</div>
             </div>
           </div>
         </section>
@@ -406,7 +528,7 @@
                 vòng.</p>
             </div>
             <div style="text-align: center;">
-              <img src="img/lec04a/18.png" alt="Nested CV Diagram" style="max-width:100%;" />
+              <img src="img/lec04a/nested-cv-diagram.png" alt="Nested CV Diagram" style="max-width:100%;" />
             </div>
           </div>
         </section>
@@ -450,42 +572,60 @@
         <section style="font-size: 0.85em;" data-auto-animate>
           <h2>Bootstrap là gì?</h2>
           <div style="text-align: center;">
-            <img src="img/lec04a/19.png" alt="Bootstrap Concept" style="max-width:100%;" />
+            <img src="img/lec04a/bootstrap-repeated-sampling.svg" alt="Bootstrap Concept" style="max-width:100%;" />
+            <p style="font-size:0.8em;color:#555;margin-top:6px;">Ước lượng \(\hat{\alpha}\) thay đổi như thế nào khi ta
+              <em>lặp lại</em> lấy 100 mẫu?
+            </p>
           </div>
         </section>
 
-        <section style="font-size: 0.7em;">
+        <section style="font-size: 0.7em;" data-auto-animate>
           <h2>Bootstrap — Lặp lại lấy mẫu</h2>
-          <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
-            <div>
-              <p>Nếu có thể lấy mẫu nhiều lần từ phân phối thực:</p>
-              <ul>
-                <li>1000 ước lượng \(\hat{\alpha}_1, \ldots, \hat{\alpha}_{1000}\).</li>
-                <li>\(\bar{\hat{\alpha}} = 0.5996\); \(\widehat{\text{SE}}(\hat{\alpha}) = 0.083\).</li>
-              </ul>
-              <p style="margin-top:8px;"><strong>Thực tế:</strong> không có mẫu mới → <span class="keyword">lấy mẫu
-                  lại</span> (re-sample) từ dữ liệu gốc.</p>
-              <ul>
-                <li>\(B=1000\) tập bootstrap \(Z^{*1}, \ldots, Z^{*B}\), mỗi tập cỡ \(n\).</li>
-                <li>\(\widehat{\text{SE}}_B(\hat{\alpha}) = \sqrt{\dfrac{1}{B-1}\sum_{b=1}^{B}\left(\hat{\alpha}^{*b} -
-                  \bar{\hat{\alpha}}^*\right)^2}\)</li>
-              </ul>
-            </div>
-            <div style="text-align: center;">
-              <img src="img/lec04a/20.png" alt="Bootstrap Distribution" style="max-width:100%;" />
-            </div>
+          <div>
+            <p>Nếu có thể lấy mẫu nhiều lần từ phân phối thực:</p>
+            <ul>
+              <li>1000 ước lượng \(\hat{\alpha}_1, \ldots, \hat{\alpha}_{1000}\).</li>
+              <li>\(\bar{\hat{\alpha}} = 0.5972\); \(\widehat{\text{SE}}(\hat{\alpha}) = 0.078\).</li>
+            </ul>
+          </div>
+          <div style="text-align: center;" data-id="bootstrap-distribution">
+            <img src="img/lec04a/bootstrap-alpha-distribution.svg" alt="Bootstrap Distribution"
+              style="max-width:60%;" />
+            <p style="font-size:0.8em;color:#555;margin-top:4px;">Trái: phân phối 1000 ước lượng \(\hat{\alpha}\) từ lấy
+              mẫu lặp lại. Phải: so sánh phân phối thực và bootstrap.</p>
+          </div>
+        </section>
+
+        <section style="font-size: 0.7em;" data-auto-animate>
+          <h2>Bootstrap — Lặp lại lấy mẫu</h2>
+          <div>
+            <p style="margin-top:8px;"><strong>Thực tế:</strong> không có mẫu mới → <span class="keyword">lấy mẫu lặp
+                lại</span> (re-sample) từ dữ liệu gốc.</p>
+            <ul>
+              <li>\(B=1000\) tập bootstrap \(Z^{*1}, \ldots, Z^{*B}\), mỗi tập cỡ \(n\).</li>
+              <li>\(\widehat{\text{SE}}_B(\hat{\alpha}) = \sqrt{\dfrac{1}{B-1}\sum_{b=1}^{B}\left(\hat{\alpha}^{*b} -
+                \bar{\hat{\alpha}}^*\right)^2}\)</li>
+            </ul>
+          </div>
+          <div style="text-align: center;" data-id="bootstrap-distribution">
+            <img src="img/lec04a/bootstrap-alpha-distribution.svg" alt="Bootstrap Distribution"
+              style="max-width:60%;" />
+            <p style="font-size:0.8em;color:#555;margin-top:4px;">Trái: phân phối 1000 ước lượng \(\hat{\alpha}\) từ
+              lấy mẫu lặp lại. Phải: so sánh phân phối thực và bootstrap.</p>
           </div>
         </section>
 
         <section style="font-size: 0.78em;">
           <h2>Ví dụ: Bootstrap trên tập dữ liệu nhỏ</h2>
           <div style="text-align: center;">
-            <img src="img/lec04a/21.png" alt="Bootstrap Sampling" style="max-width:40%;" />
+            <img src="img/lec04a/bootstrap-resampling-diagram.svg" alt="Bootstrap Sampling" style="max-width:55%;" />
+            <p style="font-size:0.8em;color:#555;margin-top:4px;">Lấy mẫu lặp lại có hoàn lại từ tập dữ liệu gốc \(Z\)
+              để tạo \(B\) tập bootstrap.</p>
           </div>
         </section>
 
         <section style="font-size: 0.75em;">
-          <h2>Bootstrap — Mẫu ngoài túi (Out-of-Bag)</h2>
+          <h2>Mẫu ngoài túi (Out-of-Bag)</h2>
           <ul>
             <li>Mỗi tập bootstrap ≈ tập con: một số mẫu lặp lại, một số bị bỏ qua.</li>
             <li>Xác suất mẫu \(i\) được chọn:
