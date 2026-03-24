@@ -1,0 +1,1146 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Bài 5: Mô hình phi tuyến</title>
+  <link rel="stylesheet" href="revealjs/dist/reset.css" />
+  <link rel="stylesheet" href="revealjs/dist/reveal.css" />
+  <link rel="stylesheet" href="revealjs/dist/theme/white.css" />
+  <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+  <link rel="stylesheet" href="lecture-style.css" />
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- OPENING: Title + Agenda -->
+      <section>
+        <section>
+          <h1>Học máy</h1>
+          <h3>Bài 5: Mô hình phi tuyến</h3>
+          <p>Trường ĐH Công nghệ – Đại học Quốc gia Hà Nội</p>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>Nội dung</h2>
+          <ol style="line-height:1.15em;">
+            <li>Tổng quan <a href="#tong-quan">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Các hướng mở rộng ngoài tuyến tính</span>
+            </li>
+            <li>Hồi quy đa thức <a href="#da-thuc">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Hồi quy phi tuyến theo biến đầu vào, phân
+                lớp, chọn bậc</span>
+            </li>
+            <li>Hàm bậc thang <a href="#bac-thang">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Chia miền giá trị, biến chỉ thị, phân
+                lớp</span>
+            </li>
+            <li>Spline hồi quy <a href="#spline">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Đa thức từng mảnh, spline bậc ba, hàm cơ sở,
+                spline tự nhiên</span>
+            </li>
+            <li>Spline làm mượt <a href="#smoothing">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Hàm mục tiêu có hình phạt, định lý cơ bản,
+                chọn tham số làm mượt</span>
+            </li>
+            <li>Hồi quy cục bộ <a href="#local">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Mô hình cục bộ, hàm kernel, băng thông</span>
+            </li>
+            <li>Mô hình cộng tổng quát <a href="#gam">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Nhiều biến đầu vào, hàm ảnh hưởng riêng phần,
+                diễn giải</span>
+            </li>
+          </ol>
+        </section>
+      </section>
+
+      <!-- PART 1: Tổng quan -->
+      <section>
+        <section id="tong-quan">
+          <h1>
+            <span class="text-light">1.</span><br />
+            Tổng quan
+          </h1>
+        </section>
+
+        <section style="font-size: 0.9em;">
+          <h2>Hạn chế của mô hình tuyến tính</h2>
+          <p>Mô hình tuyến tính tiêu chuẩn:</p>
+          <p style="text-align:center;">
+            \[ Y = \beta_0 + \beta_1 X_1 + \cdots + \beta_p X_p + \varepsilon \]
+          </p>
+          <ul>
+            <li>Đơn giản, dễ diễn giải, nền tảng lý thuyết vững</li>
+            <li>Nhưng giả thiết tuyến tính thường <strong>không đúng trong thực tế</strong></li>
+            <li>Cần mở rộng để nắm bắt quan hệ phi tuyến</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.75em;">
+          <h2>Các hướng mở rộng</h2>
+          <ol>
+            <li><span class="keyword">Hồi quy đa thức</span> — hàm cơ sở đa thức: \(X, X^2, X^3, \ldots\)</li>
+            <li><span class="keyword">Hàm bậc thang</span> — chia miền giá trị thành \(K\) vùng rời rạc, khớp hằng số
+              từng vùng</li>
+            <li><span class="keyword">Spline hồi quy</span> — kết hợp hai cách trên: đa thức bậc thấp từng vùng + ràng
+              buộc trơn tại điểm nối (nút)</li>
+            <li><span class="keyword">Spline làm mượt</span> — spline với nhiều nút, tối thiểu RSS với hình phạt độ lượn
+            </li>
+            <li><span class="keyword">Hồi quy cục bộ</span> — tương tự spline nhưng các vùng được phép chồng lên nhau
+            </li>
+            <li><span class="keyword">Mô hình cộng tổng quát (GAM)</span> — kết hợp các phương pháp trên cho nhiều biến
+              đầu vào
+            </li>
+          </ol>
+        </section>
+      </section>
+
+      <!-- PART 2: Hồi quy đa thức -->
+      <section>
+        <section id="da-thuc">
+          <h1>
+            <span class="text-light">2.</span><br />
+            Hồi quy đa thức
+          </h1>
+        </section>
+
+        <section style="font-size: 0.82em;" data-auto-animate>
+          <h2>Hồi quy đa thức</h2>
+          <p><strong>Mô hình tuyến tính tiêu chuẩn:</strong></p>
+          <p style="text-align:center;">\[ y_i = \beta_0 + \beta_1 x_i + \varepsilon_i \]</p>
+          <p><strong>Hồi quy đa thức bậc \(d\):</strong></p>
+          <p style="text-align:center;">
+            \[ y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \cdots + \beta_d x_i^d + \varepsilon \]
+          </p>
+          <p>Mô hình vẫn <strong>tuyến tính theo các hệ số \(\beta_i\)</strong></p>
+          <ul>
+            <li>Vẫn dùng được bình phương tối thiểu (OLS)</li>
+            <li>Tính khoảng tin cậy như thường lệ bằng phương sai điểm (pointwise variance) từ OLS</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.78em;" data-auto-animate>
+          <h2>Hồi quy đa thức</h2>
+          <p>\[ y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \cdots + \beta_d x_i^d + \varepsilon \]</p>
+          <div style="display:grid;grid-template-columns:1fr .9fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Mô hình vẫn <strong>tuyến tính theo \(\beta_i\)</strong></li>
+                <li>Tính khoảng tin cậy điểm như OLS thường</li>
+                <li>Dải khoảng tin cậy rộng ở các vùng thưa dữ liệu</li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec05/poly-wage-regression.svg" alt="Polynomial regression degree 4 on Wage data"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Dữ liệu Wage — đa thức bậc 4</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.75em;">
+          <h2>Hồi quy đa thức — Phân lớp</h2>
+          <p>Dùng <span class="keyword">hồi quy logistic đa thức</span>:</p>
+          <p style="font-size:0.9em;">\[
+            \Pr(y_i > 250 \mid x_i) = \frac{e^{\beta_0 + \beta_1 x_i + \cdots + \beta_d x_i^d}}{1 + e^{\beta_0 + \beta_1
+            x_i + \cdots + \beta_d x_i^d}}
+            \]</p>
+          <div style="display:grid;grid-template-columns:1fr .7fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Vẫn <strong>tuyến tính theo hệ số \(\beta_i\)</strong>, CI lấy từ mô hình logistic</li>
+                <li>Dải tin cậy rộng khi ít điểm dương<br><span style="color:#888;">(79/3000 người thu nhập cao)</span>
+                </li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec05/poly-wage-logistic.svg"
+                alt="Logistic polynomial regression degree 4: Pr(Wage>250|Age)" style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Dữ liệu Wage — logistic bậc 4</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.85em;">
+          <h2>Chọn bậc đa thức</h2>
+          <ul>
+            <li>Hiếm khi dùng bậc \(d\) lớn hơn <strong>3 hoặc 4</strong></li>
+            <li>Đa thức bậc \(d\) có \(d+1\) tham số, nên có thể nội suy \(d+1\) điểm có hoành độ phân biệt.
+            </li>
+            <li>Chọn \(d\) bằng <span class="keyword">kiểm định chéo (cross-validation)</span>, hoặc dùng
+              <span class="keyword">kiểm định ANOVA</span> (F-test) so sánh các mô hình lồng nhau:
+              \(H_0\!:\ \beta_{d_0+1} = \cdots = \beta_d = 0\)
+            </li>
+            <li><strong>Vấn đề đuôi:</strong> đa thức rất lượn ở vùng biên — không tốt cho ngoại suy
+            </li>
+          </ul>
+        </section>
+      </section>
+
+      <!-- PART 3: Hàm bậc thang -->
+      <section>
+        <section id="bac-thang">
+          <h1>
+            <span class="text-light">3.</span><br />
+            Hàm bậc thang
+          </h1>
+        </section>
+
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>Hàm bậc thang</h2>
+          <p>Chuyển biến <strong>liên tục</strong> → <strong>biến chỉ thị rời rạc</strong>:</p>
+          <ul>
+            <li>Chọn các điểm cắt \(c_1, c_2, \ldots, c_K\) trên miền của \(X\)</li>
+            <li>Tạo \(K+1\) biến mới (biến chỉ thị - dummy):
+              \[
+              \begin{aligned}
+              C_0(X) &= \mathbf{1}(X < c_1) \\ C_1(X) &=\mathbf{1}(c_1 \le X < c_2) \\ &\dots \\ C_K(X) &=\mathbf{1}(X
+                \ge c_K) \end{aligned} \] </li>
+            <li>\(\sum_{i=0}^{K} C_i(X) = 1\)</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>Hàm bậc thang</h2>
+          <p><strong>Mô hình hồi quy:</strong></p>
+          <p>\[ y_i = \beta_0 + \beta_1 C_1(x_i) + \beta_2 C_2(x_i) + \cdots + \beta_K C_K(x_i) + \varepsilon_i \]
+          </p>
+          <div style="display:grid;grid-template-columns:1fr .8fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>\(\beta_0\): trung bình \(Y\) khi \(X < c_1\)</li>
+                <li>\(\beta_j\): mức tăng trung bình so với \(\beta_0\) khi \(c_j \le X < c_{j+1}\)</li>
+                <li>Khớp hàm <strong>hằng từng mảnh</strong> (piecewise constant)</li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec05/step-wage-regression.svg" alt="Step function regression on Wage data"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Dữ liệu Wage — Hồi quy</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>Hàm bậc thang</h2>
+          <p><strong>Mô hình logistic:</strong></p>
+          <p style="font-size:0.88em;">
+            \[
+            \Pr(y_i > 250 \mid x_i) = \frac{\exp(\beta_0 + \sum_{k=1}^{K}\beta_k C_k(x_i))}{1 + \exp(\beta_0 +
+            \sum_{k=1}^{K}\beta_k C_k(x_i))}
+            \]
+          </p>
+          <div style="display:grid;grid-template-columns:1fr .9fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <blockquote
+                style="border-left:3px solid #c0392b;padding-left:10px;margin-top:10px;color:#c0392b;font-size:0.92em;">
+                ⚠️ Điểm cắt phải đặt đúng chỗ có biến động — nếu không mô hình sẽ bỏ sót xu hướng quan trọng!
+              </blockquote>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec05/step-wage-logistic.svg" alt="Step function logistic regression on Wage data"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Dữ liệu Wage — Phân lớp</em></p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- PART 4: Spline hồi quy -->
+      <section>
+        <section id="spline">
+          <h1>
+            <span class="text-light">4.</span><br />
+            Spline hồi quy
+          </h1>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>Đa thức từng mảnh</h2>
+          <div style="display:grid;grid-template-columns:1fr .7fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Chia miền \(X\) bằng các <span class="keyword">nút</span> \(\zeta_1,\ldots,\zeta_K\)</li>
+                <li>Khớp <strong>đa thức bậc thấp</strong> trên từng đoạn</li>
+                <li>Linh hoạt hơn một đa thức toàn cục</li>
+                <li>Nhược điểm: các đoạn có thể <strong>đứt</strong> hoặc <strong>gãy</strong> tại nút</li>
+              </ul>
+
+              <p style="margin-top:10px;"><strong>Ý chính:</strong> cần thêm ràng buộc tại nút để được <span
+                  class="keyword">spline</span>.</p>
+            </div>
+
+            <div style="text-align:center;">
+              <img src="img/lec05/piecewise-cubic-discontinuous.svg"
+                alt="Piecewise cubic regression discontinuous at knot" style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Linh hoạt, nhưng chưa mượt tại nút</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>Spline — Ràng buộc trơn</h2>
+          <p><strong>Cubic spline:</strong> tại mỗi nút \(\zeta\), yêu cầu</p>
+          <p style="text-align:center;">
+            \[
+            f_-(\zeta)=f_+(\zeta),\quad
+            f'_-(\zeta)=f'_+(\zeta),\quad
+            f''_-(\zeta)=f''_+(\zeta)
+            \]
+          </p>
+          <div style="display:grid;grid-template-columns:1fr .7fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Khớp <strong>giá trị</strong></li>
+                <li>Khớp <strong>độ dốc</strong></li>
+                <li>Khớp <strong>độ cong</strong></li>
+              </ul>
+
+              <p style="margin-top:10px;"><strong>Kết quả:</strong> đường cong trơn, không gãy tại điểm nối.</p>
+            </div>
+
+            <div style="text-align:center;">
+              <img src="img/lec05/piecewise-cubic-continuous.svg" alt="Continuous piecewise cubic at knot 50"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Spline nối mượt các đoạn đa thức</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>Vì sao dùng Spline bậc ba?</h2>
+          <div style="display:grid;grid-template-columns:1fr .7fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Dùng <strong>đa thức bậc 3</strong> trên mỗi đoạn</li>
+                <li>Là lựa chọn phổ biến nhất trong thực tế</li>
+                <li><strong>Đủ linh hoạt</strong> để mô tả phi tuyến</li>
+                <li>Vẫn cho đường cong <strong>trơn</strong> tại các nút</li>
+              </ul>
+
+              <p style="margin-top:10px;"><strong>Ý chính:</strong> cubic spline cho cân bằng tốt giữa <span
+                  class="keyword">linh hoạt</span> và <span class="keyword">độ trơn</span>.</p>
+            </div>
+
+            <div style="text-align:center;">
+              <img src="img/lec05/cubic-spline.svg" alt="Cubic spline with knot at age 50" style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Cubic spline với một nút</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.84em;">
+          <h2>Số bậc tự do của cubic spline</h2>
+          <ul>
+            <li>Với \(K\) nút, có \(K+1\) đoạn cubic</li>
+            <li>Mỗi đoạn có 4 hệ số \(\Rightarrow 4(K+1)\) tham số</li>
+            <li>Mỗi nút cho 3 ràng buộc trơn \(\Rightarrow 3K\) ràng buộc</li>
+            <li>Còn lại \(4(K+1)-3K = K+4\) bậc tự do</li>
+          </ul>
+
+          <p style="margin-top:12px;"><strong>Kết luận:</strong> cubic spline với \(K\) nút có \(K+4\) bậc tự do.</p>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>Tổng quát: số bậc tự do của spline</h2>
+          <div style="display:grid;grid-template-columns:1fr .9fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <p><strong>Với spline bậc \(d\) có \(K\) nút:</strong></p>
+              <p style="text-align:center;">
+                \[
+                \dim = \mathrm{dof} = d + K + 1
+                \]
+              </p>
+
+              <ul>
+                <li>Bậc 1: spline tuyến tính \(\Rightarrow K+2\) bậc tự do</li>
+                <li>Bậc 3: cubic spline \(\Rightarrow K+4\) bậc tự do</li>
+              </ul>
+
+              <p style="margin-top:10px;"><strong>Ý nghĩa:</strong> số nút và bậc spline cùng quyết định độ linh hoạt
+                của mô hình.</p>
+            </div>
+
+            <div style="text-align:center;">
+              <img src="img/lec05/linear-spline.svg" alt="Linear spline with knot at age 50" style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Spline bậc 1: ít linh hoạt hơn cubic
+                  spline</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.75em;">
+          <div style="position:absolute;top:10px;right:10px;background:#546E7A;color:white;font-size:0.5em;padding:4px 14px;border-radius:20px;font-weight:bold;z-index:10;">
+            📖 Tự học</div>
+          <h2>Hàm cơ sở của Spline bậc ba</h2>
+          <p>Cubic spline với \(K\) nút có \(K+4\) bậc tự do, nên cần \(K+4\) hàm cơ sở.</p>
+          <p>
+            \[
+            1,\ X,\ X^2,\ X^3,\ (X-\zeta_1)_+^3,\ldots,(X-\zeta_K)_+^3
+            \]
+          </p>
+          <p>Dùng cơ sở này để khớp hồi quy tuyến tính sẽ cho ra cubic spline với các nút \(\zeta_1,\ldots,\zeta_K\).
+          </p>
+          <div style="display:grid;grid-template-columns:1fr .7fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+
+              <p style="margin-top:10px;"><strong>Ý nghĩa:</strong> mọi cubic spline với \(K\) nút đều là tổ hợp tuyến
+                tính của các hàm trên.</p>
+              <p><strong>Hệ quả:</strong> fit spline = fit hồi quy tuyến tính trên các basis functions.</p>
+            </div>
+
+            <div style="text-align:center;">
+              <img src="img/lec05/cubic-spline-basis.svg" alt="Basis functions of cubic spline with 3 knots"
+                style="max-width:100%;" />
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>Vấn đề ở biên của Cubic Spline</h2>
+          <div style="display:grid;grid-template-columns:1fr .9fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Cubic spline có thể <strong>dao động mạnh ở hai đầu biên</strong></li>
+                <li>Nguyên nhân: tại biên, dữ liệu chỉ đến từ <strong>một phía</strong></li>
+                <li>Hệ quả: <strong>phương sai cao</strong>, khoảng tin cậy rộng hơn</li>
+              </ul>
+
+              <p style="margin-top:10px;"><strong>Câu hỏi:</strong> làm sao giữ được độ linh hoạt ở giữa nhưng ổn định
+                hơn ở biên?</p>
+            </div>
+
+            <div style="text-align:center;">
+              <img src="img/lec05/natural-vs-cubic-spline.svg" alt="Natural spline vs cubic spline"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Cubic spline thường kém ổn định hơn ở vùng
+                  biên</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.82em;" data-auto-animate>
+          <h2>Spline tự nhiên bậc ba</h2>
+          <div style="display:grid;grid-template-columns:1fr .9fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Là <strong>cubic spline</strong> có thêm ràng buộc <strong>tuyến tính ở biên</strong></li>
+                <li>Vẫn giữ được độ linh hoạt ở vùng giữa</li>
+                <li>Giảm phương sai ở hai đầu</li>
+                <li>Thường cho khoảng tin cậy hẹp hơn tại biên</li>
+              </ul>
+
+              <p style="margin-top:10px;"><strong>Kết quả:</strong> mô hình ổn định hơn ở vùng biên mà vẫn đủ linh hoạt
+                ở giữa.</p>
+            </div>
+
+            <div style="text-align:center;">
+              <img src="img/lec05/natural-vs-cubic-spline.svg" alt="Natural spline vs cubic spline"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Natural spline ổn định hơn ở hai đầu biên</em>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>Spline tự nhiên bậc ba</h2>
+          <ul>
+            <li>Với \(K\) nút, spline tự nhiên bậc ba có <strong>\(K\) bậc tự do</strong></li>
+            <li>Ít hơn cubic spline thông thường \(\left(K+4\right)\)</li>
+            <li>Đổi lại: <strong>phương sai thấp hơn ở vùng biên</strong></li>
+            <li>Thường cho khoảng tin cậy hẹp hơn ở hai đầu</li>
+          </ul>
+
+          <p style="margin-top:12px;"><strong>Đánh đổi:</strong> tăng một chút độ lệch, nhưng thường có lợi trong thực
+            tế.</p>
+        </section>
+
+        <section style="font-size: 0.76em;">
+          <div
+            style="position:absolute;top:10px;right:10px;background:#546E7A;color:white;font-size:0.5em;padding:4px 14px;border-radius:20px;font-weight:bold;z-index:10;">
+            📖 Tự học</div>
+          <h2>Hàm cơ sở của Spline tự nhiên</h2>
+          <div>
+            <p>Với <strong>\(K\) nút</strong>, spline tự nhiên bậc ba có <strong>\(K\) bậc tự do</strong>.</p>
+            <p>
+              \[
+              N_1(X)=1,\qquad N_2(X)=X
+              \]
+            </p>
+            <p>
+              \[
+              N_{k+2}(X)=d_k(X)-d_{K-1}(X),\qquad k=1,\ldots,K-2
+              \]
+            </p>
+            <p style="font-size:0.9em;">
+              trong đó
+              \[
+              d_k(X)=\frac{(X-\zeta_k)_+^3-(X-\zeta_K)_+^3}{\zeta_K-\zeta_k}
+              \]
+            </p>
+
+            <p style="margin-top:10px;"><strong>Ý nghĩa:</strong> các basis này đã “cài sẵn” ràng buộc <strong>tuyến
+                tính ở biên</strong>.</p>
+            <p><strong>Hệ quả:</strong> fit natural spline = fit hồi quy tuyến tính trên các basis functions.</p>
+          </div>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>Spline tự nhiên — Hồi quy</h2>
+          <div style="display:grid;grid-template-columns:1fr .75fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Khớp <span class="keyword">spline tự nhiên bậc ba</span> với 3 nút tại các phân vị của Age</li>
+                <li>Nút tại phân vị → mô hình linh hoạt hơn ở vùng dữ liệu dày</li>
+                <li>Khoảng tin cậy hẹp hơn ở biên so với spline bậc ba thông thường</li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec05/natural-spline-regression.svg" alt="Natural spline regression on Wage"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Hồi quy — 3 nút tại phân vị</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>Spline tự nhiên — Phân lớp</h2>
+          <div style="display:grid;grid-template-columns:1fr .75fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Logistic regression với cơ sở spline tự nhiên bậc ba</li>
+                <li>3 nút tại phân vị — Khoảng tin cậy hẹp hơn ở hai đầu biên</li>
+                <li>Rug plot: hàng trên (Wage &gt; 250), hàng dưới (Wage ≤ 250)</li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec05/natural-spline-logistic.svg" alt="Natural spline logistic on Wage"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Phân lớp — 3 nút tại phân vị</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.84em;">
+          <h2>Vị trí của nút</h2>
+          <ul>
+            <li>Có thể đặt nút <strong>cách đều</strong> trong miền giá trị</li>
+            <li>Hoặc đặt theo <strong>phân vị của dữ liệu</strong></li>
+            <li>Đặt theo phân vị giúp mô hình linh hoạt hơn ở vùng có nhiều dữ liệu</li>
+          </ul>
+
+          <p style="margin-top:12px;"><strong>Thực tế:</strong> đặt nút theo phân vị thường là lựa chọn an toàn.</p>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>Số nút và bậc tự do</h2>
+          <div>
+            <ul>
+              <li>Số nút quyết định <strong>độ linh hoạt</strong> của spline</li>
+              <li>Nhiều nút hơn \(\Rightarrow\) mô hình linh hoạt hơn</li>
+              <li>Thực tế thường chọn qua <strong>bậc tự do</strong></li>
+              <li>Dùng <span class="keyword">cross-validation</span> để chọn</li>
+            </ul>
+          </div>
+
+          <div style="text-align:center;">
+            <img src="img/lec05/cv-model-selection.svg" alt="CV MSE vs degrees of freedom" style="max-width:60%;" />
+            <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Chọn bậc tự do bằng cross-validation</em></p>
+          </div>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>Spline vs Đa thức</h2>
+          <div style="display:grid;grid-template-columns:1fr .7fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li>Spline dùng <strong>đa thức bậc thấp</strong> trên từng đoạn</li>
+                <li>Đa thức bậc cao thường <strong>dao động mạnh</strong>, nhất là ở biên</li>
+                <li>Spline thường <strong>ổn định hơn</strong> và dễ kiểm soát độ linh hoạt hơn</li>
+              </ul>
+
+              <p style="margin-top:10px;"><strong>Hạn chế còn lại:</strong> vẫn phải chọn <strong>số lượng</strong> và
+                <strong>vị trí</strong> của các nút.
+              </p>
+            </div>
+
+            <div style="text-align:center;">
+              <img src="img/lec05/spline-vs-polynomial.svg" alt="Natural spline vs degree-15 polynomial"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Spline tự nhiên ổn định hơn đa thức bậc
+                  cao</em></p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- PART 5: Spline làm mượt -->
+      <section>
+        <section id="smoothing">
+          <h1>
+            <span class="text-light">5.</span><br />
+            Spline làm mượt
+          </h1>
+        </section>
+
+        <section style="font-size: 0.74em;" data-auto-animate>
+          <h2>Spline làm mượt</h2>
+          <p><strong>Ý tưởng:</strong> không chọn nút thủ công; thay vào đó, điều khiển độ trơn bằng một tham số
+            \(\lambda\).</p>
+
+          <p style="margin-top:10px;"><strong>Hàm mục tiêu:</strong></p>
+          <p style="text-align:center;">
+            \[
+            \sum_{i=1}^{n}(y_i - g(x_i))^2 + \lambda \int g''(t)^2\,dt
+            \]
+          </p>
+
+          <ul>
+            <li>Hạng 1: khớp dữ liệu tốt</li>
+            <li>Hạng 2: phạt đường cong quá lượn</li>
+            <li>\(\lambda\) lớn hơn \(\Rightarrow\) đường cong trơn hơn</li>
+            <li>\(\lambda = 0\): nội suy qua mọi điểm</li>
+            <li>\(\lambda \to \infty\): tiến gần đường thẳng OLS</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.74em;" data-auto-animate>
+          <h2>Spline làm mượt</h2>
+          <p>\[
+            \min_g \; \sum_{i=1}^{n}(y_i - g(x_i))^2 + \lambda \int g''(t)^2\, dt
+            \]</p>
+
+          <div style="display:grid;grid-template-columns:1fr .65fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <p><strong>Kết quả quan trọng:</strong> nghiệm tối ưu là một <span class="keyword">spline tự nhiên bậc
+                  ba</span> với nút tại tất cả các điểm dữ liệu.</p>
+              <ul>
+                <li>Không cần chọn vị trí nút thủ công</li>
+                <li>Độ trơn được điều khiển bởi \(\lambda\)</li>
+                <li>\(\lambda\) nhỏ: fit sát dữ liệu hơn</li>
+                <li>\(\lambda\) lớn: đường cong mượt hơn</li>
+              </ul>
+            </div>
+
+            <div style="text-align:center;">
+              <img src="img/lec05/smoothing-splines.svg" alt="Smoothing splines 16 dof vs 6.8 dof"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>\(\lambda\) khác nhau cho mức độ trơn khác
+                  nhau</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.75em;">
+          <div
+            style="position:absolute;top:10px;right:10px;background:#546E7A;color:white;font-size:0.5em;padding:4px 14px;border-radius:20px;font-weight:bold;z-index:10;">
+            📖 Tự học</div>
+          <h2>Chọn lambda</h2>
+
+          <p>Với smoothing spline, dự đoán là một hàm tuyến tính của \(\mathbf{y}\):
+            \(
+            \hat{\mathbf{g}}_\lambda = \mathbf{S}_\lambda \mathbf{y}
+            \)
+          </p>
+
+          <p><strong>Bậc tự do hiệu dụng:</strong>
+            \(
+            \mathrm{dof}(\lambda)=\mathrm{tr}(\mathbf{S}_\lambda)
+            \)
+          </p>
+
+          <ul>
+            <li>\(\lambda = 0\) \(\Rightarrow\) \(\mathrm{dof}=n\): nội suy hoàn toàn, rất linh hoạt</li>
+            <li>\(\lambda \to \infty\) \(\Rightarrow\) \(\mathrm{dof}\to 2\): tiến gần đường thẳng OLS</li>
+            <li>Tăng \(\lambda\) \(\Rightarrow\) đường cong trơn hơn, bậc tự do hiệu dụng giảm</li>
+          </ul>
+
+          <p style="margin-top:10px;"><strong>Chọn \(\lambda\) bằng LOOCV:</strong>
+            \(
+            \mathrm{CV}(\lambda)=\sum_{i=1}^{n}
+            \left(\frac{y_i-\hat g_\lambda(x_i)}{1-\{S_\lambda\}_{ii}}\right)^2
+            \)
+          </p>
+
+          <p style="margin-top:10px;"><strong>Ý chính:</strong> thay vì chọn số nút, ta chọn \(\lambda\) để điều khiển
+            độ trơn.</p>
+        </section>
+      </section>
+
+      <!-- PART 6: Hồi quy cục bộ -->
+      <section>
+        <section id="local">
+          <h1>
+            <span class="text-light">6.</span><br />
+            Hồi quy cục bộ
+          </h1>
+        </section>
+
+        <section style="font-size: 0.75em;" data-auto-animate>
+          <h2>Hồi quy cục bộ</h2>
+          <div style="display:grid;grid-template-columns:1fr .8fr;gap:18px;margin-top:10px;align-items:center;">
+            <div>
+              <p>Có thể hiểu như một phiên bản làm mượt của <span class="keyword">k-NN regression</span>:</p>
+              <ul>
+                <li>Tại mỗi điểm cần dự đoán \(x_0\), chỉ dùng các điểm <strong>lân cận</strong></li>
+                <li>Các điểm gần \(x_0\) được gán <strong>trọng số lớn hơn</strong></li>
+                <li>Thay vì lấy trung bình cục bộ, ta khớp một <strong>mô hình cục bộ</strong></li>
+              </ul>
+
+              <p style="text-align:center;margin-top:10px;">
+                \[
+                \hat f(x_0)=\hat\beta_0(x_0)+\hat\beta_1(x_0)x_0
+                \]
+              </p>
+              <p style="font-size:0.9em;color:#555;">Mỗi điểm \(x_0\) có một mô hình riêng.</p>
+            </div>
+
+            <div style="text-align:center;">
+              <img src="img/lec05/local-regression-left.svg" alt="Local regression at x0=0.1" style="max-width:100%;" />
+              <p style="font-size:0.72em;color:#666;margin-top:4px;">
+                Xám: toàn bộ dữ liệu &ensp;|&ensp;
+                <span style="color:#aa3300;">Cam</span>: điểm trong lân cận \(x_0\) &ensp;|&ensp;
+                <span style="color:#c8d820;background:#555;padding:0 3px;">Vàng</span>: trọng số kernel
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.75em;" data-auto-animate>
+          <h2>Hồi quy cục bộ</h2>
+          <div style="display:grid;grid-template-columns:1fr .8fr;gap:18px;margin-top:10px;align-items:center;">
+            <div>
+              <p>Có thể hiểu như một phiên bản làm mượt của <span class="keyword">k-NN regression</span>:</p>
+              <ul>
+                <li>Tại mỗi điểm cần dự đoán \(x_0\), chỉ dùng các điểm <strong>lân cận</strong></li>
+                <li>Các điểm gần \(x_0\) được gán <strong>trọng số lớn hơn</strong></li>
+                <li>Thay vì lấy trung bình cục bộ, ta khớp một <strong>mô hình cục bộ</strong></li>
+              </ul>
+
+              <p style="text-align:center;margin-top:10px;">
+                \[
+                \hat f(x_0)=\hat\beta_0(x_0)+\hat\beta_1(x_0)x_0
+                \]
+              </p>
+              <p style="font-size:0.9em;color:#555;">Mỗi điểm \(x_0\) có một mô hình riêng.</p>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec05/local-regression-mid.svg" alt="Local regression at x0=0.45" style="max-width:100%;" />
+              <p style="font-size:0.72em;color:#666;margin-top:4px;">
+                Xám: toàn bộ dữ liệu &ensp;|&ensp;
+                <span style="color:#aa3300;">Cam</span>: điểm trong lân cận \(x_0\) &ensp;|&ensp;
+                <span style="color:#c8d820;background:#555;padding:0 3px;">Vàng</span>: trọng số kernel
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Hồi quy cục bộ — Ý tưởng toán học</h2>
+          <div>
+            <p>Tại mỗi điểm cần dự đoán \(x_0\), ta khớp một mô hình cục bộ bằng bình phương tối thiểu có trọng số:
+            </p>
+
+            <p style="text-align:center;">
+              \[
+              (\hat\beta_0(x_0),\hat\beta_1(x_0))
+              =
+              \arg\min_{\beta_0,\beta_1}
+              \sum_{i=1}^n
+              w_i(x_0)\big(y_i-\beta_0-\beta_1x_i\big)^2
+              \]
+            </p>
+
+            <p style="text-align:center;">
+              \[
+              \hat f(x_0)=\hat\beta_0(x_0)+\hat\beta_1(x_0)x_0
+              \]
+            </p>
+
+            <ul>
+              <li>\(w_i(x_0)\): trọng số của điểm \(x_i\) khi dự đoán tại \(x_0\)</li>
+              <li>Điểm càng gần \(x_0\) \(\Rightarrow\) trọng số càng lớn</li>
+              <li>Mỗi \(x_0\) cho một bài toán fit riêng</li>
+            </ul>
+          </div>
+        </section>
+
+        <section style="font-size: 0.78em;" data-auto-animate>
+          <h2>Hàm kernel</h2>
+          <p>Để fit mô hình cục bộ, ta gán cho mỗi điểm \(x_i\) một trọng số phụ thuộc vào khoảng cách đến \(x_0\):
+          </p>
+
+          <p style="text-align:center;">
+            \[
+            w_i(x_0)=K_h(x_i,x_0)
+            \]
+          </p>
+
+          <p>Một cách phổ biến để định nghĩa trọng số là dùng <strong>hàm kernel</strong>:</p>
+
+          <p style="text-align:center;">
+            \[
+            K_h(x_0,x)=D\!\left(\frac{|x-x_0|}{h}\right)
+            \]
+          </p>
+
+          <ul>
+            <li>\(D\): dạng của kernel</li>
+            <li>\(h\): <strong>băng thông</strong> (hay <span class="keyword">span</span>)</li>
+            <li>Điểm càng xa \(x_0\) \(\Rightarrow\) trọng số càng nhỏ</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.78em;" data-auto-animate>
+          <h2>Hàm kernel</h2>
+
+          <div>
+            <p style="margin-top:10px;"><strong>Ví dụ:</strong> tri-cube</p>
+            <p style="text-align:center;">
+              \[
+              D(t)=
+              \begin{cases}
+              (1-|t|^3)^3 & |t|\le 1\\
+              0 & \text{otherwise}
+              \end{cases}
+              \]
+            </p>
+          </div>
+
+          <div style="text-align:center;">
+            <img src="img/lec05/local-regression-kernel.svg" alt="Epanechnikov, Tri-cube, Gaussian kernels"
+              style="max-width:100%;" />
+          </div>
+        </section>
+
+        <section style="font-size: 0.75em;">
+          <div
+            style="position:absolute;top:10px;right:10px;background:#546E7A;color:white;font-size:0.5em;padding:4px 14px;border-radius:20px;font-weight:bold;z-index:10;">
+            📖 Tự học</div>
+          <h2>Băng thông <br /> và đánh đổi bias-variance</h2>
+          <p><strong>Băng thông \(h\)</strong> quyết định độ rộng của vùng lân cận quanh \(x_0\).</p>
+          <p>\(h\) lớn \(\Rightarrow\) vùng lân cận rộng hơn \(\Rightarrow\) bias cao hơn, variance thấp hơn.</p>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:16px;">
+            <div style="background:#f4f8ff;border-radius:8px;padding:14px 16px;">
+              <p style="margin:0 0 8px;"><span class="keyword">Metric kernel</span> — băng thông cố định \(h\)</p>
+              <ul style="margin:0;">
+                <li>Độ rộng lân cận như nhau trên toàn miền</li>
+                <li>Variance thường lớn hơn ở vùng dữ liệu thưa</li>
+              </ul>
+            </div>
+
+            <div style="background:#f4fff6;border-radius:8px;padding:14px 16px;">
+              <p style="margin:0 0 8px;"><span class="keyword">Nearest-neighbor kernel</span> — chọn \(h(x_0)\) theo
+                điểm lân cận thứ \(k\)</p>
+              <ul style="margin:0;">
+                <li>Số điểm hiệu dụng gần như giữ cố định</li>
+                <li>Bias thường lớn hơn ở vùng dữ liệu thưa</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.76em;">
+          <h2>Ví dụ: Hồi quy tuyến tính cục bộ</h2>
+          <ol style="line-height:1.9;">
+            <li>Gán trọng số \(K_{i0}=K(x_i,x_0)\) cho từng điểm dữ liệu</li>
+            <li>Khớp mô hình tuyến tính cục bộ:
+              \(
+              \min_{\beta_0,\beta_1}
+              \sum_{i=1}^n
+              K_{i0}\big(y_i-\beta_0-\beta_1(x_i-x_0)\big)^2
+              \)
+            </li>
+            <li>Khi đó \(\hat f(x_0)=\hat\beta_0\)</li>
+          </ol>
+          <div style="display:grid;grid-template-columns:1fr .5fr;gap:20px;margin-top:10px;align-items:center;">
+            <div>
+              <p style="margin-top:12px;color:#555;">
+                Có thể mở rộng sang đa thức bậc cao hơn hoặc nhiều biến, nhưng khi số chiều tăng thì dữ liệu trở nên
+                thưa hơn.
+              </p>
+            </div>
+
+            <div style="text-align:center;">
+              <img src="img/lec05/local-regression-wage.svg" alt="LOESS on Wage: span 0.2 vs 0.7"
+                style="max-width:100%;" />
+              <p style="font-size:0.8em;color:#666;margin-top:4px;">Span = tỉ lệ dữ liệu dùng cho mỗi dự đoán</p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- PART 7: Mô hình cộng tổng quát (GAM) -->
+      <section>
+        <section id="gam">
+          <h1>
+            <span class="text-light">7.</span><br />
+            Mô hình cộng tổng quát<br>
+          </h1>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>Mô hình cộng tổng quát (GAM)</h2>
+          <p>Mở rộng mô hình tuyến tính: thay thế từng \(\beta_j X_j\) bằng hàm phi tuyến \(f_j(X_j)\):</p>
+          <p style="text-align:center;margin:12px 0;">
+            \[
+            y_i = \beta_0 + \sum_{j=1}^{p} f_j(x_{ij}) + \varepsilon_i
+            \]
+          </p>
+          <ul>
+            <li>Mỗi \(f_j\) có thể là spline, hồi quy cục bộ, hoặc hàm bất kỳ</li>
+            <li>Giữ được tính <strong>cộng</strong> (additive) → dễ diễn giải từng biến</li>
+            <li>Linh hoạt hơn mô hình tuyến tính mà không cần tất cả các tương tác</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>GAM — Hồi quy trên dữ liệu Wage</h2>
+          <p style="margin-top:12px;"><strong>Ví dụ trên dữ liệu Wage:</strong></p>
+          <p style="text-align:center;margin:6px 0;">
+            \[
+            \text{wage} = \beta_0 + f_1(\text{year}) + f_2(\text{age}) + f_3(\text{education}) + \varepsilon
+            \]
+          </p>
+          <p style="font-size:0.85em;color:#555;">
+            với \(f_1\): natural spline 4 dof, \(f_2\): natural spline 5 dof, \(f_3\): hàm bậc thang theo trình độ học
+            vấn.
+          </p>
+        </section>
+
+        <section style="font-size: 0.78em;" data-auto-animate>
+          <h2>GAM — Hồi quy trên dữ liệu Wage</h2>
+          <div style="text-align:center;margin-top:6px;">
+            <img src="img/lec05/gam-wage-regression.svg" alt="GAM regression partial effects: year, age, education"
+              style="max-width:96%;" data-id="gam-reg-fig" />
+          </div>
+          <p style="margin-top:10px;font-size:0.88em;">
+            <strong>Natural spline</strong> — bậc tự do xác định trước. Ảnh hưởng riêng phần từng biến, giữ nguyên các
+            biến còn lại. Vùng tô là CI 95%.
+          </p>
+        </section>
+
+        <section style="font-size: 0.7em;">
+          <div
+            style="position:absolute;top:10px;right:10px;background:#546E7A;color:white;font-size:0.5em;padding:4px 14px;border-radius:20px;font-weight:bold;z-index:10;">
+            📖 Tự học</div>
+          <h2>GAM — Thuật toán Backfitting</h2>
+          <p style="margin-bottom:14px;color:#555;">Ước lượng lặp từng hàm \(f_j\) bằng cách cố định các hàm còn lại.
+          </p>
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:8px 18px;align-items:start;line-height:1.7;">
+
+            <span style="font-weight:600;color:#1a5276;white-space:nowrap;">Bước 1</span>
+            <div>
+              Khởi tạo: \(\hat\beta_0 = \tfrac{1}{N}\sum_i y_i\),&ensp; \(\hat f_j \equiv 0\) với mọi \(j\)
+            </div>
+
+            <span style="font-weight:600;color:#1a5276;white-space:nowrap;">Bước 2</span>
+            <div>
+              Lặp \(j = 1, 2, \ldots, p;\; 1, 2, \ldots, p;\; \ldots\) cho đến hội tụ:
+              <div style="margin:10px 0 6px 12px;">
+                \(\hat f_j \;\leftarrow\; \mathcal{S}_j\!\left[\left\{y_i - \hat\beta_0 - \sum_{k \neq j}\hat
+                f_k(x_{ik})\right\}_{i=1}^N\right]\)
+              </div>
+              <div style="margin-bottom:8px;margin-left:12px;">
+                \(\hat f_j \;\leftarrow\; \hat f_j - \tfrac{1}{N}\sum_{i=1}^N \hat f_j(x_{ij})\)
+                <span style="color:#888;font-size:0.85em;margin-left:8px;">(chuẩn hóa về trung bình 0 để tránh sai số
+                  tích lũy do làm tròn số máy tính)</span>
+              </div>
+              <p style="color:#555;font-size:0.9em;margin:0;">
+                \(\mathcal{S}_j\): bất kỳ toán tử làm mượt tuyến tính — spline tự nhiên, smoothing spline, hồi quy cục
+                bộ, …
+              </p>
+            </div>
+          </div>
+          <p style="margin-top:18px;font-size:0.85em;color:#555;border-top:1px solid #ddd;padding-top:10px;">
+            Với nhiều bộ làm mượt tuyến tính, backfitting tương đương với thuật toán <strong>Gauss–Seidel</strong>
+            để giải hệ phương trình tuyến tính.
+          </p>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>GAM — Ưu và nhược điểm</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:12px;">
+            <div>
+              <p><strong style="color:#228833;">Ưu điểm</strong></p>
+              <ul>
+                <li>Mô hình hóa được quan hệ <strong>phi tuyến</strong> của từng biến</li>
+                <li>Giữ được tính <strong>cộng</strong> nên dễ diễn giải</li>
+                <li>Có thể kết hợp nhiều bộ làm mượt khác nhau cho các biến khác nhau</li>
+                <li>Độ phức tạp của từng \(f_j\) có thể điều chỉnh riêng</li>
+              </ul>
+            </div>
+
+            <div>
+              <p><strong style="color:#cc2222;">Nhược điểm</strong></p>
+              <ul>
+                <li>Có thể bỏ sót các <strong>tương tác</strong> quan trọng giữa các biến</li>
+                <li>Cần chọn dạng làm mượt và mức độ trơn cho từng \(f_j\)</li>
+                <li>Kém hiệu quả hơn khi quan hệ thật sự phụ thuộc mạnh vào tương tác nhiều chiều</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>GAM cho Phân lớp</h2>
+
+          <p style="color:#888;font-size:0.88em;margin:20px 0 4px;">Logistic tuyến tính</p>
+          \[
+          \log\frac{p}{1-p} = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p
+          \]
+
+          <p style="color:#2e86c1;font-size:0.88em;font-weight:600;margin:16px 0 4px;">
+            Logistic GAM — thay \(\beta_j X_j\) bằng hàm phi tuyến \(f_j(X_j)\)
+          </p>
+          \[
+          \log\frac{p}{1-p} = \beta_0 + f_1(X_1) + f_2(X_2) + \cdots + f_p(X_p)
+          \]
+
+          <p style="color:#555;font-size:0.88em;margin-top:16px;">
+            Mỗi \(f_j\) có thể là spline, hồi quy cục bộ, hay một bộ làm mượt khác.
+          </p>
+        </section>
+
+        <section style="font-size: 0.7em;" data-auto-animate>
+          <h2>GAM — Phân lớp trên dữ liệu Wage</h2>
+          <p style="margin-bottom:6px;">
+            \(\log \frac{p}{1-p} = \beta_0 + \beta_1\,\text{year} + f_2(\text{age}) + f_3(\text{education})\)
+            <br /><span style="color:#888;font-size:0.85em;">year tuyến tính, age: spline tự nhiên 5 dof</span>
+          </p>
+          <div style="text-align:center;">
+            <img src="img/lec05/gam-wage-logistic.svg" alt="GAM logistic partial effects: year, age, education"
+              style="max-width:96%;" data-id="logistic-fig" />
+          </div>
+          <p style="margin-top:8px;font-size:0.85em;color:#c00;">
+            Nhóm &lt;HS không có ai có lương &gt;250K → ước lượng phân ly hoàn toàn, CI cực rộng.
+          </p>
+        </section>
+
+        <section style="font-size: 0.7em;" data-auto-animate>
+          <h2>GAM — Phân lớp trên dữ liệu Wage</h2>
+          <p style="margin-bottom:6px;">
+            Loại bỏ nhóm &lt;HS và fit lại:
+          </p>
+          <div style="text-align:center;">
+            <img src="img/lec05/gam-wage-logistic-nohs.svg" alt="GAM logistic partial effects excluding <HS"
+              style="max-width:96%;" data-id="logistic-fig" />
+          </div>
+          <p style="margin-top:8px;font-size:0.85em;">
+            CI thu hẹp lại. Tuổi trung niên và học vấn cao dự đoán xác suất lương &gt;250K cao hơn.
+          </p>
+        </section>
+      </section>
+
+      <!-- CLOSING: Summary + Next -->
+      <section>
+        <section style="font-size: 0.5em;">
+          <h2>Tổng kết</h2>
+          <table style="width:100%;border-collapse:collapse">
+            <thead>
+              <tr style="background:#1a1a6e;color:white;">
+                <th style="padding:8px 10px;text-align:left;">Phương pháp</th>
+                <th style="padding:8px 10px;text-align:center;">Linh hoạt</th>
+                <th style="padding:8px 10px;text-align:center;">Trơn</th>
+                <th style="padding:8px 10px;text-align:center;">Tham số</th>
+                <th style="padding:8px 10px;text-align:left;">Lưu ý</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:#f8f8f8;">
+                <td style="padding:7px 10px;"><strong>Hồi quy đa thức</strong></td>
+                <td style="padding:7px 10px;text-align:center;">Vừa</td>
+                <td style="padding:7px 10px;text-align:center;">✓</td>
+                <td style="padding:7px 10px;text-align:center;">Bậc \(d\)</td>
+                <td style="padding:7px 10px;">Đuôi lượn mạnh; \(d \le 4\) thường đủ</td>
+              </tr>
+              <tr>
+                <td style="padding:7px 10px;"><strong>Hàm bậc thang</strong></td>
+                <td style="padding:7px 10px;text-align:center;">Thấp</td>
+                <td style="padding:7px 10px;text-align:center;">✗</td>
+                <td style="padding:7px 10px;text-align:center;">Số vùng \(K\)</td>
+                <td style="padding:7px 10px;">Phụ thuộc vị trí điểm cắt</td>
+              </tr>
+              <tr style="background:#f8f8f8;">
+                <td style="padding:7px 10px;"><strong>Spline bậc ba</strong></td>
+                <td style="padding:7px 10px;text-align:center;">Cao</td>
+                <td style="padding:7px 10px;text-align:center;">✓</td>
+                <td style="padding:7px 10px;text-align:center;">Số nút \(K\)</td>
+                <td style="padding:7px 10px;">Phương sai cao ở biên; dof = \(K+4\)</td>
+              </tr>
+              <tr>
+                <td style="padding:7px 10px;"><strong>Spline tự nhiên bậc ba</strong></td>
+                <td style="padding:7px 10px;text-align:center;">Cao</td>
+                <td style="padding:7px 10px;text-align:center;">✓✓</td>
+                <td style="padding:7px 10px;text-align:center;">Số nút \(K\)</td>
+                <td style="padding:7px 10px;">Tuyến tính ở biên; dof = \(K\)</td>
+              </tr>
+              <tr style="background:#f8f8f8;">
+                <td style="padding:7px 10px;"><strong>Spline làm mượt</strong></td>
+                <td style="padding:7px 10px;text-align:center;">Rất cao</td>
+                <td style="padding:7px 10px;text-align:center;">✓✓</td>
+                <td style="padding:7px 10px;text-align:center;">\(\lambda\)</td>
+                <td style="padding:7px 10px;">Nút tại mọi điểm dữ liệu; chọn \(\lambda\) bằng CV</td>
+              </tr>
+              <tr>
+                <td style="padding:7px 10px;"><strong>Hồi quy cục bộ</strong></td>
+                <td style="padding:7px 10px;text-align:center;">Rất cao</td>
+                <td style="padding:7px 10px;text-align:center;">✓✓</td>
+                <td style="padding:7px 10px;text-align:center;">Băng thông</td>
+                <td style="padding:7px 10px;">Vùng lân cận chồng nhau; kém hiệu quả khi số chiều tăng</td>
+              </tr>
+              <tr style="background:#f8f8f8;">
+                <td style="padding:7px 10px;"><strong>GAM</strong></td>
+                <td style="padding:7px 10px;text-align:center;">Cao</td>
+                <td style="padding:7px 10px;text-align:center;">✓✓</td>
+                <td style="padding:7px 10px;text-align:center;">Theo từng \(f_j\)</td>
+                <td style="padding:7px 10px;">Nhiều đầu vào; cộng tính; bỏ qua tương tác</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin-top:14px;text-align:center;color:#555;">
+            <strong>Thực tế:</strong> Dùng <strong>kiểm định chéo</strong> để chọn phương pháp và tham số.
+          </p>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>Tài liệu tham khảo</h2>
+          <ul style="list-style:none;padding:0;line-height:2.2em;">
+            <li>James, G., Witten, D., Hastie, T., Tibshirani, R. <em>An Introduction to Statistical Learning</em>
+              (ISLR), 2nd ed., Springer, 2021. Chương 7.</li>
+            <li>Hastie, T., Tibshirani, R., Friedman, J. <em>The Elements of Statistical Learning</em> (ESL), 2nd ed.,
+              Springer, 2009. Chương 5, 6, 9.</li>
+            <li>Muandet, K. &amp; Vreeken, J., Lecture slides, Saarland University.</li>
+          </ul>
+        </section>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    Học máy (Học kỳ 2 2025-2026) §5: Mô hình phi tuyến
+  </div>
+
+  <script src="revealjs/dist/reveal.js"></script>
+  <script src="plugin/notes/notes.js"></script>
+  <script src="plugin/markdown/markdown.js"></script>
+  <script src="plugin/highlight/highlight.js"></script>
+  <script src="plugin/math/math.js"></script>
+  <script>
+    Reveal.initialize({
+      controlsLayout: "edges",
+      slideNumber: true,
+      hashOneBasedIndex: true,
+      hash: true,
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX],
+    });
+  </script>
+</body>
+
+</html>
