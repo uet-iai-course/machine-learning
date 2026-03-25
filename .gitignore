@@ -6,3 +6,4 @@ package-lock.json
 .conda/
 temp-*.html
 .claude/
+qti_exports/
