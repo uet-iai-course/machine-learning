@@ -25,11 +25,12 @@
         <section>
           <h2>Nội dung</h2>
           <ol style="line-height:1.8em;">
-            <li>Kiểm định (Validation) <a href="#validation">→</a><br>
-              <small style="color:#888;font-weight:normal;">Phân chia tập train/test; ưu điểm và hạn chế</small>
+            <li>Phương pháp tập kiểm định (validation set) <a href="#validation">→</a><br>
+              <small style="color:#888;font-weight:normal;">Chia dữ liệu thành train/test; ưu điểm và hạn chế</small>
             </li>
-            <li>Kiểm định chéo (Cross-Validation) <a href="#cross-validation">→</a><br>
-              <small style="color:#888;font-weight:normal;">LOOCV, k-fold CV; chọn mô hình và tránh data leakage</small>
+            <li>Kiểm định chéo (cross-validation) <a href="#cross-validation">→</a><br>
+              <small style="color:#888;font-weight:normal;">LOOCV, k-fold CV; chọn mô hình và tránh rò rỉ dữ
+                liệu</small>
             </li>
             <li>Bootstrap <a href="#bootstrap">→</a><br>
               <small style="color:#888;font-weight:normal;">Định lượng độ không chắc chắn của ước lượng thống kê</small>
@@ -45,7 +46,8 @@
         <section id="validation">
           <h1>
             <span class="text-light">1.</span><br />
-            Kiểm định (Validation)
+            Phương pháp<br />
+            tập kiểm định
           </h1>
         </section>
 
@@ -56,9 +58,11 @@
             <li><strong>Dưới-khớp (underfitting):</strong> lỗi cao trên cả hai tập.</li>
             <li>Lỗi train <em>không</em> phản ánh hiệu năng thực tế.</li>
           </ul>
-          <p style="margin-top:16px;"><strong>Câu hỏi:</strong> Ước lượng lỗi test khi không có thêm dữ liệu?</p>
+          <p style="margin-top:16px;"><strong>Câu hỏi:</strong> Ước lượng lỗi trên tập kiểm tra khi không có thêm dữ
+            liệu?</p>
           <blockquote style="border-left:3px solid #4a90d9;padding-left:12px;margin-top:10px;">
-            Giải pháp: <span class="keyword">lấy mẫu lại</span> (resampling).
+            Giải pháp: tách dữ liệu hiện có thành <span class="keyword">tập huấn luyện</span> và <span
+              class="keyword">tập kiểm định</span>.
           </blockquote>
         </section>
 
@@ -71,7 +75,7 @@
             <li>Cách đơn giản nhất: chia ngẫu nhiên thành hai tập:
               <ul>
                 <li><strong>Tập huấn luyện</strong> (training set): khớp mô hình.</li>
-                <li><strong>Tập kiểm tra</strong> (test set): ước lượng <strong>lỗi tổng quát hoá</strong>.
+                <li><strong>Tập kiểm định</strong> (validation set): ước lượng <strong>lỗi tổng quát hoá</strong>.
                 </li>
               </ul>
             </li>
@@ -101,19 +105,19 @@
             <!-- Labels below boxes -->
             <div style="display:flex;gap:4px;font-family:sans-serif;font-size:0.8em;margin-top:6px;">
               <div style="flex:1;text-align:center;color:#4a7cc7;font-weight:600;">Tập huấn luyện</div>
-              <div style="flex:1;text-align:center;color:#c0603a;font-weight:600;">Tập kiểm tra</div>
+              <div style="flex:1;text-align:center;color:#c0603a;font-weight:600;">Tập kiểm định</div>
             </div>
           </div>
         </section>
 
         <section>
-          <h2>Ví dụ: Kiểm định</h2>
+          <h2>Ví dụ: Dùng tập kiểm định</h2>
           <div style="text-align: center;">
             <img src="img/lec04a/auto-polynomial-validation.svg" alt="Auto dataset: polynomial fits and validation MSE"
               style="max-width:100%;" />
           </div>
           <p style="font-size:0.75em;color:#666;text-align:center;margin-top:6px;">
-            Lỗi kiểm định cho <strong>một lần chia ngẫu nhiên 50–50</strong>.
+            Lỗi trên tập kiểm định cho <strong>một lần chia ngẫu nhiên 50–50</strong>.
           </p>
         </section>
 
@@ -123,7 +127,7 @@
             <div>
               <p><strong>Quan sát:</strong></p>
               <ol>
-                <li>Lỗi kiểm tra <strong>biến động lớn</strong> theo cách chia.</li>
+                <li>Lỗi kiểm định <strong>biến động lớn</strong> theo cách chia.</li>
                 <li>Bậc 2 cải thiện rõ rệt.</li>
                 <li>Bậc cao hơn không mang lại lợi ích.</li>
               </ol>
@@ -144,7 +148,8 @@
               <p><strong>Hai vấn đề khi dùng 1 tập kiểm định:</strong></p>
               <ol>
                 <li><span class="keyword">Phương sai cao</span> — phụ thuộc phép chia ngẫu nhiên.</li>
-                <li>Tập huấn luyện nhỏ → <strong>dưới-khớp</strong> → lỗi kiểm tra bị thổi phồng (overestimation).</li>
+                <li>Tập huấn luyện nhỏ → mô hình học từ ít dữ liệu hơn → lỗi trên tập kiểm định có thể bị <strong>ước
+                    lượng cao hơn thực tế</strong>.</li>
               </ol>
               <p style="margin-top:12px;">→ Cần dùng dữ liệu hiệu quả hơn: <span class="keyword">Kiểm định chéo</span>.
               </p>
@@ -174,12 +179,13 @@
           <h2>Leave-One-Out Cross-Validation (LOOCV)</h2>
           <div style="display:grid;grid-template-columns:1fr .5fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
-              <p><strong>Ý tưởng:</strong> mỗi lần giữ lại <span class="keyword">một</span> điểm để kiểm tra.</p>
+              <p><strong>Ý tưởng:</strong> mỗi lần giữ lại <span class="keyword">một</span> điểm để kiểm định.</p>
               <ul>
                 <li>Train trên \(n-1\) mẫu → <strong>ít độ chệch</strong>.</li>
-                <li>Test trên 1 điểm → <strong>phương sai cao</strong>.</li>
-                <li>Lặp qua mọi điểm → trung bình hoá phương sai.</li>
-                <li>Kết quả <strong>tất định</strong> — không phụ thuộc ngẫu nhiên.</li>
+                <li>Kiểm định trên 1 điểm → <strong>phương sai cao</strong>.</li>
+                <li>Mỗi điểm được kiểm định đúng một lần.</li>
+                <li>Lấy trung bình lỗi của tất cả \(n\) lần.</li>
+                <li>Kết quả <strong>không phụ thuộc</strong> vào phép chia ngẫu nhiên.</li>
               </ul>
             </div>
             <!-- LOOCV diagram -->
@@ -226,17 +232,18 @@
           <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <ul>
-                <li>Chia ngẫu nhiên dữ liệu thành \(k\) <span class="keyword">fold</span>.</li>
-                <li>Dùng \(k-1\) fold để train, 1 fold để test.</li>
-                <li>Lặp \(k\) lần.</li>
-                <li>Ước lượng lỗi:
+                <li>Chia dữ liệu thành \(k\) <span class="keyword">fold</span>.</li>
+                <li>Train trên \(k-1\) fold.</li>
+                <li>Kiểm định trên 1 fold.</li>
+                <li>Mỗi fold được kiểm định đúng một lần.</li>
+                <li>Lỗi CV là trung bình lỗi của \(k\) lần:
                   \(
                   \text{CV}_{(k)} = \frac{1}{k}\sum_{i=1}^{k}\text{MSE}_i
                   \)
                 </li>
-                <li>Thực tế dùng \(k = 5\) hoặc \(k = 10\).</li>
-                <li>LOOCV = \(k\)-fold với \(k = n\).</li>
-                <li>Hiệu quả tính toán hơn LOOCV; độ chệch cao hơn một chút.</li>
+                <li>Thường dùng \(k = 5\) hoặc \(k = 10\).</li>
+                <li>LOOCV là trường hợp \(k = n\).</li>
+                <li>Nhanh hơn LOOCV; độ chệch nhỉnh hơn.</li>
               </ul>
             </div>
             <!-- k-fold CV diagram (k=5) -->
@@ -293,17 +300,28 @@
 
         <section style="font-size: 0.8em;">
           <h2>\(k\)-fold CV — Giảm phương sai</h2>
-          <div>
-            Lặp lại nhiều lần chia ngẫu nhiên rồi trung bình → <strong>giảm phương sai</strong> ước lượng.
-          </div>
-          <div style="text-align: center;">
-            <img src="img/lec04a/auto-cv-comparison.svg" alt="Validation set vs LOOCV vs 10-fold CV"
-              style="max-width:50%;" />
-            <p style="font-size:0.75em;color:#666;margin-top:5px;">10-fold CV trên 10 lần chia ngẫu nhiên khác nhau.</p>
+          <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
+            <div>
+              <ul>
+                <li><strong>Phương pháp tập kiểm định:</strong> phụ thuộc vào một lần chia dữ liệu.</li>
+                <li><strong>\(k\)-fold CV:</strong> ổn định hơn vì lấy trung bình trên nhiều fold.</li>
+                <li>Lặp lại \(k\)-fold CV nhiều lần giúp giảm phương sai thêm.</li>
+                <li>Thực tế thường dùng <strong>10-fold CV</strong>.</li>
+              </ul>
+            </div>
+            <div style="text-align: center;">
+              <img src="img/lec04a/auto-cv-comparison.svg" alt="Validation set vs LOOCV vs 10-fold CV"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:5px;">Minh hoạ: 10-fold CV lặp lại trên 10 phép chia ngẫu
+                nhiên.</p>
+            </div>
           </div>
         </section>
 
         <section style="font-size: 0.75em;">
+          <div
+            style="position:absolute;top:10px;right:10px;background:#546E7A;color:white;font-size:0.5em;padding:4px 14px;border-radius:20px;font-weight:bold;z-index:10;">
+            📖 Tự học</div>
           <h2>Ví dụ: Dữ liệu gần tuyến tính</h2>
           <div style="text-align: center;">
             <img src="img/lec04a/cv-nearly-linear-data.png" alt="Nearly Linear Data" style="max-width:100%;" />
@@ -311,6 +329,9 @@
         </section>
 
         <section style="font-size: 0.75em;">
+          <div
+            style="position:absolute;top:10px;right:10px;background:#546E7A;color:white;font-size:0.5em;padding:4px 14px;border-radius:20px;font-weight:bold;z-index:10;">
+            📖 Tự học</div>
           <h2>Ví dụ: Dữ liệu phi tuyến vừa</h2>
           <div style="text-align: center;">
             <img src="img/lec04a/cv-moderately-nonlinear-data.png" alt="Moderately Nonlinear Data"
@@ -319,6 +340,9 @@
         </section>
 
         <section style="font-size: 0.75em;">
+          <div
+            style="position:absolute;top:10px;right:10px;background:#546E7A;color:white;font-size:0.5em;padding:4px 14px;border-radius:20px;font-weight:bold;z-index:10;">
+            📖 Tự học</div>
           <h2>Ví dụ: Dữ liệu phi tuyến mạnh</h2>
           <div style="text-align: center;">
             <img src="img/lec04a/cv-strongly-nonlinear-data.png" alt="Strongly Nonlinear Data"
@@ -331,13 +355,13 @@
           <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <ul>
-                <li>Mục tiêu: tìm độ phức tạp tối ưu (vị trí cực tiểu lỗi).</li>
-                <li>Lỗi kiểm tra dao động → cực tiểu khó xác định chính xác.</li>
-                <li>CV cho ước lượng độ lệch chuẩn của lỗi.</li>
-                <li>Nhiều mô hình có lỗi tương đương nhau.</li>
+                <li>Mục tiêu: chọn độ phức tạp phù hợp.</li>
+                <li>Lỗi CV dao động nên cực tiểu không luôn rõ ràng.</li>
+                <li>CV cho ta cả lỗi trung bình và độ lệch chuẩn.</li>
+                <li>Nhiều mô hình có chất lượng gần như nhau.</li>
               </ul>
-              <p style="margin-top:10px;"><strong>Quy tắc:</strong> chọn mô hình <span class="keyword">đơn giản
-                  nhất</span> trong phạm vi <strong>1 SE</strong> từ điểm tối ưu.</p>
+              <p style="margin-top:10px;"><strong>Quy tắc 1-SE:</strong> chọn mô hình <span class="keyword">đơn giản
+                  nhất</span> nằm trong phạm vi <strong>1 sai số chuẩn</strong> quanh mô hình tốt nhất.</p>
             </div>
             <div style="text-align: center;">
               <img src="img/lec04a/cv-1se-rule-curve.png" alt="One Standard Error Rule" style="max-width:100%;" />
@@ -350,37 +374,46 @@
           <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <ul>
-                <li>Mục tiêu: tìm độ phức tạp tối ưu (vị trí cực tiểu lỗi).</li>
-                <li>Lỗi kiểm tra dao động → cực tiểu khó xác định chính xác.</li>
-                <li>CV cho ước lượng độ lệch chuẩn của lỗi.</li>
-                <li>Nhiều mô hình có lỗi tương đương nhau.</li>
+                <li>Mục tiêu: chọn độ phức tạp phù hợp.</li>
+                <li>Lỗi CV dao động nên cực tiểu không luôn rõ ràng.</li>
+                <li>CV cho ta cả lỗi trung bình và độ lệch chuẩn.</li>
+                <li>Nhiều mô hình có chất lượng gần như nhau.</li>
               </ul>
-              <p style="margin-top:10px;"><strong>Quy tắc:</strong> chọn mô hình <span class="keyword">đơn giản
-                  nhất</span> trong phạm vi <strong>1 SE</strong> từ điểm tối ưu.</p>
+              <p style="margin-top:10px;"><strong>Quy tắc 1-SE:</strong> chọn mô hình <span class="keyword">đơn giản
+                  nhất</span> nằm trong phạm vi <strong>1 sai số chuẩn</strong> quanh mô hình tốt nhất.</p>
             </div>
             <div style="text-align: center;">
-              <img src="img/lec04a/cv-all-subsets-1se-rule.png" alt="One Standard Error Rule" style="max-width:100%;" />
+              <img src="img/lec04b/one-se-rule-esl.svg" alt="One Standard Error Rule" style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:5px;"><em>Subset size</em> = số biến được giữ lại trong
+                mô hình.</p>
             </div>
           </div>
         </section>
 
-        <section style="font-size: 0.72em;">
+        <section style="font-size: 0.75em;">
           <h2>Độ chệch – Phương sai của \(k\)-fold CV</h2>
           <ul>
-            <li>LOOCV: tập train gần giống nhau → ước lượng <span class="keyword">tương quan cao</span> (\(\rho \approx
+            <li><strong>LOOCV:</strong> các tập huấn luyện gần như giống hệt nhau.</li>
+            <li>Vì vậy, lỗi giữa các lần kiểm định có <span class="keyword">tương quan cao</span> (\(\rho \approx
               1\)).</li>
-            <li>\(k\)-fold CV: ít chồng lấp → \(\rho\) thấp → <strong>phương sai thấp hơn</strong>.</li>
+            <li><strong>\(k\)-fold CV:</strong> các tập huấn luyện khác nhau nhiều hơn.</li>
+            <li>Do đó, ước lượng lỗi thường có <strong>phương sai thấp hơn</strong>.</li>
           </ul>
           \[
           \operatorname{Var} = \rho\sigma^2 + \frac{1-\rho}{k}\,\sigma^2
           \]
+          <p style="font-size:0.8em;color:#666;margin-top:4px;"><em>Đây là công thức phương sai của trung bình \(k\)
+              lỗi kiểm định khi các lỗi này có tương quan \(\rho\).</em></p>
           <ul style="margin-top:6px;">
-            <li>Số hạng \(\rho\sigma^2\) không giảm khi tăng \(k\).</li>
-            <li>LOOCV: \(\rho \to 1\) → số hạng đầu thống trị → <strong>phương sai lớn</strong>.</li>
+            <li>\(\rho\) càng lớn thì phương sai càng lớn.</li>
+            <li>Với LOOCV, \(\rho \to 1\) nên số hạng đầu chiếm ưu thế.</li>
           </ul>
         </section>
 
         <section style="font-size: 0.72em;" data-auto-animate="">
+          <div
+            style="position:absolute;top:10px;right:10px;background:#546E7A;color:white;font-size:0.5em;padding:4px 14px;border-radius:20px;font-weight:bold;z-index:10;">
+            📖 Tự học</div>
           <h2>Ví dụ: CV cho Phân lớp</h2>
           <div style="text-align: center;">
             <img src="img/lec04a/cv-classification-logistic-boundaries.png" alt="CV for Classification Example"
@@ -389,6 +422,9 @@
         </section>
 
         <section style="font-size: 0.72em;" data-auto-animate="">
+          <div
+            style="position:absolute;top:10px;right:10px;background:#546E7A;color:white;font-size:0.5em;padding:4px 14px;border-radius:20px;font-weight:bold;z-index:10;">
+            📖 Tự học</div>
           <h2>Ví dụ: CV cho Phân lớp</h2>
           <div style="text-align: center;">
             <img src="img/lec04a/cv-classification-error-logistic-knn.png" alt="CV for Classification Example"
@@ -396,27 +432,27 @@
           </div>
         </section>
 
-        <section style="font-size: 0.75em;">
+        <section style="font-size: 0.7em;">
           <h2>CV sai cách — Ví dụ cảnh báo</h2>
-          <p><strong>Bối cảnh:</strong> \(N=50\) mẫu, 2 lớp; \(p=5000\) đặc trưng Gaussian <em>độc lập hoàn toàn</em>
-            với nhãn.</p>
+          <p><strong>Bối cảnh:</strong> \(N=50\) mẫu, \(K=2\) lớp; \(p=5000\) đặc trưng Gaussian <em>độc lập hoàn
+              toàn</em> với nhãn.</p>
           <p><span class="keyword">Lỗi Bayes = 50%</span> — không thể phân lớp tốt hơn đoán ngẫu
             nhiên.</p>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px;">
             <div>
-              <p><strong>Quy trình đúng:</strong></p>
-              <ol>
-                <li>Chọn đặc trưng tương quan cao nhất.</li>
-                <li>Xây mô hình đa biến.</li>
-                <li>Dùng CV chọn siêu tham số.</li>
-              </ol>
+              <p><strong>Thiết lập:</strong></p>
+              <ul>
+                <li>Không có tín hiệu thật giữa đặc trưng và nhãn.</li>
+                <li>Nếu làm đúng, lỗi phải gần <strong>50%</strong>.</li>
+                <li>Đây là ví dụ để kiểm tra xem CV có đang bị dùng sai không.</li>
+              </ul>
             </div>
             <div>
               <p><strong>Làm sai:</strong></p>
               <ol>
                 <li>Chọn 100 đặc trưng <em>trên toàn bộ \(N\) mẫu</em>.</li>
                 <li>Dùng 1-NN.</li>
-                <li>Chạy CV (50 mô phỏng).</li>
+                <li>Sau đó mới chạy CV.</li>
               </ol>
               <p style="margin-top:8px;">→ CV báo lỗi <span class="keyword">3%</span> thay vì 50%!</p>
             </div>
@@ -427,28 +463,30 @@
           <h2>CV sai cách — Tại sao?</h2>
           <p><strong>Nguyên nhân: <span class="keyword">rò rỉ dữ liệu</span> (data leakage)</strong></p>
           <ul>
-            <li>Chọn đặc trưng trên <em>toàn bộ</em> dữ liệu → tập test đã bị "nhìn".</li>
-            <li>CV chia <em>sau</em> bước lọc → tập test không còn độc lập.</li>
+            <li>Chọn đặc trưng trên <em>toàn bộ</em> dữ liệu → phần dữ liệu dùng để đánh giá đã bị "nhìn".</li>
+            <li>CV chia <em>sau</em> bước lọc → fold kiểm định không còn độc lập.</li>
           </ul>
         </section>
 
-        <section style="font-size: 0.9em;">
+        <section style="font-size: 0.8em;">
           <h2>Làm sai — Minh hoạ</h2>
+          <p><strong>Điều gì xảy ra sau bước chọn đặc trưng sai cách?</strong></p>
           <div style="display:grid;grid-template-columns:1fr .6fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
-              <p><strong>Minh hoạ:</strong></p>
               <ol>
-                <li>Chọn 100 đặc trưng trên toàn bộ \(n\) mẫu.</li>
+                <li>Chọn 100 đặc trưng có tương quan cao nhất trên toàn bộ \(N\) mẫu.</li>
                 <li>Lấy ngẫu nhiên 10 mẫu.</li>
                 <li>Tính tương quan trên 10 mẫu đó.</li>
               </ol>
-              <p style="margin-top:8px;">Tương quan trung bình = <strong>28%</strong> (thực tế = 0%).</p>
             </div>
             <div style="text-align: center;">
-              <img src="img/lec04a/cv-wrong-way-variable-selection.png" alt="Wrong Way Example"
+              <img src="img/lec04a/cv-wrong-way-variable-selection.svg" alt="Wrong Way Example"
                 style="max-width:100%;" />
             </div>
           </div>
+          <p style="margin-top:8px;">Tương quan trung bình = <strong>28%</strong> (thực tế = 0%).</p>
+          <p style="margin-top:8px;">→ Bước chọn đặc trưng đã tạo ra <span class="keyword">tương quan giả</span>.
+          </p>
         </section>
 
         <section style="font-size: 0.72em;">
@@ -470,7 +508,7 @@
               <p style="font-size:0.85em;color:#555;">Gom cụm không dùng nhãn: có thể thực hiện trước khi chia fold.</p>
             </div>
             <div style="text-align: center;">
-              <img src="img/lec04a/cv-right-way-variable-selection.png" alt="Right Way Example"
+              <img src="img/lec04a/cv-right-way-variable-selection.svg" alt="Right Way Example"
                 style="max-width:100%;" />
             </div>
           </div>
@@ -485,20 +523,20 @@
               <li><strong>Tập kiểm định</strong>: chọn mô hình.</li>
               <li><strong>Tập kiểm tra</strong>: đánh giá mô hình cuối.</li>
             </ol>
-            <p style="margin-top:8px;">Tỷ lệ điển hình: <strong>50% / 25% / 25%</strong>.</p>
+            <p style="margin-top:8px;">Một cách chia thường gặp: <strong>50% / 25% / 25%</strong>.</p>
           </div>
           <div style="width:100%;font-family:sans-serif;font-size:.6em;">
             <!-- Bar -->
             <div style="display:flex;border-radius:6px;overflow:hidden;height:52px;">
               <div
                 style="flex:2;background:#4a90d9;display:flex;align-items:center;justify-content:center;color:white;font-size:1em;">
-                Train</div>
+                Huấn luyện</div>
               <div
                 style="flex:1;background:#5aaa44;display:flex;align-items:center;justify-content:center;color:white;font-size:1em;">
-                Validate</div>
+                Kiểm định</div>
               <div
                 style="flex:1;background:#e8732a;display:flex;align-items:center;justify-content:center;color:white;font-size:1em;">
-                Test</div>
+                Kiểm tra</div>
             </div>
             <!-- Percentages -->
             <div style="display:flex;margin-top:6px;font-size:0.85em;color:#444;">
@@ -516,7 +554,10 @@
         </section>
 
         <section style="font-size: 0.78em;">
-          <h2>Kiểm định chéo lồng nhau (Nested CV)</h2>
+          <div
+            style="position:absolute;top:10px;right:10px;background:#546E7A;color:white;font-size:0.5em;padding:4px 14px;border-radius:20px;font-weight:bold;z-index:10;">
+            📖 Tự học</div>
+          <h2>Kiểm định chéo lồng nhau <br /> (Nested CV)</h2>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;align-items:start;">
             <div>
               <p><strong>Mục đích:</strong> tối ưu siêu tham số và đánh giá tách biệt nhau.</p>
@@ -553,9 +594,10 @@
           </ul>
         </section>
 
-        <section style="font-size: 0.85em;" data-auto-animate>
-          <h2>Bootstrap là gì?</h2>
-          <p style="margin-top:10px;"><strong>Ví dụ:</strong> đầu tư vào hai tài sản lợi suất \(X\) và \(Y\).</p>
+        <section style="font-size: 0.85em;">
+          <h2>Ví dụ: Ước lượng tỷ lệ đầu tư</h2>
+          <p style="margin-top:10px;"><strong>Ví dụ:</strong> ước lượng tỷ lệ đầu tư tối ưu giữa hai tài sản \(X\) và
+            \(Y\).</p>
           <ul>
             <li>Đầu tư tỷ lệ \(\alpha\) vào \(X\), \(1-\alpha\) vào \(Y\).</li>
             <li>Mục tiêu: chọn \(\alpha\) tối thiểu hoá \(\text{Var}(\alpha X + (1-\alpha)Y)\).</li>
@@ -565,22 +607,12 @@
           \hat{\alpha} = \frac{\hat{\sigma}_Y^2 - \hat{\sigma}_{XY}}{\hat{\sigma}_X^2 + \hat{\sigma}_Y^2 -
           2\hat{\sigma}_{XY}}
           \]
-          <p style="font-size:0.85em;color:#666;">\(\hat{\alpha}\) phụ thuộc ước lượng mẫu — làm sao biết độ không chắc
-            chắn của \(\hat{\alpha}\)?</p>
-        </section>
-
-        <section style="font-size: 0.85em;" data-auto-animate>
-          <h2>Bootstrap là gì?</h2>
-          <div style="text-align: center;">
-            <img src="img/lec04a/bootstrap-repeated-sampling.svg" alt="Bootstrap Concept" style="max-width:100%;" />
-            <p style="font-size:0.8em;color:#555;margin-top:6px;">Ước lượng \(\hat{\alpha}\) thay đổi như thế nào khi ta
-              <em>lặp lại</em> lấy 100 mẫu?
-            </p>
-          </div>
+          <p style="font-size:0.85em;color:#666;">Câu hỏi: \(\hat{\alpha}\) dao động nhiều hay ít khi dữ liệu thay
+            đổi?</p>
         </section>
 
         <section style="font-size: 0.7em;" data-auto-animate>
-          <h2>Bootstrap — Lặp lại lấy mẫu</h2>
+          <h2>Nếu có thể lấy nhiều mẫu mới...</h2>
           <div>
             <p>Nếu có thể lấy mẫu nhiều lần từ phân phối thực:</p>
             <ul>
@@ -590,33 +622,37 @@
           </div>
           <div style="text-align: center;" data-id="bootstrap-distribution">
             <img src="img/lec04a/bootstrap-alpha-distribution.svg" alt="Bootstrap Distribution"
-              style="max-width:60%;" />
+              style="max-width:70%;" />
             <p style="font-size:0.8em;color:#555;margin-top:4px;">Trái: phân phối 1000 ước lượng \(\hat{\alpha}\) từ lấy
               mẫu lặp lại. Phải: so sánh phân phối thực và bootstrap.</p>
           </div>
         </section>
 
         <section style="font-size: 0.7em;" data-auto-animate>
-          <h2>Bootstrap — Lặp lại lấy mẫu</h2>
+          <h2>Bootstrap: lấy mẫu có hoàn lại</h2>
           <div>
-            <p style="margin-top:8px;"><strong>Thực tế:</strong> không có mẫu mới → <span class="keyword">lấy mẫu lặp
-                lại</span> (re-sample) từ dữ liệu gốc.</p>
+            <p style="margin-top:8px;"><strong>Thực tế:</strong> không có mẫu mới. Bootstrap <span class="keyword">bắt
+                chước</span> quá trình đó bằng cách lấy mẫu có hoàn lại từ dữ liệu
+              gốc.</p>
             <ul>
-              <li>\(B=1000\) tập bootstrap \(Z^{*1}, \ldots, Z^{*B}\), mỗi tập cỡ \(n\).</li>
+              <li>\(B=1000\) mẫu bootstrap \(Z^{*1}, \ldots, Z^{*B}\), mỗi mẫu có cỡ \(n\).</li>
               <li>\(\widehat{\text{SE}}_B(\hat{\alpha}) = \sqrt{\dfrac{1}{B-1}\sum_{b=1}^{B}\left(\hat{\alpha}^{*b} -
                 \bar{\hat{\alpha}}^*\right)^2}\)</li>
             </ul>
           </div>
           <div style="text-align: center;" data-id="bootstrap-distribution">
             <img src="img/lec04a/bootstrap-alpha-distribution.svg" alt="Bootstrap Distribution"
-              style="max-width:60%;" />
+              style="max-width:70%;" />
             <p style="font-size:0.8em;color:#555;margin-top:4px;">Trái: phân phối 1000 ước lượng \(\hat{\alpha}\) từ
               lấy mẫu lặp lại. Phải: so sánh phân phối thực và bootstrap.</p>
           </div>
         </section>
 
         <section style="font-size: 0.78em;">
-          <h2>Ví dụ: Bootstrap trên tập dữ liệu nhỏ</h2>
+          <div
+            style="position:absolute;top:10px;right:10px;background:#546E7A;color:white;font-size:0.5em;padding:4px 14px;border-radius:20px;font-weight:bold;z-index:10;">
+            📖 Tự học</div>
+          <h2>Ví dụ: Bootstrap<br />trên tập dữ liệu nhỏ</h2>
           <div style="text-align: center;">
             <img src="img/lec04a/bootstrap-resampling-diagram.svg" alt="Bootstrap Sampling" style="max-width:55%;" />
             <p style="font-size:0.8em;color:#555;margin-top:4px;">Lấy mẫu lặp lại có hoàn lại từ tập dữ liệu gốc \(Z\)
@@ -649,7 +685,7 @@
             <li><strong>Lấy mẫu lại</strong> (resampling): rút mẫu nhiều lần từ dữ liệu hiện có, dùng cho:
               <ul>
                 <li><span class="keyword">Đánh giá độ biến động</span> của mô hình.</li>
-                <li><span class="keyword">Đánh giá mô hình</span> (model assessment): ước lượng lỗi kiểm tra.</li>
+                <li><span class="keyword">Đánh giá mô hình</span> (model assessment): ước lượng lỗi tổng quát hoá.</li>
                 <li><span class="keyword">Lựa chọn mô hình</span> (model selection): tối ưu hiệu năng.</li>
               </ul>
             </li>
@@ -670,18 +706,19 @@
             <tbody>
               <tr>
                 <td style="border:1px solid #ccc;padding:8px 12px;">Dữ liệu lớn</td>
-                <td style="border:1px solid #ccc;padding:8px 12px;"><strong>Validation Set</strong></td>
+                <td style="border:1px solid #ccc;padding:8px 12px;"><strong>Phương pháp tập kiểm định</strong></td>
                 <td style="border:1px solid #ccc;padding:8px 12px;">Nhanh, đủ dữ liệu cho cả 3 tập</td>
               </tr>
               <tr style="background:#fafafa;">
                 <td style="border:1px solid #ccc;padding:8px 12px;">Dữ liệu vừa</td>
-                <td style="border:1px solid #ccc;padding:8px 12px;"><strong>k-fold CV</strong> (k = 5–10)</td>
-                <td style="border:1px solid #ccc;padding:8px 12px;">Cân bằng bias–variance</td>
+                <td style="border:1px solid #ccc;padding:8px 12px;"><strong>Kiểm định chéo k-fold</strong> (k = 5–10)
+                </td>
+                <td style="border:1px solid #ccc;padding:8px 12px;">Cân bằng độ chệch – phương sai</td>
               </tr>
               <tr>
                 <td style="border:1px solid #ccc;padding:8px 12px;">Dữ liệu nhỏ</td>
                 <td style="border:1px solid #ccc;padding:8px 12px;"><strong>LOOCV</strong></td>
-                <td style="border:1px solid #ccc;padding:8px 12px;">Ít bias nhất</td>
+                <td style="border:1px solid #ccc;padding:8px 12px;">Độ chệch thấp nhất</td>
               </tr>
               <tr style="background:#fafafa;">
                 <td style="border:1px solid #ccc;padding:8px 12px;">Cần khoảng tin cậy</td>
@@ -690,7 +727,7 @@
               </tr>
               <tr>
                 <td style="border:1px solid #ccc;padding:8px 12px;">Tối ưu siêu tham số + đánh giá cuối</td>
-                <td style="border:1px solid #ccc;padding:8px 12px;"><strong>Nested CV</strong></td>
+                <td style="border:1px solid #ccc;padding:8px 12px;"><strong>Kiểm định chéo lồng nhau</strong></td>
                 <td style="border:1px solid #ccc;padding:8px 12px;">Tránh ước lượng lỗi quá thấp</td>
               </tr>
             </tbody>
