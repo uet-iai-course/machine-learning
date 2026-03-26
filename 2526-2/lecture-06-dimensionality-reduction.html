@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Bài 6: Giảm chiều dữ liệu</title>
+  <link rel="stylesheet" href="revealjs/dist/reset.css" />
+  <link rel="stylesheet" href="revealjs/dist/reveal.css" />
+  <link rel="stylesheet" href="revealjs/dist/theme/white.css" />
+  <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+  <link rel="stylesheet" href="lecture-style.css" />
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- OPENING: Title + Agenda -->
+      <section>
+        <section>
+          <h1>Học máy</h1>
+          <h3>Bài 6: Giảm chiều dữ liệu</h3>
+          <p>Trường ĐH Công nghệ – Đại học Quốc gia Hà Nội</p>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>Nội dung</h2>
+          <ol style="line-height:1.15em;">
+            <li>Tổng quan <a href="#tong-quan">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Học không giám sát, động lực giảm chiều</span>
+            </li>
+            <li>Phân tích thành phần chính (PCA) <a href="#pca">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Định nghĩa, tính toán, diễn giải, chọn số thành phần</span>
+            </li>
+            <li>Chia tỷ lệ đa chiều (MDS) <a href="#mds">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Sammon mapping, Kruskal-Shepard, quan hệ với PCA</span>
+            </li>
+            <li>t-SNE <a href="#tsne">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">SNE, phân phối t, vấn đề chật chội, ưu nhược điểm</span>
+            </li>
+          </ol>
+        </section>
+      </section>
+
+      <!-- PART 1: Tổng quan -->
+      <section>
+        <section id="tong-quan">
+          <h1>
+            <span class="text-light">1.</span><br />
+            Tổng quan
+          </h1>
+        </section>
+
+        <section style="font-size: 0.75em;">
+          <h2>Học có giám sát vs. không giám sát</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;">
+            <div style="border:2px solid #4a90d9;border-radius:8px;padding:12px;">
+              <p style="text-align:center;font-weight:bold;color:#4a90d9;margin:0 0 6px;">Học có giám sát</p>
+              <ul style="margin:0;">
+                <li>Có nhãn đầu ra \(Y\) kèm đặc trưng \(X_1,\ldots,X_p\)</li>
+                <li>Mục tiêu: <strong>dự đoán</strong> \(Y\) từ \(X\)</li>
+                <li>Đánh giá rõ ràng qua sai số kiểm tra</li>
+                <li>Hồi quy, phân lớp, ...</li>
+              </ul>
+            </div>
+            <div style="border:2px solid #e8732a;border-radius:8px;padding:12px;">
+              <p style="text-align:center;font-weight:bold;color:#e8732a;margin:0 0 6px;">Học không giám sát</p>
+              <ul style="margin:0;">
+                <li>Chỉ có đặc trưng \(X_1,\ldots,X_p\), <strong>không có nhãn</strong></li>
+                <li>Mục tiêu: khám phá <strong>cấu trúc ẩn</strong> trong dữ liệu</li>
+                <li>Khó đánh giá chất lượng kết quả</li>
+                <li>Phân cụm, giảm chiều, ...</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Học không giám sát</h2>
+          <p>Không có câu hỏi mục tiêu rõ ràng — mang tính <strong>khám phá</strong>:</p>
+          <ul>
+            <li>Tìm các mẫu, nhóm, hoặc cụm trong biến hoặc quan sát</li>
+            <li><strong>Chiếu</strong> dữ liệu từ không gian chiều cao xuống chiều thấp</li>
+            <li>Trực quan hóa dữ liệu một cách có thông tin</li>
+            <li>Phát hiện bất thường (anomaly detection)</li>
+          </ul>
+          <p style="margin-top:8px;"><strong>Ưu điểm:</strong></p>
+          <ul>
+            <li>Dữ liệu không nhãn dễ thu thập hơn nhiều</li>
+            <li>Nhiều bài toán thú vị nhất lại là không giám sát — tập trung vào <em>khám phá</em></li>
+          </ul>
+          <p style="margin-top:8px;color:#555;"><strong>Ví dụ:</strong>
+            phân nhóm ung thư theo đặc trưng gen; phân tích hành vi mua sắm; gợi ý phim theo đánh giá người dùng.</p>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Động lực giảm chiều</h2>
+          <p>Dữ liệu chiều cao đặt ra nhiều thách thức:</p>
+          <ul>
+            <li>Khó trực quan hóa khi \(p > 3\)</li>
+            <li>Nhiều chiều tương quan gây khó khăn cho các thuật toán</li>
+            <li>Tính toán tốn kém do hàm khoảng cách phức tạp</li>
+          </ul>
+          <p style="margin-top:8px;"><span class="keyword">Lời nguyền chiều dữ liệu</span> (curse of dimensionality):</p>
+          <ul>
+            <li>Cần lượng dữ liệu tăng theo hàm mũ để mô tả mật độ</li>
+            <li>Khoảng cách giữa các điểm trở nên vô nghĩa — tất cả gần bằng nhau</li>
+          </ul>
+          <p style="margin-top:8px;"><strong>Thực tế:</strong> dữ liệu thường nằm trên một
+            <span class="keyword">đa tạp chiều thấp</span> nhúng trong không gian chiều cao —
+            <strong>Mục tiêu:</strong> giảm chiều trong khi <em>bảo toàn cấu trúc</em>.</p>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Các phương pháp giảm chiều</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
+            <div style="border:1px solid #ccc;border-radius:8px;padding:10px;background:#f9f9f9;">
+              <p style="text-align:center;font-weight:bold;color:#4a90d9;margin:0 0 6px;">PCA</p>
+              <p style="margin:0;">Tìm các hướng phương sai lớn nhất — bảo toàn <strong>cấu trúc toàn cục</strong></p>
+              <p style="font-size:0.8em;color:#888;margin-top:6px;">1901</p>
+            </div>
+            <div style="border:1px solid #ccc;border-radius:8px;padding:10px;background:#f9f9f9;">
+              <p style="text-align:center;font-weight:bold;color:#e8732a;margin:0 0 6px;">MDS</p>
+              <p style="margin:0;">Chiếu khoảng cách chiều cao xuống chiều thấp — bảo toàn <strong>khoảng cách</strong></p>
+              <p style="font-size:0.8em;color:#888;margin-top:6px;">1969</p>
+            </div>
+            <div style="border:1px solid #ccc;border-radius:8px;padding:10px;background:#f9f9f9;">
+              <p style="text-align:center;font-weight:bold;color:#5aaa44;margin:0 0 6px;">t-SNE</p>
+              <p style="margin:0;">Bảo toàn <strong>cấu trúc cục bộ</strong> (láng giềng gần)</p>
+              <p style="font-size:0.8em;color:#888;margin-top:6px;">2008</p>
+            </div>
+          </div>
+          <p style="margin-top:12px;text-align:center;color:#555;">PCA có thể dẫn đến bất nhất cục bộ —
+            các điểm xa có thể trở thành láng giềng gần sau khi chiếu</p>
+        </section>
+      </section>
+
+      <!-- PART 2: PCA -->
+      <section>
+        <section id="pca">
+          <h1>
+            <span class="text-light">2.</span><br />
+            Phân tích thành phần chính<br>
+            <span style="font-size:0.6em;">(Principal Component Analysis)</span>
+          </h1>
+        </section>
+
+        <section style="font-size: 0.72em;" data-auto-animate>
+          <h2>Ý tưởng trực quan</h2>
+          <div style="display:grid;grid-template-columns:1fr .9fr;gap:12px;margin-top:6px;align-items:start;">
+            <div>
+              <p>Dữ liệu dân số và chi tiêu quảng cáo của 100 thành phố:</p>
+              <ul>
+                <li>Dữ liệu <strong>gần tuyến tính</strong> theo một hướng, phương sai nhỏ theo hướng thứ hai</li>
+                <li><strong>PC1</strong> (đường liền): hướng có phương sai lớn nhất</li>
+                <li><strong>PC2</strong> (đường chấm): vuông góc với PC1</li>
+                <li>Phần lớn biến động nằm dọc theo PC1</li>
+                <li>PC định nghĩa <em>hệ tọa độ mới</em></li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec06/pca-pop-ad-scatter.svg" alt="PCA trên dữ liệu dân số và quảng cáo"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Dân số vs. quảng cáo — hướng PC1 và PC2</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.72em;" data-auto-animate>
+          <h2>Định nghĩa chính thức</h2>
+          <p><strong>Thành phần chính thứ nhất</strong> là tổ hợp tuyến tính của các biến đã chuẩn hóa trung bình:</p>
+          <p style="text-align:center;">
+            \[ Z_1 = \sum_{j=1}^{p} \phi_{j1}(X_j - \bar{X}_j) \]
+          </p>
+          <ul>
+            <li>Ràng buộc chuẩn hóa: \(\phi_{11}^2 + \phi_{21}^2 + \cdots + \phi_{p1}^2 = 1\) (tránh co giãn tùy ý)</li>
+            <li>Tìm \(\phi_{j1}\) sao cho phương sai \(Z_1\) lớn nhất</li>
+            <li>\(\phi_{j1}\) gọi là <span class="keyword">hệ số tải</span> (loading) của PC1</li>
+            <li>\(z_{i1}\) gọi là <span class="keyword">điểm thành phần chính</span> (PC score)</li>
+            <li>PC thứ \(j\) là hướng vuông góc với mọi PC trước, có phương sai còn lại lớn nhất</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>PC1 và PC2 — Hai cách hiểu tương đương</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px;">
+            <div style="border-left:4px solid #4a90d9;padding-left:12px;">
+              <p><strong>Cực đại phương sai</strong></p>
+              <ul>
+                <li>PC1: hướng mà hình chiếu dữ liệu có phương sai lớn nhất</li>
+                <li>PC2: hướng vuông góc với PC1, phương sai còn lại lớn nhất</li>
+              </ul>
+            </div>
+            <div style="border-left:4px solid #e8732a;padding-left:12px;">
+              <p><strong>Cực tiểu khoảng cách</strong></p>
+              <ul>
+                <li>PC1: đường thẳng gần nhất với tất cả các điểm (tổng bình phương khoảng cách từ điểm đến đường nhỏ nhất)</li>
+                <li>PC hyperplane: siêu phẳng bảo toàn dữ liệu tốt nhất</li>
+              </ul>
+            </div>
+          </div>
+          <p style="margin-top:16px;text-align:center;border-top:1px solid #ddd;padding-top:12px;">
+            <strong>Diễn giải 3:</strong> PCA tìm phép biến đổi tuyến tính sang hệ tọa độ mới
+            trong đó dữ liệu <em>không tương quan tuyến tính</em>
+          </p>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Ví dụ: Tập dữ liệu USArrests</h2>
+          <div style="display:grid;grid-template-columns:1fr .85fr;gap:16px;margin-top:10px;align-items:start;">
+            <div>
+              <p>Tỷ lệ bắt giữ trên 100.000 dân tại các tiểu bang Mỹ (1973), 50 quan sát, 4 biến:</p>
+              <ul>
+                <li><code>Murder</code>: số vụ giết người</li>
+                <li><code>Assault</code>: số vụ tấn công</li>
+                <li><code>UrbanPop</code>: % dân đô thị</li>
+                <li><code>Rape</code>: số vụ hiếp dâm</li>
+              </ul>
+              <table style="font-size:0.85em;margin-top:10px;border-collapse:collapse;width:100%;">
+                <thead>
+                  <tr style="background:#e8e8e8;">
+                    <th style="padding:4px 8px;text-align:left;">Biến</th>
+                    <th style="padding:4px 8px;text-align:center;">PC1</th>
+                    <th style="padding:4px 8px;text-align:center;">PC2</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td style="padding:4px 8px;">Murder</td><td style="text-align:center;">0.536</td><td style="text-align:center;">−0.418</td></tr>
+                  <tr style="background:#f8f8f8;"><td style="padding:4px 8px;">Assault</td><td style="text-align:center;">0.583</td><td style="text-align:center;">−0.188</td></tr>
+                  <tr><td style="padding:4px 8px;">UrbanPop</td><td style="text-align:center;">0.278</td><td style="text-align:center;">0.873</td></tr>
+                  <tr style="background:#f8f8f8;"><td style="padding:4px 8px;">Rape</td><td style="text-align:center;">0.543</td><td style="text-align:center;">0.167</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec06/pca-usarrests-biplot.svg" alt="Biplot PCA trên dữ liệu USArrests"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Biplot PCA — USArrests</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>Diễn giải kết quả PCA — USArrests</h2>
+          <ul>
+            <li>Các biến tội phạm (<code>Murder</code>, <code>Assault</code>, <code>Rape</code>) tương quan cao —
+              vectơ tải chỉ gần cùng hướng</li>
+            <li><code>UrbanPop</code> ít tương quan hơn với tội phạm</li>
+          </ul>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px;">
+            <div style="border-left:4px solid #4a90d9;padding-left:12px;">
+              <p><strong>PC1</strong> phản ánh <em>tỷ lệ tội phạm</em></p>
+              <ul>
+                <li>Cao: California, Nevada, Florida</li>
+                <li>Thấp: West Virginia, Dakotas</li>
+              </ul>
+            </div>
+            <div style="border-left:4px solid #e8732a;padding-left:12px;">
+              <p><strong>PC2</strong> phản ánh <em>mức độ đô thị hóa</em></p>
+              <ul>
+                <li>Cao: California, New Jersey</li>
+                <li>Thấp: Carolinas, Mississippi</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>Chọn số thành phần chính</h2>
+          <div style="display:grid;grid-template-columns:1fr .85fr;gap:16px;margin-top:10px;align-items:start;">
+            <div>
+              <p><strong>Tỷ lệ phương sai được giải thích (PVE):</strong></p>
+              <p>\[
+                \text{PVE}_m = \frac{\text{Var}(Z_m)}{\sum_{j=1}^{p}\text{Var}(X_j)}
+              \]</p>
+              <ul>
+                <li>Nếu mục tiêu là <strong>trực quan hóa</strong>: chọn 2 hoặc 3 PC</li>
+                <li>Nếu mục tiêu là <strong>tiền xử lý</strong>: chọn \(k\) PC sao cho PVE tích lũy đạt ngưỡng (ví dụ: 90%)</li>
+                <li>Tìm <span class="keyword">điểm gãy khuỷu</span> (elbow) trên biểu đồ PVE</li>
+                <li>Có thể dùng <strong>kiểm định chéo</strong> trên sai số của tác vụ cuối</li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec06/pca-scree-plot.svg" alt="Biểu đồ PVE (scree plot)"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Biểu đồ PVE — tìm điểm khuỷu</em></p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- PART 3: MDS -->
+      <section>
+        <section id="mds">
+          <h1>
+            <span class="text-light">3.</span><br />
+            Chia tỷ lệ đa chiều<br>
+            <span style="font-size:0.6em;">(Multidimensional Scaling)</span>
+          </h1>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>Động lực — Hạn chế của PCA</h2>
+          <p>PCA tìm <strong>cấu trúc toàn cục</strong> (tuyến tính) trong dữ liệu:</p>
+          <ul>
+            <li>Có thể dẫn đến <strong>bất nhất cục bộ</strong></li>
+            <li>Các điểm ở xa nhau có thể trở thành láng giềng gần sau khi chiếu</li>
+          </ul>
+          <p style="margin-top:14px;"><strong>Ý tưởng:</strong> Thay vì bảo toàn phương sai (cấu trúc toàn cục),
+            hãy <span class="keyword">bảo toàn khoảng cách</span> (cấu trúc cục bộ).</p>
+          <p style="margin-top:10px;font-size:0.88em;color:#555;">
+            Đây là cơ sở của MDS (Multidimensional Scaling) hay còn gọi là Sammon Mapping.
+          </p>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Chia tỷ lệ đa chiều (MDS)</h2>
+          <p>Tìm biểu diễn \(z_1,\ldots,z_N \in \mathbb{R}^k\) sao cho khoảng cách được bảo toàn — tối thiểu hóa <span class="keyword">hàm stress</span>:</p>
+          <p style="margin-top:10px;"><strong>Kruskal-Shepard:</strong></p>
+          <p style="text-align:center;">
+            \[ S_M = \sum_{i \neq i'} \left(d_{ii'} - \|z_i - z_{i'}\|\right)^2 \]
+          </p>
+          <p style="margin-top:6px;"><strong>Sammon mapping</strong> — nhấn mạnh khoảng cách <em>nhỏ</em>:</p>
+          <p style="text-align:center;">
+            \[ S_{Sm} = \sum_{i \neq i'} \frac{(d_{ii'} - \|z_i - z_{i'}\|)^2}{d_{ii'}} \]
+          </p>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>Quan hệ giữa MDS và PCA</h2>
+          <p><strong>Tối thiểu hóa</strong> bằng gradient descent. Với <em>classic scaling</em>:</p>
+          <ul>
+            <li>Dùng tích vô hướng có tâm (centered inner product):
+              \[ s_{ii'} = \langle x_i - \bar{x},\; x_{i'} - \bar{x} \rangle \]
+            </li>
+            <li>Hàm mục tiêu:
+              \[ S_C(z_1,\ldots,z_N) = \sum_{i,i'}\left(s_{ii'} - \langle z_i - \bar{z},\; z_{i'} - \bar{z}\rangle\right)^2 \]
+            </li>
+            <li>Nghiệm theo eigenvectors của ma trận tương đồng</li>
+          </ul>
+          <blockquote style="border-left:3px solid #4a90d9;padding-left:10px;margin-top:12px;color:#333;">
+            Nếu độ tương đồng là tích vô hướng có tâm, thì MDS classic <strong>chính xác là PCA</strong>.
+          </blockquote>
+          <p style="margin-top:10px;font-size:0.88em;color:#555;">
+            MDS chỉ cần ma trận độ tương đồng / bất đồng — không cần tọa độ điểm thực tế.
+          </p>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>MDS phi tham số (Non-metric MDS)</h2>
+          <p>Phiên bản Shepard-Kruskal <strong>chỉ cần thứ hạng</strong> của khoảng cách:</p>
+          <p style="text-align:center;">
+            \[ S_{NM}(z_1,\ldots,z_N) = \frac{\sum_{i \neq i'}\left(\|z_i - z_{i'}\| - \theta(d_{ii'})\right)^2}{\sum_{i \neq i'}\|z_i - z_{i'}\|^2} \]
+          </p>
+          <ul>
+            <li>\(\theta\) là hàm tăng đơn điệu tùy ý</li>
+            <li>Với \(\theta\) cố định: tối thiểu hóa theo \(z_i\) bằng gradient descent</li>
+            <li>Với \(z_i\) cố định: tìm \(\theta\) đơn điệu tốt nhất bằng "isotonic regression"</li>
+          </ul>
+          <p style="margin-top:12px;font-size:0.88em;color:#555;"><strong>Ứng dụng:</strong>
+            phân tích kháng nguyên virus cúm (79 chiều → 2D), dự đoán kháng nguyên tương tự theo năm.</p>
+        </section>
+      </section>
+
+      <!-- PART 4: t-SNE -->
+      <section>
+        <section id="tsne">
+          <h1>
+            <span class="text-light">4.</span><br />
+            t-SNE
+          </h1>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>Nhúng láng giềng ngẫu nhiên (SNE)</h2>
+          <p>Ý tưởng: Thay vì bảo toàn khoảng cách, hãy bảo toàn
+            <span class="keyword">xác suất láng giềng</span>:</p>
+          <!-- Pipeline diagram -->
+          <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin:18px 0;font-size:0.9em;">
+            <div style="border:2px solid #4a90d9;border-radius:8px;padding:10px 16px;text-align:center;">
+              <div style="font-weight:bold;color:#4a90d9;">X</div>
+              <div style="font-size:0.75em;color:#555;">dữ liệu gốc<br>\(\mathbb{R}^p\)</div>
+            </div>
+            <div style="font-size:1.5em;color:#888;">&#x2192;</div>
+            <div style="border:2px solid #4a90d9;border-radius:8px;padding:10px 16px;text-align:center;background:#e8f0fb;">
+              <div style="font-weight:bold;color:#4a90d9;">P</div>
+              <div style="font-size:0.75em;color:#555;">độ tương đồng<br>chiều cao</div>
+            </div>
+            <div style="font-size:1.5em;color:#c0392b;font-weight:bold;">&#x2248;</div>
+            <div style="border:2px solid #e8732a;border-radius:8px;padding:10px 16px;text-align:center;background:#fdf0e5;">
+              <div style="font-weight:bold;color:#e8732a;">Q</div>
+              <div style="font-size:0.75em;color:#555;">độ tương đồng<br>chiều thấp</div>
+            </div>
+            <div style="font-size:1.5em;color:#888;">&#x2190;</div>
+            <div style="border:2px solid #e8732a;border-radius:8px;padding:10px 16px;text-align:center;">
+              <div style="font-weight:bold;color:#e8732a;">Z</div>
+              <div style="font-size:0.75em;color:#555;">biểu diễn<br>\(\mathbb{R}^k\)</div>
+            </div>
+          </div>
+          <ul style="margin-top:4px;">
+            <li>\(p_{j|i}\): xác suất điểm \(x_i\) "muốn" \(x_j\) là láng giềng trong không gian gốc</li>
+            <li>\(q_{j|i}\): xác suất tương tự trong không gian chiều thấp</li>
+            <li>Tìm \(z_i\) sao cho \(Q_i \approx P_i\) cho mọi điểm \(i\)</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>Độ tương đồng chiều cao</h2>
+          <p><strong>Dùng kernel Gaussian xung quanh mỗi điểm \(x_i\):</strong></p>
+          <p style="text-align:center;">
+            \[ p_{j|i} \propto \exp\!\left(-\frac{\|x_j - x_i\|^2}{2\sigma_i^2}\right) \]
+          </p>
+          <p style="text-align:center;">
+            \[ P_i \propto \mathcal{N}(x_i,\, \sigma_i^2) \]
+          </p>
+          <ul>
+            <li>Chọn \(\sigma_i^2\) để đạt <span class="keyword">perplexity</span> cố định:
+              \(\text{Perp}(P_i) = 2^{H(P_i)}\)</li>
+            <li>Perplexity điều khiển <em>số láng giềng hiệu dụng</em> của mỗi điểm</li>
+            <li>Giá trị perplexity thường dùng: 5 – 50</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>Độ tương đồng chiều thấp &amp; Hàm mục tiêu</h2>
+          <p><strong>SNE gốc</strong> dùng Gaussian trong không gian biểu diễn:</p>
+          <p style="text-align:center;">
+            \[ q_{j|i} \propto \exp\!\left(-\|z_j - z_i\|^2\right) \]
+          </p>
+          <p style="margin-top:8px;"><strong>Hàm mục tiêu</strong> — tổng phân kỳ KL:</p>
+          <p style="text-align:center;">
+            \[ C = \sum_i KL(P_i \| Q_i) = \sum_i \sum_j p_{j|i} \log \frac{p_{j|i}}{q_{j|i}} \]
+          </p>
+          <ul style="margin-top:6px;">
+            <li>Tối thiểu hóa bằng gradient descent</li>
+            <li>Gradient hiểu như <em>lực hút/đẩy</em>: cặp gần trong \(P\) nhưng xa trong \(Q\) bị kéo lại gần</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Phân kỳ KL</h2>
+          <p>Đo "khoảng cách" giữa hai phân phối:</p>
+          <p style="text-align:center;">
+            \[ KL(P \| Q) = \sum_j p_j \log \frac{p_j}{q_j} = H(P,Q) - H(P) \]
+          </p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;">
+            <div>
+              <p><strong>Tính chất:</strong></p>
+              <ul>
+                <li>\(KL(P \| Q) \geq 0\)</li>
+                <li>\(KL(P \| Q) = 0\) khi và chỉ khi \(P = Q\)</li>
+                <li><strong>Bất đối xứng:</strong> \(KL(P\|Q) \neq KL(Q\|P)\)</li>
+              </ul>
+            </div>
+            <div>
+              <p><strong>Ý nghĩa trong SNE:</strong></p>
+              <ul>
+                <li>Phạt nặng khi \(q_{j|i}\) nhỏ mà \(p_{j|i}\) lớn</li>
+                <li>Hai điểm <em>gần nhau</em> trong không gian gốc phải <em>gần nhau</em> trong biểu diễn mới</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.75em;">
+          <h2>Vấn đề chật chội (Crowding Problem)</h2>
+          <div style="display:grid;grid-template-columns:1fr .9fr;gap:14px;margin-top:8px;align-items:start;">
+            <div>
+              <p><strong>Vấn đề:</strong> Không gian chiều thấp có <em>thể tích nhỏ hơn nhiều</em>:</p>
+              <ul>
+                <li>Thể tích cầu bán kính \(r\) trong \(d\) chiều: \(V \propto r^d\)</li>
+                <li>Khi \(d\) tăng, thể tích tăng mạnh</li>
+                <li>Khi chiếu xuống \(k \ll d\), không đủ chỗ cho các điểm ở khoảng cách hợp lý</li>
+                <li>Các điểm trung bình và xa bị <strong>dồn cục</strong> vào trung tâm</li>
+              </ul>
+              <p style="margin-top:8px;"><strong>Giải pháp:</strong> Dùng phân phối đuôi nặng hơn!</p>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec06/tsne-gaussian-vs-tdist.svg" alt="So sánh Gaussian và phân phối t"
+                style="max-width:100%;" />
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Gaussian (SNE) vs. phân phối t (t-SNE)</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.75em;">
+          <h2>Từ SNE đến t-SNE</h2>
+          <p><strong>Hai cải tiến chính:</strong></p>
+          <ol style="line-height:1.45em;">
+            <li style="margin-bottom:6px;"><strong>Đối xứng hóa</strong> xác suất (symmetric SNE):
+              \[ p_{ij} = \frac{p_{j|i} + p_{i|j}}{2n}, \quad p_{ii} = 0 \]
+              \(\Rightarrow\) Một hàm KL duy nhất: \(C = KL(P \| Q) = \sum_{i,j} p_{ij} \log \dfrac{p_{ij}}{q_{ij}}\)
+            </li>
+            <li><strong>Phân phối t (bậc 1)</strong> cho không gian chiều thấp:
+              \[ q_{ij} = \frac{(1 + \|z_i - z_j\|^2)^{-1}}{\sum_{k \neq l}(1 + \|z_k - z_l\|^2)^{-1}} \]
+              Đuôi nặng hơn Gaussian — giảm vấn đề chật chội
+            </li>
+          </ol>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>Thuật toán t-SNE — Tóm tắt</h2>
+          <ol style="line-height:1.5em;">
+            <li>Tính \(p_{j|i}\) trong không gian chiều cao (Gaussian, \(\sigma_i\) theo perplexity)</li>
+            <li>Đối xứng hóa: \(p_{ij} = (p_{j|i} + p_{i|j}) / (2n)\)</li>
+            <li>Khởi tạo ngẫu nhiên \(z_1, \ldots, z_n \in \mathbb{R}^k\)</li>
+            <li>Tính \(q_{ij}\) trong không gian chiều thấp (phân phối t bậc 1)</li>
+            <li>Tối thiểu hóa \(KL(P\|Q)\) bằng gradient descent — lặp đến hội tụ</li>
+          </ol>
+          <blockquote style="border-left:3px solid #5aaa44;padding-left:10px;margin-top:12px;color:#333;">
+            Gradient hiểu như <em>lực hút/đẩy</em>: cặp điểm gần trong \(P\) nhưng xa trong \(Q\) bị
+            kéo lại gần nhau; ngược lại bị đẩy ra xa.
+          </blockquote>
+        </section>
+
+        <section style="font-size: 0.7em;">
+          <h2>Ưu điểm và hạn chế của t-SNE</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;">
+            <div style="border-left:4px solid #5aaa44;padding-left:12px;">
+              <p><strong>Ưu điểm</strong></p>
+              <ul>
+                <li>Tiêu chuẩn hiện tại cho trực quan hóa dữ liệu chiều cao</li>
+                <li>Giúp hiểu các thuật toán "hộp đen" (DNN)</li>
+                <li>Giảm vấn đề chật chội nhờ đuôi nặng</li>
+                <li>Bảo toàn cấu trúc cụm cục bộ tốt</li>
+              </ul>
+            </div>
+            <div style="border-left:4px solid #c0392b;padding-left:12px;">
+              <p><strong>Hạn chế</strong></p>
+              <ul>
+                <li>Cẩn thận: kích thước cụm, khoảng cách giữa cụm, mật độ cụm <strong>không có ý nghĩa tuyệt đối</strong></li>
+                <li>Nhạy cảm với siêu tham số (perplexity)</li>
+                <li>Không tốt cho \(k > 3\)</li>
+                <li>Nhiễu ngẫu nhiên không phải lúc nào cũng trông ngẫu nhiên</li>
+                <li>Không có cách dễ để nhúng điểm mới</li>
+              </ul>
+            </div>
+          </div>
+          <p style="margin-top:10px;text-align:center;">
+            <strong>Thay thế phổ biến:</strong>
+            <span class="keyword">UMAP</span> — nhanh hơn, bảo toàn cấu trúc toàn cục tốt hơn
+          </p>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>Ảnh hưởng của Perplexity</h2>
+          <p>Perplexity điều khiển <em>số láng giềng hiệu dụng</em> — ảnh hưởng lớn đến kết quả:</p>
+          <div style="display:flex;gap:10px;justify-content:center;margin:14px 0;align-items:flex-end;">
+            <div style="text-align:center;">
+              <div style="width:90px;height:90px;background:#e8f0fb;border:1px solid #4a90d9;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.75em;color:#333;">Nhiều cụm<br>nhỏ</div>
+              <p style="font-size:0.75em;margin-top:4px;color:#555;">perp = 2</p>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:90px;height:90px;background:#d5e8d4;border:1px solid #5aaa44;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.75em;color:#333;">Cụm rõ<br>ràng</div>
+              <p style="font-size:0.75em;margin-top:4px;color:#555;">perp = 5–50</p>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:90px;height:90px;background:#fdf0e5;border:1px solid #e8732a;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.75em;color:#333;">Cụm bị<br>gộp lại</div>
+              <p style="font-size:0.75em;margin-top:4px;color:#555;">perp = 100</p>
+            </div>
+          </div>
+          <blockquote style="border-left:3px solid #c0392b;padding-left:10px;color:#c0392b;font-size:0.9em;">
+            ⚠️ Luôn thử nhiều giá trị perplexity trước khi diễn giải kết quả t-SNE.
+          </blockquote>
+        </section>
+      </section>
+
+      <!-- PART 5: Summary -->
+      <section>
+        <section>
+          <h1>
+            <span class="text-light">&#x2022;</span><br />
+            Tổng kết
+          </h1>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>So sánh các phương pháp</h2>
+          <table style="border-collapse:collapse;width:100%;font-size:0.88em;margin-top:10px;">
+            <thead>
+              <tr style="background:#e8e8e8;">
+                <th style="padding:7px 10px;text-align:left;">Phương pháp</th>
+                <th style="padding:7px 10px;text-align:center;">Tuyến tính?</th>
+                <th style="padding:7px 10px;text-align:center;">Bảo toàn</th>
+                <th style="padding:7px 10px;text-align:center;">Tham số</th>
+                <th style="padding:7px 10px;text-align:left;">Phù hợp khi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:7px 10px;"><strong>PCA</strong></td>
+                <td style="padding:7px 10px;text-align:center;">✓</td>
+                <td style="padding:7px 10px;text-align:center;">Phương sai toàn cục</td>
+                <td style="padding:7px 10px;text-align:center;">Số PC \(k\)</td>
+                <td style="padding:7px 10px;">Cấu trúc tuyến tính; tiền xử lý; diễn giải được</td>
+              </tr>
+              <tr style="background:#f8f8f8;">
+                <td style="padding:7px 10px;"><strong>MDS</strong></td>
+                <td style="padding:7px 10px;text-align:center;">✗</td>
+                <td style="padding:7px 10px;text-align:center;">Khoảng cách pairwise</td>
+                <td style="padding:7px 10px;text-align:center;">Số chiều \(k\)</td>
+                <td style="padding:7px 10px;">Chỉ có ma trận khoảng cách (không có tọa độ)</td>
+              </tr>
+              <tr>
+                <td style="padding:7px 10px;"><strong>t-SNE</strong></td>
+                <td style="padding:7px 10px;text-align:center;">✗</td>
+                <td style="padding:7px 10px;text-align:center;">Cấu trúc láng giềng</td>
+                <td style="padding:7px 10px;text-align:center;">Perplexity</td>
+                <td style="padding:7px 10px;">Trực quan hóa; khám phá cụm; \(k = 2, 3\)</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin-top:14px;text-align:center;color:#555;">
+            Dữ liệu chiều cao thách thức — giảm chiều giúp trực quan hóa và cải thiện thuật toán xuôi dòng.
+          </p>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>Tài liệu tham khảo</h2>
+          <ul style="list-style:none;padding:0;line-height:2.2em;">
+            <li>James, G., Witten, D., Hastie, T., Tibshirani, R. <em>An Introduction to Statistical Learning</em>
+              (ISLR), 2nd ed., Springer, 2021. Chương 12.</li>
+            <li>Hastie, T., Tibshirani, R., Friedman, J. <em>The Elements of Statistical Learning</em> (ESL), 2nd ed.,
+              Springer, 2009. Chương 14.</li>
+            <li>van der Maaten, L. &amp; Hinton, G. <em>Visualizing Data using t-SNE</em>, JMLR, 2008.</li>
+            <li>Muandet, K. &amp; Vreeken, J., Lecture slides, Saarland University.</li>
+          </ul>
+        </section>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    Học máy (Học kỳ 2 2025-2026) §6: Giảm chiều dữ liệu
+  </div>
+
+  <script src="revealjs/dist/reveal.js"></script>
+  <script src="plugin/notes/notes.js"></script>
+  <script src="plugin/markdown/markdown.js"></script>
+  <script src="plugin/highlight/highlight.js"></script>
+  <script src="plugin/math/math.js"></script>
+  <script>
+    Reveal.initialize({
+      controlsLayout: "edges",
+      slideNumber: true,
+      hashOneBasedIndex: true,
+      hash: true,
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX],
+    });
+  </script>
+</body>
+
+</html>
