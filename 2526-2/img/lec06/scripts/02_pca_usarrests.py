@@ -62,6 +62,14 @@ for j, (feat, col) in enumerate(zip(features, colors)):
 
 ax.axhline(0, color="#ccc", lw=0.8, zorder=1)
 ax.axvline(0, color="#ccc", lw=0.8, zorder=1)
+
+# Expand axes so all arrow labels stay inside the plot
+label_xs = [loadings[j, 0] * scale * 1.15 for j in range(len(features))]
+label_ys = [loadings[j, 1] * scale * 1.15 for j in range(len(features))]
+x_needed = max(abs(scores[:, 0]).max() * 1.1, max(abs(x) for x in label_xs) * 1.1)
+y_needed = max(abs(scores[:, 1]).max() * 1.1, max(abs(y) for y in label_ys) * 1.1)
+ax.set_xlim(-x_needed, x_needed)
+ax.set_ylim(-y_needed, y_needed)
 pve = pca.explained_variance_ratio_
 ax.set_xlabel(f"PC1  ({pve[0]:.1%} phương sai)", fontsize=10)
 ax.set_ylabel(f"PC2  ({pve[1]:.1%} phương sai)", fontsize=10)

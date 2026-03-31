@@ -78,6 +78,21 @@
     text-transform: none !important;
 }
 
+.reveal .slide-badge-row {
+    text-align: right;
+    margin: 0 0 0.35em;
+}
+
+.reveal .self-study-badge {
+    display: inline-block;
+    background: #90A4AE;
+    color: white;
+    font-size: 0.42em;
+    padding: 3px 10px;
+    border-radius: 16px;
+    font-weight: 600;
+}
+
 .reveal .fragment.blur {
     filter: blur(5px);
 }

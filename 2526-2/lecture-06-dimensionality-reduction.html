@@ -28,16 +28,20 @@
           <h2>Nội dung</h2>
           <ol style="line-height:1.15em;">
             <li>Tổng quan <a href="#tong-quan">→</a><br>
-              <span style="color:#888;font-weight:normal;font-size:0.5em;">Học không giám sát, động lực giảm chiều</span>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Học không giám sát, động lực giảm
+                chiều</span>
             </li>
             <li>Phân tích thành phần chính (PCA) <a href="#pca">→</a><br>
-              <span style="color:#888;font-weight:normal;font-size:0.5em;">Định nghĩa, tính toán, diễn giải, chọn số thành phần</span>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Định nghĩa, tính toán, diễn giải, chọn số
+                thành phần</span>
             </li>
             <li>Chia tỷ lệ đa chiều (MDS) <a href="#mds">→</a><br>
-              <span style="color:#888;font-weight:normal;font-size:0.5em;">Sammon mapping, Kruskal-Shepard, quan hệ với PCA</span>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Sammon mapping, Kruskal-Shepard, quan hệ với
+                PCA</span>
             </li>
             <li>t-SNE <a href="#tsne">→</a><br>
-              <span style="color:#888;font-weight:normal;font-size:0.5em;">SNE, phân phối t, vấn đề chật chội, ưu nhược điểm</span>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">SNE, phân phối t, vấn đề chật chội, ưu nhược
+                điểm</span>
             </li>
           </ol>
         </section>
@@ -85,7 +89,8 @@
             <li>Dữ liệu không nhãn dễ thu thập hơn.</li>
             <li>Thường dùng cho phân cụm, giảm chiều, phát hiện bất thường.</li>
           </ul>
-          <p style="margin-top:8px;color:#555;"><strong>Ví dụ:</strong> phân nhóm ung thư, hành vi mua sắm, gợi ý phim.</p>
+          <p style="margin-top:8px;color:#555;"><strong>Ví dụ:</strong> phân nhóm ung thư, hành vi mua sắm, gợi ý phim.
+          </p>
         </section>
 
         <section style="font-size: 0.8em;">
@@ -129,20 +134,21 @@
                 <li>Khó trực quan hóa khi \(p > 3\).</li>
                 <li>Nhiều chiều tương quan gây khó cho thuật toán.</li>
                 <li>Tính toán trở nên tốn kém.</li>
-              </ul>
-              <p style="margin-top:8px;"><span class="keyword">Lời nguyền chiều dữ liệu:</span></p>
-              <ul>
-                <li>Cần rất nhiều dữ liệu để mô tả phân phối.</li>
-                <li>Khoảng cách giữa các điểm dần mất ý nghĩa.</li>
-              </ul>
-              <p style="margin-top:8px;"><strong>Mục tiêu:</strong> giảm chiều nhưng vẫn giữ cấu trúc chính.</p>
             </div>
             <div style="text-align:center;">
               <img src="img/lec06/flow-cytometry-comparison.png" alt="Flow cytometry: raw vs t-SNE"
                 style="max-width:100%;max-height:340px;object-fit:contain;" />
-              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Dữ liệu flow cytometry chiều cao — raw vs. sau giảm chiều</em></p>
+              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Dữ liệu flow cytometry chiều cao — raw vs. sau
+                  giảm chiều</em></p>
             </div>
           </div>
+          </ul>
+          <p style="margin-top:8px;"><span class="keyword">Lời nguyền chiều dữ liệu:</span></p>
+          <ul>
+            <li>Cần rất nhiều dữ liệu để mô tả phân phối.</li>
+            <li>Khoảng cách giữa các điểm dần mất ý nghĩa.</li>
+          </ul>
+          <p style="margin-top:8px;"><strong>Mục tiêu:</strong> giảm chiều nhưng vẫn giữ cấu trúc chính.</p>
         </section>
       </section>
 
@@ -152,7 +158,7 @@
           <h1>
             <span class="text-light">2.</span><br />
             Phân tích thành phần chính<br>
-            <span style="font-size:0.6em;">(Principal Component Analysis)</span>
+            <span style="font-size:0.5em;color:#555;">(Principal Component Analysis)</span>
           </h1>
         </section>
 
@@ -170,55 +176,60 @@
             <div style="text-align:center;">
               <img src="img/lec06/pca-pop-ad-scatter.svg" alt="PCA trên dữ liệu dân số và quảng cáo"
                 style="max-width:100%;" />
-              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Dân số vs. quảng cáo — hướng PC1 và PC2</em></p>
+              <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Dân số vs. quảng cáo — hướng PC1 và PC2</em>
+              </p>
             </div>
           </div>
         </section>
 
         <section style="font-size: 0.72em;" data-auto-animate>
-          <h2>Định nghĩa chính thức</h2>
-          <p><strong>Thành phần chính thứ nhất</strong> là tổ hợp tuyến tính của các biến đã chuẩn hóa trung bình:</p>
+          <h2>Định nghĩa</h2>
+          <p><strong>Thành phần chính thứ nhất</strong> (first principal component, first PC) là tổ hợp tuyến tính của
+            các biến đã chuẩn hóa trung bình:</p>
           <p style="text-align:center;">
             \[ Z_1 = \sum_{j=1}^{p} \phi_{j1}(X_j - \bar{X}_j) \]
           </p>
           <ul>
             <li>Ràng buộc chuẩn hóa: \(\phi_{11}^2 + \phi_{21}^2 + \cdots + \phi_{p1}^2 = 1\)</li>
             <li>Tìm \(\phi_{j1}\) sao cho phương sai \(Z_1\) lớn nhất</li>
-            <li>\(\phi_{j1}\): <span class="keyword">hệ số tải</span>, \(z_{i1}\): <span class="keyword">điểm PC</span></li>
+            <li>\(\phi_{j1}\): <span class="keyword">hệ số tải</span>, \(z_{i1}\): <span class="keyword">điểm PC</span>
+            </li>
             <li>PC thứ \(j\) vuông góc với mọi PC trước</li>
           </ul>
         </section>
 
         <section style="font-size: 0.75em;">
           <h2>PC1 và PC2 — Hai cách hiểu</h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;align-items:start;">
-            <div style="border-left:4px solid #4a90d9;padding-left:8px;">
-              <p style="margin:0 0 3px;"><strong>Cực đại phương sai</strong></p>
-              <ul style="margin:0;">
-                <li>PC1: hướng mà hình chiếu có <em>phương sai lớn nhất</em></li>
-                <li>PC2: vuông góc PC1, phương sai còn lại lớn nhất</li>
-              </ul>
+          <div style="display:grid;grid-template-columns:1fr .5fr;gap:8px;margin-top:6px;align-items:start;">
+            <div>
+              <div style="border-left:4px solid #4a90d9;padding-left:8px;">
+                <p style="margin:0 0 3px;"><strong>Cực đại phương sai</strong></p>
+                <ul style="margin:0;">
+                  <li>PC1: hướng mà hình chiếu có <em>phương sai lớn nhất</em></li>
+                  <li>PC2: vuông góc PC1, phương sai còn lại lớn nhất</li>
+                </ul>
+              </div>
+              <div style="border-left:4px solid #e8732a;padding-left:8px;margin-top:10px;">
+                <p style="margin:0 0 3px;"><strong>Cực tiểu khoảng cách</strong></p>
+                <ul style="margin:0;">
+                  <li>Không gian con sinh bởi các PC đầu tiên gần dữ liệu nhất.</li>
+                  <li>Tổng bình phương khoảng cách từ điểm đến không gian con là nhỏ nhất.</li>
+                </ul>
+              </div>
             </div>
-            <div style="border-left:4px solid #e8732a;padding-left:8px;">
-              <p style="margin:0 0 3px;"><strong>Cực tiểu khoảng cách</strong></p>
-              <ul style="margin:0;">
-                <li>Không gian con sinh bởi các PC đầu tiên gần dữ liệu nhất.</li>
-                <li>Tổng bình phương khoảng cách từ điểm đến không gian con là nhỏ nhất.</li>
-              </ul>
-            </div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px;">
-            <div style="text-align:center;">
-              <img src="img/lec06/pca-3d-interpretation.png" alt="3D data with principal subspace"
-                style="max-height:210px;max-width:100%;object-fit:contain;" />
-              <p style="font-size:0.72em;color:#666;margin:2px 0 0;">Dữ liệu 3D và mặt phẳng PC1–PC2</p>
+            <div>
+              <div style="text-align:center;">
+                <img src="img/lec06/pca-3d-interpretation.png" alt="3D data with principal subspace"
+                  style="max-width:100%;object-fit:contain;" />
+                <p style="font-size:0.72em;color:#666;margin:2px 0 0;">Dữ liệu 3D và mặt phẳng PC1–PC2</p>
+              </div>
             </div>
           </div>
         </section>
 
         <section style="font-size: 0.78em;">
           <h2>PCA như biến đổi tọa độ</h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center;margin-top:8px;">
+          <div style="display:grid;grid-template-columns:1fr 0.6fr;gap:12px;align-items:center;margin-top:8px;">
             <div>
               <ul>
                 <li>PCA tạo ra một hệ tọa độ mới.</li>
@@ -228,7 +239,7 @@
             </div>
             <div style="text-align:center;">
               <img src="img/lec06/pca-pc-scores-2d.png" alt="2D PC scores scatter"
-                style="max-height:210px;max-width:100%;object-fit:contain;" />
+                style="width:100%;object-fit:contain;" />
               <p style="font-size:0.72em;color:#666;margin:2px 0 0;">Điểm PC sau khi chiếu xuống 2D</p>
             </div>
           </div>
@@ -236,12 +247,12 @@
 
         <section style="font-size: 0.78em;">
           <h2>Ví dụ: Tập dữ liệu USArrests</h2>
-          <p>Tỷ lệ bắt giữ trên 100.000 dân tại các tiểu bang Mỹ (1973), 50 quan sát, 4 biến:</p>
+          <p>Tỷ lệ bắt giữ trên 100.000 dân tại các bang Mỹ (1973), 50 mẫu, 4 biến:</p>
           <ul>
-            <li><code>Murder</code>: số vụ giết người</li>
-            <li><code>Assault</code>: số vụ tấn công</li>
-            <li><code>UrbanPop</code>: % dân đô thị</li>
-            <li><code>Rape</code>: số vụ hiếp dâm</li>
+            <li><span class="inline-code">Murder</span>: số vụ giết người</li>
+            <li><span class="inline-code">Assault</span>: số vụ tấn công</li>
+            <li><span class="inline-code">UrbanPop</span>: % dân đô thị</li>
+            <li><span class="inline-code">Rape</span>: số vụ hiếp dâm</li>
           </ul>
           <table style="font-size:0.88em;margin-top:10px;border-collapse:collapse;width:100%;">
             <thead>
@@ -252,10 +263,26 @@
               </tr>
             </thead>
             <tbody>
-              <tr><td style="padding:4px 8px;">Murder</td><td style="text-align:center;">0.536</td><td style="text-align:center;">−0.418</td></tr>
-              <tr style="background:#f8f8f8;"><td style="padding:4px 8px;">Assault</td><td style="text-align:center;">0.583</td><td style="text-align:center;">−0.188</td></tr>
-              <tr><td style="padding:4px 8px;">UrbanPop</td><td style="text-align:center;">0.278</td><td style="text-align:center;">0.873</td></tr>
-              <tr style="background:#f8f8f8;"><td style="padding:4px 8px;">Rape</td><td style="text-align:center;">0.543</td><td style="text-align:center;">0.167</td></tr>
+              <tr>
+                <td style="padding:4px 8px;">Murder</td>
+                <td style="text-align:center;">0.536</td>
+                <td style="text-align:center;">−0.418</td>
+              </tr>
+              <tr style="background:#f8f8f8;">
+                <td style="padding:4px 8px;">Assault</td>
+                <td style="text-align:center;">0.583</td>
+                <td style="text-align:center;">−0.188</td>
+              </tr>
+              <tr>
+                <td style="padding:4px 8px;">UrbanPop</td>
+                <td style="text-align:center;">0.278</td>
+                <td style="text-align:center;">0.873</td>
+              </tr>
+              <tr style="background:#f8f8f8;">
+                <td style="padding:4px 8px;">Rape</td>
+                <td style="text-align:center;">0.543</td>
+                <td style="text-align:center;">0.167</td>
+              </tr>
             </tbody>
           </table>
         </section>
@@ -269,14 +296,15 @@
           </div>
         </section>
 
-        <section style="font-size: 0.75em;">
+        <section style="font-size: 0.85em;">
           <h2>Diễn giải kết quả PCA — USArrests</h2>
+          <ul style="margin-top:0;margin-bottom:8px;">
+            <li><span class="inline-code">Murder</span>, <span class="inline-code">Assault</span>, <span
+                class="inline-code">Rape</span> tương quan cao.</li>
+            <li><span class="inline-code">UrbanPop</span> ít tương quan hơn.</li>
+          </ul>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;align-items:start;">
             <div>
-              <ul style="margin-top:0;margin-bottom:8px;">
-                <li><code>Murder</code>, <code>Assault</code>, <code>Rape</code> tương quan cao.</li>
-                <li><code>UrbanPop</code> ít tương quan hơn.</li>
-              </ul>
               <div style="border-left:4px solid #4a90d9;padding-left:10px;">
                 <p style="margin:0 0 3px;"><strong>PC1</strong> → <em>tỷ lệ tội phạm</em></p>
                 <p style="margin:0;color:#555;">Cao: CA, NV, FL &nbsp;|&nbsp; Thấp: WV, Dakotas</p>
@@ -299,20 +327,19 @@
               <p><strong>Tỷ lệ phương sai được giải thích (PVE):</strong></p>
               <p>\[
                 \text{PVE}_m = \frac{\text{Var}(Z_m)}{\sum_{j=1}^{p}\text{Var}(X_j)}
-              \]</p>
-              <ul>
-                <li>Trực quan hóa: thường chọn 2 hoặc 3 PC.</li>
-                <li>Tiền xử lý: chọn \(k\) sao cho PVE tích lũy đủ lớn.</li>
-                <li>Tìm <span class="keyword">điểm khuỷu</span> trên scree plot.</li>
-                <li>Nếu dùng cho dự đoán: có thể chọn \(k\) bằng kiểm định chéo.</li>
-              </ul>
+                \]</p>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec06/pca-scree-plot.svg" alt="Biểu đồ PVE (scree plot)"
-                style="max-width:100%;" />
+              <img src="img/lec06/pca-scree-plot.svg" alt="Biểu đồ PVE (scree plot)" style="max-width:100%;" />
               <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Biểu đồ PVE — tìm điểm khuỷu</em></p>
             </div>
           </div>
+          <ul>
+            <li>Trực quan hóa: thường chọn 2 hoặc 3 PC.</li>
+            <li>Tiền xử lý: chọn \(k\) sao cho PVE tích lũy đủ lớn.</li>
+            <li>Tìm <span class="keyword">điểm khuỷu</span> trên scree plot.</li>
+            <li>Nếu dùng cho dự đoán: có thể chọn \(k\) bằng kiểm định chéo.</li>
+          </ul>
         </section>
       </section>
 
@@ -322,7 +349,7 @@
           <h1>
             <span class="text-light">3.</span><br />
             Chia tỷ lệ đa chiều<br>
-            <span style="font-size:0.6em;">(Multidimensional Scaling)</span>
+            <span style="font-size:0.5em;color:#555">(Multidimensional Scaling)</span>
           </h1>
         </section>
 
@@ -346,9 +373,10 @@
 
         <section style="font-size: 0.78em;">
           <h2>Chia tỷ lệ đa chiều (MDS)</h2>
+          <p style="margin-top:0;">Tìm \(z_1,\ldots,z_N \in \mathbb{R}^k\) sao cho khoảng cách được xấp xỉ bảo toàn.
+          </p>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin-top:8px;">
             <div>
-              <p style="margin-top:0;">Tìm \(z_1,\ldots,z_N \in \mathbb{R}^k\) sao cho khoảng cách được xấp xỉ bảo toàn.</p>
               <p style="margin-top:8px;"><strong>Kruskal-Shepard:</strong></p>
               <p style="text-align:center;">
                 \[ S_M = \sum_{i \neq i'} \left(d_{ii'} - \|z_i - z_{i'}\|\right)^2 \]
@@ -357,17 +385,19 @@
               <p style="text-align:center;">
                 \[ S_{Sm} = \sum_{i \neq i'} \frac{(d_{ii'} - \|z_i - z_{i'}\|)^2}{d_{ii'}} \]
               </p>
-              <p style="font-size:0.85em;color:#555;margin-top:6px;"><em>Nhấn mạnh việc bảo toàn các khoảng cách nhỏ.</em></p>
+              <p style="font-size:0.85em;color:#555;margin-top:6px;"><em>Nhấn mạnh việc bảo toàn các khoảng cách
+                  nhỏ.</em></p>
             </div>
             <div style="text-align:center;">
               <img src="img/lec06/mds-sammon-helix.png" alt="Sammon mapping: 3D helix → 2D"
                 style="max-width:100%;max-height:300px;object-fit:contain;" />
-              <p style="font-size:0.75em;color:#666;margin:2px 0 0;"><em>Dữ liệu 3D (xoắn ốc) → 2D bằng Sammon mapping</em></p>
+              <p style="font-size:0.75em;color:#666;margin:2px 0 0;"><em>Dữ liệu 3D (xoắn ốc) → 2D bằng Sammon
+                  mapping</em></p>
             </div>
           </div>
         </section>
 
-        <section style="font-size: 0.82em;">
+        <section style="font-size: 0.72em;">
           <h2>Quan hệ giữa MDS và PCA</h2>
           <p><strong>Classic scaling</strong> làm việc trên ma trận độ tương đồng:</p>
           <ul>
@@ -375,20 +405,24 @@
               \[ s_{ii'} = \langle x_i - \bar{x},\; x_{i'} - \bar{x} \rangle \]
             </li>
             <li>Hàm mục tiêu:
-              \[ S_C(z_1,\ldots,z_N) = \sum_{i,i'}\left(s_{ii'} - \langle z_i - \bar{z},\; z_{i'} - \bar{z}\rangle\right)^2 \]
+              \[ S_C(z_1,\ldots,z_N) = \sum_{i,i'}\left(s_{ii'} - \langle z_i - \bar{z},\; z_{i'} -
+              \bar{z}\rangle\right)^2 \]
             </li>
           </ul>
           <blockquote style="border-left:3px solid #4a90d9;padding-left:10px;margin-top:12px;color:#333;">
             Nếu độ tương đồng là tích vô hướng có tâm, thì MDS classic <strong>chính xác là PCA</strong>.
           </blockquote>
-          <p style="margin-top:10px;font-size:0.88em;color:#555;"><em>MDS chỉ cần ma trận độ tương đồng / bất đồng.</em></p>
+          <p style="margin-top:10px;font-size:0.88em;color:#555;"><em>MDS chỉ cần ma trận độ tương đồng / bất đồng.</em>
+          </p>
         </section>
 
-        <section style="font-size: 0.78em;">
+        <section style="font-size: 0.85em;">
           <h2>MDS phi tham số (Non-metric MDS)</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <p style="margin-top:0;">Chỉ cần <strong>thứ hạng</strong> của khoảng cách:</p>
           <p style="text-align:center;">
-            \[ S_{NM} = \frac{\sum_{i \neq i'}\left(\|z_i - z_{i'}\| - \theta(d_{ii'})\right)^2}{\sum_{i \neq i'}\|z_i - z_{i'}\|^2} \]
+            \[ S_{NM} = \frac{\sum_{i \neq i'}\left(\|z_i - z_{i'}\| - \theta(d_{ii'})\right)^2}{\sum_{i \neq i'}\|z_i -
+            z_{i'}\|^2} \]
           </p>
           <ul style="margin-top:6px;">
             <li>\(\theta\) là hàm tăng đơn điệu.</li>
@@ -398,10 +432,12 @@
 
         <section style="font-size: 0.82em;">
           <h2>Ví dụ: MDS trên virus cúm</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="text-align:center;margin-top:8px;">
             <img src="img/lec06/mds-influenza.png" alt="MDS - Influenza antigenic shift"
               style="max-width:88%;max-height:420px;object-fit:contain;" />
-            <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Kháng nguyên virus cúm (79D → 2D), Smith et al., Science 2004</em></p>
+            <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Kháng nguyên virus cúm (79D → 2D), Smith et al.,
+                Science 2004</em></p>
           </div>
         </section>
       </section>
@@ -419,8 +455,10 @@
           <h2>Nhúng láng giềng ngẫu nhiên (SNE)</h2>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:8px;">
             <div>
-              <p style="margin-top:0;">Ý tưởng: bảo toàn <span class="keyword">xác suất láng giềng</span> thay vì khoảng cách.</p>
-              <p style="margin-top:12px;color:#555;"><em>\(P\): không gian gốc &nbsp;&nbsp; \(Q\): không gian chiều thấp</em></p>
+              <p style="margin-top:0;">Ý tưởng: bảo toàn <span class="keyword">xác suất láng giềng</span> thay vì khoảng
+                cách.</p>
+              <p style="margin-top:12px;color:#555;"><em>\(P\): không gian gốc <br /> \(Q\): không gian chiều
+                  thấp</em></p>
             </div>
             <div style="text-align:center;">
               <img src="img/lec06/sne-pipeline.png" alt="SNE pipeline: X→P≈Q←Z"
@@ -456,6 +494,7 @@
 
         <section style="font-size: 0.82em;" data-auto-animate>
           <h2>Độ tương đồng chiều cao</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="text-align:center;margin-top:8px;">
             <img src="img/lec06/sne-gaussian-similarity.png" alt="Gaussian P_i: x_j far"
               style="max-width:88%;max-height:420px;object-fit:contain;" />
@@ -479,37 +518,40 @@
             <div style="text-align:center;">
               <img src="img/lec06/sne-perplexity-bandwidth.png" alt="Perplexity controls bandwidth σ_i"
                 style="max-width:100%;max-height:300px;object-fit:contain;" />
-              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Vùng đặc dùng \(\sigma_i\) nhỏ, vùng thưa dùng \(\sigma_i\) lớn.</em></p>
+              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Vùng đặc dùng \(\sigma_i\) nhỏ, vùng thưa dùng
+                  \(\sigma_i\) lớn.</em></p>
             </div>
           </div>
         </section>
 
-        <section style="font-size: 0.75em;" data-auto-animate>
-          <h2>Độ tương đồng chiều thấp &amp; Hàm mục tiêu</h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:6px;">
+        <section style="font-size: 0.7em;">
+          <h2>Độ tương đồng chiều thấp</h2>
+          <div style="display:grid;grid-template-columns:1fr .7fr;gap:16px;align-items:center;margin-top:6px;">
             <div>
               <p style="margin-top:0;"><strong>SNE gốc</strong> dùng Gaussian trong không gian chiều thấp:</p>
               <p style="text-align:center;">
                 \[ q_{j|i} \propto \exp\!\left(-\|z_j - z_i\|^2\right) \]
               </p>
-              <p style="margin-top:8px;"><strong>Hàm mục tiêu:</strong></p>
-              <p style="text-align:center;">
-                \[ C = \sum_i KL(P_i \| Q_i) = \sum_i \sum_j p_{j|i} \log \frac{p_{j|i}}{q_{j|i}} \]
-              </p>
-              <ul style="margin-top:6px;">
-                <li>Tối thiểu hóa bằng gradient descent.</li>
-              </ul>
             </div>
             <div style="text-align:center;">
               <img src="img/lec06/sne-q-distribution.png" alt="Q_{j|i} in low-dimensional space"
                 style="max-width:100%;max-height:280px;object-fit:contain;" />
-              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>\(Q_{j|i} \propto \mathcal{N}(z_i,\tfrac{1}{\sqrt{2}})\) — Gaussian trong không gian chiều thấp</em></p>
+              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>\(Q_{j|i} \propto
+                  \mathcal{N}(z_i,\tfrac{1}{\sqrt{2}})\) — Gaussian trong không gian chiều thấp</em></p>
             </div>
           </div>
+          <p style="margin-top:8px;"><strong>Hàm mục tiêu:</strong></p>
+          <p style="text-align:center;">
+            \[ C = \sum_i KL(P_i \| Q_i) = \sum_i \sum_j p_{j|i} \log \frac{p_{j|i}}{q_{j|i}} \]
+          </p>
+          <ul style="margin-top:6px;">
+            <li>Tối thiểu hóa bằng gradient descent.</li>
+          </ul>
         </section>
 
         <section style="font-size: 0.8em;">
           <h2>So sánh phân phối \(P_i\) và \(Q_i\)</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:8px;">
             <div>
               <p style="margin-top:0;">Mục tiêu: tìm \(z_i\) sao cho \(Q_i \approx P_i\) cho mọi điểm \(i\).</p>
@@ -518,13 +560,15 @@
             <div style="text-align:center;">
               <img src="img/lec06/sne-pq-comparison.png" alt="P_i vs Q_i similarity comparison"
                 style="max-width:100%;max-height:300px;object-fit:contain;" />
-              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Độ tương đồng \(P_i\) (cam) và \(Q_i\) (xanh) theo khoảng cách</em></p>
+              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Độ tương đồng \(P_i\) (cam) và \(Q_i\) (xanh)
+                  theo khoảng cách</em></p>
             </div>
           </div>
         </section>
 
         <section style="font-size: 0.8em;">
           <h2>Tất cả phân phối \(P_n\) và \(Q_n\)</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:8px;">
             <div>
               <p style="margin-top:0;">Mỗi điểm \(i\) có một phân phối riêng \(P_i\) và \(Q_i\).</p>
@@ -535,14 +579,17 @@
             <div style="text-align:center;">
               <img src="img/lec06/sne-all-distributions.png" alt="All P_n and Q_n distributions"
                 style="max-width:100%;max-height:300px;object-fit:contain;" />
-              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Tất cả phân phối \(P_1,\ldots,P_n\) (cam) và \(Q_1,\ldots,Q_n\) (xanh)</em></p>
+              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Tất cả phân phối \(P_1,\ldots,P_n\) (cam) và
+                  \(Q_1,\ldots,Q_n\) (xanh)</em></p>
             </div>
           </div>
         </section>
 
         <section style="font-size: 0.75em;">
           <h2>Phân kỳ KL</h2>
-          <p style="margin-top:4px;">Đo "khoảng cách" giữa hai phân phối — <strong>bất đối xứng:</strong> \(KL(P\|Q) \neq KL(Q\|P)\)</p>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
+          <p style="margin-top:4px;">Đo "khoảng cách" giữa hai phân phối — <strong>bất đối xứng:</strong> </p>
+          <div>\[KL(P\|Q) \neq KL(Q\|P)\]</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;align-items:start;">
             <div>
               <p style="margin:0 0 4px;">\[ KL(P \| Q) = \sum_j p_j \log \frac{p_j}{q_j} \geq 0 \]</p>
@@ -554,16 +601,18 @@
             <div style="text-align:center;">
               <img src="img/lec06/kl-divergence-illustration.png" alt="KL mean-seeking vs mode-seeking"
                 style="max-width:100%;max-height:320px;object-fit:contain;" />
-              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>KL thuận (mean-seeking) vs. KL ngược (mode-seeking)</em></p>
+              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>KL thuận (mean-seeking) vs. KL ngược
+                  (mode-seeking)</em></p>
             </div>
           </div>
         </section>
 
         <section style="font-size: 0.78em;">
-          <h2>Vấn đề chật chội — Toán học</h2>
+          <h2>Vấn đề chật chội (Crowding Problem)</h2>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;align-items:center;">
             <div>
-              <p style="margin-top:0;">Trong không gian 2D, <strong>không đủ chỗ</strong> để bảo toàn tất cả khoảng cách:</p>
+              <p style="margin-top:0;">Trong không gian 2D, <strong>không đủ chỗ</strong> để bảo toàn tất cả khoảng
+                cách:</p>
               <ul style="margin-top:8px;">
                 <li>Chiếu từ cao chiều xuống thấp chiều luôn làm méo một số khoảng cách.</li>
                 <li>Không có cách nào bảo toàn đồng thời mọi khoảng cách.</li>
@@ -572,7 +621,8 @@
             <div style="text-align:center;">
               <img src="img/lec06/crowding-problem-distances.png" alt="Crowding problem distance example"
                 style="max-width:100%;max-height:300px;object-fit:contain;" />
-              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Chiều cao vs. chiều thấp: khoảng cách không bảo toàn được</em></p>
+              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Chiều cao vs. chiều thấp: khoảng cách không bảo
+                  toàn được</em></p>
             </div>
           </div>
         </section>
@@ -591,7 +641,8 @@
             <div style="text-align:center;">
               <img src="img/lec06/crowding-problem.png" alt="Crowding problem: MNIST digits"
                 style="max-width:100%;max-height:320px;object-fit:contain;" />
-              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Cùng dữ liệu MNIST — tỷ lệ 10× vs 1×<br>(Kobak et al. 2019)</em></p>
+              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Cùng dữ liệu MNIST — tỷ lệ 10× vs 1×<br>(Kobak
+                  et al. 2019)</em></p>
             </div>
           </div>
         </section>
@@ -601,7 +652,8 @@
           <div style="text-align:center;margin-top:8px;">
             <img src="img/lec06/sne-pipeline-overview.png" alt="t-SNE pipeline overview"
               style="max-width:90%;max-height:420px;object-fit:contain;" />
-            <p style="font-size:0.75em;color:#666;margin:6px 0 0;"><em>Dữ liệu \(X\) → khoảng cách → xác suất \(P\) &nbsp;≈&nbsp; \(Q\) ← xác suất ← biểu diễn \(Z\) &nbsp; (van der Maarten &amp; Hinton, 2008)</em></p>
+            <p style="font-size:0.75em;color:#666;margin:6px 0 0;"><em>Dữ liệu \(X\) → khoảng cách → xác suất \(P\)
+                &nbsp;≈&nbsp; \(Q\) ← xác suất ← biểu diễn \(Z\) &nbsp; (van der Maarten &amp; Hinton, 2008)</em></p>
           </div>
         </section>
 
@@ -611,10 +663,10 @@
             <p style="margin-top:0;"><strong>Symmetric SNE:</strong></p>
             <p>\[
               p_{ij} = \frac{p_{j|i} + p_{i|j}}{2n}, \qquad p_{ii} = 0
-            \]</p>
+              \]</p>
             <p>\[
               C = KL(P \| Q) = \sum_{i,j} p_{ij} \log \frac{p_{ij}}{q_{ij}}
-            \]</p>
+              \]</p>
             <p style="margin:8px 0 0;color:#555;">Một hàm mục tiêu duy nhất cho toàn bộ cặp điểm.</p>
           </div>
         </section>
@@ -626,7 +678,7 @@
               <p style="margin-top:0;"><strong>Không gian chiều thấp:</strong></p>
               <p>\[
                 q_{ij} = \frac{(1 + \|z_i - z_j\|^2)^{-1}}{\sum_{k \neq l}(1 + \|z_k - z_l\|^2)^{-1}}
-              \]</p>
+                \]</p>
               <ul>
                 <li>Dùng phân phối t bậc 1.</li>
                 <li>Đuôi nặng hơn Gaussian.</li>
@@ -660,40 +712,46 @@
         </section>
 
         <section style="font-size: 0.78em;">
-          <h2>Diễn giải khác: Bảo toàn đồ thị láng giềng</h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:8px;">
-            <div>
-              <p style="margin-top:0;">Một cách nhìn khác: t-SNE cố làm cho <strong>đồ thị láng giềng</strong> trong không gian chiều thấp giống với đồ thị láng giềng ban đầu.</p>
-            </div>
-            <div style="text-align:center;">
-              <img src="img/lec06/sne-similarity-graph.png" alt="High-dim data → neighbor graph"
-                style="max-width:100%;max-height:300px;object-fit:contain;" />
-              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Bước 1: Dữ liệu chiều cao → đồ thị tương đồng/láng giềng</em></p>
-            </div>
+          <h2>Diễn giải khác: <br /> Bảo toàn đồ thị láng giềng</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
+          <div>
+            <p style="margin-top:0;">t-SNE cố làm cho <strong>đồ thị láng giềng</strong> trong
+              không gian chiều thấp giống với đồ thị láng giềng ban đầu.</p>
+          </div>
+          <div style="text-align:center;">
+            <img src="img/lec06/sne-similarity-graph.png" alt="High-dim data → neighbor graph"
+              style="max-width:100%;max-height:300px;object-fit:contain;" />
+            <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Bước 1: Dữ liệu chiều cao → đồ thị tương
+                đồng/láng giềng</em></p>
           </div>
         </section>
 
         <section style="font-size: 0.82em;">
           <h2>Diễn giải: Chiều cao vs. chiều thấp</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="text-align:center;margin-top:8px;">
             <img src="img/lec06/sne-similarity-graph-comparison.png" alt="Neighborhood graph: high-dim vs low-dim"
               style="max-width:88%;max-height:420px;object-fit:contain;" />
-            <p style="font-size:0.75em;color:#666;margin:6px 0 0;"><em>Đồ thị láng giềng chiều cao (trên) và chiều thấp (dưới).</em></p>
+            <p style="font-size:0.75em;color:#666;margin:6px 0 0;"><em>Đồ thị láng giềng chiều cao (trên) và chiều thấp
+                (dưới).</em></p>
           </div>
         </section>
 
-      <!-- PART 4: t-SNE applications -->
+        <!-- PART 4: t-SNE applications -->
         <section style="font-size: 0.82em;">
           <h2>Ứng dụng t-SNE: Dữ liệu liên kết từ</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="text-align:center;margin-top:6px;">
             <img src="img/lec06/tsne-word-association.png" alt="t-SNE word association data"
               style="max-width:94%;max-height:390px;object-fit:contain;" />
-            <p style="font-size:0.7em;color:#666;margin:3px 0 0;"><em>van der Maaten, <a href="https://lvdmaaten.github.io/tsne/" target="_blank">lvdmaaten.github.io/tsne</a></em></p>
+            <p style="font-size:0.7em;color:#666;margin:3px 0 0;"><em>van der Maaten, <a
+                  href="https://lvdmaaten.github.io/tsne/" target="_blank">lvdmaaten.github.io/tsne</a></em></p>
           </div>
         </section>
 
         <section style="font-size: 0.82em;">
           <h2>Ứng dụng t-SNE: Phim Netflix</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="text-align:center;margin-top:6px;">
             <img src="img/lec06/tsne-netflix.png" alt="t-SNE Netflix movies"
               style="max-width:94%;max-height:390px;object-fit:contain;" />
@@ -702,6 +760,7 @@
 
         <section style="font-size: 0.82em;">
           <h2>Ứng dụng t-SNE: Tế bào não chuột</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="text-align:center;margin-top:6px;">
             <img src="img/lec06/tsne-mouse-brain.png" alt="t-SNE mouse brain cells"
               style="max-width:84%;max-height:390px;object-fit:contain;" />
@@ -710,15 +769,17 @@
         </section>
 
         <section style="font-size: 0.8em;">
-          <h2>So sánh: t-SNE vs. Sammon vs. Isomap vs. LLE</h2>
+          <h2>t-SNE vs. Sammon vs. Isomap vs. LLE</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="text-align:center;margin-top:6px;">
             <img src="img/lec06/tsne-coil20.png" alt="COIL-20: t-SNE vs Sammon vs Isomap vs LLE"
               style="max-width:96%;max-height:390px;object-fit:contain;" />
-            <p style="font-size:0.7em;color:#666;margin:3px 0 0;"><em>van der Maaten &amp; Hinton, 2008 — t-SNE tách cụm rõ ràng nhất</em></p>
+            <p style="font-size:0.7em;color:#666;margin:3px 0 0;"><em>van der Maaten &amp; Hinton, 2008 — t-SNE tách cụm
+                rõ ràng nhất</em></p>
           </div>
         </section>
 
-        <section style="font-size: 0.78em;">
+        <section>
           <h2>Ưu điểm của t-SNE</h2>
           <ul style="margin-top:12px;">
             <li>Rất mạnh cho trực quan hóa dữ liệu chiều cao.</li>
@@ -747,9 +808,12 @@
           <div style="text-align:center;margin-top:8px;">
             <img src="img/lec06/tsne-perplexity-effect.png" alt="Effect of perplexity on t-SNE"
               style="max-width:90%;max-height:330px;object-fit:contain;" />
-            <p style="font-size:0.72em;color:#666;margin:4px 0 0;"><em>Cùng dữ liệu, perplexity = 2, 5, 30, 50, 100 — kết quả rất khác nhau (<a href="https://distill.pub/2016/misread-tsne/" target="_blank">distill.pub</a>)</em></p>
+            <p style="font-size:0.72em;color:#666;margin:4px 0 0;"><em>Cùng dữ liệu, perplexity = 2, 5, 30, 50, 100 —
+                kết quả rất khác nhau (<a href="https://distill.pub/2016/misread-tsne/"
+                  target="_blank">distill.pub</a>)</em></p>
           </div>
-          <p style="margin-top:8px;color:#c0392b;font-size:0.85em;text-align:center;"><strong>Perplexity ảnh hưởng mạnh đến kết quả.</strong></p>
+          <p style="margin-top:8px;color:#c0392b;font-size:0.85em;text-align:center;"><strong>Perplexity ảnh hưởng mạnh
+              đến kết quả.</strong></p>
         </section>
       </section>
 
@@ -757,12 +821,11 @@
       <section>
         <section>
           <h1>
-            <span class="text-light">&#x2022;</span><br />
             Tổng kết
           </h1>
         </section>
 
-        <section style="font-size: 0.82em;">
+        <section style="font-size: 0.7em;">
           <h2>So sánh các phương pháp</h2>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
             <div style="border:1px solid #ccc;border-radius:8px;padding:12px;background:#f9f9f9;">
@@ -784,7 +847,8 @@
               <p style="margin:0;color:#555;">Mạnh nhất cho trực quan hóa và khám phá cụm.</p>
             </div>
           </div>
-          <p style="margin-top:12px;text-align:center;color:#555;">Giảm chiều giúp trực quan hóa và đơn giản hóa dữ liệu.</p>
+          <p style="margin-top:12px;text-align:center;color:#555;">Giảm chiều giúp trực quan hóa và đơn giản hóa dữ
+            liệu.</p>
         </section>
 
         <section style="font-size: 0.86em;">
