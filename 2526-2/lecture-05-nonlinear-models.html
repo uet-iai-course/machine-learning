@@ -373,7 +373,8 @@
         </section>
 
         <section style="font-size: 0.75em;">
-          <div style="position:absolute;top:10px;right:10px;background:#546E7A;color:white;font-size:0.5em;padding:4px 14px;border-radius:20px;font-weight:bold;z-index:10;">
+          <div
+            style="position:absolute;top:10px;right:10px;background:#546E7A;color:white;font-size:0.5em;padding:4px 14px;border-radius:20px;font-weight:bold;z-index:10;">
             📖 Tự học</div>
           <h2>Hàm cơ sở của Spline bậc ba</h2>
           <p>Cubic spline với \(K\) nút có \(K+4\) bậc tự do, nên cần \(K+4\) hàm cơ sở.</p>
@@ -600,8 +601,8 @@
           </p>
 
           <ul>
-            <li>Hạng 1: khớp dữ liệu tốt</li>
-            <li>Hạng 2: phạt đường cong quá lượn</li>
+            <li>Số hạng 1: khớp dữ liệu tốt</li>
+            <li>Số hạng 2: phạt đường cong quá lượn</li>
             <li>\(\lambda\) lớn hơn \(\Rightarrow\) đường cong trơn hơn</li>
             <li>\(\lambda = 0\): nội suy qua mọi điểm</li>
             <li>\(\lambda \to \infty\): tiến gần đường thẳng OLS</li>
@@ -703,7 +704,7 @@
               <img src="img/lec05/local-regression-left.svg" alt="Local regression at x0=0.1" style="max-width:100%;" />
               <p style="font-size:0.72em;color:#666;margin-top:4px;">
                 Xám: toàn bộ dữ liệu &ensp;|&ensp;
-                <span style="color:#aa3300;">Cam</span>: điểm trong lân cận \(x_0\) &ensp;|&ensp;
+                <span style="color:#aa3300;">Đỏ</span>: điểm trong lân cận \(x_0\) &ensp;|&ensp;
                 <span style="color:#c8d820;background:#555;padding:0 3px;">Vàng</span>: trọng số kernel
               </p>
             </div>
@@ -732,7 +733,7 @@
               <img src="img/lec05/local-regression-mid.svg" alt="Local regression at x0=0.45" style="max-width:100%;" />
               <p style="font-size:0.72em;color:#666;margin-top:4px;">
                 Xám: toàn bộ dữ liệu &ensp;|&ensp;
-                <span style="color:#aa3300;">Cam</span>: điểm trong lân cận \(x_0\) &ensp;|&ensp;
+                <span style="color:#aa3300;">Đỏ</span>: điểm trong lân cận \(x_0\) &ensp;|&ensp;
                 <span style="color:#c8d820;background:#555;padding:0 3px;">Vàng</span>: trọng số kernel
               </p>
             </div>
@@ -845,21 +846,21 @@
           </div>
         </section>
 
-        <section style="font-size: 0.76em;">
+        <section style="font-size: 0.65em;">
           <h2>Ví dụ: Hồi quy tuyến tính cục bộ</h2>
-          <ol style="line-height:1.9;">
-            <li>Gán trọng số \(K_{i0}=K(x_i,x_0)\) cho từng điểm dữ liệu</li>
-            <li>Khớp mô hình tuyến tính cục bộ:
-              \(
-              \min_{\beta_0,\beta_1}
-              \sum_{i=1}^n
-              K_{i0}\big(y_i-\beta_0-\beta_1(x_i-x_0)\big)^2
-              \)
-            </li>
-            <li>Khi đó \(\hat f(x_0)=\hat\beta_0\)</li>
-          </ol>
-          <div style="display:grid;grid-template-columns:1fr .5fr;gap:20px;margin-top:10px;align-items:center;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:10px;align-items:center;">
             <div>
+              <ol style="line-height:1.9;">
+                <li>Gán trọng số \(K_{i0}=K(x_i,x_0)\) cho từng điểm dữ liệu</li>
+                <li>Khớp mô hình tuyến tính cục bộ:
+                  \[
+                  \min_{\beta_0,\beta_1}
+                  \sum_{i=1}^n
+                  K_{i0}\big(y_i-\beta_0-\beta_1(x_i-x_0)\big)^2
+                  \]
+                </li>
+                <li>Khi đó \(\hat f(x_0)=\hat\beta_0\)</li>
+              </ol>
               <p style="margin-top:12px;color:#555;">
                 Có thể mở rộng sang đa thức bậc cao hơn hoặc nhiều biến, nhưng khi số chiều tăng thì dữ liệu trở nên
                 thưa hơn.
@@ -869,7 +870,6 @@
             <div style="text-align:center;">
               <img src="img/lec05/local-regression-wage.svg" alt="LOESS on Wage: span 0.2 vs 0.7"
                 style="max-width:100%;" />
-              <p style="font-size:0.8em;color:#666;margin-top:4px;">Span = tỉ lệ dữ liệu dùng cho mỗi dự đoán</p>
             </div>
           </div>
         </section>
