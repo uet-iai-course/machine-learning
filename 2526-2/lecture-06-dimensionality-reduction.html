@@ -134,6 +134,13 @@
                 <li>Khó trực quan hóa khi \(p > 3\).</li>
                 <li>Nhiều chiều tương quan gây khó cho thuật toán.</li>
                 <li>Tính toán trở nên tốn kém.</li>
+              </ul>
+              <p style="margin-top:8px;"><span class="keyword">Lời nguyền chiều dữ liệu:</span></p>
+              <ul>
+                <li>Cần rất nhiều dữ liệu để mô tả phân phối.</li>
+                <li>Khoảng cách giữa các điểm dần mất ý nghĩa.</li>
+              </ul>
+              <p style="margin-top:8px;"><strong>Mục tiêu:</strong> giảm chiều nhưng vẫn giữ cấu trúc chính.</p>
             </div>
             <div style="text-align:center;">
               <img src="img/lec06/flow-cytometry-comparison.png" alt="Flow cytometry: raw vs t-SNE"
@@ -142,13 +149,6 @@
                   giảm chiều</em></p>
             </div>
           </div>
-          </ul>
-          <p style="margin-top:8px;"><span class="keyword">Lời nguyền chiều dữ liệu:</span></p>
-          <ul>
-            <li>Cần rất nhiều dữ liệu để mô tả phân phối.</li>
-            <li>Khoảng cách giữa các điểm dần mất ý nghĩa.</li>
-          </ul>
-          <p style="margin-top:8px;"><strong>Mục tiêu:</strong> giảm chiều nhưng vẫn giữ cấu trúc chính.</p>
         </section>
       </section>
 
@@ -607,26 +607,6 @@
           </div>
         </section>
 
-        <section style="font-size: 0.78em;">
-          <h2>Vấn đề chật chội (Crowding Problem)</h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;align-items:center;">
-            <div>
-              <p style="margin-top:0;">Trong không gian 2D, <strong>không đủ chỗ</strong> để bảo toàn tất cả khoảng
-                cách:</p>
-              <ul style="margin-top:8px;">
-                <li>Chiếu từ cao chiều xuống thấp chiều luôn làm méo một số khoảng cách.</li>
-                <li>Không có cách nào bảo toàn đồng thời mọi khoảng cách.</li>
-              </ul>
-            </div>
-            <div style="text-align:center;">
-              <img src="img/lec06/crowding-problem-distances.png" alt="Crowding problem distance example"
-                style="max-width:100%;max-height:300px;object-fit:contain;" />
-              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Chiều cao vs. chiều thấp: khoảng cách không bảo
-                  toàn được</em></p>
-            </div>
-          </div>
-        </section>
-
         <section style="font-size: 0.75em;">
           <h2>Vấn đề chật chội (Crowding Problem)</h2>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;align-items:center;">
@@ -647,13 +627,23 @@
           </div>
         </section>
 
-        <section style="font-size: 0.82em;">
-          <h2>t-SNE: Sơ đồ tổng quan</h2>
-          <div style="text-align:center;margin-top:8px;">
-            <img src="img/lec06/sne-pipeline-overview.png" alt="t-SNE pipeline overview"
-              style="max-width:90%;max-height:420px;object-fit:contain;" />
-            <p style="font-size:0.75em;color:#666;margin:6px 0 0;"><em>Dữ liệu \(X\) → khoảng cách → xác suất \(P\)
-                &nbsp;≈&nbsp; \(Q\) ← xác suất ← biểu diễn \(Z\) &nbsp; (van der Maarten &amp; Hinton, 2008)</em></p>
+        <section style="font-size: 0.78em;">
+          <h2>Vấn đề chật chội — Toán học</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;align-items:center;">
+            <div>
+              <p style="margin-top:0;">Trong không gian 2D, <strong>không đủ chỗ</strong> để bảo toàn tất cả khoảng
+                cách:</p>
+              <ul style="margin-top:8px;">
+                <li>Chiếu từ cao chiều xuống thấp chiều luôn làm méo một số khoảng cách.</li>
+                <li>Không có cách nào bảo toàn đồng thời mọi khoảng cách.</li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec06/crowding-problem-distances.png" alt="Crowding problem distance example"
+                style="max-width:100%;max-height:300px;object-fit:contain;" />
+              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Chiều cao vs. chiều thấp: khoảng cách không bảo
+                  toàn được</em></p>
+            </div>
           </div>
         </section>
 
@@ -708,6 +698,16 @@
               <img src="img/lec06/sne-pipeline-clean.png" alt="SNE/t-SNE pipeline: X→P≈Q←Z"
                 style="max-width:100%;max-height:300px;object-fit:contain;" />
             </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>t-SNE: Sơ đồ tổng quan</h2>
+          <div style="text-align:center;margin-top:8px;">
+            <img src="img/lec06/sne-pipeline-overview.png" alt="t-SNE pipeline overview"
+              style="max-width:90%;max-height:420px;object-fit:contain;" />
+            <p style="font-size:0.75em;color:#666;margin:6px 0 0;"><em>Dữ liệu \(X\) → khoảng cách → xác suất \(P\)
+                &nbsp;≈&nbsp; \(Q\) ← xác suất ← biểu diễn \(Z\) &nbsp; (van der Maarten &amp; Hinton, 2008)</em></p>
           </div>
         </section>
 
