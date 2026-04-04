@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Học máy | Bài tập về nhà #7</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <style>
+        .hint {
+            background: #f8f9fa;
+            border-left: 3px solid #6c757d;
+            padding: 8px 14px;
+            margin-top: 10px;
+            font-size: 0.93em;
+            color: #555;
+        }
+        table.dissimilarity {
+            border-collapse: collapse;
+            margin: 12px 0;
+        }
+        table.dissimilarity th,
+        table.dissimilarity td {
+            border: 1px solid #ccc;
+            padding: 6px 14px;
+            text-align: center;
+        }
+        table.dissimilarity th {
+            background: #f0f0f0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container my-4">
+        <h1>Bài tập về nhà #7</h1>
+        <h2>Bài toán phân cụm</h2>
+        <hr>
+
+        <!-- ── BÀI 1 ── -->
+        <h2>Bài 1 — Phân cụm phân cấp</h2>
+        <div class="q">
+            <ol>
+                <li>
+                    <p>Xét hai tập dữ liệu trong Hình 1 và Hình 2 dưới đây.
+                    Với mỗi tập dữ liệu, hãy cho biết phương pháp <em>single linkage</em>
+                    hay <em>complete linkage</em> phù hợp hơn, và giải thích vì sao.</p>
+                    <div class="row my-3">
+                        <div class="col-md-5 text-center">
+                            <img src="img/07/fig1.svg" alt="Hình 1: Tập dữ liệu 1"
+                                style="max-width: 320px; width: 100%;">
+                            <figcaption class="text-muted mt-1"><em>Hình 1: Tập dữ liệu 1</em></figcaption>
+                        </div>
+                        <div class="col-md-5 text-center">
+                            <img src="img/07/fig2.svg" alt="Hình 2: Tập dữ liệu 2"
+                                style="max-width: 320px; width: 100%;">
+                            <figcaption class="text-muted mt-1"><em>Hình 2: Tập dữ liệu 2</em></figcaption>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <p>Phân cụm phân cấp có thể dùng để phân nhóm văn bản theo nội dung.
+                    Giả sử mỗi văn bản được biểu diễn bằng một vector đếm từ,
+                    trong đó phần tử thứ \(i\) cho biết số lần từ thứ \(i\) xuất hiện trong văn bản.</p>
+                    <ol type="a">
+                        <li>Lập luận tại sao khoảng cách Euclid <strong>không phải</strong> là lựa chọn tốt
+                            để đo độ bất đồng giữa hai văn bản.</li>
+                        <li>Nêu một khoảng cách thay thế phù hợp hơn và giải thích ưu điểm của nó.</li>
+                    </ol>
+                </li>
+                <li>
+                    <p>Xét tập dữ liệu ảnh CIFAR-10<sup>*</sup> gồm các ảnh RGB 32×32 pixel thuộc
+                    10 lớp (Máy bay, Ô tô, Chim, Mèo, Nai, Chó, Ếch, Ngựa, Tàu, Xe tải).
+                    Giả sử ta áp dụng phân cụm phân cấp trên tập ảnh <em>không có nhãn</em>.</p>
+                    <p>Ngoài nhãn lớp, phân cụm phân cấp có thể tiết lộ thêm thông tin gì?
+                    Bạn kỳ vọng cấu trúc phân cấp ở mức cao nhất của dendrogram
+                    sẽ trông như thế nào?</p>
+                    <p class="text-muted" style="font-size:0.88em;"><sup>*</sup>
+                        CIFAR-10 chứa 60.000 ảnh RGB 32×32 với nhãn thuộc 10 lớp.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <hr class="my-5">
+
+        <!-- ── BÀI 2 ── -->
+        <h2>Bài 2 — Thuật toán K-means</h2>
+        <div class="q">
+            <ol>
+                <li>
+                    <p>Trong K-means, ta luân phiên tối ưu hóa cách gán cụm \(C_1, \ldots, C_K\)
+                    và các tâm cụm \(\bar{x}_1, \ldots, \bar{x}_K\) để cực tiểu hóa:</p>
+                    \[
+                        \min_{\bar{x}_k,\, C_k}\ \sum_{k=1}^{K} W(C_k)
+                        = \min_{\bar{x}_k,\, C_k}\ \sum_{k=1}^{K} \sum_{x_i \in C_k}
+                          2\|x_i - \bar{x}_k\|^2.
+                    \]
+                    <p>Chứng minh rằng thuật toán Lloyd, sau khi khởi tạo ngẫu nhiên,
+                    hội tụ đến một nghiệm cực tiểu cục bộ. Thuật toán gồm hai bước:</p>
+                    <ol type="a">
+                        <li>Giữ nguyên \(C_k\), tính lại
+                            \(\bar{x}_k = \dfrac{1}{|C_k|} \sum_{x_i \in C_k} x_i\).</li>
+                        <li>Cập nhật \(C_k = \bigl\{x_i \mid \forall l \neq k :
+                            \|x_i - \bar{x}_l\|^2 > \|x_i - \bar{x}_k\|^2\bigr\}\)
+                            — gán mỗi điểm dữ liệu vào tâm cụm gần nhất.</li>
+                    </ol>
+                    <p>Để đơn giản ký hiệu, bạn có thể dùng chỉ số cụm \(c(i)\) của điểm dữ liệu \(x_i\)
+                    để chỉ tâm cụm được gán cho nó là \(\bar{x}_{c(i)}\).</p>
+                    <div class="hint">
+                        <strong>Gợi ý:</strong> Hãy chỉ ra rằng mỗi bước đều <em>không làm tăng</em>
+                        giá trị hàm mục tiêu \(\sum_k W(C_k)\), và vì hàm này bị chặn dưới
+                        (và số cách phân cụm là hữu hạn), thuật toán phải hội tụ.
+                    </div>
+                </li>
+
+                <li>
+                    <p>Cho tập dữ liệu trái cây \(\{\text{Táo, Cam, Mâm xôi, Dâu tây}\}\)
+                    với ma trận bất đồng như sau:</p>
+                    <table class="dissimilarity">
+                        <thead>
+                            <tr>
+                                <th>\(d(a,b)\)</th>
+                                <th>Táo</th>
+                                <th>Cam</th>
+                                <th>Mâm xôi</th>
+                                <th>Dâu tây</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Táo</strong></td>     <td>0</td><td>1</td><td>5</td><td>4</td></tr>
+                            <tr><td><strong>Cam</strong></td>     <td>1</td><td>0</td><td>4</td><td>5</td></tr>
+                            <tr><td><strong>Mâm xôi</strong></td><td>5</td><td>4</td><td>0</td><td>1</td></tr>
+                            <tr><td><strong>Dâu tây</strong></td><td>4</td><td>5</td><td>1</td><td>0</td></tr>
+                        </tbody>
+                    </table>
+                    <p>Trong trường hợp này, nên dùng K-means hay K-medoids? Giải thích lý do.</p>
+                </li>
+
+                <li>
+                    <p>Kết quả phân cụm mong muốn là \(\{\text{Táo, Cam}\}\) và
+                    \(\{\text{Mâm xôi, Dâu tây}\}\) với \(K = 2\).
+                    Sử dụng phương pháp bạn chọn ở câu 2.2, hãy cho một ví dụ về cách
+                    khởi tạo cụ thể (chọn ngẫu nhiên từ tập dữ liệu)
+                    khiến thuật toán <strong>không đạt được</strong> kết quả mong muốn.</p>
+                </li>
+            </ol>
+        </div>
+
+    </main>
+</body>
+
+</html>
