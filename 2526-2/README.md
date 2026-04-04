@@ -1,8 +1,8 @@
-# README for 2526-2
+# Học máy — Học kì 2, năm học 2025–2026
 
-**@Lecturers:** Please update the `lecture-XX.html` files for each lecture as needed. You can use the existing lectures as references.
+**@Giảng viên:** Vui lòng cập nhật các file `lecture-XX.html` cho từng buổi học khi cần. Bạn có thể dùng các bài giảng hiện có làm tham khảo.
 
-## Nội dung học kì 2, 2025–2026
+## Nội dung học kì
 
 | Tuần | Bài giảng | Bài tập |
 |------|-----------|---------|
@@ -17,37 +17,37 @@
 | 9 | Máy vectơ hỗ trợ (SVM) | — |
 | 10 | Mạng nơ-ron nhân tạo | — |
 
-## Serving Lectures
+## Chạy slide
 
-This directory contains lecture slides written with Reveal.js that can be served via either GitHub Pages or a local web server.
+Thư mục này chứa slide bài giảng viết bằng Reveal.js, có thể serve qua GitHub Pages hoặc máy chủ web cục bộ.
 
-### Serving Locally (Recommended for Development)
+### Chạy trên máy cục bộ (khuyến nghị khi phát triển)
 
-Serving the slides locally allows several advantages, such as the ability to see **speaker notes** and **automatic reloading** when you make changes to the slides.
+Chạy cục bộ có nhiều ưu điểm: xem được **ghi chú của giảng viên** và **tự động tải lại** khi có thay đổi.
 
-1. Install Node.js.
-2. Go to this directory in your terminal and run `npm install` to install dependencies.
-3. Serve the presentation by running `npm start`.
-4. Open your web browser and navigate to http://localhost:8000 to view the slides.
+1. Cài Node.js.
+2. Vào thư mục này và chạy `npm install` để cài dependencies.
+3. Chạy `npm start` để khởi động server.
+4. Mở trình duyệt và truy cập http://localhost:8000.
 
-Alternatively, use Python's built-in server (no dependencies needed):
+Hoặc dùng server tích hợp của Python (không cần cài thêm gì):
 
 ```bash
 python3 -m http.server 8765
-# Open http://localhost:8765
+# Mở http://localhost:8765
 ```
 
-### Serving via GitHub Pages
+### Serve qua GitHub Pages
 
-Nothing special is needed. Just push your changes to the `main` branch, and GitHub Pages will automatically serve the content.
+Không cần cấu hình gì thêm. Chỉ cần push thay đổi lên nhánh `main`, GitHub Pages sẽ tự động serve nội dung.
 
 ## Tạo lại hình minh hoạ
 
-Mỗi bài giảng có thư mục `img/lecXX/scripts/` chứa các Python script. Để chạy:
+Mỗi bài giảng có thư mục `img/lecXX/scripts/` chứa các Python script sinh hình SVG. Để chạy:
 
 ```bash
 cd img/lec07/scripts
-python NN_script_name.py
+python NN_ten_script.py
 ```
 
 Yêu cầu: `numpy`, `matplotlib`, `scipy`, `scikit-learn`.
