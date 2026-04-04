@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Bài 7: Phân cụm</title>
+  <link rel="stylesheet" href="revealjs/dist/reset.css" />
+  <link rel="stylesheet" href="revealjs/dist/reveal.css" />
+  <link rel="stylesheet" href="revealjs/dist/theme/white.css" />
+  <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+  <link rel="stylesheet" href="lecture-style.css" />
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- OPENING: Title + Agenda -->
+      <section>
+        <section>
+          <h1>Học máy</h1>
+          <h3>Bài 7: Phân cụm</h3>
+          <p>Trường ĐH Công nghệ – Đại học Quốc gia Hà Nội</p>
+        </section>
+
+        <section>
+          <h2>Nội dung</h2>
+          <ol style="line-height:1.15em;">
+            <li>Tổng quan <a href="#tong-quan">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Khái niệm, ứng dụng, bài toán phân cụm</span>
+            </li>
+            <li>K-means <a href="#kmeans">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Thuật toán Lloyd, hội tụ, khởi tạo,
+                K-medoids, elbow</span>
+            </li>
+            <li>Phân cụm phân cấp <a href="#hierarchical">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Dendrogram, agglomerative, các phương pháp
+                linkage</span>
+            </li>
+            <li>Lựa chọn thực tế <a href="#practical">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Ma trận bất đồng, chuẩn hóa, đánh giá
+                cụm</span>
+            </li>
+          </ol>
+        </section>
+      </section>
+
+      <!-- PART 1: Tổng quan -->
+      <section>
+        <section id="tong-quan">
+          <h1>
+            <span class="text-light">1.</span><br />
+            Tổng quan
+          </h1>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Phân cụm là gì?</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:8px;">
+            <div>
+              <p style="margin-top:0;">Nhóm các quan sát thành các <span class="keyword">cụm</span> sao cho:</p>
+              <ul>
+                <li><strong>Trong cụm:</strong> độ tương đồng cao (intra-cluster similarity ↑)</li>
+                <li><strong>Giữa các cụm:</strong> độ tương đồng thấp (inter-cluster similarity ↓)</li>
+              </ul>
+              <p style="margin-top:10px;color:#555;">Không có nhãn đầu ra — đây là bài toán <strong>học không giám
+                  sát</strong>.</p>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec07/clustering-example.svg" alt="Ví dụ phân cụm"
+                style="max-width:100%;max-height:330px;object-fit:contain;" />
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>Ứng dụng phân cụm (1/2)</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:10px;align-items:start;">
+            <div style="text-align:center;">
+              <img src="img/lec07/raw-screenshots/Screenshot 2026-04-03 at 16.35.26.png"
+                style="max-width:100%;max-height:240px;object-fit:contain;border-radius:6px;" />
+              <p style="margin-top:8px;"><strong>Phân nhóm khách hàng</strong><br>
+                <span style="color:#555;">Nhóm khách hàng theo hành vi, sở thích để cá nhân hoá dịch vụ</span>
+              </p>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec07/raw-screenshots/Screenshot 2026-04-03 at 16.35.39.png"
+                style="max-width:100%;max-height:240px;object-fit:contain;border-radius:6px;" />
+              <p style="margin-top:8px;"><strong>Phân tích biểu hiện gen</strong><br>
+                <span style="color:#555;">Nhóm các gen và mẫu có pattern biểu hiện tương tự nhau</span>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>Ứng dụng phân cụm (2/2)</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:10px;align-items:start;">
+            <div style="text-align:center;">
+              <img src="img/lec07/raw-screenshots/Screenshot 2026-04-03 at 16.35.49.png"
+                style="max-width:100%;max-height:240px;object-fit:contain;border-radius:6px;" />
+              <p style="margin-top:8px;"><strong>Nén ảnh</strong><br>
+                <span style="color:#555;">Thay thế màu pixel bằng K màu đại diện (K-means)</span>
+              </p>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec07/raw-screenshots/Screenshot 2026-04-03 at 16.36.02.png"
+                style="max-width:100%;max-height:240px;object-fit:contain;border-radius:6px;" />
+              <p style="margin-top:8px;"><strong>Phân đoạn ảnh</strong><br>
+                <span style="color:#555;">Phân vùng ảnh thành các vùng có đặc trưng tương đồng</span>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.76em;">
+          <h2>Bài toán phân cụm</h2>
+          <p>Cho tập quan sát \(\mathcal{U}\) và hàm khoảng cách \(d: \mathcal{U} \times \mathcal{U} \to \mathbb{R}^+\),
+            nhóm các phần tử thành các cụm sao cho:</p>
+          <ul>
+            <li>Khoảng cách giữa các điểm <strong>trong cùng cụm</strong> nhỏ</li>
+            <li>Khoảng cách giữa các điểm <strong>khác cụm</strong> lớn</li>
+          </ul>
+          <p style="margin-top:10px;"><em>Nhỏ</em> và <em>lớn</em> ở đây không được định nghĩa chặt chẽ.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px;">
+            <div style="border:2px solid #4a90d9;border-radius:8px;padding:10px;">
+              <p style="text-align:center;font-weight:bold;color:#4a90d9;margin:0 0 5px;">Phân vùng độc quyền</p>
+              <p style="margin:0;font-size:0.9em;">Mỗi quan sát thuộc đúng một cụm</p>
+            </div>
+            <div style="border:2px solid #e8732a;border-radius:8px;padding:10px;">
+              <p style="text-align:center;font-weight:bold;color:#e8732a;margin:0 0 5px;">Phân vùng mềm</p>
+              <p style="margin:0;font-size:0.9em;">Mỗi quan sát có xác suất thuộc từng cụm</p>
+            </div>
+            <div style="border:2px solid #5aaa44;border-radius:8px;padding:10px;">
+              <p style="text-align:center;font-weight:bold;color:#5aaa44;margin:0 0 5px;">Phân cấp</p>
+              <p style="margin:0;font-size:0.9em;">Cây cụm lồng nhau theo mức độ tương đồng</p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- PART 2: K-means -->
+      <section>
+        <section id="kmeans">
+          <h1>
+            <span class="text-light">2.</span><br />
+            Phân cụm K-means
+          </h1>
+        </section>
+
+        <section style="font-size: 0.72em;">
+          <h2>Định nghĩa K-means</h2>
+          <p style="margin:4px 0;">Tìm \(K\) cụm rời nhau \(C_1, \ldots, C_K\) sao cho: \(C_1 \cup \cdots \cup C_K =
+            \{1,\ldots,n\}\) và \(C_k \cap C_{k'} = \emptyset\) với \(k \neq k'\).</p>
+          <p style="margin:8px 0 2px;"><strong>Hàm mục tiêu</strong> — tối thiểu hóa phương sai trong cụm:</p>
+          <p style="text-align:center;margin:0;">
+            \[ \min_{C_1,\ldots,C_K} \sum_{k=1}^{K} W(C_k) \]
+          </p>
+          <p style="text-align:center;margin:0;">
+            \[ W(C_k) = \frac{1}{|C_k|} \sum_{i,i' \in C_k} \sum_{j=1}^{p} (x_{ij} - x_{i'j})^2 = 2\sum_{i \in C_k}
+            \|x_i - \bar{x}_k\|^2 \]
+          </p>
+          <div
+            style="background:#fff8e1;border-left:4px solid #e8a020;padding:8px 12px;margin-top:8px;border-radius:4px;">
+            <strong>Lưu ý:</strong> Có tới \(\sim K^n / K!\) cách phân hoạch — bài toán rất khó, chỉ tìm được
+            <strong>nghiệm cục bộ</strong>.
+          </div>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>K-means: K = 2, 3, 4</h2>
+          <div style="text-align:center;margin-top:8px;">
+            <img src="img/lec07/kmeans-k234.svg" alt="K-means với K=2,3,4"
+              style="max-width:95%;max-height:380px;object-fit:contain;" />
+            <p style="font-size:0.75em;color:#666;margin-top:4px;"><em>Cùng dữ liệu, kết quả phân cụm thay đổi theo K. ★
+                = centroid</em></p>
+          </div>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>Thuật toán Lloyd (K-means)</h2>
+          <p style="margin-top:8px;"><strong>Thuật toán 12.2 — K-means clustering:</strong></p>
+          <ol style="line-height:2em;margin-top:6px;">
+            <li>Gán ngẫu nhiên mỗi điểm vào một trong \(K\) cụm.</li>
+            <li>Lặp đến khi cụm không đổi:
+              <ol type="a" style="margin-top:6px;line-height:2em;">
+                <li>Tính <strong>centroid</strong> mỗi cụm (trung bình vị trí các thành viên).</li>
+                <li>Gán mỗi quan sát vào cụm có centroid <strong>gần nhất</strong> (khoảng cách Euclid).</li>
+              </ol>
+            </li>
+          </ol>
+          <div
+            style="background:#fff8e1;border-left:4px solid #e8a020;padding:8px 14px;margin-top:16px;border-radius:4px;">
+            <strong>Đảm bảo hội tụ:</strong> số cấu hình phân hoạch hữu hạn và \(W(C_k)\) giảm sau mỗi vòng lặp.
+          </div>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Thuật toán Lloyd — Minh hoạ</h2>
+          <div style="text-align:center;margin-top:8px;">
+            <img src="img/lec07/kmeans-lloyd-steps.svg" alt="Các bước Lloyd K-means"
+              style="max-width:96%;max-height:450px;object-fit:contain;" />
+          </div>
+        </section>
+
+        <section style="font-size: 0.72em;">
+          <h2>Diễn giải: Tại sao Lloyd hoạt động?</h2>
+          <p style="margin:4px 0 2px;">Biểu diễn lại hàm mục tiêu qua centroid \(\mu_k\):</p>
+          <p style="text-align:center;margin:0;">
+            \[ \min_{C_k,\,\mu_k} \sum_{k=1}^{K} \sum_{i \in C_k} \|x_i - \mu_k\|^2 \]
+          </p>
+          <p style="margin:8px 0 6px;">Bài toán <strong>kết hợp</strong> này rất khó, nhưng <strong>hai bài toán
+              con</strong> lại đơn giản:</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div style="border:2px solid #4a90d9;border-radius:8px;padding:10px;">
+              <p style="margin:0 0 4px;font-weight:bold;color:#4a90d9;">Cố định \(C_k\) → tìm \(\mu_k\)</p>
+              <p style="margin:0;">Nghiệm tốt nhất là <strong>trung bình mẫu</strong>: \(\mu_k = \bar{x}_k\)</p>
+              <p style="margin:4px 0 0;color:#555;">(bước 2a — tính centroid)</p>
+            </div>
+            <div style="border:2px solid #e8732a;border-radius:8px;padding:10px;">
+              <p style="margin:0 0 4px;font-weight:bold;color:#e8732a;">Cố định \(\mu_k\) → tìm \(C_k\)</p>
+              <p style="margin:0;">Gán mỗi điểm vào <strong>cụm gần nhất</strong>:<br>\(\hat{k}(i) = \arg\min_k \|x_i -
+                \mu_k\|\)</p>
+              <p style="margin:4px 0 0;color:#555;">(bước 2b — gán cụm)</p>
+            </div>
+          </div>
+          <p style="margin-top:10px;color:#555;">Đây là chiến lược <strong>tối ưu hoá xen kẽ</strong> — mỗi bước đều
+            giảm hàm mục tiêu \(W\), nên thuật toán hội tụ sau hữu hạn bước.</p>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>Khởi tạo K-means</h2>
+          <p style="margin-top:8px;">K-means là thuật toán tham lam → chỉ tìm <strong>cực tiểu cục bộ</strong>.</p>
+          <ul style="line-height:1.9em;">
+            <li>Cần chạy <strong>nhiều lần</strong> với điểm khởi tạo khác nhau.</li>
+            <li>Chọn kết quả có \(W\) nhỏ nhất.</li>
+          </ul>
+          <p style="margin-top:14px;"><span class="keyword">K-means++</span> — thuật toán khởi tạo phổ biến nhất:</p>
+          <ul style="line-height:1.9em;">
+            <li>Chọn centroid đầu tiên ngẫu nhiên.</li>
+            <li>Các centroid tiếp theo ưu tiên các điểm <strong>xa</strong> centroid hiện tại.</li>
+            <li>Giảm đáng kể nguy cơ hội tụ về cực tiểu xấu.</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.8em;">
+          <h2>Khởi tạo K-means — Minh hoạ</h2>
+          <div style="text-align:center;margin-top:8px;">
+            <img src="img/lec07/kmeans-initialization.svg" alt="K-means nhiều lần khởi tạo"
+              style="max-width:80%;max-height:420px;object-fit:contain;" />
+          </div>
+        </section>
+
+        <section style="font-size: 0.76em;">
+          <h2>K-medoids</h2>
+          <p style="margin-top:0;"><strong>Hạn chế của K-means:</strong></p>
+          <ul>
+            <li>Cần không gian metric (centroid phải tính được).</li>
+            <li>Nhạy cảm với nhiễu ngoại lai (outliers).</li>
+          </ul>
+          <p style="margin-top:10px;"><strong>K-medoids</strong> — dùng điểm dữ liệu thực thay cho centroid:</p>
+          <p style="text-align:center;">
+            \[ i_k^* = \arg\min_{i: C_i = k} \sum_{j: C(j)=k} d(x_i, x_j) \]
+          </p>
+          <ul>
+            <li><span class="keyword">Medoid</span>: quan sát gần nhất với tất cả quan sát còn lại trong cụm.</li>
+            <li>Dùng được khi chỉ có ma trận khoảng cách.</li>
+            <li>Chi phí tính toán tăng từ \(N\) lên \(N^2\).</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Chọn K — Elbow Method</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:8px;">
+            <div>
+              <p style="margin-top:0;"><span class="keyword">Heuristic điểm khuỷu</span>: tìm điểm uốn (elbow) trên
+                đường cong:</p>
+              <ul>
+                <li>Tăng \(K\) luôn giảm \(W\), nhưng có <strong>lợi nhuận giảm dần</strong>.</li>
+                <li>Chọn \(K\) tại điểm đường cong "gãy".</li>
+                <li>Áp dụng cả cho PCA (chọn số PC) và K-means (chọn K).</li>
+              </ul>
+              <p style="margin-top:8px;color:#c0392b;font-size:0.9em;">Không có quy tắc tự động — cần phán đoán trực
+                quan.</p>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec07/elbow-plot.svg" alt="Elbow method plot"
+                style="max-width:100%;max-height:300px;object-fit:contain;" />
+              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Điểm khuỷu tại K=3</em></p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- PART 3: Phân cụm phân cấp -->
+      <section>
+        <section id="hierarchical">
+          <h1>
+            <span class="text-light">3.</span><br />
+            Phân cụm <br /> phân cấp<br>
+            <span style="font-size:0.5em;color:#555;">(Hierarchical Clustering)</span>
+          </h1>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Động lực — Không cần chọn K</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:8px;">
+            <div>
+              <p style="margin-top:0;">Phân cụm phân cấp <strong>không yêu cầu chọn trước K</strong>.</p>
+              <div style="border-left:4px solid #4a90d9;padding-left:10px;margin-top:8px;">
+                <p style="margin:0 0 3px;"><strong>Top-down (chia đôi)</strong></p>
+                <p style="margin:0;font-size:0.9em;">Bắt đầu từ 1 cụm, chia đệ quy.</p>
+              </div>
+              <div style="border-left:4px solid #e8732a;padding-left:10px;margin-top:8px;">
+                <p style="margin:0 0 3px;"><strong>Bottom-up (tích tụ)</strong></p>
+                <p style="margin:0;font-size:0.9em;">Bắt đầu từ n cụm đơn, gộp dần.</p>
+              </div>
+              <p style="margin-top:10px;">Kết quả là <span class="keyword">dendrogram</span> — biểu đồ cây phân cấp.</p>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec07/hierarchical-data.svg" alt="Dữ liệu mô phỏng 3 lớp"
+                style="max-width:100%;max-height:300px;object-fit:contain;" />
+              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Dữ liệu mô phỏng — nhãn lớp ẩn với thuật
+                  toán</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.82em;">
+          <h2>Đọc Dendrogram</h2>
+          <p style="margin-top:8px;">Cấu trúc cây, trong đó:</p>
+          <ul style="line-height:1.9em;">
+            <li>Mỗi <strong>lá</strong> là một quan sát.</li>
+            <li>Mỗi <strong>nút trong</strong> là gốc của một cụm tiềm năng.</li>
+            <li>Trục \(y\): độ bất đồng khi hai cụm được gộp.</li>
+            <li>Thứ tự trục \(x\) là tùy ý (miễn tuân cấu trúc cây).</li>
+          </ul>
+          <div style="background:#e8f4fd;border-left:4px solid #4a90d9;padding:10px 14px;margin-top:14px;border-radius:4px;">
+            <strong>Cắt ngang dendrogram</strong> tạo ra các cụm rời nhau:<br>
+            cắt <strong>cao</strong> → ít cụm lớn &nbsp;|&nbsp; cắt <strong>thấp</strong> → nhiều cụm nhỏ.
+          </div>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Đọc Dendrogram — Minh hoạ</h2>
+          <div style="text-align:center;margin-top:8px;">
+            <img src="img/lec07/dendrogram-example.svg" alt="Dendrogram ví dụ"
+              style="max-width:92%;max-height:420px;object-fit:contain;" />
+            <p style="font-size:0.75em;color:#666;margin-top:6px;"><em>Đường đứt cam = ngưỡng cắt → 2 cụm</em></p>
+          </div>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Lưu ý khi đọc Dendrogram</h2>
+          <div style="text-align:center;margin-top:8px;">
+            <img src="img/lec07/dendrogram-axis.svg?v=3" alt="Khoảng cách trên trục ngang không phản ánh độ tương đồng"
+              style="max-width:88%;max-height:380px;object-fit:contain;" />
+            <p style="font-size:0.75em;color:#666;margin:4px 0 0;"><em>Khoảng cách trên trục ngang
+                <strong>không</strong> phản ánh độ tương đồng giữa các quan sát</em></p>
+          </div>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Các cách biểu diễn Dendrogram</h2>
+          <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:12px;align-items:center;margin-top:6px;">
+            <div style="text-align:center;">
+              <img src="img/lec07/dendrogram-other-viz.svg?v=4" alt="Dendrogram tiêu chuẩn và tô màu theo cụm"
+                style="max-width:100%;max-height:340px;object-fit:contain;" />
+              <p style="font-size:0.73em;color:#666;margin:3px 0 0;"><em>Trái: tiêu chuẩn (màu đơn).
+                  Phải: tô màu theo cụm sau khi cắt tại K = 3.</em></p>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec07/dendrogram-radial.svg?v=2" alt="Dendrogram dạng tròn (radial)"
+                style="max-width:100%;max-height:340px;object-fit:contain;" />
+              <p style="font-size:0.73em;color:#666;margin:3px 0 0;"><em>Dạng tròn (radial): lá ở vòng ngoài,
+                  gốc ở tâm.</em></p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.76em;">
+          <h2>Thuật toán Agglomerative</h2>
+          <p style="margin-top:0;"><strong>Thuật toán 12.3 — Phân cụm tích tụ:</strong></p>
+          <ol style="line-height:1.65em;">
+            <li>Mỗi quan sát là một cụm đơn; tính ma trận khoảng cách tất cả các cặp \((d_{ij})\).</li>
+            <li>Gộp hai cụm có khoảng cách nhỏ nhất thành một cụm mới.</li>
+            <li>Tính khoảng cách giữa cụm mới và các cụm còn lại.</li>
+            <li>Lặp bước 2–3 cho đến khi còn một cụm duy nhất.</li>
+          </ol>
+        </section>
+
+        <section style="font-size: 0.76em;">
+          <h2>Agglomerative vs. Divisive</h2>
+          <blockquote style="border-left:3px solid #4a90d9;padding-left:10px;margin-top:24px;color:#333;font-size:1.05em;">
+            <strong>Agglomerative</strong> (tích tụ, bottom-up) thường được ưa hơn
+            <strong>divisive</strong> (phân chia, top-down): một lần chia sai từ đầu
+            thì không sửa được, còn gộp nhầm thì cấu trúc dendrogram vẫn dễ nhận ra hơn.
+          </blockquote>
+        </section>
+
+        <section style="font-size: 0.74em;">
+          <h2>Các phương pháp Linkage</h2>
+          <p style="margin-top:0;">Cho \((d_{ij})\) là ma trận bất đồng và \(d(G,H)\) là khoảng cách giữa hai cụm \(G\)
+            và \(H\):</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;">
+            <div style="border-left:4px solid #4a90d9;padding-left:10px;">
+              <p style="margin:0 0 3px;"><strong>Complete linkage (CL)</strong></p>
+              <p style="margin:0;">\(d_{CL}(G,H) = \max_{i\in G, j\in H} d_{ij}\)</p>
+              <p style="margin:4px 0 0;font-size:0.88em;color:#555;">→ Tạo ra các cụm compact.</p>
+            </div>
+            <div style="border-left:4px solid #e8732a;padding-left:10px;">
+              <p style="margin:0 0 3px;"><strong>Single linkage (SL)</strong></p>
+              <p style="margin:0;">\(d_{SL}(G,H) = \min_{i\in G, j\in H} d_{ij}\)</p>
+              <p style="margin:4px 0 0;font-size:0.88em;color:#555;">→ Dễ tạo cụm dạng chuỗi dài.</p>
+            </div>
+            <div style="border-left:4px solid #5aaa44;padding-left:10px;">
+              <p style="margin:0 0 3px;"><strong>Average linkage (GA)</strong></p>
+              <p style="margin:0;">\(d_{GA}(G,H) = \dfrac{1}{N_G N_H}\sum_{i\in G}\sum_{j\in H} d_{ij}\)</p>
+              <p style="margin:4px 0 0;font-size:0.88em;color:#555;">→ Thỏa hiệp giữa CL và SL.</p>
+            </div>
+            <div style="border-left:4px solid #c0392b;padding-left:10px;">
+              <p style="margin:0 0 3px;"><strong>Centroid linkage (CTL)</strong></p>
+              <p style="margin:0;">\(d_{CTL}(G,H) = \|\bar{G} - \bar{H}\|^2\)</p>
+              <p style="margin:4px 0 0;font-size:0.88em;color:#555;">→ Có thể gây đảo ngược (inversions).</p>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>So sánh phương pháp Linkage</h2>
+          <div style="text-align:center;margin-top:8px;">
+            <img src="img/lec07/linkage-comparison.svg?v=3" alt="So sánh complete, single, average linkage"
+              style="max-width:95%;max-height:380px;object-fit:contain;" />
+            <p style="font-size:0.75em;color:#666;margin:4px 0 0;"><em>
+                <span style="color:#4a90d9;font-weight:bold;">Complete</span> (compact) vs.
+                <span style="color:#e8732a;font-weight:bold;">Single</span> (chuỗi) vs.
+                <span style="color:#5aaa44;font-weight:bold;">Average</span> (trung bình)
+                trên cùng dữ liệu</em></p>
+          </div>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Ví dụ: Dữ liệu khối u người</h2>
+          <div style="text-align:center;margin-top:8px;">
+            <img src="img/lec07/linkage-tumor.svg?v=2"
+              alt="Dendrograms: Average, Complete, Single Linkage trên dữ liệu microarray"
+              style="max-width:92%;max-height:380px;object-fit:contain;" />
+            <p style="font-size:0.75em;color:#666;margin:4px 0 0;"><em>Average / Complete / Single Linkage cho kết quả
+                rất khác nhau trên cùng dữ liệu microarray</em></p>
+          </div>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Khi nào phân cụm phân cấp phù hợp?</h2>
+          <p style="margin-top:0;">Dendrogram <strong>không phải lúc nào cũng phù hợp</strong>:
+            một số tập dữ liệu không có cấu trúc phân cấp thực sự — trong trường hợp đó,
+            K-means cho kết quả tốt hơn về độ kết dính.</p>
+          <div style="text-align:center;margin-top:6px;">
+            <img src="img/lec07/hierarchical-limitation.svg?v=3" alt="Hạn chế hierarchical clustering"
+              style="max-width:95%;max-height:360px;object-fit:contain;" />
+            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Dữ liệu nam/nữ: phân cấp theo quốc tịch không tự nhiên bằng phân theo giới tính</em></p>
+          </div>
+        </section>
+      </section>
+
+      <!-- PART 4: Lựa chọn thực tế -->
+      <section>
+        <section id="practical">
+          <h1>
+            <span class="text-light">4.</span><br />
+            Lựa chọn thực tế
+          </h1>
+        </section>
+
+        <section style="font-size: 0.76em;">
+          <h2>Chọn ma trận bất đồng</h2>
+          <p style="margin-top:0;">Mặc định thường dùng khoảng cách Euclid. Đôi khi <span class="keyword">khoảng cách tương quan</span> phù hợp hơn khi các quan sát tương đồng nếu <strong>hình dạng</strong> profile giống nhau, dù độ lớn khác nhau.</p>
+          <div style="text-align:center;margin-top:6px;">
+            <img src="img/lec07/dissimilarity-comparison.svg?v=2" alt="Euclid vs correlation distance"
+              style="max-width:96%;max-height:360px;object-fit:contain;" />
+            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Obs 1 &amp; 2 có hình dạng giống nhau (tương quan cao) nhưng Euclid xa nhau; Obs 1 &amp; 3 ngược lại</em></p>
+          </div>
+        </section>
+
+        <section style="font-size: 0.76em;">
+          <h2>Ví dụ: Hồ sơ mua hàng</h2>
+          <div style="text-align:center;margin-top:8px;">
+            <img src="img/lec07/shoppers-profiles.svg?v=2" alt="Shoppers buying profiles"
+              style="max-width:88%;max-height:380px;object-fit:contain;" />
+            <p style="font-size:0.75em;color:#666;margin:4px 0 0;"><em>Số mặt hàng mua cho 8 khách hàng — Euclid không
+                phân biệt được xu hướng mua hàng</em></p>
+          </div>
+        </section>
+
+        <section style="font-size: 0.76em;">
+          <h2>Chuẩn hóa dữ liệu</h2>
+          <p style="margin-top:0;">Nên chuẩn hóa khi các đặc trưng có đơn vị khác nhau:</p>
+          <ul>
+            <li>Ví dụ: khách hàng có xu hướng mua nhiều tất hơn máy tính.</li>
+            <li>Nếu không chuẩn hóa, khoảng cách bị chi phối bởi đặc trưng có giá trị lớn.</li>
+            <li>Chuẩn hóa (z-score) đưa mọi đặc trưng về cùng thang đo.</li>
+          </ul>
+          <p style="margin-top:10px;"><strong>Khi nào KHÔNG nên chuẩn hóa?</strong></p>
+          <ul>
+            <li>Khi độ lớn mang ý nghĩa quan trọng (ví dụ: lượng chi tiêu).</li>
+            <li>Khi muốn phân cụm theo giá trị tuyệt đối.</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.76em;">
+          <h2>Các vấn đề thực tế</h2>
+          <p style="margin-top:0;">Những quyết định nhỏ có hậu quả lớn:</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;">
+            <div style="border:1px solid #ccc;border-radius:8px;padding:12px;background:#f9f9f9;">
+              <p style="font-weight:bold;color:#4a90d9;margin:0 0 6px;">Phân cụm phân cấp</p>
+              <ul style="margin:0;">
+                <li>Chọn ma trận bất đồng nào?</li>
+                <li>Phương pháp linkage nào?</li>
+                <li>Cắt dendrogram ở đâu?</li>
+              </ul>
+            </div>
+            <div style="border:1px solid #ccc;border-radius:8px;padding:12px;background:#f9f9f9;">
+              <p style="font-weight:bold;color:#e8732a;margin:0 0 6px;">K-means</p>
+              <ul style="margin:0;">
+                <li>Chọn K bằng cách nào?</li>
+                <li>Có chuẩn hóa dữ liệu không?</li>
+              </ul>
+            </div>
+          </div>
+          <p style="margin-top:12px;"><strong>Đánh giá kết quả phân cụm:</strong></p>
+          <ul>
+            <li>Rất khó nếu không có nhãn.</li>
+            <li>Có thể dùng bootstrap để kiểm tra độ ổn định cụm.</li>
+            <li>Nếu có nhãn một phần: đánh giá độ tinh khiết lớp (class purity).</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Phân cụm đồng thời hàng và cột</h2>
+          <p style="margin-top:0;">Áp dụng phân cấp riêng biệt cho cả quan sát và đặc trưng, hiển thị dưới dạng <strong>heatmap</strong> sắp xếp theo cụm — dễ phát hiện pattern ẩn.</p>
+          <p style="margin:4px 0 0;font-size:0.88em;color:#555;"><strong>Dữ liệu Iris</strong>: 150 mẫu hoa diên vĩ thuộc 3 loài (<em>setosa</em>, <em>versicolor</em>, <em>virginica</em>), mỗi mẫu có 4 đặc trưng đo kích thước đài hoa và cánh hoa.</p>
+          <div style="text-align:center;margin-top:6px;">
+            <img src="img/lec07/bicluster-iris.svg?v=3" alt="Biclustering Iris dataset"
+              style="max-width:92%;max-height:310px;object-fit:contain;" />
+            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Heatmap phân cụm tập dữ liệu Iris — hàng (quan sát) và cột (đặc trưng) đều được sắp xếp theo cụm</em></p>
+          </div>
+        </section>
+      </section>
+
+      <!-- PART 5: Summary -->
+      <section>
+        <section>
+          <h1>Tổng kết</h1>
+        </section>
+
+        <section style="font-size: 0.72em;">
+          <h2>So sánh K-means và phân cụm phân cấp</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;">
+            <div style="border:2px solid #4a90d9;border-radius:8px;padding:14px;background:#f5f9ff;">
+              <p style="text-align:center;font-weight:bold;color:#4a90d9;margin:0 0 8px;">K-means</p>
+              <ul style="margin:0;line-height:1.6em;">
+                <li>Cần chọn trước \(K\).</li>
+                <li>Nhanh, dễ mở rộng.</li>
+                <li>Tìm cực tiểu cục bộ — cần nhiều lần chạy.</li>
+                <li>Nhạy cảm với outliers.</li>
+                <li>Phù hợp khi cụm dạng cầu (spherical).</li>
+              </ul>
+            </div>
+            <div style="border:2px solid #e8732a;border-radius:8px;padding:14px;background:#fff8f5;">
+              <p style="text-align:center;font-weight:bold;color:#e8732a;margin:0 0 8px;">Phân cụm phân cấp</p>
+              <ul style="margin:0;line-height:1.6em;">
+                <li>Không cần chọn trước số cụm.</li>
+                <li>Cho phép xem toàn bộ phân cấp (dendrogram).</li>
+                <li>Tốn bộ nhớ \(O(n^2)\) — khó mở rộng.</li>
+                <li>Kết quả phụ thuộc vào linkage.</li>
+                <li>Phù hợp khi dữ liệu có cấu trúc phân cấp tự nhiên.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Phân cụm mềm và các biến thể</h2>
+          <ul style="margin-top:12px;line-height:1.7em;">
+            <li><strong>Soft K-means / Gaussian Mixture Model:</strong> mỗi quan sát có xác suất thuộc từng cụm.</li>
+            <li><strong>Subspace clustering:</strong> mỗi cụm tồn tại trong một không gian con khác nhau.</li>
+            <li><strong>Density-based clustering (DBSCAN):</strong> cụm là vùng mật độ cao.</li>
+            <li><strong>Spectral clustering:</strong> dùng đồ thị láng giềng để phân cụm hình dạng bất kỳ.</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.86em;">
+          <h2>Tài liệu tham khảo</h2>
+          <ul style="line-height:1.9em;">
+            <li>ISLR, Chương 12.</li>
+            <li>ESL, Chương 13–14.</li>
+            <li>Muandet &amp; Vreeken, lecture slides.</li>
+          </ul>
+        </section>
+      </section>
+
+      <div class="footer">
+        Học máy (Học kỳ 2 2025-2026) §7: Phân cụm
+      </div>
+    </div>
+  </div>
+
+  <script src="revealjs/dist/reveal.js"></script>
+  <script src="plugin/notes/notes.js"></script>
+  <script src="plugin/markdown/markdown.js"></script>
+  <script src="plugin/highlight/highlight.js"></script>
+  <script src="plugin/math/math.js"></script>
+  <script>
+    Reveal.initialize({
+      controlsLayout: "edges",
+      slideNumber: true,
+      hashOneBasedIndex: true,
+      hash: true,
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX],
+    });
+  </script>
+</body>
+
+</html>
