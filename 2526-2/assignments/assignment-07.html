@@ -2,45 +2,27 @@
 <html lang="vi">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Học máy | Bài tập về nhà #7</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
-    <style>
-        .hint {
-            background: #f8f9fa;
-            border-left: 3px solid #6c757d;
-            padding: 8px 14px;
-            margin-top: 10px;
-            font-size: 0.93em;
-            color: #555;
-        }
-        table.dissimilarity {
-            border-collapse: collapse;
-            margin: 12px 0;
-        }
-        table.dissimilarity th,
-        table.dissimilarity td {
-            border: 1px solid #ccc;
-            padding: 6px 14px;
-            text-align: center;
-        }
-        table.dissimilarity th {
-            background: #f0f0f0;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="../../favicon.png">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <title>Học máy | Bài tập về nhà #7</title>
+    <link rel="stylesheet" href="../../index-pages.css">
+    <link rel="stylesheet" href="assignment-pages.css">
+  <script src="mathjax-config.js"></script>
+  <script id="MathJax-script" async src="mathjax4.js"></script>
 </head>
 
 <body>
-    <main class="container my-4">
-        <h1>Bài tập về nhà #7</h1>
-        <h2>Bài toán phân cụm</h2>
+    <main class="page-shell assignment-shell">
+        <header class="assignment-header">
+            <a class="secondary-link assignment-backlink" href="../index.html"><span aria-hidden="true">←</span><span>Quay lại học kỳ</span></a>
+            <p class="eyebrow assignment-eyebrow">IAI · UET · VNU</p>
+            <p class="assignment-course">Học máy</p>
+            <h1 class="assignment-topic">Bài toán phân cụm</h1>
+            <p class="assignment-meta">Bài tập về nhà #7 · Học kì 2 · Năm học 2025-2026</p>
+        </header>
+
         <hr>
 
         <!-- ── BÀI 1 ── -->
@@ -54,12 +36,12 @@
                     <div class="row my-3">
                         <div class="col-md-5 text-center">
                             <img src="img/07/fig1.svg" alt="Hình 1: Tập dữ liệu 1"
-                                style="max-width: 320px; width: 100%;">
+                                class="figure-img-compact">
                             <figcaption class="text-muted mt-1"><em>Hình 1: Tập dữ liệu 1</em></figcaption>
                         </div>
                         <div class="col-md-5 text-center">
                             <img src="img/07/fig2.svg" alt="Hình 2: Tập dữ liệu 2"
-                                style="max-width: 320px; width: 100%;">
+                                class="figure-img-compact">
                             <figcaption class="text-muted mt-1"><em>Hình 2: Tập dữ liệu 2</em></figcaption>
                         </div>
                     </div>
@@ -81,7 +63,7 @@
                     <p>Ngoài nhãn lớp, phân cụm phân cấp có thể tiết lộ thêm thông tin gì?
                     Bạn kỳ vọng cấu trúc phân cấp ở mức cao nhất của dendrogram
                     sẽ trông như thế nào?</p>
-                    <p class="text-muted" style="font-size:0.88em;"><sup>*</sup>
+                    <p class="text-muted note-inline"><sup>*</sup>
                         CIFAR-10 chứa 60.000 ảnh RGB 32×32 với nhãn thuộc 10 lớp.
                     </p>
                 </li>
@@ -153,7 +135,11 @@
             </ol>
         </div>
 
-    </main>
+
+    <p class="footer">
+      Viện Trí tuệ nhân tạo · Trường Đại học Công nghệ · Đại học Quốc gia Hà Nội
+    </p>
+  </main>
 </body>
 
 </html>

@@ -2,21 +2,27 @@
 <html lang="vi">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Học máy | Bài tập về nhà #4</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="../../favicon.png">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <title>Học máy | Bài tập về nhà #4</title>
+    <link rel="stylesheet" href="../../index-pages.css">
+    <link rel="stylesheet" href="assignment-pages.css">
+  <script src="mathjax-config.js"></script>
+  <script id="MathJax-script" async src="mathjax4.js"></script>
 </head>
 
 <body>
-    <main class="container my-4">
-        <h1>Bài tập về nhà #4</h1>
-        <h2>Tổng quát hóa &amp; Lựa chọn mô hình</h2>
+    <main class="page-shell assignment-shell">
+        <header class="assignment-header">
+            <a class="secondary-link assignment-backlink" href="../index.html"><span aria-hidden="true">←</span><span>Quay lại học kỳ</span></a>
+            <p class="eyebrow assignment-eyebrow">IAI · UET · VNU</p>
+            <p class="assignment-course">Học máy</p>
+            <h1 class="assignment-topic">Tổng quát hóa &amp; Lựa chọn mô hình</h1>
+            <p class="assignment-meta">Bài tập về nhà #4 · Học kì 2 · Năm học 2025-2026</p>
+        </header>
+
         <hr>
 
         <h2>Bài 1: Kiểm định chéo</h2>
@@ -42,9 +48,9 @@
                 bằng nghiệm dạng đóng của hồi quy tuyến tính (phương trình chuẩn).
             </p>
             <p>
-                Bob nghe nói rằng bằng cách biến đổi đầu vào \(x_i\) với một hàm vector \(\boldsymbol{\phi}\), anh có
-                thể khớp một hàm thay thế \(g(x_i) = \mathbf{v}^T \boldsymbol{\phi}(x_i)\) bằng cùng thủ tục (giải
-                phương trình chuẩn). Bob quyết định dùng phép biến đổi tuyến tính \(\boldsymbol{\phi}(x_i) =
+                Bob nghe nói rằng bằng cách biến đổi đầu vào \(x_i\) với một hàm vector \(\phi\), anh có
+                thể khớp một hàm thay thế \(g(x_i) = \mathbf{v}^T \phi(x_i)\) bằng cùng thủ tục (giải
+                phương trình chuẩn). Bob quyết định dùng phép biến đổi tuyến tính \(\phi(x_i) =
                 \mathbf{A}^T x_i\), trong đó \(\mathbf{A} \in \mathbb{R}^{D \times D}\) có hạng đầy đủ.
             </p>
             <ol>
@@ -115,7 +121,7 @@
                 hướng \(a_i \in \mathbb{R}_+\) (tức là \(a_i > 0\) với mọi \(i\)). Khi đó hàm tổng bình phương sai số
                 có dạng:
                 \[
-                E_{\text{weighted}}(\mathbf{w}) = \frac{1}{2} \sum_{i=1}^N a_i \left(\mathbf{w}^T \boldsymbol{\phi}(x_i)
+                E_{\text{weighted}}(\mathbf{w}) = \frac{1}{2} \sum_{i=1}^N a_i \left(\mathbf{w}^T \phi(x_i)
                 - y_i\right)^2
                 \]
             </p>
@@ -125,12 +131,16 @@
                     trong trường hợp có các bản sao chính xác của một điểm dữ liệu trong tập dữ liệu.
                     <br>
                     <em>Gợi ý: Bình phương tối thiểu thông thường có thể được mô hình hóa trong bối cảnh xác suất là
-                        các biến ngẫu nhiên i.i.d. \(y_i \sim \mathcal{N}(\mathbf{w}^T \boldsymbol{\phi}(x_i),
+                        các biến ngẫu nhiên i.i.d. \(y_i \sim \mathcal{N}(\mathbf{w}^T \phi(x_i),
                         \beta^{-1})\) với độ chính xác nhiễu chung là \(\beta\).</em>
                 </li>
             </ol>
         </div>
-    </main>
+
+    <p class="footer">
+      Viện Trí tuệ nhân tạo · Trường Đại học Công nghệ · Đại học Quốc gia Hà Nội
+    </p>
+  </main>
 </body>
 
 </html>
