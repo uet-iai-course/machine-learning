@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Học máy | Bài tập về nhà #6</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <style>
+        .hint {
+            background: #f8f9fa;
+            border-left: 3px solid #6c757d;
+            padding: 8px 14px;
+            margin-top: 10px;
+            font-size: 0.93em;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container my-4">
+        <h1>Bài tập về nhà #6</h1>
+        <h2>Giảm chiều dữ liệu</h2>
+        <hr>
+
+        <!-- ── BÀI 1 ── -->
+        <h2>Bài 1 — PCA và t-SNE</h2>
+        <div class="q">
+            <ol>
+                <li>
+                    Bằng lời của mình, hãy mô tả ngắn gọn (tối đa 50 từ cho mỗi ý) cách PCA và t-SNE
+                    tiếp cận bài toán giảm chiều dữ liệu. Với mỗi phương pháp, hãy nêu một nhược điểm
+                    (cũng tối đa 50 từ).
+                </li>
+                <li>
+                    Vì sao cần chuẩn hóa dữ liệu trước khi áp dụng PCA?
+                </li>
+                <li>
+                    <p>
+                        Cho tập dữ liệu gồm \(n\) quan sát \(\mathbf{X} \in \mathbb{R}^{n \times p}\), trong đó
+                        trung bình của mỗi cột bằng không. Thành phần chính thứ nhất là hướng làm cho phương sai đạt cực đại:
+                        \[
+                            \operatorname*{argmax}_{\mathbf{w} \in \mathbb{R}^p,\, \|\mathbf{w}\|=1}
+                            \frac{1}{n} \sum_{i=1}^{n}
+                            \left( \sum_{j=1}^{p} w_j x_{i,j} \right)^2.
+                        \]
+                        Hãy chứng minh rằng thành phần chính thứ nhất cũng chính là vector riêng ứng với
+                        giá trị riêng lớn nhất của ma trận hiệp phương sai \(\mathbf{X}^\top \mathbf{X}\).
+                    </p>
+                    <div class="hint">
+                        <strong>Gợi ý:</strong> Viết lại bài toán tối ưu dưới dạng ma trận, rồi
+                        áp dụng điều kiện tối ưu với nhân tử Lagrange cho ràng buộc \(\|\mathbf{w}\| = 1\).
+                    </div>
+                </li>
+            </ol>
+        </div>
+
+    </main>
+</body>
+
+</html>
