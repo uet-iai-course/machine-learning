@@ -22,6 +22,7 @@ html {
 
 body {
     margin: 0;
+    scrollbar-gutter: stable;
     color: var(--text);
     font-family: var(--font-sans);
     background:
