@@ -126,29 +126,29 @@
           </div>
         </section>
 
-        <section style="font-size: 0.78em;">
+        <section style="font-size: 0.9em;">
           <h2>Động lực giảm chiều</h2>
-          <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:16px;align-items:start;">
-            <div>
-              <ul>
-                <li>Khó trực quan hóa khi \(p > 3\).</li>
-                <li>Nhiều chiều tương quan gây khó cho thuật toán.</li>
-                <li>Tính toán trở nên tốn kém.</li>
-              </ul>
-              <p style="margin-top:8px;"><span class="keyword">Lời nguyền chiều dữ liệu:</span></p>
-              <ul>
-                <li>Cần rất nhiều dữ liệu để mô tả phân phối.</li>
-                <li>Khoảng cách giữa các điểm dần mất ý nghĩa.</li>
-              </ul>
-              <p style="margin-top:8px;"><strong>Mục tiêu:</strong> giảm chiều nhưng vẫn giữ cấu trúc chính.</p>
-            </div>
-            <div style="text-align:center;">
+          <!-- <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:16px;align-items:start;"> -->
+          <div>
+            <ul>
+              <li>Khó trực quan hóa khi \(p > 3\).</li>
+              <li>Nhiều chiều tương quan gây khó cho thuật toán.</li>
+              <li>Tính toán trở nên tốn kém.</li>
+            </ul>
+            <p style="margin-top:8px;"><span class="keyword">Lời nguyền chiều dữ liệu:</span></p>
+            <ul>
+              <li>Cần rất nhiều dữ liệu để mô tả phân phối.</li>
+              <li>Khoảng cách giữa các điểm dần mất ý nghĩa.</li>
+            </ul>
+            <p style="margin-top:8px;"><strong>Mục tiêu:</strong> giảm chiều nhưng vẫn giữ cấu trúc chính.</p>
+          </div>
+          <!-- <div style="text-align:center;">
               <img src="img/lec06/flow-cytometry-comparison.png" alt="Flow cytometry: raw vs t-SNE"
                 style="max-width:100%;max-height:340px;object-fit:contain;" />
               <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Dữ liệu flow cytometry chiều cao — raw vs. sau
                   giảm chiều</em></p>
-            </div>
-          </div>
+            </div> -->
+          <!-- </div> -->
         </section>
       </section>
 
@@ -162,9 +162,9 @@
           </h1>
         </section>
 
-        <section style="font-size: 0.72em;" data-auto-animate>
+        <section style="font-size: 0.72em;">
           <h2>Ý tưởng trực quan</h2>
-          <div style="display:grid;grid-template-columns:1fr .9fr;gap:12px;margin-top:6px;align-items:start;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px;align-items:start;">
             <div>
               <p>Dữ liệu dân số và chi tiêu quảng cáo của 100 thành phố:</p>
               <ul>
@@ -182,7 +182,7 @@
           </div>
         </section>
 
-        <section style="font-size: 0.72em;" data-auto-animate>
+        <section style="font-size: 0.85em;">
           <h2>Định nghĩa</h2>
           <p><strong>Thành phần chính thứ nhất</strong> (first principal component, first PC) là tổ hợp tuyến tính của
             các biến đã chuẩn hóa trung bình:</p>
@@ -190,15 +190,29 @@
             \[ Z_1 = \sum_{j=1}^{p} \phi_{j1}(X_j - \bar{X}_j) \]
           </p>
           <ul>
-            <li>Ràng buộc chuẩn hóa: \(\phi_{11}^2 + \phi_{21}^2 + \cdots + \phi_{p1}^2 = 1\)</li>
-            <li>Tìm \(\phi_{j1}\) sao cho phương sai \(Z_1\) lớn nhất</li>
-            <li>\(\phi_{j1}\): <span class="keyword">hệ số tải</span>, \(z_{i1}\): <span class="keyword">điểm PC</span>
-            </li>
-            <li>PC thứ \(j\) vuông góc với mọi PC trước</li>
+            <li>\(\phi_{j1}\): <span class="keyword">hệ số tải</span> (loading) — mỗi biến gốc đóng góp bao nhiêu</li>
+            <li>\(z_{i1}\): <span class="keyword">điểm PC</span> (score) — toạ độ mới của quan sát \(i\)</li>
+            <li>PC thứ \(m\) vuông góc với mọi PC trước: \(\sum_j \phi_{jm}\phi_{jk} = 0\) với \(k < m\)</li>
           </ul>
         </section>
 
-        <section style="font-size: 0.75em;">
+        <section style="font-size: 0.72em;" data-auto-animate>
+          <h2>Bài toán tối ưu PCA</h2>
+          <p>Tìm hệ số tải \(\phi_{j1}\) sao cho <strong>phương sai hình chiếu lớn nhất</strong>, với ràng buộc
+            \(\sum_{j=1}^{p}\phi_{j1}^2 = 1\):</p>
+          <p style="text-align:center;">
+            \[ \max_{\phi_{11},\ldots,\phi_{p1}} \underbrace{\frac{1}{n}\sum_{i=1}^{n} z_{i1}^2}_{\text{phương sai}} =
+            \frac{1}{n}\sum_{i=1}^{n}\left(\sum_{j=1}^{p}\phi_{j1}(X_j - \bar{X}_j)\right)^2 \]
+          </p>
+          <div
+            style="background:#e8f4fd;border-left:4px solid #4a90d9;padding:10px 14px;margin-top:14px;border-radius:4px;">
+            <strong>Nghiệm:</strong> \(\boldsymbol{\phi}_1\) là vector riêng ứng với trị riêng lớn nhất của ma trận hiệp
+            phương sai \(\mathbf{S} = \frac{1}{n}\mathbf{X}_c^\top\mathbf{X}_c\) với \(\mathbf{X}_c\) là ma trận dữ liệu
+            đã chuẩn hoá trung bình.
+          </div>
+        </section>
+
+        <!-- <section style="font-size: 0.75em;">
           <h2>PC1 và PC2 — Hai cách hiểu</h2>
           <div style="display:grid;grid-template-columns:1fr .5fr;gap:8px;margin-top:6px;align-items:start;">
             <div>
@@ -225,7 +239,7 @@
               </div>
             </div>
           </div>
-        </section>
+        </section> -->
 
         <section style="font-size: 0.78em;">
           <h2>PCA như biến đổi tọa độ</h2>
