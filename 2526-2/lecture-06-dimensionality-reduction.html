@@ -202,12 +202,12 @@
             \(\sum_{j=1}^{p}\phi_{j1}^2 = 1\):</p>
           <p style="text-align:center;">
             \[ \max_{\phi_{11},\ldots,\phi_{p1}} \underbrace{\frac{1}{n}\sum_{i=1}^{n} z_{i1}^2}_{\text{phương sai}} =
-            \frac{1}{n}\sum_{i=1}^{n}\left(\sum_{j=1}^{p}\phi_{j1}(X_j - \bar{X}_j)\right)^2 \]
+            \frac{1}{n}\sum_{i=1}^{n}\left(\sum_{j=1}^{p}\phi_{j1}(X_{ij} - \bar{X}_j)\right)^2 \]
           </p>
           <div
             style="background:#e8f4fd;border-left:4px solid #4a90d9;padding:10px 14px;margin-top:14px;border-radius:4px;">
             <strong>Nghiệm:</strong> \(\boldsymbol{\phi}_1\) là vector riêng ứng với trị riêng lớn nhất của ma trận hiệp
-            phương sai \(\mathbf{S} = \frac{1}{n}\mathbf{X}_c^\top\mathbf{X}_c\) với \(\mathbf{X}_c\) là ma trận dữ liệu
+            phương sai \(\mathbf{S} = \frac{1}{n}\mathbf{X}_c\mathbf{X}_c^\top\) với \(\mathbf{X}_c\) là ma trận dữ liệu
             đã chuẩn hoá trung bình.
           </div>
         </section>
@@ -371,10 +371,10 @@
           <h2>Động lực — Hạn chế của PCA</h2>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;">
             <div>
-              <p style="margin-top:0;">PCA tìm <strong>cấu trúc toàn cục</strong> trong dữ liệu.</p>
+              <p style="margin-top:0;">PCA là phép chiếu <strong>tuyến tính</strong> — không thể "mở" cấu trúc phi tuyến (xoắn ốc, đa tạp cong).</p>
               <ul>
-                <li>Có thể làm mất cấu trúc cục bộ.</li>
-                <li>MDS cố gắng <strong>bảo toàn khoảng cách</strong> thay vì phương sai.</li>
+                <li>Các điểm xa nhau theo cấu trúc thực có thể bị chiếu chồng lên nhau.</li>
+                <li>MDS <strong>bảo toàn khoảng cách</strong> thay vì phương sai → không bị giới hạn bởi phép chiếu tuyến tính.</li>
               </ul>
             </div>
             <div style="text-align:center;">
@@ -387,60 +387,56 @@
 
         <section style="font-size: 0.78em;">
           <h2>Chia tỷ lệ đa chiều (MDS)</h2>
-          <p style="margin-top:0;">Tìm \(z_1,\ldots,z_N \in \mathbb{R}^k\) sao cho khoảng cách được xấp xỉ bảo toàn.
+          <p style="margin-top:0;">Tìm \(z_1,\ldots,z_N \in \mathbb{R}^k\) sao cho khoảng cách chiều thấp <strong>xấp xỉ</strong> khoảng cách gốc.</p>
+          <p style="margin-top:6px;">Gọi \(d_{ii'}\) là khoảng cách gốc, \(\|z_i - z_{i'}\|\) là khoảng cách chiều thấp. <strong>Kruskal-Shepard</strong> cực tiểu hoá:</p>
+          <p style="text-align:center;">
+            \[ \min_{z_1,\ldots,z_N} \sum_{i \neq i'} \left(d_{ii'} - \|z_i - z_{i'}\|\right)^2 \]
           </p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin-top:8px;">
+          <p style="color:#555;">Mọi cặp điểm đều quan trọng như nhau, dù gần hay xa.</p>
+        </section>
+
+        <section style="font-size: 0.78em;">
+          <h2>Sammon Mapping</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:center;margin-top:8px;">
             <div>
-              <p style="margin-top:8px;"><strong>Kruskal-Shepard:</strong></p>
+              <p style="margin-top:0;">Cực tiểu hoá với trọng số <strong>ưu tiên cặp gần</strong>:</p>
               <p style="text-align:center;">
-                \[ S_M = \sum_{i \neq i'} \left(d_{ii'} - \|z_i - z_{i'}\|\right)^2 \]
+                \[ \min_{z_1,\ldots,z_N} \sum_{i \neq i'} \frac{(d_{ii'} - \|z_i - z_{i'}\|)^2}{d_{ii'}} \]
               </p>
-              <p style="margin-top:6px;"><strong>Sammon mapping:</strong></p>
-              <p style="text-align:center;">
-                \[ S_{Sm} = \sum_{i \neq i'} \frac{(d_{ii'} - \|z_i - z_{i'}\|)^2}{d_{ii'}} \]
-              </p>
-              <p style="font-size:0.85em;color:#555;margin-top:6px;"><em>Nhấn mạnh việc bảo toàn các khoảng cách
-                  nhỏ.</em></p>
+              <p style="color:#555;">Chia cho \(d_{ii'}\) → cặp gần nhau (\(d_{ii'}\) nhỏ) bị phạt <strong>nặng hơn</strong> khi sai lệch → bảo toàn cấu trúc cục bộ tốt hơn.</p>
             </div>
             <div style="text-align:center;">
               <img src="img/lec06/mds-sammon-helix.png" alt="Sammon mapping: 3D helix → 2D"
                 style="max-width:100%;max-height:300px;object-fit:contain;" />
-              <p style="font-size:0.75em;color:#666;margin:2px 0 0;"><em>Dữ liệu 3D (xoắn ốc) → 2D bằng Sammon
-                  mapping</em></p>
+              <p style="font-size:0.75em;color:#666;margin:2px 0 0;"><em>Dữ liệu 3D (xoắn ốc) → 2D bằng Sammon mapping</em></p>
             </div>
           </div>
         </section>
 
         <section style="font-size: 0.72em;">
           <h2>Quan hệ giữa MDS và PCA</h2>
-          <p><strong>Classic scaling</strong> làm việc trên ma trận độ tương đồng:</p>
-          <ul>
-            <li>Dùng tích vô hướng có tâm:
-              \[ s_{ii'} = \langle x_i - \bar{x},\; x_{i'} - \bar{x} \rangle \]
-            </li>
-            <li>Hàm mục tiêu:
-              \[ S_C(z_1,\ldots,z_N) = \sum_{i,i'}\left(s_{ii'} - \langle z_i - \bar{z},\; z_{i'} -
-              \bar{z}\rangle\right)^2 \]
-            </li>
-          </ul>
+          <p style="margin-top:0;">Kruskal-Shepard và Sammon bảo toàn <strong>khoảng cách</strong>. Nếu thay bằng bảo toàn <strong>tích vô hướng</strong> (classical MDS):</p>
+          <p style="text-align:center;">
+            \[ \min_{z_1,\ldots,z_N} \sum_{i,i'}\left(\underbrace{\langle x_i - \bar{x},\; x_{i'} - \bar{x} \rangle}_{\text{tích vô hướng gốc}} - \underbrace{\langle z_i - \bar{z},\; z_{i'} - \bar{z}\rangle}_{\text{tích vô hướng chiều thấp}}\right)^2 \]
+          </p>
           <blockquote style="border-left:3px solid #4a90d9;padding-left:10px;margin-top:12px;color:#333;">
-            Nếu độ tương đồng là tích vô hướng có tâm, thì MDS classic <strong>chính xác là PCA</strong>.
+            Nghiệm của bài toán này <strong>chính xác là PCA</strong> — chiếu lên \(k\) vector riêng đầu tiên.
           </blockquote>
-          <p style="margin-top:10px;font-size:0.88em;color:#555;"><em>MDS chỉ cần ma trận độ tương đồng / bất đồng.</em>
+          <p style="margin-top:10px;color:#555;">Ý nghĩa: PCA là trường hợp đặc biệt của MDS. Nhưng MDS tổng quát hơn — <strong>chỉ cần ma trận khoảng cách</strong>, không cần dữ liệu gốc \(x_i\).</p>
           </p>
         </section>
 
-        <section style="font-size: 0.85em;">
+        <section style="font-size: 0.78em;">
           <h2>MDS phi tham số (Non-metric MDS)</h2>
           <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
-          <p style="margin-top:0;">Chỉ cần <strong>thứ hạng</strong> của khoảng cách:</p>
+          <p style="margin-top:0;">Kruskal-Shepard và Sammon cần <strong>giá trị chính xác</strong> của khoảng cách. Non-metric MDS chỉ cần <strong>thứ hạng</strong>: nếu \(d_{ab} < d_{cd}\) trong gốc thì cũng muốn \(\|z_a - z_b\| < \|z_c - z_d\|\) trong chiều thấp.</p>
           <p style="text-align:center;">
-            \[ S_{NM} = \frac{\sum_{i \neq i'}\left(\|z_i - z_{i'}\| - \theta(d_{ii'})\right)^2}{\sum_{i \neq i'}\|z_i -
+            \[ \min_{z_i,\;\theta} \frac{\sum_{i \neq i'}\left(\|z_i - z_{i'}\| - \theta(d_{ii'})\right)^2}{\sum_{i \neq i'}\|z_i -
             z_{i'}\|^2} \]
           </p>
           <ul style="margin-top:6px;">
-            <li>\(\theta\) là hàm tăng đơn điệu.</li>
-            <li>Tối ưu luân phiên giữa \(\theta\) và các \(z_i\).</li>
+            <li>\(\theta\): hàm tăng đơn điệu bất kỳ — chỉ giữ thứ tự, không cần giữ giá trị.</li>
+            <li>Tối ưu luân phiên: cố định \(z_i\) tìm \(\theta\), rồi cố định \(\theta\) tìm \(z_i\).</li>
           </ul>
         </section>
 
@@ -465,14 +461,16 @@
           </h1>
         </section>
 
-        <section style="font-size: 0.82em;">
+        <section style="font-size: 0.78em;">
           <h2>Nhúng láng giềng ngẫu nhiên (SNE)</h2>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:8px;">
             <div>
-              <p style="margin-top:0;">Ý tưởng: bảo toàn <span class="keyword">xác suất láng giềng</span> thay vì khoảng
-                cách.</p>
-              <p style="margin-top:12px;color:#555;"><em>\(P\): không gian gốc <br /> \(Q\): không gian chiều
-                  thấp</em></p>
+              <p style="margin-top:0;">MDS bảo toàn <strong>khoảng cách</strong> giữa mọi cặp điểm. SNE đổi góc nhìn: với mỗi điểm, tính <span class="keyword">xác suất láng giềng</span> — điểm nào gần thì xác suất cao, xa thì thấp.</p>
+              <ul style="margin-top:8px;">
+                <li>\(P\): phân phối xác suất trong <strong>không gian gốc</strong></li>
+                <li>\(Q\): phân phối xác suất trong <strong>chiều thấp</strong></li>
+                <li>Mục tiêu: tìm toạ độ chiều thấp sao cho \(Q \approx P\)</li>
+              </ul>
             </div>
             <div style="text-align:center;">
               <img src="img/lec06/sne-pipeline.png" alt="SNE pipeline: X→P≈Q←Z"
