@@ -1,4 +1,4 @@
-"""Compare complete, single, average linkage dendrograms."""
+"""Compare average, single, and complete linkage dendrograms."""
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
@@ -8,9 +8,9 @@ from sklearn.datasets import make_blobs
 
 X, _ = make_blobs(n_samples=30, centers=3, cluster_std=0.9, random_state=12)
 
-methods = [("complete", "Complete Linkage", "#4a90d9"),
-           ("single",   "Single Linkage",   "#e8732a"),
-           ("average",  "Average Linkage",  "#5aaa44")]
+methods = [("average",  "Average Linkage",  "#e8a020"),
+           ("single",   "Single Linkage",   "#5aaa44"),
+           ("complete", "Complete Linkage", "#4a90d9")]
 
 fig, axes = plt.subplots(1, 3, figsize=(12, 4))
 for ax, (method, title, col) in zip(axes, methods):

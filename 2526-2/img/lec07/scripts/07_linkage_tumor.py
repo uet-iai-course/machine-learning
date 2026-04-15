@@ -14,8 +14,8 @@ X = np.vstack([group1, group2])
 
 methods = [
     ("average",  "Average Linkage",  "#e8a020"),
-    ("complete", "Complete Linkage", "#4a90d9"),
     ("single",   "Single Linkage",   "#5aaa44"),
+    ("complete", "Complete Linkage", "#4a90d9"),
 ]
 
 fig, axes = plt.subplots(1, 3, figsize=(13, 5))
@@ -31,7 +31,7 @@ for ax, (method, title, col) in zip(axes, methods):
         leaf_font_size=0,   # hide individual leaf labels (too many)
         show_leaf_counts=False,
     )
-    ax.set_title(title, fontsize=11, fontweight="bold")
+    ax.set_title(title, fontsize=11, fontweight="bold", color=col)
     ax.set_ylabel("Khoảng cách bất đồng" if ax is axes[0] else "")
     ax.set_xlabel("Quan sát (mẫu)")
     ax.tick_params(axis="x", bottom=False, labelbottom=False)

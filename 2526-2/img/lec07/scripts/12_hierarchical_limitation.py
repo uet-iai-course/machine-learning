@@ -1,7 +1,8 @@
-"""Hierarchical limitation: gender/nationality data.
+"""Example where a dendrogram is not the most natural summary.
 
-Left:  scatter plot coloured by gender → clear 2-cluster structure
-Right: dendrogram with leaves coloured by gender → hierarchy cuts by nationality first
+Left: scatter plot coloured by gender -> clear 2-cluster structure.
+Right: dendrogram with leaf labels showing nationality and colours showing gender
+       -> the tree tends to merge by nationality first.
 """
 import numpy as np
 import matplotlib
@@ -22,17 +23,16 @@ groups = {
 }
 
 n_per = 5
-X, labels_list, colors_list, markers_list = [], [], [], []
+X, leaf_labels, colors_list, markers_list = [], [], [], []
 for name, (gender, col, marker, h, w) in groups.items():
     pts = rng.randn(n_per, 2) * np.array([2.5, 3]) + np.array([h, w])
     X.append(pts)
-    labels_list.extend([name] * n_per)
+    country = name.split("-")[1]
+    leaf_labels.extend([country] * n_per)
     colors_list.extend([col] * n_per)
     markers_list.extend([marker] * n_per)
 
 X = np.vstack(X)
-labels_arr = np.array(labels_list)
-colors_arr = np.array(colors_list)
 
 Z = linkage(X, method="complete")
 
@@ -89,26 +89,23 @@ ax1.legend(handles=legend_elements, fontsize=8.5, loc="upper left",
            ncol=2, framealpha=0.85)
 ax1.set_xlabel("Chiều cao (cm)", fontsize=9)
 ax1.set_ylabel("Cân nặng (kg)", fontsize=9)
-ax1.set_title("Dữ liệu thực: 2 cụm rõ ràng theo giới tính", fontsize=10)
+ax1.set_title("Một cách chia tự nhiên: 2 cụm theo giới tính", fontsize=10)
 ax1.tick_params(labelsize=8)
 
 # ── Right: dendrogram, leaves coloured by gender ─────────────────────
 ax2 = axes[1]
 dn = dendrogram(Z, ax=ax2,
-                labels=labels_list,
+                labels=leaf_labels,
                 link_color_func=link_color_func,
                 leaf_rotation=90, leaf_font_size=7)
 
 # Colour x-tick labels by gender
-for ticklabel in ax2.get_xticklabels():
-    txt = ticklabel.get_text()
-    # find first occurrence of this label
-    idx = labels_list.index(txt)
-    ticklabel.set_color(colors_list[idx])
+for ticklabel, leaf_idx in zip(ax2.get_xticklabels(), dn["leaves"]):
+    ticklabel.set_color(colors_list[leaf_idx])
     ticklabel.set_fontweight("bold")
 
 ax2.set_ylabel("Khoảng cách", fontsize=9)
-ax2.set_title("Dendrogram: gộp theo quốc tịch (không theo giới tính!)", fontsize=10)
+ax2.set_title("Dendrogram lại gộp theo quốc tịch trước", fontsize=10)
 ax2.tick_params(axis='y', labelsize=8)
 
 fig.tight_layout(pad=1.2)

@@ -57,7 +57,7 @@
 
         <section style="font-size: 0.78em;">
           <h2>Phân cụm là gì?</h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:8px;">
+          <div style="display:grid;grid-template-columns:0.95fr 1.05fr;gap:16px;align-items:center;margin-top:8px;">
             <div>
               <p style="margin-top:0;">Nhóm các quan sát thành các <span class="keyword">cụm</span> sao cho:</p>
               <ul>
@@ -153,7 +153,7 @@
           <h2>Định nghĩa K-means</h2>
           <p style="margin:4px 0;">Tìm \(K\) cụm rời nhau \(C_1, \ldots, C_K\) sao cho: \(C_1 \cup \cdots \cup C_K =
             \{1,\ldots,n\}\) và \(C_k \cap C_{k'} = \emptyset\) với \(k \neq k'\).</p>
-          <p style="margin:8px 0 2px;"><strong>Hàm mục tiêu</strong> — tối thiểu hóa phương sai trong cụm:</p>
+          <p style="margin:8px 0 2px;"><strong>Hàm mục tiêu</strong> — tối thiểu hóa độ phân tán trong cụm:</p>
           <p style="text-align:center;margin:0;">
             \[ \min_{C_1,\ldots,C_K} \sum_{k=1}^{K} W(C_k) \]
           </p>
@@ -180,13 +180,12 @@
 
         <section style="font-size: 0.82em;">
           <h2>Thuật toán Lloyd (K-means)</h2>
-          <p style="margin-top:8px;"><strong>Thuật toán 12.2 — K-means clustering:</strong></p>
           <ol style="line-height:2em;margin-top:6px;">
             <li>Gán ngẫu nhiên mỗi điểm vào một trong \(K\) cụm.</li>
             <li>Lặp đến khi cụm không đổi:
               <ol type="a" style="margin-top:6px;line-height:2em;">
                 <li>Tính <strong>centroid</strong> mỗi cụm (trung bình vị trí các thành viên).</li>
-                <li>Gán mỗi quan sát vào cụm có centroid <strong>gần nhất</strong> (khoảng cách Euclid).</li>
+                <li>Gán mỗi điểm vào cụm có centroid <strong>gần nhất</strong> (khoảng cách Euclid).</li>
               </ol>
             </li>
           </ol>
@@ -319,10 +318,10 @@
               <p style="margin-top:10px;">Kết quả là <span class="keyword">dendrogram</span> — biểu đồ cây phân cấp.</p>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec07/hierarchical-data.svg" alt="Dữ liệu mô phỏng 3 lớp"
-                style="max-width:100%;max-height:300px;object-fit:contain;" />
-              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Dữ liệu mô phỏng — nhãn lớp ẩn với thuật
-                  toán</em></p>
+              <img src="img/lec07/hierarchical-no-k.svg" alt="Dendrogram minh hoạ"
+                style="max-width:100%;max-height:290px;object-fit:contain;" />
+              <p style="font-size:0.72em;color:#666;margin:4px 0 0;"><em>Cắt cây ở các mức khác nhau sẽ cho số cụm
+                  khác nhau.</em></p>
             </div>
           </div>
         </section>
@@ -336,7 +335,8 @@
             <li>Trục \(y\): độ bất đồng khi hai cụm được gộp.</li>
             <li>Thứ tự trục \(x\) là tùy ý (miễn tuân cấu trúc cây).</li>
           </ul>
-          <div style="background:#e8f4fd;border-left:4px solid #4a90d9;padding:10px 14px;margin-top:14px;border-radius:4px;">
+          <div
+            style="background:#e8f4fd;border-left:4px solid #4a90d9;padding:10px 14px;margin-top:14px;border-radius:4px;">
             <strong>Cắt ngang dendrogram</strong> tạo ra các cụm rời nhau:<br>
             cắt <strong>cao</strong> → ít cụm lớn &nbsp;|&nbsp; cắt <strong>thấp</strong> → nhiều cụm nhỏ.
           </div>
@@ -355,7 +355,7 @@
           <h2>Lưu ý khi đọc Dendrogram</h2>
           <div style="text-align:center;margin-top:8px;">
             <img src="img/lec07/dendrogram-axis.svg?v=3" alt="Khoảng cách trên trục ngang không phản ánh độ tương đồng"
-              style="max-width:88%;max-height:380px;object-fit:contain;" />
+              style="max-width:90%;max-height:420px;object-fit:contain;" />
             <p style="font-size:0.75em;color:#666;margin:4px 0 0;"><em>Khoảng cách trên trục ngang
                 <strong>không</strong> phản ánh độ tương đồng giữa các quan sát</em></p>
           </div>
@@ -373,15 +373,14 @@
             <div style="text-align:center;">
               <img src="img/lec07/dendrogram-radial.svg?v=2" alt="Dendrogram dạng tròn (radial)"
                 style="max-width:100%;max-height:340px;object-fit:contain;" />
-              <p style="font-size:0.73em;color:#666;margin:3px 0 0;"><em>Dạng tròn (radial): lá ở vòng ngoài,
-                  gốc ở tâm.</em></p>
+              <p style="font-size:0.73em;color:#666;margin:3px 0 0;"><em>Dạng tròn (radial): cùng một cây phân cấp,
+                  nhưng trải theo vòng tròn; đọc theo mức gộp, không theo vị trí các lá.</em></p>
             </div>
           </div>
         </section>
 
-        <section style="font-size: 0.76em;">
+        <section style="font-size: 0.9em;">
           <h2>Thuật toán Agglomerative</h2>
-          <p style="margin-top:0;"><strong>Thuật toán 12.3 — Phân cụm tích tụ:</strong></p>
           <ol style="line-height:1.65em;">
             <li>Mỗi quan sát là một cụm đơn; tính ma trận khoảng cách tất cả các cặp \((d_{ij})\).</li>
             <li>Gộp hai cụm có khoảng cách nhỏ nhất thành một cụm mới.</li>
@@ -390,13 +389,14 @@
           </ol>
         </section>
 
-        <section style="font-size: 0.76em;">
+        <section style="font-size: 0.9em;">
           <h2>Agglomerative vs. Divisive</h2>
-          <blockquote style="border-left:3px solid #4a90d9;padding-left:10px;margin-top:24px;color:#333;font-size:1.05em;">
-            <strong>Agglomerative</strong> (tích tụ, bottom-up) thường được ưa hơn
-            <strong>divisive</strong> (phân chia, top-down): một lần chia sai từ đầu
-            thì không sửa được, còn gộp nhầm thì cấu trúc dendrogram vẫn dễ nhận ra hơn.
-          </blockquote>
+          <ul style="line-height:1.8em;margin-top:10px;">
+            <li><strong>Agglomerative</strong> (tích tụ, bottom-up) thường được dùng nhiều hơn.</li>
+            <li><strong>Divisive</strong> (phân chia, top-down) dễ mắc lỗi sớm: chia sai từ đầu thì khó sửa lại.</li>
+            <li>Với <strong>agglomerative</strong>, nếu gộp chưa hợp lý, cấu trúc dendrogram vẫn thường dễ đọc và dễ
+              diễn giải hơn.</li>
+          </ul>
         </section>
 
         <section style="font-size: 0.74em;">
@@ -409,12 +409,12 @@
               <p style="margin:0;">\(d_{CL}(G,H) = \max_{i\in G, j\in H} d_{ij}\)</p>
               <p style="margin:4px 0 0;font-size:0.88em;color:#555;">→ Tạo ra các cụm compact.</p>
             </div>
-            <div style="border-left:4px solid #e8732a;padding-left:10px;">
+            <div style="border-left:4px solid #5aaa44;padding-left:10px;">
               <p style="margin:0 0 3px;"><strong>Single linkage (SL)</strong></p>
               <p style="margin:0;">\(d_{SL}(G,H) = \min_{i\in G, j\in H} d_{ij}\)</p>
               <p style="margin:4px 0 0;font-size:0.88em;color:#555;">→ Dễ tạo cụm dạng chuỗi dài.</p>
             </div>
-            <div style="border-left:4px solid #5aaa44;padding-left:10px;">
+            <div style="border-left:4px solid #e8a020;padding-left:10px;">
               <p style="margin:0 0 3px;"><strong>Average linkage (GA)</strong></p>
               <p style="margin:0;">\(d_{GA}(G,H) = \dfrac{1}{N_G N_H}\sum_{i\in G}\sum_{j\in H} d_{ij}\)</p>
               <p style="margin:4px 0 0;font-size:0.88em;color:#555;">→ Thỏa hiệp giữa CL và SL.</p>
@@ -428,14 +428,26 @@
         </section>
 
         <section style="font-size: 0.78em;">
+          <h2>Linkage nào phù hợp với dữ liệu nào?</h2>
+          <div style="text-align:center;margin-top:8px;">
+            <img src="img/lec07/linkage-scatter.svg" alt="So sánh linkage trên 2 loại dữ liệu"
+              style="max-width:95%;max-height:400px;object-fit:contain;" />
+            <p style="font-size:0.75em;color:#666;margin:4px 0 0;"><em>
+                <span style="color:#2ecc71;font-weight:bold;">Viền xanh</span> = phù hợp,
+                <span style="color:#e74c3c;font-weight:bold;">viền đỏ</span> = không phù hợp.
+                Single tốt cho cụm dạng chuỗi; Complete và Average tốt cho cụm compact.</em></p>
+          </div>
+        </section>
+
+        <section style="font-size: 0.78em;">
           <h2>So sánh phương pháp Linkage</h2>
           <div style="text-align:center;margin-top:8px;">
-            <img src="img/lec07/linkage-comparison.svg?v=3" alt="So sánh complete, single, average linkage"
+            <img src="img/lec07/linkage-comparison.svg?v=4" alt="So sánh average, single, complete linkage"
               style="max-width:95%;max-height:380px;object-fit:contain;" />
             <p style="font-size:0.75em;color:#666;margin:4px 0 0;"><em>
-                <span style="color:#4a90d9;font-weight:bold;">Complete</span> (compact) vs.
-                <span style="color:#e8732a;font-weight:bold;">Single</span> (chuỗi) vs.
-                <span style="color:#5aaa44;font-weight:bold;">Average</span> (trung bình)
+                <span style="color:#e8a020;font-weight:bold;">Average</span> (trung bình) vs.
+                <span style="color:#5aaa44;font-weight:bold;">Single</span> (chuỗi) vs.
+                <span style="color:#4a90d9;font-weight:bold;">Complete</span> (compact)
                 trên cùng dữ liệu</em></p>
           </div>
         </section>
@@ -443,23 +455,37 @@
         <section style="font-size: 0.78em;">
           <h2>Ví dụ: Dữ liệu khối u người</h2>
           <div style="text-align:center;margin-top:8px;">
-            <img src="img/lec07/linkage-tumor.svg?v=2"
-              alt="Dendrograms: Average, Complete, Single Linkage trên dữ liệu microarray"
+            <img src="img/lec07/linkage-tumor.svg?v=3"
+              alt="Dendrograms: Average, Single, Complete Linkage trên dữ liệu microarray"
               style="max-width:92%;max-height:380px;object-fit:contain;" />
-            <p style="font-size:0.75em;color:#666;margin:4px 0 0;"><em>Average / Complete / Single Linkage cho kết quả
-                rất khác nhau trên cùng dữ liệu microarray</em></p>
+            <p style="font-size:0.75em;color:#666;margin:4px 0 0;"><em>
+                <span style="color:#e8a020;font-weight:bold;">Average</span> /
+                <span style="color:#5aaa44;font-weight:bold;">Single</span> /
+                <span style="color:#4a90d9;font-weight:bold;">Complete</span>
+                cho kết quả rất khác nhau trên cùng dữ liệu microarray</em></p>
           </div>
         </section>
 
-        <section style="font-size: 0.78em;">
+        <section style="font-size: 0.8em;" data-auto-animate>
           <h2>Khi nào phân cụm phân cấp phù hợp?</h2>
-          <p style="margin-top:0;">Dendrogram <strong>không phải lúc nào cũng phù hợp</strong>:
-            một số tập dữ liệu không có cấu trúc phân cấp thực sự — trong trường hợp đó,
-            K-means cho kết quả tốt hơn về độ kết dính.</p>
+          <ul style="line-height:1.7em;margin-top:4px;">
+            <li>Dendrogram hữu ích khi dữ liệu thật sự có <strong>cấu trúc lồng nhau</strong> ở nhiều mức.</li>
+            <li>Nếu dữ liệu chỉ có một cách chia thực dụng, nhưng <strong>không có cấu trúc cây tự nhiên</strong>, thì
+              dendrogram có thể gây hiểu nhầm.</li>
+            <li>Khi đó, cây phân cấp vẫn tồn tại, nhưng nó có thể phản ánh <strong>thuộc tính phụ</strong> hơn là cách
+              chia cụm mà ta quan tâm.</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.8em;" data-auto-animate>
+          <h2>Khi nào phân cụm phân cấp phù hợp?</h2>
           <div style="text-align:center;margin-top:6px;">
-            <img src="img/lec07/hierarchical-limitation.svg?v=3" alt="Hạn chế hierarchical clustering"
+            <img src="img/lec07/hierarchical-limitation.svg?v=4"
+              alt="Ví dụ khi dendrogram không phản ánh cách chia cụm mong muốn"
               style="max-width:95%;max-height:360px;object-fit:contain;" />
-            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Dữ liệu nam/nữ: phân cấp theo quốc tịch không tự nhiên bằng phân theo giới tính</em></p>
+            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Trái: dữ liệu có thể chia khá tự nhiên theo
+                giới tính. Phải: dendrogram lại gộp theo quốc tịch trước, nên không làm nổi cấu trúc mà ta quan
+                tâm.</em></p>
           </div>
         </section>
       </section>
@@ -475,11 +501,14 @@
 
         <section style="font-size: 0.76em;">
           <h2>Chọn ma trận bất đồng</h2>
-          <p style="margin-top:0;">Mặc định thường dùng khoảng cách Euclid. Đôi khi <span class="keyword">khoảng cách tương quan</span> phù hợp hơn khi các quan sát tương đồng nếu <strong>hình dạng</strong> profile giống nhau, dù độ lớn khác nhau.</p>
+          <p style="margin-top:0;">Mặc định thường dùng khoảng cách Euclid. Đôi khi <span class="keyword">khoảng cách
+              tương quan</span> phù hợp hơn khi các quan sát tương đồng nếu <strong>hình dạng</strong> profile giống
+            nhau, dù độ lớn khác nhau.</p>
           <div style="text-align:center;margin-top:6px;">
             <img src="img/lec07/dissimilarity-comparison.svg?v=2" alt="Euclid vs correlation distance"
               style="max-width:96%;max-height:360px;object-fit:contain;" />
-            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Obs 1 &amp; 2 có hình dạng giống nhau (tương quan cao) nhưng Euclid xa nhau; Obs 1 &amp; 3 ngược lại</em></p>
+            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Obs 1 &amp; 2 có hình dạng giống nhau (tương quan
+                cao) nhưng Euclid xa nhau; Obs 1 &amp; 3 ngược lại</em></p>
           </div>
         </section>
 
@@ -538,12 +567,17 @@
 
         <section style="font-size: 0.78em;">
           <h2>Phân cụm đồng thời hàng và cột</h2>
-          <p style="margin-top:0;">Áp dụng phân cấp riêng biệt cho cả quan sát và đặc trưng, hiển thị dưới dạng <strong>heatmap</strong> sắp xếp theo cụm — dễ phát hiện pattern ẩn.</p>
-          <p style="margin:4px 0 0;font-size:0.88em;color:#555;"><strong>Dữ liệu Iris</strong>: 150 mẫu hoa diên vĩ thuộc 3 loài (<em>setosa</em>, <em>versicolor</em>, <em>virginica</em>), mỗi mẫu có 4 đặc trưng đo kích thước đài hoa và cánh hoa.</p>
+          <p style="margin-top:0;">Áp dụng phân cấp riêng biệt cho cả quan sát và đặc trưng, hiển thị dưới dạng
+            <strong>heatmap</strong> sắp xếp theo cụm — dễ phát hiện pattern ẩn.
+          </p>
+          <p style="margin:4px 0 0;font-size:0.88em;color:#555;"><strong>Dữ liệu Iris</strong>: 150 mẫu hoa diên vĩ
+            thuộc 3 loài (<em>setosa</em>, <em>versicolor</em>, <em>virginica</em>), mỗi mẫu có 4 đặc trưng đo kích
+            thước đài hoa và cánh hoa.</p>
           <div style="text-align:center;margin-top:6px;">
             <img src="img/lec07/bicluster-iris.svg?v=3" alt="Biclustering Iris dataset"
               style="max-width:92%;max-height:310px;object-fit:contain;" />
-            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Heatmap phân cụm tập dữ liệu Iris — hàng (quan sát) và cột (đặc trưng) đều được sắp xếp theo cụm</em></p>
+            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Heatmap phân cụm tập dữ liệu Iris — hàng (quan
+                sát) và cột (đặc trưng) đều được sắp xếp theo cụm</em></p>
           </div>
         </section>
       </section>
