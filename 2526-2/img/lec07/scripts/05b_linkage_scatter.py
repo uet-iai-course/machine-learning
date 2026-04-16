@@ -1,4 +1,7 @@
-"""Scatter plots showing when each linkage method excels or fails."""
+"""Scatter plots showing when each linkage method excels or fails.
+
+Each panel has ✓/✗ annotation explaining why the result is good or bad.
+"""
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
@@ -23,7 +26,17 @@ methods = [
     ("average",  "Average",  "#e8a020"),
 ]
 
-fig, axes = plt.subplots(2, 3, figsize=(11, 6.5))
+# Annotations: (row, col) → (good, text)
+annotations = {
+    (0, 0): (False, "✗ Cắt ngang lưỡi liềm"),
+    (0, 1): (True,  "✓ Tách đúng theo hình dạng"),
+    (0, 2): (False, "✗ Không theo được hình cong"),
+    (1, 0): (True,  "✓ Cụm tròn, tách gọn"),
+    (1, 1): (False, "✗ Hiệu ứng chuỗi"),
+    (1, 2): (True,  "✓ Cụm tròn, tách gọn"),
+}
+
+fig, axes = plt.subplots(2, 3, figsize=(11, 7))
 
 for row, (data_label, X, K) in enumerate(datasets):
     for col, (method, method_label, color) in enumerate(methods):
@@ -34,34 +47,33 @@ for row, (data_label, X, K) in enumerate(datasets):
         cmap = plt.cm.tab10
         for k in sorted(set(labels)):
             mask = labels == k
-            ax.scatter(X[mask, 0], X[mask, 1], s=18, alpha=0.8,
+            ax.scatter(X[mask, 0], X[mask, 1], s=22, alpha=0.8,
                        color=cmap(k - 1), edgecolors="none")
 
         ax.set_aspect("equal")
-        ax.tick_params(labelsize=6)
         ax.set_xticks([])
         ax.set_yticks([])
 
         if row == 0:
-            ax.set_title(method_label, fontsize=11, fontweight="bold", color=color)
+            ax.set_title(method_label, fontsize=12, fontweight="bold", color=color)
         if col == 0:
             ax.set_ylabel(data_label, fontsize=9, fontweight="bold")
 
-        # Mark good/bad
-        good = (row == 0 and method == "single") or \
-               (row == 1 and method in ("complete", "average"))
-        bad  = (row == 0 and method == "complete") or \
-               (row == 1 and method == "single")
-        if good:
-            for spine in ax.spines.values():
-                spine.set_edgecolor("#2ecc71")
-                spine.set_linewidth(2.5)
-        elif bad:
-            for spine in ax.spines.values():
-                spine.set_edgecolor("#e74c3c")
-                spine.set_linewidth(2.5)
+        # Border color
+        good, text = annotations[(row, col)]
+        border_color = "#2ecc71" if good else "#e74c3c"
+        for spine in ax.spines.values():
+            spine.set_edgecolor(border_color)
+            spine.set_linewidth(2.5)
 
-fig.tight_layout(pad=0.6)
+        # Annotation text inside panel
+        text_color = "#1a7a3a" if good else "#c0392b"
+        ax.text(0.5, 0.02, text, transform=ax.transAxes,
+                fontsize=8.5, ha="center", va="bottom",
+                fontweight="bold", color=text_color,
+                bbox=dict(boxstyle="round,pad=0.25", facecolor="white",
+                          edgecolor=border_color, alpha=0.85, linewidth=1.2))
+
+fig.tight_layout(pad=0.8)
 fig.savefig("../linkage-scatter.svg", format="svg", bbox_inches="tight")
-fig.savefig("../linkage-scatter.png", format="png", dpi=150, bbox_inches="tight")
-print("Saved linkage-scatter.svg + .png")
+print("Saved linkage-scatter.svg")
