@@ -333,14 +333,17 @@
           </div>
         </section>
 
-        <!-- p.17: Heart — unpruned tree — screenshot -->
+        <!-- p.17: Heart — unpruned tree -->
         <section style="font-size: 0.78em;">
           <h2>Cây chưa cắt tỉa — Heart</h2>
-          <p style="margin-top:0;">Tại sao tiếp tục chia nút? Vì tăng <strong>độ thuần nhất</strong> (purity) — giảm Gini
-            / cross-entropy, dù lỗi phân lớp không đổi.</p>
-          <div style="text-align:center;margin-top:6px;">
-            <img src="img/lec08/raw-screenshots/p17-heart-unpruned.png" alt="Cây Heart chưa cắt tỉa"
-              style="max-width:92%;max-height:360px;object-fit:contain;border-radius:6px;" />
+          <ul style="margin-top:0;margin-bottom:6px;">
+            <li>Tại sao tiếp tục chia nút? Vì tăng <strong>độ thuần nhất</strong> (purity).</li>
+            <li>Chia nút không giảm lỗi phân lớp, nhưng giảm Gini / cross-entropy.</li>
+            <li>Kết quả: cây quá phức tạp, dễ <strong>overfitting</strong>.</li>
+          </ul>
+          <div style="text-align:center;">
+            <img src="img/lec08/heart-unpruned.svg" alt="Cây Heart chưa cắt tỉa"
+              style="max-width:96%;max-height:340px;object-fit:contain;border-radius:6px;" />
           </div>
         </section>
 
