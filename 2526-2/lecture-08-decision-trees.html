@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Bài 8: Mô hình cây quyết định</title>
+  <link rel="stylesheet" href="revealjs/dist/reset.css" />
+  <link rel="stylesheet" href="revealjs/dist/reveal.css" />
+  <link rel="stylesheet" href="revealjs/dist/theme/white.css" />
+  <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+  <link rel="stylesheet" href="lecture-style.css" />
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- OPENING: Title + Agenda -->
+      <section>
+        <section>
+          <h1>Học máy</h1>
+          <h3>Bài 8: Mô hình cây quyết định</h3>
+          <p>Trường ĐH Công nghệ – Đại học Quốc gia Hà Nội</p>
+        </section>
+
+        <section>
+          <h2>Nội dung</h2>
+          <ol style="line-height:1.15em;">
+            <li>Tổng quan <a href="#tong-quan">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Ý tưởng, phân vùng, cấu trúc cây</span>
+            </li>
+            <li>Cây hồi quy <a href="#regression-tree">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Recursive splitting, cắt tỉa, cost
+                complexity</span>
+            </li>
+            <li>Cây phân lớp <a href="#classification-tree">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Gini, entropy, ví dụ Heart</span>
+            </li>
+            <li>Ưu nhược điểm <a href="#pros-cons">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Trees vs. hồi quy tuyến tính</span>
+            </li>
+            <li>Phương pháp ensemble <a href="#ensemble">→</a><br>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Bagging, Random Forests, Boosting</span>
+            </li>
+          </ol>
+        </section>
+      </section>
+
+      <!-- ====== PART 1: Tổng quan ====== -->
+      <section>
+        <section id="tong-quan">
+          <h1>
+            <span class="text-light">1.</span><br />
+            Tổng quan
+          </h1>
+        </section>
+
+        <!-- p.2: 20-Questions Game -->
+        <section style="font-size: 0.78em;">
+          <h2>Trò chơi 20 câu hỏi</h2>
+          <p style="margin-top:0;">Trực giác cho cây quyết định (decision tree): liên tục đặt câu hỏi cho đến khi tìm ra
+            câu trả lời.</p>
+          <div style="text-align:center;margin-top:12px;">
+            <img src="img/lec08/20questions-tree.svg" alt="Cây 20 câu hỏi"
+              style="max-width:70%;max-height:350px;object-fit:contain;" />
+          </div>
+        </section>
+
+        <!-- p.3: Basics — Hitters dataset -->
+        <section style="font-size: 0.74em;">
+          <h2>Cơ sở — Phân vùng không gian</h2>
+          <p style="margin-top:0;">Cây quyết định chia không gian đặc trưng thành các <span class="keyword">vùng</span>,
+            trong mỗi vùng dùng một mô hình hằng số (giá trị trung bình).</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:8px;">
+            <div>
+              <p><strong>Ví dụ:</strong> Tập dữ liệu <span class="inline-code">Hitters</span></p>
+              <ul>
+                <li>Dự đoán lương cầu thủ bóng chày</li>
+                <li><span style="color:#b8860b;font-weight:bold;">Years</span>: số năm thi đấu</li>
+                <li><span style="color:#b8860b;font-weight:bold;">Hits</span>: số cú đánh năm trước</li>
+                <li>Lương được log-transform</li>
+              </ul>
+              <p style="margin-top:8px;">Không gian chia thành 3 vùng \(R_1, R_2, R_3\) với lương trung bình khác nhau.
+              </p>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec08/hitters-scatter.svg" alt="Hitters: Years vs Hits với 3 vùng"
+                style="max-width:100%;max-height:340px;object-fit:contain;" />
+            </div>
+          </div>
+        </section>
+
+        <!-- p.4: Two steps, rectangles -->
+        <section style="font-size: 0.78em;">
+          <h2>Xây dựng cây hồi quy — Hai bước</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:8px;">
+            <div>
+              <ol style="line-height:2em;">
+                <li>Chia không gian đặc trưng thành \(J\) vùng rời nhau \(R_1, \ldots, R_J\).</li>
+                <li>Trong mỗi vùng, dự đoán bằng <strong>giá trị trung bình</strong> của các quan sát thuộc vùng đó.</li>
+              </ol>
+              <p style="margin-top:10px;">Về lý thuyết, các vùng có thể có hình dạng bất kỳ — nhưng ta chỉ dùng <span
+                  class="keyword">hình hộp</span> (rectangles / cuboids).</p>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec08/regions-partition.svg" alt="Phân vùng hình hộp"
+                style="max-width:100%;max-height:320px;object-fit:contain;" />
+            </div>
+          </div>
+        </section>
+
+        <!-- p.5: Tree structure -->
+        <section style="font-size: 0.76em;">
+          <h2>Cấu trúc cây quyết định</h2>
+          <p style="margin-top:0;">Cây dễ giải thích và có biểu diễn đồ hoạ trực quan:</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:8px;">
+            <div>
+              <ul style="line-height:1.8em;">
+                <li><span class="keyword">Nút trong</span> (internal node): kiểm tra một đặc trưng, tạo biên quyết
+                  định</li>
+                <li><span class="keyword">Nhánh</span> (branch): kết quả khác nhau của phép kiểm tra (đúng → trái, sai →
+                  phải)</li>
+                <li><span class="keyword">Lá</span> (leaf / terminal node): vùng trong không gian đặc trưng và dự đoán
+                  tương ứng</li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec08/hitters-tree.svg" alt="Cây quyết định Hitters"
+                style="max-width:100%;max-height:320px;object-fit:contain;" />
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- ====== PART 2: Cây hồi quy ====== -->
+      <section>
+        <section id="regression-tree">
+          <h1>
+            <span class="text-light">2.</span><br />
+            Cây hồi quy<br>
+            <span style="font-size:0.5em;color:#555;">(Regression Trees)</span>
+          </h1>
+        </section>
+
+        <!-- p.6: Guillotine cuts, RSS, greedy -->
+        <section style="font-size: 0.74em;">
+          <h2>Phân vùng tham lam</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.8fr;gap:16px;align-items:start;margin-top:8px;">
+            <div>
+              <p style="margin-top:0;">Dùng <span class="keyword">guillotine cuts</span> — các đường cắt nhị phân song
+                song với trục toạ độ.</p>
+              <p style="margin-top:6px;">Cực tiểu hoá sai số huấn luyện:</p>
+              <p style="text-align:center;">
+                \[ \sum_{j=1}^{J} \sum_{i \in R_j} (y_i - \hat{y}_{R_j})^2 \]
+              </p>
+              <p>Tìm cây tối ưu là <strong>NP-complete</strong> → dùng chiến lược <span class="keyword">tham
+                  lam</span>: tại mỗi bước, chọn phép chia tốt nhất <em>hiện tại</em>.</p>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec08/regions-recursive.svg" alt="5 vùng chia đệ quy"
+                style="max-width:100%;max-height:320px;object-fit:contain;" />
+            </div>
+          </div>
+        </section>
+
+        <!-- p.7: Recursive binary splitting -->
+        <section style="font-size: 0.72em;">
+          <h2>Chia đôi đệ quy</h2>
+          <p style="margin-top:0;">Tại mỗi bước, chọn đặc trưng \(X_j\) và điểm chia \(s\) tạo hai vùng:</p>
+          <p style="text-align:center;">
+            \[ R_1(j,s) = \{X \mid X_j < s\} \quad \text{và} \quad R_2(j,s) = \{X \mid X_j \geq s\} \]
+          </p>
+          <p>Cực tiểu hoá:</p>
+          <p style="text-align:center;">
+            \[ \sum_{i:\,x_i \in R_1(j,s)} (y_i - \hat{y}_{R_1})^2 + \sum_{i:\,x_i \in R_2(j,s)} (y_i -
+            \hat{y}_{R_2})^2 \]
+          </p>
+          <ul style="margin-top:8px;">
+            <li>Dữ liệu hữu hạn → chỉ có \(p \times (n-1)\) lựa chọn</li>
+            <li>Điểm chia đặt giữa hai điểm dữ liệu liên tiếp</li>
+            <li>Dừng khi thoả điều kiện (ví dụ: mỗi vùng có ít hơn 5 điểm)</li>
+            <li>Về nguyên tắc có thể đưa đến 1 điểm/vùng → training error = 0</li>
+          </ul>
+        </section>
+
+        <!-- p.8: Tree to Regions and Back — screenshot -->
+        <section style="font-size: 0.82em;">
+          <h2>Từ cây đến vùng và ngược lại</h2>
+          <div style="text-align:center;margin-top:8px;">
+            <img src="img/lec08/raw-screenshots/p08-tree-regions-3d.png" alt="Cây ↔ vùng ↔ bề mặt 3D"
+              style="max-width:92%;max-height:420px;object-fit:contain;border-radius:6px;" />
+          </div>
+        </section>
+
+        <!-- p.9: Pruning motivation -->
+        <section style="font-size: 0.82em;">
+          <h2>Cắt tỉa cây (Pruning)</h2>
+          <p style="margin-top:0;">Cây phát triển đầy đủ sẽ <strong>quá khớp</strong> (overfit). Hai cách chống:</p>
+          <ol style="line-height:2em;">
+            <li>Phát triển cây không hoàn chỉnh (dừng sớm)</li>
+            <li>Phát triển cây đầy đủ rồi <strong>cắt tỉa</strong></li>
+          </ol>
+          <div
+            style="background:#fff8e1;border-left:4px solid #e8a020;padding:8px 12px;margin-top:14px;border-radius:4px;">
+            Cách 1 không tốt vì thuật toán tham lam <strong>thiếu tầm nhìn xa</strong> — một phép chia tệ ở bước này có
+            thể dẫn đến phép chia tốt ở bước sau.
+          </div>
+          <p style="margin-top:10px;">→ Cần tiêu chí phức tạp (complexity criterion) để tìm cây con tốt nhất.</p>
+        </section>
+
+        <!-- p.10: Cost complexity α -->
+        <section style="font-size: 0.74em;">
+          <h2>Tiêu chí Cost Complexity</h2>
+          <p style="margin-top:0;">Tương tự Lasso — thêm phạt vào sai số huấn luyện:</p>
+          <p style="text-align:center;">
+            \[ \sum_{m=1}^{|T|} \sum_{i:\,x_i \in R_m} (y_i - \hat{y}_{R_m})^2 + \alpha |T| \]
+          </p>
+          <ul style="margin-top:8px;">
+            <li>\(|T|\): số lá của cây con \(T \subset T_0\)</li>
+            <li>\(2|T| - 1\): tổng số nút của \(T\)</li>
+            <li>\(\alpha\) kiểm soát đánh đổi giữa fit và complexity:
+              <ul>
+                <li>\(\alpha = 0\) → chọn cây đầy đủ</li>
+                <li>\(\alpha\) tăng → cây nhỏ dần</li>
+              </ul>
+            </li>
+            <li>Khi \(\alpha\) tăng, cây co lại theo cách <strong>lồng nhau và dự đoán được</strong></li>
+          </ul>
+        </section>
+
+        <!-- p.11 + p.12: Algorithm 8.1 + weakest-link -->
+        <section style="font-size: 0.72em;">
+          <h2>Thuật toán 8.1 — Xây dựng cây hồi quy</h2>
+          <ol style="line-height:1.8em;margin-top:6px;">
+            <li>Phát triển cây đầy đủ bằng chia đôi đệ quy.</li>
+            <li>Cắt tỉa cost complexity → dãy cây con tốt nhất theo \(\alpha\).</li>
+            <li>Dùng <strong>\(K\)-fold cross validation</strong> để chọn \(\alpha\):
+              <ol type="a" style="margin-top:4px;line-height:1.8em;">
+                <li>Lặp bước 1–2 trên \(K-1\) fold</li>
+                <li>Đánh giá MSE trên fold còn lại</li>
+                <li>Trung bình kết quả, chọn \(\alpha\) tối thiểu (hoặc 1-SE rule)</li>
+              </ol>
+            </li>
+            <li>Trả về cây con ứng với \(\alpha\) đã chọn.</li>
+          </ol>
+          <div
+            style="background:#e8f4fd;border-left:4px solid #4a90d9;padding:10px 14px;margin-top:12px;border-radius:4px;">
+            <strong>Weakest-link pruning</strong> (bước 2): lần lượt gộp nút trong gây tăng training error ít nhất, đến
+            khi còn 1 nút. Dãy cây thu được chứa cây tốt nhất cho mọi \(\alpha\).
+          </div>
+        </section>
+
+        <!-- p.13: Example Hitters -->
+        <section style="font-size: 0.78em;">
+          <h2>Ví dụ: Cây hồi quy trên Hitters</h2>
+          <div style="text-align:center;margin-top:8px;">
+            <img src="img/lec08/hitters-pruning.svg" alt="Hitters: MSE vs tree size + cây đã cắt tỉa"
+              style="max-width:95%;max-height:400px;object-fit:contain;" />
+            <p style="font-size:0.75em;color:#666;margin:4px 0 0;"><em>9 đặc trưng, 132 training / 131 test.
+                Six-fold CV chọn cây có khoảng 3 nút lá.</em></p>
+          </div>
+        </section>
+      </section>
+
+      <!-- ====== PART 3: Cây phân lớp ====== -->
+      <section>
+        <section id="classification-tree">
+          <h1>
+            <span class="text-light">3.</span><br />
+            Cây phân lớp<br>
+            <span style="font-size:0.5em;color:#555;">(Classification Trees)</span>
+          </h1>
+        </section>
+
+        <!-- p.14: Classification Trees — misclassification error -->
+        <section style="font-size: 0.72em;">
+          <h2>Cây phân lớp</h2>
+          <p style="margin-top:0;">Giống cây hồi quy nhưng dự đoán trong mỗi vùng là <strong>lớp phổ biến nhất</strong>
+            (majority class / Bayes classifier). Tỷ lệ lớp trong vùng hữu ích cho diễn giải.</p>
+          <p style="margin-top:8px;">Ý tưởng: dùng <span class="keyword">lỗi phân lớp</span> thay vì RSS:</p>
+          <p style="text-align:center;">
+            \[ E = 1 - \max_k(\hat{p}_{mk}) \]
+          </p>
+          <ul>
+            <li>\(\hat{p}_{mk}\): tỷ lệ điểm thuộc lớp \(k\) trong vùng \(R_m\)</li>
+          </ul>
+          <div
+            style="background:#fff8e1;border-left:4px solid #e8a020;padding:8px 12px;margin-top:10px;border-radius:4px;">
+            <strong>Vấn đề:</strong> lỗi phân lớp \(E\) <strong>không đủ nhạy</strong> — ví dụ: trước khi chia
+            \(E = 40/200\), sau khi chia tốt nhất trung bình vẫn là \(40/200\).
+          </div>
+        </section>
+
+        <!-- p.15: Impurity Measures -->
+        <section style="font-size: 0.72em;">
+          <h2>Các độ đo tạp chất (Impurity Measures)</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.8fr;gap:16px;align-items:start;margin-top:6px;">
+            <div>
+              <p style="margin-top:0;">Yêu cầu: cực đại khi các lớp phân bố đều, cực tiểu (0) khi nút thuần nhất.</p>
+              <p style="margin-top:8px;"><strong>Chỉ số Gini:</strong></p>
+              <p style="text-align:center;">\[ G = \sum_{k=1}^{K} \hat{p}_{mk}(1 - \hat{p}_{mk}) \]</p>
+              <p style="margin-top:6px;"><strong>Cross-entropy:</strong></p>
+              <p style="text-align:center;">\[ D = -\sum_{k=1}^{K} \hat{p}_{mk} \log \hat{p}_{mk} \]</p>
+              <p style="margin-top:8px;color:#555;">Thường dùng \(G\) và \(D\) để <strong>xây cây</strong>,
+                \(E\) để <strong>cắt tỉa</strong>.</p>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec08/impurity-measures.svg" alt="Gini vs entropy vs misclassification error"
+                style="max-width:100%;max-height:320px;object-fit:contain;" />
+            </div>
+          </div>
+        </section>
+
+        <!-- p.16: Heart — pruned tree -->
+        <section style="font-size: 0.78em;">
+          <h2>Ví dụ: Cây phân lớp trên Heart</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:8px;">
+            <div>
+              <p style="margin-top:0;">Tập dữ liệu <span class="inline-code">Heart</span>:</p>
+              <ul>
+                <li>303 bệnh nhân đau ngực</li>
+                <li>Biến mục tiêu <span class="inline-code">HD</span>: bệnh tim (Yes/No)</li>
+                <li>13 đặc trưng: <span class="inline-code">Age</span>, <span class="inline-code">Sex</span>, <span
+                    class="inline-code">Chol</span>, ...</li>
+                <li>CV chọn cây có 6 nút</li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec08/heart-tree.svg" alt="Cây phân lớp Heart (đã cắt tỉa)"
+                style="max-width:100%;max-height:320px;object-fit:contain;" />
+            </div>
+          </div>
+        </section>
+
+        <!-- p.17: Heart — unpruned tree — screenshot -->
+        <section style="font-size: 0.78em;">
+          <h2>Cây chưa cắt tỉa — Heart</h2>
+          <p style="margin-top:0;">Tại sao tiếp tục chia nút? Vì tăng <strong>độ thuần nhất</strong> (purity) — giảm Gini
+            / cross-entropy, dù lỗi phân lớp không đổi.</p>
+          <div style="text-align:center;margin-top:6px;">
+            <img src="img/lec08/raw-screenshots/p17-heart-unpruned.png" alt="Cây Heart chưa cắt tỉa"
+              style="max-width:92%;max-height:360px;object-fit:contain;border-radius:6px;" />
+          </div>
+        </section>
+
+        <!-- p.18: Heart — error plot -->
+        <section style="font-size: 0.78em;">
+          <h2>Chọn kích thước cây — Heart</h2>
+          <div style="text-align:center;margin-top:8px;">
+            <img src="img/lec08/heart-error.svg" alt="Error vs tree size trên Heart"
+              style="max-width:80%;max-height:400px;object-fit:contain;" />
+            <p style="font-size:0.75em;color:#666;margin:4px 0 0;"><em>Training error giảm dần, CV chọn cây khoảng 6
+                nút</em></p>
+          </div>
+        </section>
+
+        <!-- p.19: Categorical Predictors -->
+        <section style="font-size: 0.76em;">
+          <h2>Chia biến phân loại</h2>
+          <p style="margin-top:0;">Biến phân loại với \(q\) giá trị không thứ tự cho phép \(2^{q-1} - 1\) cách chia — rất
+            tốn kém.</p>
+          <p style="margin-top:10px;"><strong>Thủ thuật</strong> cho bài toán 2 lớp (0–1):</p>
+          <ul>
+            <li>Sắp xếp các giá trị của biến theo tỷ lệ thuộc lớp 1</li>
+            <li>Chia như biến liên tục (ordered)</li>
+            <li>Tối ưu cả Gini và cross-entropy</li>
+          </ul>
+          <p style="margin-top:8px;">Cũng áp dụng khi biến mục tiêu là liên tục — sắp xếp theo trung bình.</p>
+        </section>
+
+        <!-- p.20: Missing Values -->
+        <section style="font-size: 0.78em;">
+          <h2>Giá trị thiếu (Missing Values)</h2>
+          <p style="margin-top:0;">Có thể điền giá trị thiếu bằng trung bình — nhưng cây có cách tốt hơn:</p>
+          <ul style="line-height:1.8em;">
+            <li><strong>Biến phân loại:</strong> tạo thêm một mức "missing"</li>
+            <li><strong>Biến liên tục:</strong> dùng <span class="keyword">biến thay thế</span> (surrogate variables):
+              <ul>
+                <li>Chọn biến chính (primary) và điểm chia như thường</li>
+                <li>Tìm biến khác mà phép chia <strong>bắt chước</strong> biến chính tốt nhất</li>
+                <li>Khi giá trị chính bị thiếu → dùng surrogate đầu tiên có sẵn</li>
+              </ul>
+            </li>
+          </ul>
+          <p style="margin-top:8px;color:#555;">Các biến càng tương quan cao → surrogate càng hiệu quả.</p>
+        </section>
+      </section>
+
+      <!-- ====== PART 4: Ưu nhược điểm ====== -->
+      <section>
+        <section id="pros-cons">
+          <h1>
+            <span class="text-light">4.</span><br />
+            Ưu nhược điểm
+          </h1>
+        </section>
+
+        <!-- p.21: Trees vs. Linear Regression -->
+        <section style="font-size: 0.74em;">
+          <h2>Cây vs. Hồi quy tuyến tính</h2>
+          <p style="margin-top:0;">Hai giả định khác nhau về thế giới:</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;">
+            <div style="border:2px solid #4a90d9;border-radius:8px;padding:10px;">
+              <p style="margin:0 0 4px;font-weight:bold;color:#4a90d9;">Hồi quy tuyến tính</p>
+              <p style="margin:0;">\(f(X) = \beta_0 + \sum_{j=1}^{p} \beta_j X_j\)</p>
+              <p style="margin:4px 0 0;color:#555;">Thế giới <strong>tuyến tính toàn cục</strong></p>
+            </div>
+            <div style="border:2px solid #e8732a;border-radius:8px;padding:10px;">
+              <p style="margin:0 0 4px;font-weight:bold;color:#e8732a;">Cây quyết định</p>
+              <p style="margin:0;">\(f(X) = \beta_0 + \sum_{m=1}^{M} c_m \mathbb{I}(X \in R_m)\)</p>
+              <p style="margin:4px 0 0;color:#555;">Thế giới <strong>hằng số theo vùng</strong></p>
+            </div>
+          </div>
+          <div style="text-align:center;margin-top:10px;">
+            <img src="img/lec08/trees-vs-linear.svg" alt="Linear vs Tree trên 2 loại dữ liệu"
+              style="max-width:95%;max-height:260px;object-fit:contain;" />
+            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Dữ liệu tuyến tính → mô hình tuyến tính tốt hơn;
+                dữ liệu vùng → cây tốt hơn</em></p>
+          </div>
+        </section>
+
+        <!-- p.22: Advantages and Disadvantages -->
+        <section style="font-size: 0.76em;">
+          <h2>Ưu và nhược điểm của cây</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px;">
+            <div style="border:2px solid #5aaa44;border-radius:8px;padding:12px;background:#f5fff5;">
+              <p style="text-align:center;font-weight:bold;color:#5aaa44;margin:0 0 8px;">Ưu điểm</p>
+              <ul style="margin:0;line-height:1.6em;">
+                <li>Dễ giải thích cho người không chuyên</li>
+                <li>Mô phỏng cách ra quyết định của con người</li>
+                <li>Biểu diễn đồ hoạ trực quan</li>
+                <li>Xử lý biến phân loại không cần dummy</li>
+                <li>Xử lý giá trị thiếu một cách tự nhiên</li>
+              </ul>
+            </div>
+            <div style="border:2px solid #c0392b;border-radius:8px;padding:12px;background:#fff5f5;">
+              <p style="text-align:center;font-weight:bold;color:#c0392b;margin:0 0 8px;">Nhược điểm</p>
+              <ul style="margin:0;line-height:1.6em;">
+                <li>Độ chính xác thường <strong>kém hơn</strong> các mô hình khác</li>
+                <li><strong>Không robust</strong> — thay đổi nhỏ trong dữ liệu có thể thay đổi cây hoàn toàn</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- ====== PART 5: Ensemble ====== -->
+      <section>
+        <section id="ensemble">
+          <h1>
+            <span class="text-light">5.</span><br />
+            Phương pháp Ensemble<br>
+            <span style="font-size:0.5em;color:#555;">(Ensemble Methods)</span>
+          </h1>
+        </section>
+
+        <!-- p.23 + p.25: Ensemble intro + 3 methods -->
+        <section style="font-size: 0.78em;">
+          <h2>Phương pháp Ensemble</h2>
+          <p style="margin-top:0;">Kết hợp <strong>nhiều mô hình</strong> và gộp dự đoán — như hỏi ý kiến nhiều chuyên
+            gia ("trí tuệ đám đông").</p>
+          <ul style="margin-top:6px;">
+            <li>Gộp nhiều dự đoán thường giảm <strong>phương sai</strong></li>
+          </ul>
+          <p style="margin-top:14px;">Ba phương pháp chính:</p>
+          <ol style="line-height:2em;">
+            <li><strong>Bagging:</strong> kết hợp cây với bootstrap</li>
+            <li><strong>Random Forests:</strong> giảm tương quan giữa các cây bagged</li>
+            <li><strong>Boosting:</strong> xây cây tuần tự, tập trung vào vùng yếu</li>
+          </ol>
+        </section>
+
+        <!-- p.24: Wisdom of Crowds — screenshot -->
+        <section style="font-size: 0.78em;">
+          <h2>Trí tuệ đám đông</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:8px;">
+            <div>
+              <p style="margin-top:0;"><strong>Ví dụ:</strong> bỏ phiếu giải Oscar giả lập</p>
+              <ul>
+                <li>50 thành viên, 10 hạng mục, 4 đề cử mỗi hạng mục</li>
+                <li>Chỉ 15 người có hiểu biết (\(p = 0.25\) = không biết)</li>
+                <li>Kết quả <span style="color:#e8732a;font-weight:bold;">consensus</span> luôn tốt hơn <span
+                    style="color:#5aaa44;font-weight:bold;">cá nhân</span></li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec08/raw-screenshots/p24-wisdom-crowds.png" alt="Consensus vs Individual"
+                style="max-width:100%;max-height:320px;object-fit:contain;border-radius:6px;" />
+            </div>
+          </div>
+        </section>
+
+        <!-- p.26: Bagging -->
+        <section style="font-size: 0.74em;">
+          <h2>Bagging (Bootstrap Aggregating)</h2>
+          <p style="margin-top:0;">Áp dụng bootstrap để giảm phương sai cho cây quyết định:</p>
+          <ol style="line-height:1.8em;margin-top:6px;">
+            <li>Tạo \(B\) tập huấn luyện bằng <strong>bootstrap</strong></li>
+            <li>Xây cây đầy đủ (deep, unpruned) trên mỗi tập: \(\hat{f}^{*b}(x)\)</li>
+            <li>Trung bình dự đoán: \(\hat{f}_{\text{bag}}(x) = \frac{1}{B}\sum_{b=1}^{B} \hat{f}^{*b}(x)\)</li>
+          </ol>
+          <div
+            style="background:#e8f4fd;border-left:4px solid #4a90d9;padding:10px 14px;margin-top:12px;border-radius:4px;">
+            Đặc biệt hiệu quả cho cây vì: cây deep có <strong>phương sai cao, bias thấp</strong> → trung bình giảm
+            phương sai.
+          </div>
+          <p style="margin-top:8px;">Hồi quy → trung bình; phân lớp → <strong>bầu cử đa số</strong> (majority vote).</p>
+        </section>
+
+        <!-- p.27: Random Forests -->
+        <section style="font-size: 0.72em;">
+          <h2>Random Forests</h2>
+          <p style="margin-top:0;"><strong>Vấn đề của bagging:</strong> các mẫu bootstrap chồng lắp nhiều → các cây
+            <strong>tương quan cao</strong> → giảm phương sai không đủ mạnh.
+          </p>
+          <div
+            style="background:#e8f4fd;border-left:4px solid #4a90d9;padding:10px 14px;margin-top:8px;border-radius:4px;">
+            Phương sai trung bình của \(k\) biến i.i.d. có phương sai \(\sigma^2\) và tương quan \(\rho\):
+            \[ \rho\sigma^2 + \frac{1-\rho}{k}\sigma^2 \]
+            Khi \(k\) lớn, số hạng thứ 2 → 0 nhưng \(\rho\sigma^2\) vẫn còn.
+          </div>
+          <p style="margin-top:10px;"><strong>Giải pháp:</strong> tại mỗi phép chia, chỉ xét <strong>\(m\) đặc trưng ngẫu
+              nhiên</strong> thay vì toàn bộ \(p\):</p>
+          <ul>
+            <li>Phân lớp: \(m = \sqrt{p}\) &nbsp;|&nbsp; Hồi quy: \(m = p/3\)</li>
+            <li>Các cây dùng đặc trưng khác nhau → <strong>giảm tương quan</strong></li>
+            <li>Ví dụ: nếu có 1 biến rất mạnh, bagging luôn chia theo biến đó → cây giống nhau. RF chỉ dùng biến đó
+              trong \(m/p\) lần chia.</li>
+          </ul>
+        </section>
+
+        <!-- p.28: Bagging vs Forests — Heart -->
+        <section style="font-size: 0.78em;">
+          <h2>So sánh Bagging vs. Random Forests — Heart</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:8px;">
+            <div>
+              <ul style="line-height:1.8em;">
+                <li>Khoảng 1/3 mẫu bootstrap nằm ngoài túi (<span class="keyword">out-of-bag</span>, OOB)</li>
+                <li>Dùng OOB để ước lượng test error mà không cần tập kiểm tra riêng</li>
+                <li>Bagging <strong>không overfit</strong> khi \(B\) tăng → chọn \(B\) đủ lớn để error ổn định</li>
+                <li>Random Forests thường tốt hơn nhờ giảm tương quan</li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec08/bagging-vs-rf.svg" alt="Bagging vs RF error curves"
+                style="max-width:100%;max-height:320px;object-fit:contain;" />
+            </div>
+          </div>
+        </section>
+
+        <!-- p.29: Choosing m — screenshot -->
+        <section style="font-size: 0.78em;">
+          <h2>Chọn giá trị \(m\)</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:8px;">
+            <div>
+              <p style="margin-top:0;">\(m\) nhỏ (như \(m = \sqrt{p}\)) phù hợp khi có <strong>nhiều biến tương
+                  quan</strong>.</p>
+              <ul>
+                <li>\(m = p\) tương đương bagging</li>
+              </ul>
+              <p style="margin-top:8px;"><strong>Ví dụ:</strong> dự đoán loại ung thư</p>
+              <ul>
+                <li>4718 gen, 349 bệnh nhân, 15 lớp</li>
+                <li>RF với \(m = \sqrt{p}\) tốt nhất</li>
+                <li>Lợi ích RF nhỏ hơn mong đợi — có thể do bias tăng khi ép dùng gen không liên quan</li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec08/raw-screenshots/p29-choosing-m.png" alt="RF: chọn m trên cancer dataset"
+                style="max-width:100%;max-height:320px;object-fit:contain;border-radius:6px;" />
+            </div>
+          </div>
+        </section>
+
+        <!-- p.30: Variable Importance -->
+        <section style="font-size: 0.74em;">
+          <h2>Độ quan trọng biến (Variable Importance)</h2>
+          <p style="margin-top:0;">Ensemble nhiều cây khó diễn giải → dùng <span class="keyword">độ quan trọng
+              biến</span> thay thế.</p>
+          <p style="margin-top:8px;">Với một cây \(T\), độ quan trọng bình phương của biến \(X_l\):</p>
+          <p style="text-align:center;">
+            \[ I_l^2(T) = \sum_{t=1}^{J-1} \hat{i}_t^2 \, \mathbb{I}(v(t) = l) \]
+          </p>
+          <ul>
+            <li>\(\hat{i}_t^2\): mức giảm sai số (RSS hoặc Gini) tại nút \(t\)</li>
+            <li>\(v(t)\): biến được dùng để chia tại nút \(t\)</li>
+            <li>Tổng hợp trên \(M\) cây: \(I_l^2 = \frac{1}{M}\sum_{m=1}^{M} I_l^2(T_m)\)</li>
+          </ul>
+        </section>
+
+        <!-- p.31: Variable Importance — Heart -->
+        <section style="font-size: 0.78em;">
+          <h2>Ví dụ: Độ quan trọng biến — Heart</h2>
+          <div style="text-align:center;margin-top:8px;">
+            <img src="img/lec08/variable-importance.svg" alt="Variable importance Heart dataset"
+              style="max-width:75%;max-height:400px;object-fit:contain;" />
+            <p style="font-size:0.75em;color:#666;margin:4px 0 0;"><em>Gini index, chuẩn hoá max = 100.
+                Thal và Ca là hai biến quan trọng nhất.</em></p>
+          </div>
+        </section>
+
+        <!-- p.32: Boosting -->
+        <section style="font-size: 0.76em;">
+          <h2>Boosting</h2>
+          <div style="display:grid;grid-template-columns:1fr 0.9fr;gap:16px;align-items:start;margin-top:8px;">
+            <div>
+              <p style="margin-top:0;">Khác bagging/RF: các cây được xây <strong>tuần tự</strong>, mỗi cây tập trung vào
+                vùng mà mô hình hiện tại yếu.</p>
+              <ul style="line-height:1.7em;">
+                <li>Nền tảng lý thuyết vững chắc (AdaBoost)</li>
+                <li>Cây nhỏ (stumps / shallow trees)</li>
+                <li>Học <strong>chậm</strong> — nhiều cây nhỏ tốt hơn ít cây lớn</li>
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec08/raw-screenshots/p32-boosting-curves.png" alt="Boosting vs RF comparison"
+                style="max-width:100%;max-height:300px;object-fit:contain;border-radius:6px;" />
+              <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Boosting depth=1,2 vs. RF trên cancer
+                  dataset</em></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- p.33: Algorithm 8.2 -->
+        <section style="font-size: 0.72em;">
+          <h2>Thuật toán 8.2 — Boosting cho cây hồi quy</h2>
+          <ol style="line-height:1.8em;margin-top:6px;">
+            <li>Đặt \(\hat{f}(x) = 0\) và <span style="color:#c0392b;">phần dư</span> \(r_i = y_i\) cho mọi \(i\).</li>
+            <li>Với \(b = 1, 2, \ldots, B\):
+              <ol type="a" style="margin-top:4px;line-height:1.8em;">
+                <li>Fit cây \(\hat{f}^b\) có \(d\) phép chia (\(d+1\) lá) trên \((\mathbf{X}, \mathbf{r})\)</li>
+                <li>Cập nhật: \(\hat{f}(x) \leftarrow \hat{f}(x) + \lambda \hat{f}^b(x)\)</li>
+                <li>Cập nhật phần dư: \(r_i \leftarrow r_i - \lambda \hat{f}^b(x_i)\)</li>
+              </ol>
+            </li>
+            <li>Mô hình cuối: \(\hat{f}(x) = \sum_{b=1}^{B} \lambda \hat{f}^b(x)\)</li>
+          </ol>
+          <div
+            style="background:#e8f4fd;border-left:4px solid #4a90d9;padding:10px 14px;margin-top:10px;border-radius:4px;">
+            Boosting = <strong>học chậm</strong>: cây nhỏ (\(d\)), co ngót (\(\lambda\)) → từ từ cải thiện vùng yếu.
+          </div>
+        </section>
+
+        <!-- p.34: Model Parameters -->
+        <section style="font-size: 0.76em;">
+          <h2>Tham số của Boosting</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
+            <div style="border:1px solid #ccc;border-radius:8px;padding:12px;background:#f9f9f9;">
+              <p style="text-align:center;font-weight:bold;color:#4a90d9;margin:0 0 6px;">Số cây \(B\)</p>
+              <ul style="margin:0;font-size:0.9em;">
+                <li>Boosting <strong>có thể overfit</strong> (khác bagging)</li>
+                <li>Dùng CV để chọn</li>
+              </ul>
+            </div>
+            <div style="border:1px solid #ccc;border-radius:8px;padding:12px;background:#f9f9f9;">
+              <p style="text-align:center;font-weight:bold;color:#e8732a;margin:0 0 6px;">Shrinkage \(\lambda\)</p>
+              <ul style="margin:0;font-size:0.9em;">
+                <li>Thường 0.01 hoặc 0.001</li>
+                <li>\(\lambda\) nhỏ → cần \(B\) lớn</li>
+              </ul>
+            </div>
+            <div style="border:1px solid #ccc;border-radius:8px;padding:12px;background:#f9f9f9;">
+              <p style="text-align:center;font-weight:bold;color:#5aaa44;margin:0 0 6px;">Số chia \(d\)</p>
+              <ul style="margin:0;font-size:0.9em;">
+                <li>\(d=1\) (stumps) thường tốt</li>
+                <li>\(d\) kiểm soát bậc tương tác</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- p.35: Simulated Data — screenshot -->
+        <section style="font-size: 0.78em;">
+          <h2>Bagging vs. Boosting — Dữ liệu giả lập</h2>
+          <p style="margin-top:0;">\(p=5\) đặc trưng, 2 lớp, biên quyết định \(x_1 + x_2 = 1\).
+            Bagging stumps: tất cả cây chia gần giữa → trung bình không cải thiện. Boosting tốt hơn rõ rệt.</p>
+          <div style="text-align:center;margin-top:6px;">
+            <img src="img/lec08/raw-screenshots/p35-simulated-data.png" alt="Bagged vs Boosted decision rule"
+              style="max-width:88%;max-height:340px;object-fit:contain;border-radius:6px;" />
+          </div>
+        </section>
+      </section>
+
+      <!-- ====== PART 6: Tổng kết ====== -->
+      <section>
+        <section>
+          <h1>Tổng kết</h1>
+        </section>
+
+        <section style="font-size: 0.76em;">
+          <h2>Tổng kết</h2>
+          <ul style="line-height:1.8em;">
+            <li><strong>Cây quyết định:</strong> chia không gian thành các vùng, mỗi vùng dùng mô hình hằng số. Thuật
+              toán tham lam vì tìm cây tối ưu là NP-hard.</li>
+            <li><strong>Bagging:</strong> bootstrap + trung bình → giảm phương sai. Nhưng các cây tương quan cao.</li>
+            <li><strong>Random Forests:</strong> tại mỗi chia chỉ xét \(m < p\) đặc trưng → giảm tương quan giữa các
+              cây.</li>
+            <li><strong>Boosting:</strong> xây tuần tự các cây nhỏ trên phần dư → từ từ cải thiện vùng yếu.</li>
+          </ul>
+        </section>
+
+        <section style="font-size: 0.86em;">
+          <h2>Tài liệu tham khảo</h2>
+          <ul style="line-height:1.9em;">
+            <li>ISLR, Chương 8.</li>
+            <li>ESL, Chương 9–10.</li>
+            <li>Muandet &amp; Vreeken, lecture slides.</li>
+          </ul>
+        </section>
+      </section>
+
+      <div class="footer">
+        Học máy (Học kỳ 2 2025-2026) §8: Mô hình cây quyết định
+      </div>
+    </div>
+  </div>
+
+  <script src="revealjs/dist/reveal.js"></script>
+  <script src="plugin/notes/notes.js"></script>
+  <script src="plugin/markdown/markdown.js"></script>
+  <script src="plugin/highlight/highlight.js"></script>
+  <script src="plugin/math/math.js"></script>
+  <script>
+    Reveal.initialize({
+      controlsLayout: "edges",
+      slideNumber: true,
+      hashOneBasedIndex: true,
+      hash: true,
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX],
+    });
+  </script>
+</body>
+
+</html>
