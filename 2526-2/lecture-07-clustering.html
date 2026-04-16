@@ -564,18 +564,24 @@
 
         <section style="font-size: 0.78em;">
           <h2>Phân cụm đồng thời hàng và cột</h2>
-          <p style="margin-top:0;">Áp dụng phân cấp riêng biệt cho cả quan sát và đặc trưng, hiển thị dưới dạng
-            <strong>heatmap</strong> sắp xếp theo cụm — dễ phát hiện pattern ẩn.
-          </p>
-          <p style="margin:4px 0 0;font-size:0.88em;color:#555;"><strong>Dữ liệu Iris</strong>: 150 mẫu hoa diên vĩ
-            thuộc 3 loài (<em>setosa</em>, <em>versicolor</em>, <em>virginica</em>), mỗi mẫu có 4 đặc trưng đo kích
-            thước đài hoa và cánh hoa.</p>
-          <div style="text-align:center;margin-top:6px;">
-            <img src="img/lec07/bicluster-iris.svg?v=3" alt="Biclustering Iris dataset"
-              style="max-width:92%;max-height:310px;object-fit:contain;" />
-            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Heatmap phân cụm tập dữ liệu Iris — hàng (quan
-                sát) và cột (đặc trưng) đều được sắp xếp theo cụm</em></p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin-top:6px;">
+            <div>
+              <p style="margin-top:0;"><strong>Ý tưởng:</strong> Bảng dữ liệu thô khó thấy pattern. Nếu ta:</p>
+              <ol style="line-height:1.7em;">
+                <li><strong>Phân cụm hàng</strong> → gom quan sát giống nhau</li>
+                <li><strong>Phân cụm cột</strong> → gom đặc trưng liên quan</li>
+                <li>Vẽ <strong>heatmap</strong> theo thứ tự mới</li>
+              </ol>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec07/bicluster-iris.svg?v=4" alt="Biclustering Iris dataset"
+                style="max-width:100%;max-height:280px;object-fit:contain;" />
+              <p style="font-size:0.82em;color:#555;margin:4px 0 0;"><strong>Ví dụ Iris:</strong> khối xanh đậm phía trên
+                = <em>setosa</em> (cánh hoa nhỏ); khối đỏ phía dưới = <em>virginica</em> (cánh hoa lớn).</p>
+            </div>
           </div>
+          <p style="margin-top:6px;">→ Các <strong>khối màu</strong> xuất hiện, cho thấy nhóm quan sát nào có giá trị
+            cao/thấp ở nhóm đặc trưng nào.</p>
         </section>
       </section>
 
