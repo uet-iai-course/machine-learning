@@ -98,14 +98,14 @@
                 <li>Chia không gian đặc trưng thành \(J\) vùng rời nhau \(R_1, \ldots, R_J\).</li>
                 <li>Trong mỗi vùng, dự đoán bằng <strong>giá trị trung bình</strong> của các quan sát thuộc vùng đó.</li>
               </ol>
-              <p style="margin-top:10px;">Về lý thuyết, các vùng có thể có hình dạng bất kỳ — nhưng ta chỉ dùng <span
-                  class="keyword">hình hộp</span> (rectangles / cuboids).</p>
             </div>
             <div style="text-align:center;">
               <img src="img/lec08/regions-partition.svg" alt="Phân vùng hình hộp"
                 style="max-width:100%;max-height:350px;object-fit:contain;" />
             </div>
           </div>
+          <p style="margin-top:8px;">Các vùng có thể có hình dạng bất kỳ — nhưng ta chỉ dùng <span
+              class="keyword">hình hộp</span> (rectangles) vì đơn giản và dễ diễn giải.</p>
         </section>
 
         <!-- p.5: Tree structure -->
@@ -115,12 +115,8 @@
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:8px;">
             <div>
               <ul style="line-height:1.8em;">
-                <li><span class="keyword">Nút trong</span> (internal node): kiểm tra một đặc trưng, tạo biên quyết
-                  định</li>
-                <li><span class="keyword">Nhánh</span> (branch): kết quả khác nhau của phép kiểm tra (đúng → trái, sai →
-                  phải)</li>
-                <li><span class="keyword">Lá</span> (leaf / terminal node): vùng trong không gian đặc trưng và dự đoán
-                  tương ứng</li>
+                <li><span class="keyword">Nút trong</span> (internal node): kiểm tra một đặc trưng</li>
+                <li><span class="keyword">Nhánh</span> (branch): đúng → trái, sai → phải</li>
               </ul>
             </div>
             <div style="text-align:center;">
@@ -128,6 +124,8 @@
                 style="max-width:100%;max-height:350px;object-fit:contain;" />
             </div>
           </div>
+          <p style="margin-top:6px;"><span class="keyword">Lá</span> (leaf): vùng trong không gian đặc trưng — mỗi lá
+            cho một dự đoán.</p>
         </section>
 
         <!-- Tree to Regions: moved here for better flow -->
@@ -151,23 +149,22 @@
         </section>
 
         <!-- p.6a: Greedy strategy -->
-        <section style="font-size: 0.76em;">
+        <section style="font-size: 0.78em;">
           <h2>Chiến lược tham lam</h2>
-          <div style="display:grid;grid-template-columns:1fr 0.8fr;gap:16px;align-items:start;margin-top:8px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:8px;">
             <div>
               <p style="margin-top:0;">Không thể xét hết mọi cây → dùng chiến lược <span
-                  class="keyword">tham lam</span>: tại mỗi bước, chọn đặc trưng \(X_j\) và điểm chia \(s\) tạo hai
-                vùng:</p>
-              <p style="text-align:center;margin:8px 0;">
-                \[ R_1(j,s) = \{X \mid X_j < s\}, \quad R_2(j,s) = \{X \mid X_j \geq s\} \]
-              </p>
-              <p>Lặp lại trên mỗi vùng con → cây lớn dần.</p>
+                  class="keyword">tham lam</span>: tại mỗi bước, chọn \(X_j\) và \(s\) tạo hai vùng.</p>
+              <p style="margin-top:6px;">Lặp lại trên mỗi vùng con → cây lớn dần.</p>
             </div>
             <div style="text-align:center;">
               <img src="img/lec08/regions-recursive.svg" alt="5 vùng chia đệ quy"
                 style="max-width:100%;max-height:350px;object-fit:contain;" />
             </div>
           </div>
+          <p style="text-align:center;margin:8px 0;">
+            \[ R_1(j,s) = \{X \mid X_j < s\}, \quad R_2(j,s) = \{X \mid X_j \geq s\} \]
+          </p>
         </section>
 
         <!-- p.6b: RSS objective -->
@@ -215,7 +212,7 @@
 
         <!-- p.11 + p.12: Algorithm 8.1 + weakest-link -->
         <section style="font-size: 0.72em;">
-          <h2>Thuật toán 8.1 — Xây dựng cây hồi quy</h2>
+          <h2>Xây dựng cây hồi quy</h2>
           <ol style="line-height:2em;margin-top:8px;">
             <li>Phát triển cây đầy đủ bằng chia đôi đệ quy.</li>
             <li>Cắt tỉa cost complexity: lần lượt gộp nút gây tăng error ít nhất (<em>weakest-link pruning</em>)
@@ -275,21 +272,20 @@
         <!-- p.15: Impurity Measures -->
         <section style="font-size: 0.72em;">
           <h2>Các độ đo tạp chất (Impurity Measures)</h2>
-          <div style="display:grid;grid-template-columns:1fr 0.8fr;gap:16px;align-items:start;margin-top:6px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:6px;">
             <div>
-              <p style="margin-top:0;">Yêu cầu: cực đại khi các lớp phân bố đều, cực tiểu (0) khi nút thuần nhất.</p>
-              <p style="margin-top:8px;"><strong>Chỉ số Gini:</strong></p>
-              <p style="text-align:center;">\[ G = \sum_{k=1}^{K} \hat{p}_{mk}(1 - \hat{p}_{mk}) \]</p>
-              <p style="margin-top:6px;"><strong>Cross-entropy:</strong></p>
-              <p style="text-align:center;">\[ D = -\sum_{k=1}^{K} \hat{p}_{mk} \log \hat{p}_{mk} \]</p>
+              <p style="margin-top:0;"><strong>Gini:</strong>
+                \( G = \sum_k \hat{p}_{mk}(1 - \hat{p}_{mk}) \)</p>
+              <p style="margin-top:8px;"><strong>Entropy:</strong>
+                \( D = -\sum_k \hat{p}_{mk} \log \hat{p}_{mk} \)</p>
+              <p style="margin-top:10px;"><strong>Nguyên tắc:</strong> Gini / entropy để <strong>chia</strong>; lỗi phân
+                lớp để <strong>đánh giá</strong>.</p>
             </div>
             <div style="text-align:center;">
               <img src="img/lec08/impurity-measures.svg" alt="Gini vs entropy vs misclassification error"
-                style="max-width:100%;max-height:330px;object-fit:contain;" />
+                style="max-width:100%;max-height:340px;object-fit:contain;" />
             </div>
           </div>
-          <p style="margin-top:8px;"><strong>Nguyên tắc:</strong> dùng Gini / entropy để <strong>chọn phép chia</strong>
-            (nhạy hơn); dùng lỗi phân lớp để <strong>đánh giá hoặc chọn giữa các cây</strong> đã xây.</p>
         </section>
 
         <!-- p.16: Heart — pruned tree -->
@@ -399,7 +395,7 @@
           </div>
           <div style="text-align:center;margin-top:10px;">
             <img src="img/lec08/trees-vs-linear.svg" alt="Linear vs Tree trên 2 loại dữ liệu"
-              style="max-width:95%;max-height:310px;object-fit:contain;" />
+              style="max-width:98%;max-height:260px;object-fit:contain;" />
             <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Dữ liệu tuyến tính → mô hình tuyến tính tốt hơn;
                 dữ liệu vùng → cây tốt hơn</em></p>
           </div>
@@ -489,7 +485,7 @@
               <ul>
                 <li>50 thành viên, 10 hạng mục, 4 đề cử mỗi hạng mục</li>
                 <li>15 người có hiểu biết (đúng với xác suất \(p\)); 35 người chọn ngẫu nhiên (\(1/4\))</li>
-                <li>Kết quả <span style="color:#e8732a;font-weight:bold;">consensus</span> thường tốt hơn <span
+                <li>Kết quả <span style="color:#e8732a;font-weight:bold;">đồng thuận (consensus)</span> thường tốt hơn <span
                     style="color:#5aaa44;font-weight:bold;">cá nhân</span></li>
               </ul>
             </div>
@@ -569,17 +565,10 @@
           <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:8px;">
             <div>
-              <p style="margin-top:0;">\(m\) nhỏ (như \(m = \sqrt{p}\)) phù hợp khi có <strong>nhiều biến tương
-                  quan</strong>.</p>
-              <ul>
-                <li>\(m = p\) tương đương bagging</li>
-              </ul>
-              <p style="margin-top:8px;"><strong>Ví dụ:</strong> dự đoán loại ung thư</p>
-              <ul>
-                <li>4718 gen, 349 bệnh nhân, 15 lớp</li>
-                <li>RF với \(m = \sqrt{p}\) tốt nhất</li>
-                <li>Lợi ích RF nhỏ hơn mong đợi — có thể do bias tăng khi ép dùng gen không liên quan</li>
-              </ul>
+              <p style="margin-top:0;">\(m\) nhỏ phù hợp khi có <strong>nhiều biến tương quan</strong>.
+                \(m = p\) tương đương bagging.</p>
+              <p style="margin-top:8px;"><strong>Ví dụ:</strong> 4718 gen, 15 lớp ung thư — RF với \(m = \sqrt{p}\) tốt
+                nhất.</p>
             </div>
             <div style="text-align:center;">
               <img src="img/lec08/choosing-m.svg" alt="RF: chọn m trên dữ liệu cao chiều"
@@ -632,7 +621,7 @@
 
         <!-- p.33: Algorithm 8.2 -->
         <section style="font-size: 0.72em;">
-          <h2>Thuật toán 8.2 — Boosting cho cây hồi quy</h2>
+          <h2>Boosting cho cây hồi quy</h2>
           <ol style="line-height:1.8em;margin-top:6px;">
             <li>Đặt \(\hat{f}(x) = 0\) và <span style="color:#c0392b;">phần dư</span> \(r_i = y_i\) cho mọi \(i\).</li>
             <li>Với \(b = 1, 2, \ldots, B\):

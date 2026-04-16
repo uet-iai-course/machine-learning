@@ -42,7 +42,11 @@ ax.text(18, 180, f"$R_3$\n\\${np.mean(r3):,.0f}", fontsize=9, ha="center", va="c
 
 ax.set_xlabel("Years", fontsize=11)
 ax.set_ylabel("Hits", fontsize=11)
-ax.text(t_years, -8, "4.5", fontsize=8, ha="center", va="top", color="#2c3e50")
+# Mark thresholds on axes
+ax.set_xticks([5, 10, 15, 20, 25])
+ax.annotate("4.5", xy=(t_years, 0), xytext=(t_years, -15),
+            fontsize=8, ha="center", va="top", color="#2c3e50", fontweight="bold",
+            arrowprops=dict(arrowstyle="-", color="#2c3e50", lw=0.8))
 ax.text(25.5, t_hits, "117.5", fontsize=8, ha="left", va="center", color="#2c3e50")
 
 fig.tight_layout(pad=0.5)

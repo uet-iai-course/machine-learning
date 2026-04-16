@@ -26,15 +26,17 @@ models = [
     ("Mô hình cây", DecisionTreeClassifier),
 ]
 
-fig, axes = plt.subplots(2, 2, figsize=(8, 7))
+fig, axes = plt.subplots(1, 4, figsize=(14, 3.5))
 xx, yy = np.meshgrid(np.linspace(-3, 3, 200), np.linspace(-3, 3, 200))
 grid = np.c_[xx.ravel(), yy.ravel()]
 
 colors = ["#f4d03f", "#82e0aa"]  # yellow, green
 
-for row, (data_label, X, y) in enumerate(datasets):
-    for col, (model_label, ModelClass) in enumerate(models):
-        ax = axes[row, col]
+panel_idx = 0
+for col_d, (data_label, X, y) in enumerate(datasets):
+    for col_m, (model_label, ModelClass) in enumerate(models):
+        ax = axes[panel_idx]
+        panel_idx += 1
         kw = {"max_depth": 4} if ModelClass == DecisionTreeClassifier else {}
         clf = ModelClass(**kw).fit(X, y)
         Z = clf.predict(grid).reshape(xx.shape)
@@ -54,10 +56,7 @@ for row, (data_label, X, y) in enumerate(datasets):
         ax.set_xlabel(r"$X_1$", fontsize=9)
         ax.set_ylabel(r"$X_2$", fontsize=9)
 
-        if row == 0:
-            ax.set_title(model_label, fontsize=10, fontweight="bold")
-        if col == 0:
-            ax.set_ylabel(data_label + "\n" + r"$X_2$", fontsize=9, fontweight="bold")
+        ax.set_title(f"{data_label}\n{model_label}", fontsize=9, fontweight="bold")
 
 fig.tight_layout(pad=0.6)
 fig.savefig("../trees-vs-linear.svg", format="svg", bbox_inches="tight")
