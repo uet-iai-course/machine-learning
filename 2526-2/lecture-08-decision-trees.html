@@ -26,6 +26,8 @@
 
         <section>
           <h2>Nội dung</h2>
+          <p style="margin:0 0 8px;font-style:italic;color:#666;font-size:0.85em;">Từ cây đơn đến ensemble: trực giác,
+            cơ chế, và khi nào dùng.</p>
           <ol style="line-height:1.15em;">
             <li>Tổng quan <a href="#tong-quan">→</a><br>
               <span style="color:#888;font-weight:normal;font-size:0.5em;">Ý tưởng, phân vùng, cấu trúc cây</span>
@@ -65,6 +67,7 @@
             <img src="img/lec08/20questions-tree.svg" alt="Cây 20 câu hỏi"
               style="max-width:70%;max-height:350px;object-fit:contain;" />
           </div>
+          <aside class="notes">Hỏi lớp: Nếu chỉ được hỏi 2-3 câu, bạn sẽ phân loại thế nào?</aside>
         </section>
 
         <!-- p.3: Basics — Hitters dataset -->
@@ -81,7 +84,7 @@
             </div>
             <div style="text-align:center;">
               <img src="img/lec08/hitters-scatter.svg" alt="Hitters: Years vs Hits với 3 vùng"
-                style="max-width:100%;max-height:340px;object-fit:contain;" />
+                style="max-width:100%;max-height:380px;object-fit:contain;" />
             </div>
           </div>
         </section>
@@ -100,7 +103,7 @@
             </div>
             <div style="text-align:center;">
               <img src="img/lec08/regions-partition.svg" alt="Phân vùng hình hộp"
-                style="max-width:100%;max-height:320px;object-fit:contain;" />
+                style="max-width:100%;max-height:350px;object-fit:contain;" />
             </div>
           </div>
         </section>
@@ -122,8 +125,17 @@
             </div>
             <div style="text-align:center;">
               <img src="img/lec08/hitters-tree.svg?v=2" alt="Cây quyết định Hitters"
-                style="max-width:100%;max-height:320px;object-fit:contain;" />
+                style="max-width:100%;max-height:350px;object-fit:contain;" />
             </div>
+          </div>
+        </section>
+
+        <!-- Tree to Regions: moved here for better flow -->
+        <section style="font-size: 0.82em;">
+          <h2>Từ cây đến vùng và ngược lại</h2>
+          <div style="text-align:center;margin-top:8px;">
+            <img src="img/lec08/tree-regions-3d.svg" alt="Cây ↔ vùng ↔ bề mặt 3D"
+              style="max-width:92%;max-height:420px;object-fit:contain;border-radius:6px;" />
           </div>
         </section>
       </section>
@@ -153,7 +165,7 @@
             </div>
             <div style="text-align:center;">
               <img src="img/lec08/regions-recursive.svg" alt="5 vùng chia đệ quy"
-                style="max-width:100%;max-height:320px;object-fit:contain;" />
+                style="max-width:100%;max-height:350px;object-fit:contain;" />
             </div>
           </div>
         </section>
@@ -170,15 +182,6 @@
             <li>Dữ liệu hữu hạn → chỉ \(p \times (n-1)\) lựa chọn cho \((j, s)\)</li>
             <li>Cho cây mọc hết rồi <strong>cắt tỉa</strong> sau thường tốt hơn dừng sớm</li>
           </ul>
-        </section>
-
-        <!-- p.8: Tree to Regions and Back — screenshot -->
-        <section style="font-size: 0.82em;">
-          <h2>Từ cây đến vùng và ngược lại</h2>
-          <div style="text-align:center;margin-top:8px;">
-            <img src="img/lec08/tree-regions-3d.svg" alt="Cây ↔ vùng ↔ bề mặt 3D"
-              style="max-width:92%;max-height:420px;object-fit:contain;border-radius:6px;" />
-          </div>
         </section>
 
         <!-- p.9: Pruning motivation -->
@@ -266,6 +269,7 @@
             <strong>Vấn đề:</strong> \(E\) <strong>không đủ nhạy</strong> — trước khi chia \(E = 40/200\),
             sau khi chia tốt nhất trung bình vẫn là \(40/200\). Cần độ đo tinh hơn → Gini / entropy.
           </div>
+          <aside class="notes">Bài tập nhanh: nút có 8 mẫu lớp 0 và 2 mẫu lớp 1 — E, Gini, entropy bằng bao nhiêu?</aside>
         </section>
 
         <!-- p.15: Impurity Measures -->
@@ -281,7 +285,7 @@
             </div>
             <div style="text-align:center;">
               <img src="img/lec08/impurity-measures.svg" alt="Gini vs entropy vs misclassification error"
-                style="max-width:100%;max-height:290px;object-fit:contain;" />
+                style="max-width:100%;max-height:330px;object-fit:contain;" />
             </div>
           </div>
           <p style="margin-top:8px;"><strong>Nguyên tắc:</strong> dùng Gini / entropy để <strong>chọn phép chia</strong>
@@ -304,7 +308,7 @@
             </div>
             <div style="text-align:center;">
               <img src="img/lec08/heart-tree.svg" alt="Cây phân lớp Heart (đã cắt tỉa)"
-                style="max-width:100%;max-height:320px;object-fit:contain;" />
+                style="max-width:100%;max-height:350px;object-fit:contain;" />
             </div>
           </div>
         </section>
@@ -395,7 +399,7 @@
           </div>
           <div style="text-align:center;margin-top:10px;">
             <img src="img/lec08/trees-vs-linear.svg" alt="Linear vs Tree trên 2 loại dữ liệu"
-              style="max-width:95%;max-height:260px;object-fit:contain;" />
+              style="max-width:95%;max-height:310px;object-fit:contain;" />
             <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Dữ liệu tuyến tính → mô hình tuyến tính tốt hơn;
                 dữ liệu vùng → cây tốt hơn</em></p>
           </div>
@@ -491,7 +495,7 @@
             </div>
             <div style="text-align:center;">
               <img src="img/lec08/wisdom-crowds.svg" alt="Consensus vs Individual"
-                style="max-width:100%;max-height:320px;object-fit:contain;border-radius:6px;" />
+                style="max-width:100%;max-height:350px;object-fit:contain;border-radius:6px;" />
             </div>
           </div>
         </section>
@@ -502,12 +506,12 @@
           <p style="margin-top:0;">Áp dụng bootstrap để giảm phương sai cho cây quyết định:</p>
           <ol style="line-height:1.8em;margin-top:6px;">
             <li>Tạo \(B\) tập huấn luyện bằng <strong>bootstrap</strong></li>
-            <li>Xây cây đầy đủ (deep, unpruned) trên mỗi tập: \(\hat{f}^{*b}(x)\)</li>
+            <li>Xây cây đầy đủ (chưa cắt tỉa) trên mỗi tập: \(\hat{f}^{*b}(x)\)</li>
             <li>Trung bình dự đoán: \(\hat{f}_{\text{bag}}(x) = \frac{1}{B}\sum_{b=1}^{B} \hat{f}^{*b}(x)\)</li>
           </ol>
           <div
             style="background:#e8f4fd;border-left:4px solid #4a90d9;padding:10px 14px;margin-top:12px;border-radius:4px;">
-            Đặc biệt hiệu quả cho cây vì: cây deep có <strong>phương sai cao, bias thấp</strong> → trung bình giảm
+            Đặc biệt hiệu quả cho cây vì: cây sâu có <strong>phương sai cao, bias thấp</strong> → trung bình giảm
             phương sai.
           </div>
           <p style="margin-top:8px;">Hồi quy → trung bình; phân lớp → <strong>bầu cử đa số</strong> (majority vote).</p>
@@ -554,7 +558,7 @@
             </div>
             <div style="text-align:center;">
               <img src="img/lec08/bagging-vs-rf.svg" alt="Bagging vs RF error curves"
-                style="max-width:100%;max-height:320px;object-fit:contain;" />
+                style="max-width:100%;max-height:350px;object-fit:contain;" />
             </div>
           </div>
         </section>
@@ -585,33 +589,22 @@
         </section>
 
         <!-- p.30: Variable Importance -->
-        <section style="font-size: 0.74em;">
+        <!-- Variable Importance (merged) -->
+        <section style="font-size: 0.76em;">
           <h2>Độ quan trọng biến (Variable Importance)</h2>
           <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
-          <p style="margin-top:0;">Ensemble nhiều cây khó diễn giải → dùng <span class="keyword">độ quan trọng
-              biến</span> thay thế.</p>
-          <p style="margin-top:8px;">Với một cây \(T\), độ quan trọng bình phương của biến \(X_l\):</p>
-          <p style="text-align:center;">
-            \[ I_l^2(T) = \sum_{t=1}^{J-1} \hat{i}_t^2 \, \mathbb{I}(v(t) = l) \]
-          </p>
-          <ul>
-            <li>\(\hat{i}_t^2\): mức giảm sai số (RSS hoặc Gini) tại nút \(t\)</li>
-            <li>\(v(t)\): biến được dùng để chia tại nút \(t\)</li>
-            <li>Tổng hợp trên \(M\) cây: \(I_l^2 = \frac{1}{M}\sum_{m=1}^{M} I_l^2(T_m)\)</li>
-          </ul>
-          <p style="margin-top:8px;">Nói cách khác: biến nào giảm sai số nhiều nhất khi được dùng để chia → quan trọng
-            nhất.</p>
-        </section>
-
-        <!-- p.31: Variable Importance — Heart -->
-        <section style="font-size: 0.78em;">
-          <h2>Ví dụ: Độ quan trọng biến — Heart</h2>
-          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
-          <div style="text-align:center;margin-top:8px;">
-            <img src="img/lec08/variable-importance.svg" alt="Variable importance Heart dataset"
-              style="max-width:75%;max-height:400px;object-fit:contain;" />
-            <p style="font-size:0.75em;color:#666;margin:4px 0 0;"><em>Thal và Ca là hai biến quan trọng nhất
-                (Gini index, chuẩn hoá max = 100).</em></p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:6px;">
+            <div>
+              <p style="margin-top:0;">Ensemble nhiều cây khó diễn giải → dùng <span class="keyword">độ quan trọng
+                  biến</span> thay thế.</p>
+              <p style="margin-top:10px;">Biến nào giảm sai số (RSS hoặc Gini) nhiều nhất mỗi khi được dùng để chia →
+                quan trọng nhất. Trung bình trên tất cả cây trong ensemble.</p>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec08/variable-importance.svg" alt="Variable importance Heart dataset"
+                style="max-width:100%;max-height:360px;object-fit:contain;" />
+              <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Thal và Ca quan trọng nhất trên Heart</em></p>
+            </div>
           </div>
         </section>
 
@@ -630,7 +623,7 @@
             </div>
             <div style="text-align:center;">
               <img src="img/lec08/boosting-curves.svg" alt="Boosting vs RF comparison"
-                style="max-width:100%;max-height:300px;object-fit:contain;border-radius:6px;" />
+                style="max-width:100%;max-height:330px;object-fit:contain;border-radius:6px;" />
               <p style="font-size:0.72em;color:#666;margin:2px 0 0;"><em>Boosting với cây nông đã đạt hiệu năng
                   cạnh tranh với RF</em></p>
             </div>
