@@ -265,8 +265,8 @@
         <section style="font-size: 0.72em;">
           <h2>Cây phân lớp</h2>
           <p style="margin-top:0;">Giống cây hồi quy nhưng dự đoán trong mỗi vùng là <strong>lớp phổ biến nhất</strong>
-            (majority vote). Đây là phiên bản thực nghiệm của Bayes classifier — dùng tỷ lệ trong mẫu thay vì xác suất
-            thật. Tỷ lệ lớp \(\hat{p}_{mk}\) trong vùng cũng hữu ích cho diễn giải.</p>
+            (majority vote) — dùng ước lượng xác suất lớp \(\hat{p}_{mk}\) từ dữ liệu mẫu trong mỗi nút.
+            Tỷ lệ này cũng hữu ích cho diễn giải.</p>
           <p style="margin-top:8px;">Ý tưởng: dùng <span class="keyword">lỗi phân lớp</span> thay vì RSS:</p>
           <p style="text-align:center;">
             \[ E = 1 - \max_k(\hat{p}_{mk}) \]
@@ -291,8 +291,6 @@
               <p style="text-align:center;">\[ G = \sum_{k=1}^{K} \hat{p}_{mk}(1 - \hat{p}_{mk}) \]</p>
               <p style="margin-top:6px;"><strong>Cross-entropy:</strong></p>
               <p style="text-align:center;">\[ D = -\sum_{k=1}^{K} \hat{p}_{mk} \log \hat{p}_{mk} \]</p>
-              <p style="margin-top:8px;color:#555;">Thường dùng \(G\) và \(D\) để <strong>xây cây</strong>,
-                \(E\) để <strong>cắt tỉa</strong>.</p>
             </div>
             <div style="text-align:center;">
               <img src="img/lec08/impurity-measures.svg" alt="Gini vs entropy vs misclassification error"
@@ -300,7 +298,7 @@
             </div>
           </div>
           <p style="margin-top:8px;"><strong>Nguyên tắc:</strong> dùng Gini / entropy để <strong>chọn phép chia</strong>
-            (nhạy hơn); dùng lỗi phân lớp để <strong>đánh giá</strong> cây cuối cùng.</p>
+            (nhạy hơn); dùng lỗi phân lớp để <strong>đánh giá hoặc chọn giữa các cây</strong> đã xây.</p>
         </section>
 
         <!-- p.16: Heart — pruned tree -->
@@ -483,7 +481,7 @@
             <div style="border:2px solid #5aaa44;border-radius:8px;padding:12px;background:#f5fff5;">
               <p style="text-align:center;font-weight:bold;color:#5aaa44;margin:0 0 6px;">Ensemble</p>
               <ul style="margin:0;line-height:1.6em;">
-                <li><strong>Giữ bias thấp</strong> — vẫn dùng cây làm base learner</li>
+                <li><strong>Thường giữ bias thấp</strong> — vẫn dùng cây làm base learner</li>
                 <li><strong>Giảm phương sai</strong> — kết hợp nhiều cây khác nhau</li>
                 <li>Đánh đổi: mất khả năng <strong>diễn giải</strong></li>
               </ul>
@@ -491,8 +489,8 @@
           </div>
           <div
             style="background:#e8f4fd;border-left:4px solid #4a90d9;padding:8px 12px;margin-top:12px;border-radius:4px;">
-            <strong>Insight:</strong> Ensemble ra đời để giữ ưu điểm bias thấp của cây, nhưng sửa nhược điểm phương sai
-            cao bằng cách trung bình hoá nhiều cây.
+            <strong>Insight:</strong> Ensemble sửa nhược điểm phương sai cao của cây đơn bằng cách kết hợp nhiều cây,
+            thường cải thiện độ chính xác đáng kể.
           </div>
         </section>
 
@@ -504,7 +502,7 @@
               <p style="margin-top:0;"><strong>Ví dụ:</strong> bỏ phiếu giải Oscar giả lập</p>
               <ul>
                 <li>50 thành viên, 10 hạng mục, 4 đề cử mỗi hạng mục</li>
-                <li>Chỉ 15 người có hiểu biết (\(p = 0.25\) = không biết)</li>
+                <li>15 người có hiểu biết (đúng với xác suất \(p\)); 35 người chọn ngẫu nhiên (\(1/4\))</li>
                 <li>Kết quả <span style="color:#e8732a;font-weight:bold;">consensus</span> luôn tốt hơn <span
                     style="color:#5aaa44;font-weight:bold;">cá nhân</span></li>
               </ul>
@@ -733,13 +731,13 @@
                 <td style="padding:6px 10px;border:1px solid #ddd;font-weight:bold;">Khi nào dùng</td>
                 <td style="padding:6px 10px;border:1px solid #ddd;text-align:center;">Cần diễn giải, dữ liệu nhỏ</td>
                 <td style="padding:6px 10px;border:1px solid #ddd;text-align:center;">Mặc định tốt, ít cần tuning</td>
-                <td style="padding:6px 10px;border:1px solid #ddd;text-align:center;">Cần chính xác cao nhất</td>
+                <td style="padding:6px 10px;border:1px solid #ddd;text-align:center;">Ưu tiên hiệu năng, chấp nhận tuning</td>
               </tr>
               <tr style="background:#f9f9f9;">
                 <td style="padding:6px 10px;border:1px solid #ddd;font-weight:bold;">Ưu điểm</td>
                 <td style="padding:6px 10px;border:1px solid #ddd;text-align:center;">Dễ hiểu, trực quan</td>
                 <td style="padding:6px 10px;border:1px solid #ddd;text-align:center;">Robust, song song hoá</td>
-                <td style="padding:6px 10px;border:1px solid #ddd;text-align:center;">Chính xác nhất</td>
+                <td style="padding:6px 10px;border:1px solid #ddd;text-align:center;">Thường chính xác nhất</td>
               </tr>
               <tr>
                 <td style="padding:6px 10px;border:1px solid #ddd;font-weight:bold;">Nhược điểm</td>
