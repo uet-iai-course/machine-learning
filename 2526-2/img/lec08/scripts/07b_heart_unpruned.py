@@ -16,8 +16,8 @@ X = X.apply(lambda c: c.cat.codes if hasattr(c, "cat") else c)
 dt = DecisionTreeClassifier(random_state=42)
 dt.fit(X, y)
 
-fig, ax = plt.subplots(figsize=(18, 8))
-plot_tree(dt, ax=ax, filled=True, rounded=True, fontsize=6,
+fig, ax = plt.subplots(figsize=(20, 9))
+plot_tree(dt, ax=ax, filled=True, rounded=True, fontsize=7,
           feature_names=X.columns.tolist(),
           class_names=["No", "Yes"],
           impurity=False, proportion=True)

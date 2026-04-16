@@ -41,7 +41,12 @@ ax.plot(leaf_sizes, test_err, "^-", color="#27ae60", linewidth=1.5, markersize=4
 
 # Mark best CV
 best_idx = np.argmin(cv_err)
-ax.axvline(leaf_sizes[best_idx], color="#3498db", linewidth=1.5, linestyle="--", alpha=0.7)
+best_leaves = leaf_sizes[best_idx]
+ax.axvline(best_leaves, color="#3498db", linewidth=1.5, linestyle="--", alpha=0.7)
+ax.annotate(f"CV min ≈ {best_leaves} lá", xy=(best_leaves, cv_err[best_idx]),
+            xytext=(best_leaves + 3, cv_err[best_idx] + 0.04),
+            fontsize=9, color="#3498db", fontweight="bold",
+            arrowprops=dict(arrowstyle="->", color="#3498db", lw=1.2))
 
 ax.set_xlabel("Số lá (Tree Size)", fontsize=10)
 ax.set_ylabel("Error Rate", fontsize=10)
