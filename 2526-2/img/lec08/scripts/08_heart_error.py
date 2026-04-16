@@ -34,10 +34,10 @@ for n_leaves in leaf_sizes:
     scores = cross_val_score(dt, X_train, y_train, cv=6, scoring="accuracy")
     cv_err.append(1 - scores.mean())
 
-fig, ax = plt.subplots(figsize=(5.5, 4))
-ax.plot(leaf_sizes, train_err, "o-", color="#2c3e50", linewidth=1.5, markersize=4, label="Training")
-ax.plot(leaf_sizes, cv_err, "s-", color="#e67e22", linewidth=1.5, markersize=4, label="Cross-Validation")
-ax.plot(leaf_sizes, test_err, "^-", color="#27ae60", linewidth=1.5, markersize=4, label="Test")
+fig, ax = plt.subplots(figsize=(6, 4.5))
+ax.plot(leaf_sizes, train_err, "o-", color="#2c3e50", linewidth=1.5, markersize=5, label="Training")
+ax.plot(leaf_sizes, cv_err, "s-", color="#e67e22", linewidth=1.5, markersize=5, label="Cross-Validation")
+ax.plot(leaf_sizes, test_err, "^-", color="#27ae60", linewidth=1.5, markersize=5, label="Test")
 
 # Mark best CV
 best_idx = np.argmin(cv_err)
@@ -48,7 +48,7 @@ ax.annotate(f"CV min ≈ {best_leaves} lá", xy=(best_leaves, cv_err[best_idx]),
             fontsize=9, color="#3498db", fontweight="bold",
             arrowprops=dict(arrowstyle="->", color="#3498db", lw=1.2))
 
-ax.set_xlabel("Số lá (Tree Size)", fontsize=10)
+ax.set_xlabel("Số lá (Tree Size)", fontsize=11)
 ax.set_ylabel("Error Rate", fontsize=10)
 ax.legend(fontsize=8.5)
 ax.grid(True, alpha=0.3)

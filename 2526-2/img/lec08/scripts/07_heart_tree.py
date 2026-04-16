@@ -29,8 +29,8 @@ for n_leaves in range(2, 20):
 dt = DecisionTreeClassifier(max_leaf_nodes=best_leaves, random_state=42)
 dt.fit(X, y)
 
-fig, ax = plt.subplots(figsize=(12, 6))
-plot_tree(dt, ax=ax, filled=True, rounded=True, fontsize=10,
+fig, ax = plt.subplots(figsize=(14, 7))
+plot_tree(dt, ax=ax, filled=True, rounded=True, fontsize=11,
           feature_names=X.columns.tolist(),
           class_names=["No", "Yes"],
           impurity=False, proportion=True)

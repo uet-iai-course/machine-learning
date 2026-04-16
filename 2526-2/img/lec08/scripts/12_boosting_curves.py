@@ -59,7 +59,7 @@ for k in eval_at:
 print(f"RF m=sqrt(p): final={rf_err[-1]:.3f}")
 
 # --- Plot ---
-fig, ax = plt.subplots(figsize=(5.5, 4.2))
+fig, ax = plt.subplots(figsize=(6, 4.5))
 
 trees_boost = list(range(1, max_trees + 1))
 ax.plot(trees_boost, boost1_err, color="#cc8833", linewidth=1.5, label="Boosting: depth=1")

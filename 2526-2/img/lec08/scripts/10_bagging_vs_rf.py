@@ -45,15 +45,15 @@ for n_trees in n_trees_list:
 single = DecisionTreeClassifier(random_state=42).fit(X_train, y_train)
 single_err = 1 - single.score(X_test, y_test)
 
-fig, ax = plt.subplots(figsize=(6, 4))
+fig, ax = plt.subplots(figsize=(6.5, 4.5))
 ax.plot(n_trees_list, bag_test, color="#2c3e50", linewidth=1.2, label="Test: Bagging")
 ax.plot(n_trees_list, rf_test, color="#e67e22", linewidth=1.2, label="Test: Random Forest")
 ax.plot(n_trees_list, bag_oob, color="#2c3e50", linewidth=1, linestyle="--", alpha=0.5, label="OOB: Bagging")
 ax.plot(n_trees_list, rf_oob, color="#e67e22", linewidth=1, linestyle="--", alpha=0.5, label="OOB: Random Forest")
 ax.axhline(single_err, color="#c0392b", linewidth=1.5, linestyle=":", label="Cây đơn")
 
-ax.set_xlabel("Số cây", fontsize=10)
-ax.set_ylabel("Error Rate", fontsize=10)
+ax.set_xlabel("Số cây", fontsize=11)
+ax.set_ylabel("Error Rate", fontsize=11)
 ax.legend(fontsize=7.5, loc="upper right")
 ax.grid(True, alpha=0.3)
 
