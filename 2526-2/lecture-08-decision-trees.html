@@ -143,7 +143,7 @@
           <h2>Chiến lược tham lam</h2>
           <div style="display:grid;grid-template-columns:1fr 0.8fr;gap:16px;align-items:start;margin-top:8px;">
             <div>
-              <p style="margin-top:0;">Tìm cây tối ưu là <strong>NP-complete</strong> → dùng chiến lược <span
+              <p style="margin-top:0;">Không thể xét hết mọi cây → dùng chiến lược <span
                   class="keyword">tham lam</span>: tại mỗi bước, chọn đặc trưng \(X_j\) và điểm chia \(s\) tạo hai
                 vùng:</p>
               <p style="text-align:center;margin:8px 0;">
@@ -201,19 +201,12 @@
         <section style="font-size: 0.74em;">
           <h2>Tiêu chí Cost Complexity</h2>
           <p style="margin-top:0;">Tương tự Lasso — thêm phạt vào sai số huấn luyện:</p>
-          <p style="text-align:center;">
+          <p style="text-align:center;margin:10px 0;">
             \[ \sum_{m=1}^{|T|} \sum_{i:\,x_i \in R_m} (y_i - \hat{y}_{R_m})^2 + \alpha |T| \]
           </p>
-          <ul style="margin-top:8px;">
-            <li>\(|T|\): số lá của cây con \(T \subset T_0\)</li>
-            <li>\(2|T| - 1\): tổng số nút của \(T\)</li>
-            <li>\(\alpha\) kiểm soát đánh đổi giữa fit và complexity:
-              <ul>
-                <li>\(\alpha = 0\) → chọn cây đầy đủ</li>
-                <li>\(\alpha\) tăng → cây nhỏ dần</li>
-              </ul>
-            </li>
-            <li>Khi \(\alpha\) tăng, cây co lại theo cách <strong>lồng nhau và dự đoán được</strong></li>
+          <ul style="margin-top:10px;line-height:1.8em;">
+            <li>\(|T|\): số lá của cây con — \(\alpha\) phạt cây có nhiều lá</li>
+            <li>\(\alpha = 0\) → cây đầy đủ; \(\alpha\) tăng → cây nhỏ dần</li>
           </ul>
         </section>
 
@@ -594,6 +587,7 @@
         <!-- p.30: Variable Importance -->
         <section style="font-size: 0.74em;">
           <h2>Độ quan trọng biến (Variable Importance)</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <p style="margin-top:0;">Ensemble nhiều cây khó diễn giải → dùng <span class="keyword">độ quan trọng
               biến</span> thay thế.</p>
           <p style="margin-top:8px;">Với một cây \(T\), độ quan trọng bình phương của biến \(X_l\):</p>
