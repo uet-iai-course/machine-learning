@@ -469,23 +469,22 @@
         <section style="font-size: 0.8em;" data-auto-animate>
           <h2>Khi nào phân cụm phân cấp phù hợp?</h2>
           <ul style="line-height:1.7em;margin-top:4px;">
-            <li>Dendrogram hữu ích khi dữ liệu thật sự có <strong>cấu trúc lồng nhau</strong> ở nhiều mức.</li>
-            <li>Nếu dữ liệu chỉ có một cách chia thực dụng, nhưng <strong>không có cấu trúc cây tự nhiên</strong>, thì
-              dendrogram có thể gây hiểu nhầm.</li>
-            <li>Khi đó, cây phân cấp vẫn tồn tại, nhưng nó có thể phản ánh <strong>thuộc tính phụ</strong> hơn là cách
-              chia cụm mà ta quan tâm.</li>
+            <li>Dendrogram hữu ích khi dữ liệu có <strong>cấu trúc lồng nhau</strong> ở nhiều mức (loài → họ → bộ).</li>
+            <li>Nếu ta chỉ cần <strong>một cách chia phẳng</strong> (ví dụ: Nam vs Nữ), dendrogram có thể gây hiểu nhầm —
+              vì nó <em>buộc</em> phải tạo cây, dù dữ liệu không có cấu trúc cây tự nhiên.</li>
+            <li>Khi đó, cây phân cấp có thể gộp theo <strong>thuộc tính phụ</strong> (quốc tịch, chiều cao tuyệt đối)
+              thay vì thuộc tính ta quan tâm (giới tính).</li>
           </ul>
         </section>
 
         <section style="font-size: 0.8em;" data-auto-animate>
           <h2>Khi nào phân cụm phân cấp phù hợp?</h2>
           <div style="text-align:center;margin-top:6px;">
-            <img src="img/lec07/hierarchical-limitation.svg?v=4"
+            <img src="img/lec07/hierarchical-limitation.svg?v=5"
               alt="Ví dụ khi dendrogram không phản ánh cách chia cụm mong muốn"
               style="max-width:95%;max-height:360px;object-fit:contain;" />
-            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Trái: dữ liệu có thể chia khá tự nhiên theo
-                giới tính. Phải: dendrogram lại gộp theo quốc tịch trước, nên không làm nổi cấu trúc mà ta quan
-                tâm.</em></p>
+            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Trái: 2 cụm rõ ràng theo giới tính (ellipse).
+                Phải: cắt K=2 trên dendrogram lại cho cụm trộn lẫn nam-nữ, vì gộp theo quốc tịch trước.</em></p>
           </div>
         </section>
       </section>
@@ -501,14 +500,12 @@
 
         <section style="font-size: 0.76em;">
           <h2>Chọn ma trận bất đồng</h2>
-          <p style="margin-top:0;">Mặc định thường dùng khoảng cách Euclid. Đôi khi <span class="keyword">khoảng cách
-              tương quan</span> phù hợp hơn khi các quan sát tương đồng nếu <strong>hình dạng</strong> profile giống
-            nhau, dù độ lớn khác nhau.</p>
+          <p style="margin-top:0;"><strong>Khoảng cách Euclid</strong>: gần nếu <em>giá trị</em> gần nhau.
+            <strong>Khoảng cách tương quan</strong> (\(1 - \text{corr}\)): gần nếu <em>hình dạng</em> (xu hướng
+            tăng/giảm) giống nhau, bất kể độ lớn.</p>
           <div style="text-align:center;margin-top:6px;">
-            <img src="img/lec07/dissimilarity-comparison.svg?v=2" alt="Euclid vs correlation distance"
+            <img src="img/lec07/dissimilarity-comparison.svg?v=3" alt="Euclid vs correlation distance"
               style="max-width:96%;max-height:360px;object-fit:contain;" />
-            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Obs 1 &amp; 2 có hình dạng giống nhau (tương quan
-                cao) nhưng Euclid xa nhau; Obs 1 &amp; 3 ngược lại</em></p>
           </div>
         </section>
 
@@ -567,18 +564,24 @@
 
         <section style="font-size: 0.78em;">
           <h2>Phân cụm đồng thời hàng và cột</h2>
-          <p style="margin-top:0;">Áp dụng phân cấp riêng biệt cho cả quan sát và đặc trưng, hiển thị dưới dạng
-            <strong>heatmap</strong> sắp xếp theo cụm — dễ phát hiện pattern ẩn.
-          </p>
-          <p style="margin:4px 0 0;font-size:0.88em;color:#555;"><strong>Dữ liệu Iris</strong>: 150 mẫu hoa diên vĩ
-            thuộc 3 loài (<em>setosa</em>, <em>versicolor</em>, <em>virginica</em>), mỗi mẫu có 4 đặc trưng đo kích
-            thước đài hoa và cánh hoa.</p>
-          <div style="text-align:center;margin-top:6px;">
-            <img src="img/lec07/bicluster-iris.svg?v=3" alt="Biclustering Iris dataset"
-              style="max-width:92%;max-height:310px;object-fit:contain;" />
-            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Heatmap phân cụm tập dữ liệu Iris — hàng (quan
-                sát) và cột (đặc trưng) đều được sắp xếp theo cụm</em></p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin-top:6px;">
+            <div>
+              <p style="margin-top:0;"><strong>Ý tưởng:</strong> Bảng dữ liệu thô khó thấy pattern. Nếu ta:</p>
+              <ol style="line-height:1.7em;">
+                <li><strong>Phân cụm hàng</strong> → gom quan sát giống nhau</li>
+                <li><strong>Phân cụm cột</strong> → gom đặc trưng liên quan</li>
+                <li>Vẽ <strong>heatmap</strong> theo thứ tự mới</li>
+              </ol>
+            </div>
+            <div style="text-align:center;">
+              <img src="img/lec07/bicluster-iris.svg?v=4" alt="Biclustering Iris dataset"
+                style="max-width:100%;max-height:280px;object-fit:contain;" />
+              <p style="font-size:0.82em;color:#555;margin:4px 0 0;"><strong>Ví dụ Iris:</strong> khối xanh đậm phía trên
+                = <em>setosa</em> (cánh hoa nhỏ); khối đỏ phía dưới = <em>virginica</em> (cánh hoa lớn).</p>
+            </div>
           </div>
+          <p style="margin-top:6px;">→ Các <strong>khối màu</strong> xuất hiện, cho thấy nhóm quan sát nào có giá trị
+            cao/thấp ở nhóm đặc trưng nào.</p>
         </section>
       </section>
 
