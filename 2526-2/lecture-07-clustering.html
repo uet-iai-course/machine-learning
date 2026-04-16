@@ -469,23 +469,22 @@
         <section style="font-size: 0.8em;" data-auto-animate>
           <h2>Khi nào phân cụm phân cấp phù hợp?</h2>
           <ul style="line-height:1.7em;margin-top:4px;">
-            <li>Dendrogram hữu ích khi dữ liệu thật sự có <strong>cấu trúc lồng nhau</strong> ở nhiều mức.</li>
-            <li>Nếu dữ liệu chỉ có một cách chia thực dụng, nhưng <strong>không có cấu trúc cây tự nhiên</strong>, thì
-              dendrogram có thể gây hiểu nhầm.</li>
-            <li>Khi đó, cây phân cấp vẫn tồn tại, nhưng nó có thể phản ánh <strong>thuộc tính phụ</strong> hơn là cách
-              chia cụm mà ta quan tâm.</li>
+            <li>Dendrogram hữu ích khi dữ liệu có <strong>cấu trúc lồng nhau</strong> ở nhiều mức (loài → họ → bộ).</li>
+            <li>Nếu ta chỉ cần <strong>một cách chia phẳng</strong> (ví dụ: Nam vs Nữ), dendrogram có thể gây hiểu nhầm —
+              vì nó <em>buộc</em> phải tạo cây, dù dữ liệu không có cấu trúc cây tự nhiên.</li>
+            <li>Khi đó, cây phân cấp có thể gộp theo <strong>thuộc tính phụ</strong> (quốc tịch, chiều cao tuyệt đối)
+              thay vì thuộc tính ta quan tâm (giới tính).</li>
           </ul>
         </section>
 
         <section style="font-size: 0.8em;" data-auto-animate>
           <h2>Khi nào phân cụm phân cấp phù hợp?</h2>
           <div style="text-align:center;margin-top:6px;">
-            <img src="img/lec07/hierarchical-limitation.svg?v=4"
+            <img src="img/lec07/hierarchical-limitation.svg?v=5"
               alt="Ví dụ khi dendrogram không phản ánh cách chia cụm mong muốn"
               style="max-width:95%;max-height:360px;object-fit:contain;" />
-            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Trái: dữ liệu có thể chia khá tự nhiên theo
-                giới tính. Phải: dendrogram lại gộp theo quốc tịch trước, nên không làm nổi cấu trúc mà ta quan
-                tâm.</em></p>
+            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Trái: 2 cụm rõ ràng theo giới tính (ellipse).
+                Phải: cắt K=2 trên dendrogram lại cho cụm trộn lẫn nam-nữ, vì gộp theo quốc tịch trước.</em></p>
           </div>
         </section>
       </section>
