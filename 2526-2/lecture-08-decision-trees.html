@@ -221,6 +221,7 @@
               → dãy cây con tốt nhất theo \(\alpha\).</li>
             <li>Dùng <strong>\(K\)-fold CV</strong> để chọn \(\alpha\) (hoặc 1-SE rule).</li>
           </ol>
+          <aside class="notes">Quy trình chuẩn: mọc cây lớn trước, cắt tỉa, rồi chọn kích thước bằng CV.</aside>
         </section>
 
         <!-- p.13: Example Hitters -->
@@ -288,6 +289,7 @@
                 style="max-width:100%;max-height:340px;object-fit:contain;" />
             </div>
           </div>
+          <aside class="notes">Gini/entropy nhạy hơn misclassification nên phù hợp để chọn phép chia.</aside>
         </section>
 
         <!-- p.16: Heart — pruned tree -->
@@ -528,6 +530,7 @@
             qua được nếu các cây tương quan.
           </div>
           <p style="margin-top:10px;">→ Muốn giảm phương sai thật sự, phải <strong>giảm \(\rho\)</strong>.</p>
+          <aside class="notes">Bagging giảm phương sai, nhưng nếu cây còn tương quan cao thì hiệu quả bị chặn.</aside>
         </section>
 
         <!-- p.27b: RF solution -->
@@ -559,6 +562,7 @@
                 style="max-width:100%;max-height:380px;object-fit:contain;" />
             </div>
           </div>
+          <aside class="notes">RF thường tốt hơn bagging vì giảm tương quan giữa cây.</aside>
         </section>
 
         <!-- p.29: Choosing m — screenshot -->
@@ -639,6 +643,7 @@
             style="background:#e8f4fd;border-left:4px solid #4a90d9;padding:10px 14px;margin-top:10px;border-radius:4px;">
             Boosting = <strong>học chậm</strong>: cây nhỏ (\(d\)), co ngót (\(\lambda\)) → từ từ cải thiện vùng yếu.
           </div>
+          <aside class="notes">Boosting học tuần tự bằng cách sửa phần sai còn lại.</aside>
         </section>
 
         <!-- p.34: Model Parameters -->
@@ -667,6 +672,7 @@
               </ul>
             </div>
           </div>
+          <aside class="notes">Boosting mạnh nhưng phải chỉnh tham số cẩn thận hơn RF.</aside>
         </section>
 
         <!-- p.35: Simulated Data — screenshot -->
@@ -721,6 +727,7 @@
               </tr>
             </tbody>
           </table>
+          <aside class="notes">Tree để giải thích, RF là baseline mạnh, boosting để tối ưu hiệu năng.</aside>
         </section>
 
         <section style="font-size: 0.86em;">
