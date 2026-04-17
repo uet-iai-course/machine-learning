@@ -205,6 +205,11 @@
     max-width: 340px;
 }
 
+.figure-img-wide {
+    width: 100%;
+    max-width: 680px;
+}
+
 .note-inline {
     font-size: 0.88em;
 }
