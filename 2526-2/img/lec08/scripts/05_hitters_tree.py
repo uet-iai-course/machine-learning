@@ -14,8 +14,8 @@ r1 = salary[years < 4.5]
 r2 = salary[(years >= 4.5) & (hits < 117.5)]
 r3 = salary[(years >= 4.5) & (hits >= 117.5)]
 
-fig, ax = plt.subplots(figsize=(6, 4))
-ax.set_xlim(0, 10)
+fig, ax = plt.subplots(figsize=(6.8, 4.2))
+ax.set_xlim(0, 10.8)
 ax.set_ylim(0, 6.5)
 ax.axis("off")
 
@@ -24,31 +24,31 @@ leaf_kw = dict(boxstyle="round,pad=0.35", facecolor="#e8f4fd", edgecolor="#4a90d
 edge_kw = dict(color="#333", linewidth=1.5)
 yn_kw = dict(fontsize=8.5, ha="center", va="center", color="#888")
 
-ax.text(5, 5.8, "Years < 4.5?", fontsize=11, ha="center", va="center", fontweight="bold", bbox=q_kw)
-ax.text(2, 3.5, f"${np.mean(r1):,.0f}", fontsize=10, ha="center", va="center",
+ax.text(5.2, 5.8, "Years < 4.5?", fontsize=11, ha="center", va="center", fontweight="bold", bbox=q_kw)
+ax.text(2.0, 3.5, f"${np.mean(r1):,.0f}", fontsize=10, ha="center", va="center",
         fontweight="bold", color="#c0392b", bbox=leaf_kw)
-ax.text(8, 3.8, "Hits < 117.5?", fontsize=10, ha="center", va="center", fontweight="bold", bbox=q_kw)
-ax.text(6, 1.5, f"${np.mean(r2):,.0f}", fontsize=10, ha="center", va="center",
+ax.text(8.35, 3.85, "Hits < 117.5?", fontsize=10, ha="center", va="center", fontweight="bold", bbox=q_kw)
+ax.text(6.4, 1.45, f"${np.mean(r2):,.0f}", fontsize=10, ha="center", va="center",
         fontweight="bold", color="#c0392b", bbox=leaf_kw)
-ax.text(10, 1.5, f"${np.mean(r3):,.0f}", fontsize=10, ha="center", va="center",
+ax.text(10.2, 1.45, f"${np.mean(r3):,.0f}", fontsize=10, ha="center", va="center",
         fontweight="bold", color="#c0392b", bbox=leaf_kw)
 
-ax.plot([5, 2], [5.4, 3.9], **edge_kw)
-ax.plot([5, 8], [5.4, 4.2], **edge_kw)
-ax.plot([8, 6], [3.4, 1.9], **edge_kw)
-ax.plot([8, 10], [3.4, 1.9], **edge_kw)
+ax.plot([5.2, 2.0], [5.4, 3.9], **edge_kw)
+ax.plot([5.2, 8.35], [5.4, 4.2], **edge_kw)
+ax.plot([8.35, 6.4], [3.45, 1.9], **edge_kw)
+ax.plot([8.35, 10.2], [3.45, 1.9], **edge_kw)
 
-ax.text(3.2, 4.8, "có", **yn_kw)
-ax.text(6.8, 4.8, "không", **yn_kw)
-ax.text(6.7, 2.8, "có", **yn_kw)
-ax.text(9.3, 2.8, "không", **yn_kw)
+ax.text(3.35, 4.8, "có", **yn_kw)
+ax.text(7.15, 5.0, "không", **yn_kw)
+ax.text(7.0, 2.85, "có", **yn_kw)
+ax.text(9.45, 2.85, "không", **yn_kw)
 
-ax.annotate("nhánh", xy=(6.5, 4.9), fontsize=8, color="#c0392b", fontweight="bold",
-            xytext=(7.5, 5.6), arrowprops=dict(arrowstyle="->", color="#c0392b", lw=1))
-ax.annotate("nút trong", xy=(8, 4.2), fontsize=8, color="#c0392b", fontweight="bold",
-            xytext=(10, 4.8), arrowprops=dict(arrowstyle="->", color="#c0392b", lw=1))
-ax.annotate("lá", xy=(2, 3.5), fontsize=8, color="#c0392b", fontweight="bold",
-            xytext=(0.2, 4.8), arrowprops=dict(arrowstyle="->", color="#c0392b", lw=1))
+ax.annotate("nhánh", xy=(6.6, 4.9), fontsize=8, color="#c0392b", fontweight="bold",
+            xytext=(7.55, 5.6), arrowprops=dict(arrowstyle="->", color="#c0392b", lw=1))
+ax.annotate("nút trong", xy=(8.95, 4.0), fontsize=8, color="#c0392b", fontweight="bold",
+            xytext=(10.35, 4.95), arrowprops=dict(arrowstyle="->", color="#c0392b", lw=1))
+ax.annotate("lá", xy=(1.45, 3.72), fontsize=8, color="#c0392b", fontweight="bold",
+            xytext=(0.55, 4.85), arrowprops=dict(arrowstyle="->", color="#c0392b", lw=1))
 
 fig.tight_layout(pad=0.3)
 fig.savefig("../hitters-tree.svg", format="svg", bbox_inches="tight")
