@@ -77,8 +77,9 @@
             trong mỗi vùng dùng một mô hình hằng số (giá trị trung bình).</p>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:8px;">
             <div>
-              <p><strong>Ví dụ:</strong> Dự đoán lương cầu thủ (<span class="inline-code">Hitters</span>)
-                từ số năm thi đấu và số cú đánh.</p>
+              <p><strong>Ví dụ:</strong> Dự đoán lương cầu thủ <span class="keyword">bóng chày</span>
+                (<span class="inline-code">Hitters</span>) từ <span class="inline-code">Years</span>
+                (số mùa thi đấu) và <span class="inline-code">Hits</span> (số lần đánh trúng bóng).</p>
               <p style="margin-top:8px;">Không gian chia thành 3 vùng \(R_1, R_2, R_3\) — mỗi vùng dự đoán một mức lương
                 khác nhau.</p>
             </div>
@@ -100,7 +101,7 @@
               </ol>
             </div>
             <div style="text-align:center;">
-              <img src="img/lec08/regions-partition.svg?v=2" alt="Phân vùng hình hộp"
+              <img src="img/lec08/regions-partition.svg?v=3" alt="Phân vùng hình hộp"
                 style="max-width:100%;max-height:420px;object-fit:contain;" />
             </div>
           </div>
@@ -131,10 +132,14 @@
         <!-- Tree to Regions: moved here for better flow -->
         <section style="font-size: 0.82em;">
           <h2>Từ cây đến vùng và ngược lại</h2>
+          <p style="margin-top:0;">Cùng một cây quyết định có ba cách biểu diễn tương đương.</p>
           <div style="text-align:center;margin-top:8px;">
             <img src="img/lec08/tree-regions-3d.svg" alt="Cây ↔ vùng ↔ bề mặt 3D"
-              style="max-width:92%;max-height:420px;object-fit:contain;border-radius:6px;" />
+              style="max-width:92%;max-height:380px;object-fit:contain;border-radius:6px;" />
           </div>
+          <p style="margin-top:8px;">Mỗi <span class="keyword">lá</span> của cây ↔ một
+            <span class="keyword">hình hộp</span> trong không gian đặc trưng ↔ một
+            <span class="keyword">giá trị dự đoán</span> hằng số.</p>
         </section>
       </section>
 
@@ -381,27 +386,27 @@
           </h1>
         </section>
 
-        <!-- p.21: Trees vs. Linear Regression -->
+        <!-- p.21: Trees vs. Linear models -->
         <section style="font-size: 0.74em;">
-          <h2>Cây vs. Hồi quy tuyến tính</h2>
-          <p style="margin-top:0;">Hai giả định khác nhau về thế giới:</p>
+          <h2>Cây vs. mô hình tuyến tính</h2>
+          <p style="margin-top:0;">Hai giả định hình học khác nhau về biên giới quyết định:</p>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;">
             <div style="border:2px solid #4a90d9;border-radius:8px;padding:10px;">
-              <p style="margin:0 0 4px;font-weight:bold;color:#4a90d9;">Hồi quy tuyến tính</p>
-              <p style="margin:0;">\(f(X) = \beta_0 + \sum_{j=1}^{p} \beta_j X_j\)</p>
-              <p style="margin:4px 0 0;color:#555;">Thế giới <strong>tuyến tính toàn cục</strong></p>
+              <p style="margin:0 0 4px;font-weight:bold;color:#4a90d9;">Mô hình tuyến tính</p>
+              <p style="margin:0;color:#555;">Giả định biên giới là <strong>siêu phẳng tuyến tính toàn cục</strong>.</p>
             </div>
             <div style="border:2px solid #e8732a;border-radius:8px;padding:10px;">
               <p style="margin:0 0 4px;font-weight:bold;color:#e8732a;">Cây quyết định</p>
-              <p style="margin:0;">\(f(X) = \beta_0 + \sum_{m=1}^{M} c_m \mathbb{I}(X \in R_m)\)</p>
-              <p style="margin:4px 0 0;color:#555;">Thế giới <strong>hằng số theo vùng</strong></p>
+              <p style="margin:0;color:#555;">Giả định biên giới song song với trục — chia không gian thành các
+                <strong>hình hộp</strong>.</p>
             </div>
           </div>
           <div style="text-align:center;margin-top:10px;">
             <img src="img/lec08/trees-vs-linear.svg" alt="Linear vs Tree trên 2 loại dữ liệu"
-              style="max-width:98%;max-height:260px;object-fit:contain;" />
-            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Dữ liệu tuyến tính → mô hình tuyến tính tốt hơn;
-                dữ liệu vùng → cây tốt hơn</em></p>
+              style="max-width:98%;max-height:220px;object-fit:contain;" />
+            <p style="font-size:0.72em;color:#666;margin:3px 0 0;"><em>Minh hoạ bằng bài toán phân lớp 2 class cho dễ
+                nhìn — nguyên lý tương tự cho hồi quy. Dữ liệu tuyến tính → mô hình tuyến tính tốt hơn; dữ liệu vùng →
+                cây tốt hơn.</em></p>
           </div>
         </section>
 
@@ -514,7 +519,7 @@
             Đặc biệt hiệu quả cho cây vì: cây sâu có <strong>phương sai cao, bias thấp</strong> → trung bình giảm
             phương sai.
           </div>
-          <p style="margin-top:8px;">Hồi quy → trung bình; phân lớp → <strong>bầu cử đa số</strong> (majority vote).</p>
+          <p style="margin-top:8px;">Hồi quy → trung bình; phân lớp → <strong>bình chọn đa số</strong> (majority vote).</p>
         </section>
 
         <!-- p.27: Random Forests -->

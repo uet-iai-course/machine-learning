@@ -10,8 +10,8 @@ fig, axes = plt.subplots(2, 1, figsize=(4, 7.5))
 ax = axes[0]
 ax.set_xlim(0, 1)
 ax.set_ylim(0, 1)
-ax.set_xlabel(r"$x_1$", fontsize=10)
-ax.set_ylabel(r"$x_2$", fontsize=10)
+ax.set_xlabel(r"$x_1$", fontsize=16)
+ax.set_ylabel(r"$x_2$", fontsize=16)
 ax.set_xticks([])
 ax.set_yticks([])
 ax.set_aspect("equal")
@@ -35,14 +35,14 @@ for (x, y, w, h) in rects:
     ax.add_patch(patches.Rectangle((x, y), w, h, fill=False, edgecolor="#333", linewidth=1.2))
 for x, y, label in labels_left:
     if label:
-        ax.text(x, y, label, fontsize=10, ha="center", va="center")
+        ax.text(x, y, label, fontsize=16, ha="center", va="center")
 
 # ---- Right: guillotine cuts (5 regions) ----
 ax = axes[1]
 ax.set_xlim(0, 1)
 ax.set_ylim(0, 1)
-ax.set_xlabel(r"$x_1$", fontsize=10)
-ax.set_ylabel(r"$x_2$", fontsize=10)
+ax.set_xlabel(r"$x_1$", fontsize=16)
+ax.set_ylabel(r"$x_2$", fontsize=16)
 ax.set_xticks([])
 ax.set_yticks([])
 ax.set_aspect("equal")
@@ -58,17 +58,17 @@ ax.plot([0.7, 0.7], [0, 1], color="#333", linewidth=1.2)
 ax.plot([0.4, 0.7], [0.6, 0.6], color="#333", linewidth=1.2)
 
 # Labels
-ax.text(0.2, 0.67, r"$R_2$", fontsize=10, ha="center", va="center")
-ax.text(0.2, 0.17, r"$R_1$", fontsize=10, ha="center", va="center")
-ax.text(0.55, 0.3, r"$R_3$", fontsize=10, ha="center", va="center")
-ax.text(0.55, 0.8, r"$R_5$", fontsize=10, ha="center", va="center")
-ax.text(0.85, 0.5, r"$R_4$", fontsize=10, ha="center", va="center")
+ax.text(0.2, 0.67, r"$R_2$", fontsize=16, ha="center", va="center")
+ax.text(0.2, 0.17, r"$R_1$", fontsize=16, ha="center", va="center")
+ax.text(0.55, 0.3, r"$R_3$", fontsize=16, ha="center", va="center")
+ax.text(0.55, 0.8, r"$R_5$", fontsize=16, ha="center", va="center")
+ax.text(0.85, 0.5, r"$R_4$", fontsize=16, ha="center", va="center")
 
 # Tick labels for thresholds
 ax.set_xticks([0.4, 0.7])
-ax.set_xticklabels([r"$t_1$", r"$t_3$"], fontsize=9)
+ax.set_xticklabels([r"$t_1$", r"$t_3$"], fontsize=14)
 ax.set_yticks([0.35, 0.6])
-ax.set_yticklabels([r"$t_2$", r"$t_4$"], fontsize=9)
+ax.set_yticklabels([r"$t_2$", r"$t_4$"], fontsize=14)
 
 fig.tight_layout(pad=0.8)
 fig.savefig("../regions-partition.svg", format="svg", bbox_inches="tight")
