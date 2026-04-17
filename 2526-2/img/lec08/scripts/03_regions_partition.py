@@ -4,7 +4,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
-fig, axes = plt.subplots(1, 2, figsize=(8, 3.5))
+fig, axes = plt.subplots(2, 1, figsize=(4, 7.5))
 
 # ---- Left: arbitrary regions ----
 ax = axes[0]
