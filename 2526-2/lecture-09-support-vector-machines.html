@@ -54,9 +54,9 @@
           <h2>Động lực</h2>
           <p style="margin-top:0;">Cho hai lớp dữ liệu tách được bằng đường thẳng. Nhiều đường đều tách được —
             <span class="keyword">đường nào là tốt nhất</span>?</p>
-          <div style="text-align:center;margin-top:12px;">
+          <div style="text-align:center;margin-top:8px;">
             <img src="img/lec09/motivation-many-lines.svg" alt="Nhiều đường cùng tách được"
-              style="max-width:55%;max-height:320px;object-fit:contain;" />
+              style="max-width:68%;max-height:340px;object-fit:contain;" />
           </div>
           <p style="margin-top:10px;">SVM đưa ra một tiêu chí rõ ràng: chọn đường có <span class="keyword">lề</span>
             (khoảng đệm) đến điểm gần nhất là lớn nhất.</p>
@@ -141,9 +141,9 @@
           <h2>Nhiều siêu phẳng đều tách được</h2>
           <p style="margin-top:0;">Nếu dữ liệu tách được tuyến tính, thường có <span class="keyword">vô số</span>
             siêu phẳng cùng tách đúng tập huấn luyện.</p>
-          <div style="text-align:center;margin-top:10px;">
+          <div style="text-align:center;margin-top:8px;">
             <img src="img/lec09/many-separating.svg" alt="Nhiều siêu phẳng tách"
-              style="max-width:55%;max-height:320px;object-fit:contain;" />
+              style="max-width:66%;max-height:340px;object-fit:contain;" />
           </div>
           <p style="margin-top:10px;">Ta cần một tiêu chí để chọn siêu phẳng "tốt nhất" — đó là ý tưởng của
             <span class="keyword">lề cực đại</span>.</p>
@@ -281,47 +281,53 @@
           </div>
         </section>
 
-        <!-- p.17: Biến lỏng + C -->
-        <section style="font-size: 0.72em;">
-          <h2>Biến lỏng \(\epsilon_i\) và ngân sách \(C\)</h2>
-          <div style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:10px 18px;margin-top:6px;">
+        <!-- p.17a: Bài toán tối ưu lề mềm -->
+        <section style="font-size: 0.76em;">
+          <h2>Bài toán tối ưu lề mềm</h2>
+          <p style="margin-top:0;">Mỗi điểm được gán một <span class="keyword">biến lỏng</span>
+            \(\epsilon_i \ge 0\) đo độ vi phạm lề:</p>
+          <div style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:10px 18px;margin-top:8px;">
             \[ \max_{\beta, M} M \quad \text{s.t.} \quad \sum_j \beta_j^2 = 1 \]
             \[ y_i(\beta_0 + \beta \cdot x_i) \ge M(1 - \epsilon_i), \quad
                \epsilon_i \ge 0, \quad \sum_i \epsilon_i \le C \]
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;">
-            <div>
-              <p style="margin:0;font-weight:bold;color:#2c6ea3;">Diễn giải \(\epsilon_i\)</p>
-              <ul style="line-height:1.7em;margin:4px 0 0;">
-                <li>\(\epsilon_i = 0\): đúng phía lề</li>
-                <li>\(0 < \epsilon_i < 1\): sai phía lề, đúng phía siêu phẳng</li>
-                <li>\(\epsilon_i > 1\): sai phía siêu phẳng (phân lớp sai)</li>
-              </ul>
-            </div>
-            <div>
-              <p style="margin:0;font-weight:bold;color:#2c6ea3;">Diễn giải \(C\)</p>
-              <ul style="line-height:1.7em;margin:4px 0 0;">
-                <li>Tổng "quota" vi phạm trên toàn tập huấn luyện</li>
-                <li>Số điểm phân lớp sai nhiều nhất là \(C\)</li>
-                <li>Siêu tham số, chọn bằng CV</li>
-              </ul>
-            </div>
-          </div>
+          <ul style="margin-top:12px;line-height:1.8em;">
+            <li>\(\epsilon_i = 0\): điểm nằm đúng phía lề</li>
+            <li>\(0 < \epsilon_i < 1\): sai phía lề nhưng vẫn đúng phía siêu phẳng</li>
+            <li>\(\epsilon_i > 1\): sai phía siêu phẳng — phân lớp sai</li>
+          </ul>
+        </section>
+
+        <!-- p.17b: Ý nghĩa ngân sách C -->
+        <section style="font-size: 0.8em;">
+          <h2>Ngân sách \(C\) điều khiển "độ khoan dung"</h2>
+          <p style="margin-top:0;">\(C\) là <span class="keyword">tổng quota</span> vi phạm
+            trên toàn tập huấn luyện:</p>
+          <ul style="margin-top:8px;line-height:1.8em;">
+            <li>\(C\) là <strong>siêu tham số</strong>, không học từ dữ liệu</li>
+            <li>Số điểm bị phân lớp sai không vượt quá \(C\) (vì mỗi điểm như vậy đóng \(\epsilon_i > 1\))</li>
+            <li>\(C\) lớn → cho phép nhiều vi phạm → lề rộng, mô hình ổn định hơn</li>
+            <li>\(C\) nhỏ → ít vi phạm → lề hẹp, mô hình nhạy hơn với từng điểm</li>
+          </ul>
         </section>
 
         <!-- p.18: Ảnh hưởng của C -->
         <section style="font-size: 0.78em;">
           <h2>Ảnh hưởng của \(C\)</h2>
           <p style="margin-top:0;"><span class="keyword">C lớn</span> → nhiều vi phạm được cho phép → lề rộng;
-            <span class="keyword">C nhỏ</span> → ít vi phạm → lề hẹp.</p>
-          <div style="text-align:center;margin-top:8px;">
+            <span class="keyword">C nhỏ</span> → ít vi phạm → lề hẹp. Đánh đổi bias-variance:
+            \(C\) lớn → phương sai thấp, bias cao.</p>
+          <div style="text-align:center;margin-top:4px;">
             <img src="img/lec09/effect-of-C.svg" alt="Ảnh hưởng của C lên lề"
-              style="max-width:62%;max-height:320px;object-fit:contain;" />
+              style="max-width:54%;max-height:240px;object-fit:contain;" />
           </div>
-          <p style="margin-top:8px;"><strong>Đánh đổi bias-variance:</strong> \(C\) lớn → phương sai thấp,
-            bias cao; \(C\) nhỏ → phương sai cao, bias thấp.</p>
+          <div style="background:#fff5f5;border:1.5px solid #c0392b;border-radius:8px;padding:6px 12px;margin-top:6px;font-size:0.82em;">
+            <strong style="color:#c0392b;">Cảnh báo quy ước:</strong> \(C\) ở đây là <em>ngân sách vi phạm</em>
+            (theo ISLR) — <code>scikit-learn</code> dùng <code>C</code> với ý nghĩa <strong>ngược lại</strong>.
+          </div>
           <aside class="notes">Chỉ vào 4 panel: khi C giảm (đi theo thứ tự), lề thu hẹp dần,
-            số SV giảm dần, mô hình "bám" vào từng điểm nhiều hơn.</aside>
+            số SV giảm dần, mô hình "bám" vào từng điểm nhiều hơn. Nhắc quy ước ngược của sklearn
+            trước khi sinh viên vào phần thực hành.</aside>
         </section>
 
         <!-- p.19: Chọn C bằng CV -->
@@ -437,21 +443,34 @@
             → Cần cách <span class="keyword">không dựng đặc trưng tường minh</span>.</p>
         </section>
 
-        <!-- p.25: Kernel trick -->
-        <section style="font-size: 0.68em;">
-          <h2>Kernel trick</h2>
-          <p style="margin-top:0;">Nghiệm SVM chỉ phụ thuộc vào <span class="keyword">tích vô hướng</span>
-            giữa các cặp điểm — không cần toạ độ tường minh.</p>
-          <div style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:4px 18px;margin-top:6px;">
+        <!-- p.25a: Nghiệm SVM chỉ phụ thuộc tích vô hướng -->
+        <section style="font-size: 0.8em;">
+          <h2>Nghiệm SVM chỉ phụ thuộc tích vô hướng</h2>
+          <p style="margin-top:0;">Có thể chứng minh rằng nghiệm SVM có thể viết lại hoàn toàn qua
+            <span class="keyword">tích vô hướng</span> giữa các cặp điểm:</p>
+          <div style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:8px 18px;margin-top:10px;">
             \[ f(x^*) = \beta_0 + \sum_{i \in S} \alpha_i \langle x^*, x_i \rangle \]
           </div>
-          <p style="margin-top:10px;">Thay \(\langle x_i, x_j \rangle\) bằng một <span class="keyword">kernel</span>
-            \(K(x_i, x_j)\) — đo độ tương tự giữa hai điểm — ta có SVM phi tuyến:</p>
-          <div style="background:#e8f4fd;border:1.5px solid #4a90d9;border-radius:10px;padding:4px 18px;margin-top:6px;">
+          <ul style="margin-top:12px;line-height:1.8em;">
+            <li>\(S\) — tập vectơ hỗ trợ; \(\alpha_i\) — hệ số từ huấn luyện</li>
+            <li>Công thức không chứa toạ độ \(x^*\) hay \(x_i\) riêng lẻ, chỉ chứa tích \(\langle x^*, x_i \rangle\)</li>
+          </ul>
+        </section>
+
+        <!-- p.25b: Thay tích vô hướng bằng kernel -->
+        <section style="font-size: 0.8em;">
+          <h2>Kernel trick</h2>
+          <p style="margin-top:0;">Thay \(\langle x_i, x_j \rangle\) bằng một
+            <span class="keyword">kernel</span> \(K(x_i, x_j)\) — đo độ tương tự giữa hai điểm:</p>
+          <div style="background:#e8f4fd;border:1.5px solid #4a90d9;border-radius:10px;padding:8px 18px;margin-top:10px;">
             \[ f(x^*) = \beta_0 + \sum_{i \in S} \alpha_i K(x^*, x_i) \]
           </div>
-          <p style="margin-top:10px;"><strong>Điểm then chốt:</strong> không bao giờ cần dựng không gian đặc trưng
-            mở rộng một cách tường minh.</p>
+          <div style="background:#fff5f5;border:1.5px solid #c0392b;border-radius:10px;padding:10px 18px;margin-top:14px;">
+            <strong style="color:#c0392b;">Điểm then chốt:</strong> không cần dựng không gian đặc trưng mở rộng
+            tường minh. Nếu có thể tính \(K\) rẻ, ta có SVM phi tuyến "miễn phí".
+          </div>
+          <aside class="notes">Nhấn mạnh sự khác biệt với giải pháp 1 (mở rộng feature): kernel trick cho
+            phép đi vào không gian đặc trưng khổng lồ mà không phải thực sự dựng nó.</aside>
         </section>
 
         <!-- p.26: Các kernel phổ biến -->
@@ -518,8 +537,9 @@
                 <li>207 mẫu huấn luyện, 90 mẫu kiểm tra</li>
                 <li>SVM tuyến tính (dùng ngưỡng \(f(x)\)) so với LDA (dùng ngưỡng hàm phân biệt)</li>
               </ul>
-              <p style="margin-top:10px;">Trên train: tương đương. Trên test: <strong>SVM tốt hơn</strong>
-                một chút — khái quát hoá tốt hơn.</p>
+              <p style="margin-top:10px;">Trên train: tương đương. Trên test của lần chia này:
+                <strong>SVM nhỉnh hơn</strong> một chút. Đừng kết luận phương pháp luận rộng từ
+                một ví dụ — cần nhiều dataset để nói mô hình nào "tốt hơn".</p>
             </div>
             <div style="text-align:center;">
               <img src="img/lec09/heart-svm-vs-lda.svg" alt="ROC Heart: SVM vs LDA"
