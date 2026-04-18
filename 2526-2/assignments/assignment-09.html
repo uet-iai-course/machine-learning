@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="../../favicon.png">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <title>Học máy | Bài tập về nhà #9</title>
+    <link rel="stylesheet" href="../../index-pages.css">
+    <link rel="stylesheet" href="assignment-pages.css">
+  <script src="mathjax-config.js"></script>
+  <script id="MathJax-script" async src="mathjax4.js"></script>
+</head>
+
+<body>
+    <main class="page-shell assignment-shell">
+        <header class="assignment-header">
+            <a class="secondary-link assignment-backlink" href="../index.html"><span aria-hidden="true">←</span><span>Quay lại học kỳ</span></a>
+            <p class="eyebrow assignment-eyebrow">IAI · UET · VNU</p>
+            <p class="assignment-course">Học máy</p>
+            <h1 class="assignment-topic">Máy vectơ hỗ trợ</h1>
+            <p class="assignment-meta">Bài tập về nhà #9 · Học kì 2 · Năm học 2025-2026</p>
+        </header>
+
+        <hr>
+
+        <!-- ── BÀI 1 ── -->
+        <h2>Bài 1 — Biên quyết định phi tuyến</h2>
+        <div class="q">
+            <p>
+                Trong không gian \(p = 2\) chiều, biên tuyến tính có dạng
+                \(\beta_0 + \beta_1 X_1 + \beta_2 X_2 = 0\).
+                Trong bài này, ta xét một biên <em>phi tuyến</em>.
+            </p>
+            <ol>
+                <li>
+                    Vẽ đường cong \((1 + X_1)^2 + (2 - X_2)^2 = 4\).
+                </li>
+                <li>
+                    Trên hình vẽ của bạn, chỉ ra miền điểm thoả
+                    \((1 + X_1)^2 + (2 - X_2)^2 > 4\) và miền điểm thoả
+                    \((1 + X_1)^2 + (2 - X_2)^2 \le 4\).
+                </li>
+                <li>
+                    Giả sử một bộ phân lớp gán mỗi quan sát vào lớp
+                    <strong>xanh lam</strong> nếu \((1 + X_1)^2 + (2 - X_2)^2 > 4\),
+                    và vào lớp <strong>đỏ</strong> nếu ngược lại.
+                    Các quan sát sau được phân vào lớp nào?
+                    \((0, 0),\ (-1, 1),\ (2, 2),\ (3, 8)\).
+                </li>
+                <li>
+                    Hãy giải thích vì sao biên trong câu (3) tuy <em>không</em> tuyến tính theo
+                    \(X_1, X_2\), vẫn có thể viết thành một biên <em>tuyến tính</em> theo
+                    \(X_1, X_2, X_1^2, X_2^2\).
+                </li>
+            </ol>
+        </div>
+
+        <hr class="my-5">
+
+        <!-- ── BÀI 2 ── -->
+        <h2>Bài 2 — Phân lớp nhiều lớp (One-vs-One vs One-vs-All)</h2>
+        <div class="q">
+            <ol>
+                <li>
+                    Nêu một trường hợp bạn sẽ ưu tiên dùng cách tiếp cận
+                    <strong>One-vs-One</strong> thay vì <strong>One-vs-All (One-vs-Rest)</strong>
+                    khi phân lớp nhiều lớp. Giải thích lý do.
+                </li>
+                <li>
+                    Ngược lại, nêu một trường hợp bạn sẽ ưu tiên <strong>One-vs-All</strong>.
+                    Giải thích lý do.
+                </li>
+            </ol>
+            <div class="hint">
+                <strong>Gợi ý:</strong> Suy nghĩ về số lượng bộ phân lớp cần huấn luyện,
+                độ cân bằng giữa các lớp trong mỗi bộ, và chi phí khi
+                \(K\) lớn hoặc \(n\) lớn.
+            </div>
+        </div>
+
+        <hr class="my-5">
+
+        <!-- ── BÀI 3 ── -->
+        <h2>Bài 3 — Bài toán tối ưu của bộ phân lớp vectơ hỗ trợ</h2>
+        <div class="q">
+            <p>
+                Trong bài giảng, bộ phân lớp vectơ hỗ trợ (với lề mềm)
+                được viết dưới dạng:
+            </p>
+            \[
+                \max_{\beta_0, \beta_1, \ldots, \beta_p,\, \epsilon_1, \ldots, \epsilon_n,\, M} M
+            \]
+            \[
+                \text{s.t.} \quad \sum_{j=1}^{p} \beta_j^2 = 1,
+            \]
+            \[
+                y_i(\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip}) \ge M(1 - \epsilon_i),
+            \]
+            \[
+                \epsilon_i \ge 0, \qquad \sum_{i=1}^{n} \epsilon_i \le C.
+            \]
+            <p class="text-muted note-inline">
+                Ở đây ta giữ đúng quy ước của ISLR: \(C\) là <em>ngân sách vi phạm</em>.
+                Lưu ý \(C\) trong <code>scikit-learn</code> có vai trò ngược lại —
+                trong bài này ta dùng quy ước của ISLR.
+            </p>
+            <ol>
+                <li>
+                    Giải thích mối quan hệ giữa các biến \(\epsilon_i\) và ngân sách \(C\).
+                </li>
+                <li>
+                    <p>
+                        Phát biểu sau đúng hay sai? Giải thích.
+                    </p>
+                    <p>
+                        <em>"Khi \(C\) tăng, bias của bộ phân lớp giảm và phương sai (variance) tăng."</em>
+                    </p>
+                </li>
+                <li>
+                    Viết lại bài toán tối ưu ở trên nếu ta muốn đổi biên tuyến tính thành
+                    một biên <strong>bậc hai</strong> (quadratic).
+                </li>
+                <li>
+                    Làm thế nào để mở rộng bộ phân lớp vectơ hỗ trợ sao cho nó có thể
+                    mô hình hoá được các biên phi tuyến <em>tổng quát hơn</em>? Mô tả ngắn gọn.
+                    <div class="hint">
+                        <strong>Gợi ý:</strong> Xem lại phần <em>Kernel trick</em> trong bài giảng
+                        (ISLR §9.3).
+                    </div>
+                </li>
+            </ol>
+        </div>
+
+
+    <p class="footer">
+      Viện Trí tuệ nhân tạo · Trường Đại học Công nghệ · Đại học Quốc gia Hà Nội
+    </p>
+  </main>
+</body>
+
+</html>
