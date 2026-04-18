@@ -53,7 +53,8 @@
         <section style="font-size: 0.78em;">
           <h2>Động lực</h2>
           <p style="margin-top:0;">Cho hai lớp dữ liệu tách được bằng đường thẳng. Nhiều đường đều tách được —
-            <span class="keyword">đường nào là tốt nhất</span>?</p>
+            <span class="keyword">đường nào là tốt nhất</span>?
+          </p>
           <div style="text-align:center;margin-top:8px;">
             <img src="img/lec09/motivation-many-lines.svg" alt="Nhiều đường cùng tách được"
               style="max-width:68%;max-height:340px;object-fit:contain;" />
@@ -95,7 +96,7 @@
         </section>
 
         <!-- p.6: Phương trình + vectơ pháp -->
-        <section style="font-size: 0.78em;">
+        <section style="font-size: 0.7em;">
           <h2>Phương trình và vectơ pháp tuyến</h2>
           <p style="margin-top:0;">Siêu phẳng là tập các điểm thoả:
             \[ \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p = 0 \]</p>
@@ -116,7 +117,7 @@
         </section>
 
         <!-- p.7: Phân lớp bằng dấu -->
-        <section style="font-size: 0.78em;">
+        <section style="font-size: 0.7em;">
           <h2>Phân lớp bằng dấu của \(f(x)\)</h2>
           <p style="margin-top:0;">Với nhãn \(y \in \{-1, +1\}\), ta định nghĩa
             \[ f(x) = \beta_0 + \beta_1 x_1 + \cdots + \beta_p x_p \]</p>
@@ -127,7 +128,8 @@
                 <li>\(f(x) > 0\): nửa dương (lớp \(+1\))</li>
                 <li>\(f(x) < 0\): nửa âm (lớp \(-1\))</li>
                 <li>\(|f(x)|\) lớn \(\Rightarrow\) xa siêu phẳng hơn theo thang điểm của mô hình
-                  <span style="color:#888;">(không phải xác suất)</span></li>
+                  <span style="color:#888;">(không phải xác suất)</span>
+                </li>
               </ul>
             </div>
             <div style="text-align:center;">
@@ -147,7 +149,8 @@
               style="max-width:66%;max-height:340px;object-fit:contain;" />
           </div>
           <p style="margin-top:10px;">Ta cần một tiêu chí để chọn siêu phẳng "tốt nhất" — đó là ý tưởng của
-            <span class="keyword">lề cực đại</span>.</p>
+            <span class="keyword">lề cực đại</span>.
+          </p>
         </section>
       </section>
 
@@ -182,13 +185,14 @@
         </section>
 
         <!-- p.11: Bài toán tối ưu -->
-        <section style="font-size: 0.78em;">
+        <section style="font-size: 0.7em;">
           <h2>Bài toán tối ưu</h2>
           <p style="margin-top:0;">Tìm siêu phẳng cực đại lề:</p>
-          <div style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:12px 18px;margin-top:8px;">
+          <div
+            style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:12px 18px;margin-top:8px;">
             \[ \max_{\beta_0, \beta_1, \ldots, \beta_p, M} M \]
             \[ \text{s.t.} \quad \sum_{j=1}^{p} \beta_j^2 = 1, \quad
-              y_i(\beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}) \ge M, \ \forall i \]
+            y_i(\beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}) \ge M, \ \forall i \]
           </div>
           <ul style="margin-top:10px;line-height:1.7em;">
             <li>Ràng buộc \(\|\beta\|=1\) chuẩn hoá \(\beta\) thành vectơ đơn vị</li>
@@ -219,7 +223,8 @@
                 <li>Một <span class="keyword">outlier</span> có thể làm lề co gần bằng 0</li>
                 <li>Rất nhạy với thay đổi nhỏ của dữ liệu → dễ <strong>quá khớp</strong></li>
               </ul>
-              <div style="background:#fff5f5;border:1.5px solid #c0392b;border-radius:10px;padding:10px 14px;margin-top:12px;">
+              <div
+                style="background:#fff5f5;border:1.5px solid #c0392b;border-radius:10px;padding:10px 14px;margin-top:12px;">
                 <strong style="color:#c0392b;">Cần mở rộng:</strong> cho phép vài điểm vi phạm lề, đổi lấy
                 mô hình ổn định hơn.
               </div>
@@ -286,10 +291,11 @@
           <h2>Bài toán tối ưu lề mềm</h2>
           <p style="margin-top:0;">Mỗi điểm được gán một <span class="keyword">biến lỏng</span>
             \(\epsilon_i \ge 0\) đo độ vi phạm lề:</p>
-          <div style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:10px 18px;margin-top:8px;">
+          <div
+            style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:10px 18px;margin-top:8px;">
             \[ \max_{\beta, M} M \quad \text{s.t.} \quad \sum_j \beta_j^2 = 1 \]
             \[ y_i(\beta_0 + \beta \cdot x_i) \ge M(1 - \epsilon_i), \quad
-               \epsilon_i \ge 0, \quad \sum_i \epsilon_i \le C \]
+            \epsilon_i \ge 0, \quad \sum_i \epsilon_i \le C \]
           </div>
           <ul style="margin-top:12px;line-height:1.8em;">
             <li>\(\epsilon_i = 0\): điểm nằm đúng phía lề</li>
@@ -316,12 +322,14 @@
           <h2>Ảnh hưởng của \(C\)</h2>
           <p style="margin-top:0;"><span class="keyword">C lớn</span> → nhiều vi phạm được cho phép → lề rộng;
             <span class="keyword">C nhỏ</span> → ít vi phạm → lề hẹp. Đánh đổi bias-variance:
-            \(C\) lớn → phương sai thấp, bias cao.</p>
+            \(C\) lớn → phương sai thấp, bias cao.
+          </p>
           <div style="text-align:center;margin-top:4px;">
             <img src="img/lec09/effect-of-C.svg" alt="Ảnh hưởng của C lên lề"
               style="max-width:54%;max-height:240px;object-fit:contain;" />
           </div>
-          <div style="background:#fff5f5;border:1.5px solid #c0392b;border-radius:8px;padding:6px 12px;margin-top:6px;font-size:0.82em;">
+          <div
+            style="background:#fff5f5;border:1.5px solid #c0392b;border-radius:8px;padding:6px 12px;margin-top:6px;font-size:0.82em;">
             <strong style="color:#c0392b;">Cảnh báo quy ước:</strong> \(C\) ở đây là <em>ngân sách vi phạm</em>
             (theo ISLR) — <code>scikit-learn</code> dùng <code>C</code> với ý nghĩa <strong>ngược lại</strong>.
           </div>
@@ -351,7 +359,8 @@
         <!-- p.20: Tính chất SV -->
         <section style="font-size: 0.76em;">
           <h2>Tính chất quan trọng của SV</h2>
-          <div style="background:#e8f4fd;border:1.5px solid #4a90d9;border-radius:10px;padding:8px 16px;margin-top:4px;">
+          <div
+            style="background:#e8f4fd;border:1.5px solid #4a90d9;border-radius:10px;padding:8px 16px;margin-top:4px;">
             Chỉ các điểm <strong>trên lề</strong> hoặc <strong>vi phạm lề</strong> mới là vectơ hỗ trợ.
             Điểm đúng phía lề, xa siêu phẳng — <span class="keyword">không ảnh hưởng</span> đến mô hình.
           </div>
@@ -396,7 +405,8 @@
           <p style="margin-top:10px;font-size:0.9em;color:#555;">Hai dạng chỉ khác nhau ở cách
             <em>chuẩn hoá</em> — cùng nghiệm, cùng siêu phẳng.
             <strong style="color:#c0392b;">Lưu ý:</strong> \(C\) ở dạng ESL/sklearn đóng vai trò
-            <em>ngược</em> với ngân sách vi phạm của ISLR.</p>
+            <em>ngược</em> với ngân sách vi phạm của ISLR.
+          </p>
         </section>
       </section>
 
@@ -434,7 +444,8 @@
         <section style="font-size: 0.78em;">
           <h2>Giải pháp 1: mở rộng không gian đặc trưng</h2>
           <p style="margin-top:0;">Thêm đặc trưng phi tuyến: \(X_j^2, X_j X_k, \ldots\) — vẫn là
-            SVC <strong>tuyến tính</strong> trên không gian mở rộng, nhưng biên trong không gian gốc là <strong>cong</strong>.</p>
+            SVC <strong>tuyến tính</strong> trên không gian mở rộng, nhưng biên trong không gian gốc là
+            <strong>cong</strong>.</p>
           <div style="text-align:center;margin-top:8px;">
             <img src="img/lec09/feature-map-2d-to-3d.svg" alt="Ánh xạ đặc trưng 2D → 3D"
               style="max-width:92%;max-height:380px;object-fit:contain;" />
@@ -456,16 +467,20 @@
               </tr>
             </thead>
             <tbody>
-              <tr><td style="padding:6px 14px;border:1px solid #ccc;">10</td>
+              <tr>
+                <td style="padding:6px 14px;border:1px solid #ccc;">10</td>
                 <td style="padding:6px 14px;border:1px solid #ccc;text-align:right;">66</td>
                 <td style="padding:6px 14px;border:1px solid #ccc;text-align:right;">286</td>
                 <td style="padding:6px 14px;border:1px solid #ccc;text-align:right;">3 003</td>
-                <td style="padding:6px 14px;border:1px solid #ccc;text-align:right;">184 756</td></tr>
-              <tr><td style="padding:6px 14px;border:1px solid #ccc;">50</td>
+                <td style="padding:6px 14px;border:1px solid #ccc;text-align:right;">184 756</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 14px;border:1px solid #ccc;">50</td>
                 <td style="padding:6px 14px;border:1px solid #ccc;text-align:right;">1 326</td>
                 <td style="padding:6px 14px;border:1px solid #ccc;text-align:right;">23 426</td>
                 <td style="padding:6px 14px;border:1px solid #ccc;text-align:right;">3.5M</td>
-                <td style="padding:6px 14px;border:1px solid #ccc;text-align:right;">≈ 6 × 10¹⁰</td></tr>
+                <td style="padding:6px 14px;border:1px solid #ccc;text-align:right;">≈ 6 × 10¹⁰</td>
+              </tr>
             </tbody>
           </table>
           <p style="margin-top:10px;">Không khả thi khi \(p\) hoặc \(d\) lớn.
@@ -477,8 +492,10 @@
           <h2>Nghiệm SVM chỉ phụ thuộc tích vô hướng</h2>
           <p style="margin-top:0;">Khi giải bài toán lề mềm bằng <span class="keyword">tối ưu đối ngẫu</span>
             (Lagrangian), ta chứng minh được rằng nghiệm viết lại hoàn toàn qua
-            <span class="keyword">tích vô hướng</span> giữa các cặp điểm:</p>
-          <div style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:8px 18px;margin-top:8px;">
+            <span class="keyword">tích vô hướng</span> giữa các cặp điểm:
+          </p>
+          <div
+            style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:8px 18px;margin-top:8px;">
             \[ f(x^*) = \beta_0 + \sum_{i \in S} \alpha_i \langle x^*, x_i \rangle \]
           </div>
           <ul style="margin-top:10px;line-height:1.7em;">
@@ -492,11 +509,14 @@
         <section style="font-size: 0.8em;">
           <h2>Kernel trick</h2>
           <p style="margin-top:0;">Thay \(\langle x_i, x_j \rangle\) bằng một
-            <span class="keyword">kernel</span> \(K(x_i, x_j)\) — đo độ tương tự giữa hai điểm:</p>
-          <div style="background:#e8f4fd;border:1.5px solid #4a90d9;border-radius:10px;padding:8px 18px;margin-top:10px;">
+            <span class="keyword">kernel</span> \(K(x_i, x_j)\) — đo độ tương tự giữa hai điểm:
+          </p>
+          <div
+            style="background:#e8f4fd;border:1.5px solid #4a90d9;border-radius:10px;padding:8px 18px;margin-top:10px;">
             \[ f(x^*) = \beta_0 + \sum_{i \in S} \alpha_i K(x^*, x_i) \]
           </div>
-          <div style="background:#fff5f5;border:1.5px solid #c0392b;border-radius:10px;padding:10px 18px;margin-top:14px;">
+          <div
+            style="background:#fff5f5;border:1.5px solid #c0392b;border-radius:10px;padding:10px 18px;margin-top:14px;">
             <strong style="color:#c0392b;">Điểm then chốt:</strong> không cần dựng không gian đặc trưng mở rộng
             tường minh. Nếu có thể tính \(K\) rẻ, ta có SVM phi tuyến "miễn phí".
           </div>
@@ -559,16 +579,18 @@
         </section>
 
         <!-- p.29b: Feature scaling must-have -->
-        <section style="font-size: 0.78em;">
+        <section style="font-size: 0.7em;">
           <h2>Trước khi chạy SVM: chuẩn hoá đặc trưng</h2>
           <p style="margin-top:0;">SVM phụ thuộc <span class="keyword">khoảng cách</span>. Biến có
             thang lớn (thu nhập) sẽ áp đảo biến có thang nhỏ (tuổi) — margin và \(\gamma\) của RBF
             bị méo theo đơn vị đo.</p>
-          <div style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:8px 16px;margin-top:8px;">
+          <div
+            style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:8px 16px;margin-top:8px;">
             <strong>Luôn standardize trước khi fit:</strong> \(x_j \to (x_j - \bar{x}_j) / s_j\).
           </div>
           <p style="margin-top:10px;margin-bottom:4px;"><strong>Đúng cách:</strong> đặt scaler
-            <em>bên trong</em> mỗi fold CV —</p>
+            <em>bên trong</em> mỗi fold CV —
+          </p>
           <div style="display:flex;align-items:center;justify-content:center;gap:6px;
                       font-size:0.78em;margin-top:2px;flex-wrap:wrap;">
             <span style="background:#e8f4fd;border:1px solid #4a90d9;border-radius:6px;
@@ -586,7 +608,8 @@
             <span style="background:#f5fff5;border:1px solid #5aaa44;border-radius:6px;
                          padding:3px 8px;">validate</span>
           </div>
-          <div style="background:#fff5f5;border:1.5px solid #c0392b;border-radius:10px;padding:8px 14px;margin-top:10px;font-size:0.92em;">
+          <div
+            style="background:#fff5f5;border:1.5px solid #c0392b;border-radius:10px;padding:8px 14px;margin-top:10px;font-size:0.92em;">
             <strong style="color:#c0392b;">Cạm bẫy:</strong> fit scaler trên toàn bộ dữ liệu rồi mới
             chia train/test → <span class="keyword">data leakage</span>, CV bị lạc quan hơn thực tế.
             Trong sklearn dùng <code>Pipeline([('scale', StandardScaler()), ('svm', SVC())])</code>.
@@ -623,7 +646,7 @@
         </section>
 
         <!-- p.32: SVM vs logistic -->
-        <section style="font-size: 0.78em;">
+        <section style="font-size: 0.65em;">
           <h2>SVM và hồi quy logistic</h2>
           <p style="margin-top:0;">SVM có thể viết lại như một bài toán tối ưu dạng "mất mát + phạt":
             \[ \min_\beta \sum_i \max(0, 1 - y_i f(x_i)) + \lambda \|\beta\|^2 \]</p>
@@ -634,14 +657,14 @@
                 <li>Logistic dùng <strong>log loss</strong>: luôn phạt dương, kể cả khi phân đúng</li>
                 <li>Hai hàm mất mát khá giống nhau → kết quả thường gần nhau</li>
               </ul>
-              <p style="margin-top:8px;">Vì hinge loss bằng 0 với điểm xa biên, chỉ các điểm gần biên
-                có tác dụng — đây chính là gốc rễ của tính chất vectơ hỗ trợ.</p>
             </div>
             <div style="text-align:center;">
               <img src="img/lec09/hinge-vs-log.svg" alt="Hinge loss vs log loss"
                 style="max-width:100%;max-height:320px;object-fit:contain;" />
             </div>
           </div>
+          <p style="margin-top:8px;">Vì hinge loss bằng 0 với điểm xa biên, chỉ các điểm gần biên
+            có tác dụng — đây chính là gốc rễ của tính chất vectơ hỗ trợ.</p>
         </section>
 
         <!-- p.33: Khi nào dùng -->
@@ -676,12 +699,12 @@
       <section>
         <section>
           <h1 style="font-size:2.4em;">
-            <span class="text-light">Tổng kết</span>
+            <span>Tổng kết</span>
           </h1>
         </section>
 
         <!-- p.35: Câu chuyện -->
-        <section style="font-size: 0.8em;">
+        <section style="font-size: 0.7em;">
           <h2>Ba bước: hard → soft → kernel</h2>
           <div style="text-align:center;margin-top:6px;">
             <img src="img/lec09/svm-story.svg" alt="Câu chuyện SVM: hard → soft → kernel"
@@ -698,7 +721,8 @@
             </div>
             <div style="border:2px solid #e8732a;border-radius:8px;padding:10px 14px;">
               <p style="margin:0;font-weight:bold;color:#e8732a;">Kernel</p>
-              <p style="margin:6px 0 0;color:#555;">Biên phi tuyến qua kernel trick — không cần dựng không gian đặc trưng
+              <p style="margin:6px 0 0;color:#555;">Biên phi tuyến qua kernel trick — không cần dựng không gian đặc
+                trưng
                 tường minh.</p>
             </div>
           </div>
@@ -724,7 +748,8 @@
           <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <p style="margin-top:8px;">Mỗi kernel \(K\) ứng với một ánh xạ đặc trưng \(\Phi: \mathbb{R}^p \to \Psi\)
             sao cho \(K(x, x') = \langle \Phi(x), \Phi(x') \rangle_\Psi\). Không gian \(\Psi\) gọi là
-            <span class="keyword">RKHS</span>.</p>
+            <span class="keyword">RKHS</span>.
+          </p>
           <p style="margin-top:8px;">Ví dụ với \(p=2\), kernel đa thức bậc \(d=2\): \(\dim \Psi = 6\) với
             \(\Phi = (1, \sqrt{2}X_1, \sqrt{2}X_2, X_1^2, X_2^2, \sqrt{2}X_1X_2)\).</p>
           <p style="margin-top:8px;">Với kernel RBF, \(\dim \Psi = \infty\). Thông thường không cần dựng \(\Phi\)
