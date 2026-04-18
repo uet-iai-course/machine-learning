@@ -161,16 +161,15 @@
         </section>
 
         <!-- p.10: Margin + support vectors -->
-        <section style="font-size: 0.78em;">
+        <section style="font-size: 0.82em;">
           <h2>Lề và vectơ hỗ trợ</h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:6px;">
+          <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:18px;align-items:center;margin-top:8px;">
             <div>
-              <ul style="line-height:1.8em;">
-                <li><span class="keyword">Lề</span> (margin) = khoảng cách từ siêu phẳng đến điểm huấn luyện
-                  gần nhất</li>
-                <li>Chọn siêu phẳng làm <strong>cực đại lề</strong>: ít bị lung lay bởi nhiễu nhỏ</li>
-                <li>Các điểm nằm đúng trên biên lề gọi là <span class="keyword">vectơ hỗ trợ</span></li>
-                <li>Chỉ vectơ hỗ trợ quyết định siêu phẳng — các điểm khác không ảnh hưởng</li>
+              <ul style="line-height:1.5em;">
+                <li><span class="keyword">Lề</span> = khoảng cách đến điểm huấn luyện gần nhất</li>
+                <li>Chọn siêu phẳng <strong>cực đại lề</strong> → ít bị lung lay bởi nhiễu</li>
+                <li>Điểm nằm đúng trên biên lề = <span class="keyword">vectơ hỗ trợ</span></li>
+                <li>Chỉ vectơ hỗ trợ quyết định siêu phẳng; các điểm khác không ảnh hưởng</li>
               </ul>
             </div>
             <div style="text-align:center;">
@@ -211,27 +210,27 @@
         </section>
 
         <!-- p.13: Hạn chế -->
-        <section style="font-size: 0.78em;">
+        <section style="font-size: 0.82em;">
           <h2>Hạn chế của lề cực đại</h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:6px;">
+          <div style="display:grid;grid-template-columns:1.05fr 1fr;gap:18px;align-items:center;margin-top:8px;">
             <div>
-              <ul style="line-height:1.8em;">
+              <ul style="line-height:1.5em;">
                 <li>Thực tế ít khi tách được hoàn toàn bằng đường thẳng</li>
-                <li>Chỉ một <span class="keyword">outlier</span> cũng có thể làm lề co lại rất nhiều</li>
-                <li>Rất nhạy với thay đổi nhỏ của dữ liệu — dễ <strong>quá khớp</strong></li>
+                <li>Một <span class="keyword">outlier</span> có thể làm lề co gần bằng 0</li>
+                <li>Rất nhạy với thay đổi nhỏ của dữ liệu → dễ <strong>quá khớp</strong></li>
               </ul>
               <div style="background:#fff5f5;border:1.5px solid #c0392b;border-radius:10px;padding:10px 14px;margin-top:12px;">
-                <strong style="color:#c0392b;">Cần mở rộng:</strong> cho phép một vài điểm vi phạm lề, đổi lấy mô hình
-                ổn định hơn với dữ liệu mới.
+                <strong style="color:#c0392b;">Cần mở rộng:</strong> cho phép vài điểm vi phạm lề, đổi lấy
+                mô hình ổn định hơn.
               </div>
-              <aside class="notes">Đây là cây cầu sang phần 3. Hỏi lớp: nếu bắt buộc phải sai một vài điểm,
-                bạn sẵn sàng đánh đổi điều gì để đổi lại?</aside>
             </div>
             <div style="text-align:center;">
               <img src="img/lec09/mmc-limitation.svg" alt="Hạn chế của MMC"
                 style="max-width:100%;max-height:340px;object-fit:contain;" />
             </div>
           </div>
+          <aside class="notes">Đây là cây cầu sang phần 3. Hỏi lớp: nếu bắt buộc phải sai một vài điểm,
+            bạn sẵn sàng đánh đổi điều gì để đổi lại?</aside>
         </section>
       </section>
 
@@ -350,25 +349,54 @@
         </section>
 
         <!-- p.20: Tính chất SV -->
-        <section style="font-size: 0.78em;">
+        <section style="font-size: 0.76em;">
           <h2>Tính chất quan trọng của SV</h2>
-          <div style="background:#e8f4fd;border:1.5px solid #4a90d9;border-radius:10px;padding:12px 18px;margin-top:6px;">
-            Chỉ các điểm <strong>nằm trên lề</strong> hoặc <strong>vi phạm lề</strong>
-            (nằm sai phía lề) mới là vectơ hỗ trợ. Điểm đúng phía lề, xa siêu phẳng —
-            <span class="keyword">hoàn toàn không ảnh hưởng</span> đến mô hình.
+          <div style="background:#e8f4fd;border:1.5px solid #4a90d9;border-radius:10px;padding:8px 16px;margin-top:4px;">
+            Chỉ các điểm <strong>trên lề</strong> hoặc <strong>vi phạm lề</strong> mới là vectơ hỗ trợ.
+            Điểm đúng phía lề, xa siêu phẳng — <span class="keyword">không ảnh hưởng</span> đến mô hình.
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:12px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:center;margin-top:8px;">
             <div>
-              <ul style="line-height:1.8em;">
-                <li>Khác với LDA / hồi quy logistic — vốn phụ thuộc <em>toàn bộ</em> dữ liệu</li>
-                <li>SVM chỉ quan tâm đến vùng biên → ổn định với dữ liệu xa biên</li>
+              <ul style="line-height:1.5em;">
+                <li>Khác LDA / logistic — vốn phụ thuộc <em>toàn bộ</em> dữ liệu</li>
+                <li>SVM chỉ quan tâm vùng biên → ổn định với dữ liệu xa biên</li>
+                <li>Trong nghiệm đối ngẫu, chỉ điểm có \(\alpha_i \ne 0\) còn lại —
+                  chính là vectơ hỗ trợ</li>
               </ul>
             </div>
             <div style="text-align:center;">
               <img src="img/lec09/sv-property.svg" alt="Tính chất SV"
-                style="max-width:100%;max-height:320px;object-fit:contain;" />
+                style="max-width:100%;max-height:280px;object-fit:contain;" />
             </div>
           </div>
+        </section>
+
+        <!-- p.20b: Hai dạng công thức SVM -->
+        <section style="font-size: 0.78em;">
+          <h2>Hai cách viết cùng bài toán</h2>
+          <p style="margin-top:0;">Cùng một SVM có thể viết ở hai dạng tương đương — bạn sẽ gặp cả hai
+            khi đọc sách và code:</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;">
+            <div style="border:2px solid #4a90d9;border-radius:10px;padding:10px 14px;">
+              <p style="margin:0;font-weight:bold;color:#2c6ea3;">Dạng bài giảng / ISLR</p>
+              <p style="margin:6px 0 0;">\(\displaystyle \max_{\beta, M} M\) &nbsp;s.t.</p>
+              <p style="margin:2px 0 0;">\(\|\beta\| = 1, \ y_i(\beta_0 + \beta \cdot x_i) \ge M(1 - \epsilon_i)\)</p>
+              <p style="margin:6px 0 0;color:#555;">Nhấn mạnh <strong>ý nghĩa hình học</strong>
+                của lề \(M\).</p>
+            </div>
+            <div style="border:2px solid #e8732a;border-radius:10px;padding:10px 14px;">
+              <p style="margin:0;font-weight:bold;color:#e8732a;">Dạng ESL / sklearn</p>
+              <p style="margin:6px 0 0;">\(\displaystyle \min_{\beta} \tfrac{1}{2}\|\beta\|^2 + C\!\sum_i \epsilon_i\)
+                &nbsp;s.t.</p>
+              <p style="margin:2px 0 0;">\(y_i(\beta_0 + \beta \cdot x_i) \ge 1 - \epsilon_i\)</p>
+              <p style="margin:6px 0 0;color:#555;">Quen thuộc trong tối ưu / thư viện —
+                cố định lề bằng 1, minh hoạ nhờ \(\|\beta\|\).</p>
+            </div>
+          </div>
+          <p style="margin-top:10px;font-size:0.9em;color:#555;">Hai dạng chỉ khác nhau ở cách
+            <em>chuẩn hoá</em> — cùng nghiệm, cùng siêu phẳng.
+            <strong style="color:#c0392b;">Lưu ý:</strong> \(C\) ở dạng ESL/sklearn đóng vai trò
+            <em>ngược</em> với ngân sách vi phạm của ISLR.</p>
         </section>
       </section>
 
@@ -531,25 +559,43 @@
         </section>
 
         <!-- p.29b: Feature scaling must-have -->
-        <section style="font-size: 0.8em;">
+        <section style="font-size: 0.78em;">
           <h2>Trước khi chạy SVM: chuẩn hoá đặc trưng</h2>
-          <p style="margin-top:0;">SVM phụ thuộc <span class="keyword">khoảng cách</span> trong
-            không gian đặc trưng. Nếu các biến có đơn vị khác nhau (tuổi theo năm, thu nhập theo triệu),
-            biến có thang lớn sẽ <strong>áp đảo</strong> khái niệm margin và \(\gamma\) của RBF.</p>
-          <div style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:10px 16px;margin-top:10px;">
-            <strong>Luôn chuẩn hoá trước khi fit SVM</strong> — thường dùng <em>standardization</em>
-            (\(z\)-score): \(x_j \to (x_j - \bar{x}_j) / s_j\).
+          <p style="margin-top:0;">SVM phụ thuộc <span class="keyword">khoảng cách</span>. Biến có
+            thang lớn (thu nhập) sẽ áp đảo biến có thang nhỏ (tuổi) — margin và \(\gamma\) của RBF
+            bị méo theo đơn vị đo.</p>
+          <div style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:8px 16px;margin-top:8px;">
+            <strong>Luôn standardize trước khi fit:</strong> \(x_j \to (x_j - \bar{x}_j) / s_j\).
           </div>
-          <div style="background:#fff5f5;border:1.5px solid #c0392b;border-radius:10px;padding:10px 16px;margin-top:10px;">
-            <strong style="color:#c0392b;">Cạm bẫy:</strong> chuẩn hoá phải nằm <em>bên trong</em>
-            pipeline cross-validation. Fit scaler trên toàn bộ dữ liệu rồi mới chia train/test sẽ
-            gây <span class="keyword">data leakage</span> — kết quả CV bị lạc quan hơn thực tế.
+          <p style="margin-top:10px;margin-bottom:4px;"><strong>Đúng cách:</strong> đặt scaler
+            <em>bên trong</em> mỗi fold CV —</p>
+          <div style="display:flex;align-items:center;justify-content:center;gap:6px;
+                      font-size:0.78em;margin-top:2px;flex-wrap:wrap;">
+            <span style="background:#e8f4fd;border:1px solid #4a90d9;border-radius:6px;
+                         padding:3px 8px;">train fold</span>
+            <span style="color:#888;">→</span>
+            <span style="background:#fff8e1;border:1px solid #d4a017;border-radius:6px;
+                         padding:3px 8px;">fit scaler</span>
+            <span style="color:#888;">→</span>
+            <span style="background:#fff8e1;border:1px solid #d4a017;border-radius:6px;
+                         padding:3px 8px;">transform</span>
+            <span style="color:#888;">→</span>
+            <span style="background:#e8f4fd;border:1px solid #4a90d9;border-radius:6px;
+                         padding:3px 8px;">fit SVM</span>
+            <span style="color:#888;">→</span>
+            <span style="background:#f5fff5;border:1px solid #5aaa44;border-radius:6px;
+                         padding:3px 8px;">validate</span>
           </div>
-          <p style="margin-top:10px;font-size:0.92em;color:#555;">Trong sklearn:
-            <code>Pipeline([('scale', StandardScaler()), ('svm', SVC())])</code> +
-            <code>GridSearchCV</code> là công thức chuẩn.</p>
+          <div style="background:#fff5f5;border:1.5px solid #c0392b;border-radius:10px;padding:8px 14px;margin-top:10px;font-size:0.92em;">
+            <strong style="color:#c0392b;">Cạm bẫy:</strong> fit scaler trên toàn bộ dữ liệu rồi mới
+            chia train/test → <span class="keyword">data leakage</span>, CV bị lạc quan hơn thực tế.
+            Trong sklearn dùng <code>Pipeline([('scale', StandardScaler()), ('svm', SVC())])</code>.
+            <em>Lưu ý quy ước:</em> tham số <code>C</code> của sklearn là nghịch đảo của ngân sách
+            \(C\) trong bài giảng.
+          </div>
           <aside class="notes">Nhấn mạnh đây là must-have chứ không phải best-practice. Nhiều kỳ thi
-            thực hành mất điểm vì bỏ bước này hoặc đặt ngoài pipeline CV.</aside>
+            thực hành mất điểm vì bỏ bước này hoặc đặt ngoài pipeline CV. Nhắc lại: C của sklearn
+            ngược với C của slide.</aside>
         </section>
 
         <!-- p.30: Heart SVM vs LDA -->
