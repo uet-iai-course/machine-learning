@@ -126,7 +126,8 @@
                 <li>Phân lớp: \(\hat{y} = \operatorname{sign}(f(x))\)</li>
                 <li>\(f(x) > 0\): nửa dương (lớp \(+1\))</li>
                 <li>\(f(x) < 0\): nửa âm (lớp \(-1\))</li>
-                <li>\(|f(x)|\) lớn \(\Rightarrow\) xa siêu phẳng \(\Rightarrow\) <strong>tự tin hơn</strong></li>
+                <li>\(|f(x)|\) lớn \(\Rightarrow\) xa siêu phẳng hơn theo thang điểm của mô hình
+                  <span style="color:#888;">(không phải xác suất)</span></li>
               </ul>
             </div>
             <div style="text-align:center;">
@@ -444,16 +445,18 @@
         </section>
 
         <!-- p.25a: Nghiệm SVM chỉ phụ thuộc tích vô hướng -->
-        <section style="font-size: 0.8em;">
+        <section style="font-size: 0.78em;">
           <h2>Nghiệm SVM chỉ phụ thuộc tích vô hướng</h2>
-          <p style="margin-top:0;">Có thể chứng minh rằng nghiệm SVM có thể viết lại hoàn toàn qua
+          <p style="margin-top:0;">Khi giải bài toán lề mềm bằng <span class="keyword">tối ưu đối ngẫu</span>
+            (Lagrangian), ta chứng minh được rằng nghiệm viết lại hoàn toàn qua
             <span class="keyword">tích vô hướng</span> giữa các cặp điểm:</p>
-          <div style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:8px 18px;margin-top:10px;">
+          <div style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:8px 18px;margin-top:8px;">
             \[ f(x^*) = \beta_0 + \sum_{i \in S} \alpha_i \langle x^*, x_i \rangle \]
           </div>
-          <ul style="margin-top:12px;line-height:1.8em;">
+          <ul style="margin-top:10px;line-height:1.7em;">
             <li>\(S\) — tập vectơ hỗ trợ; \(\alpha_i\) — hệ số từ huấn luyện</li>
-            <li>Công thức không chứa toạ độ \(x^*\) hay \(x_i\) riêng lẻ, chỉ chứa tích \(\langle x^*, x_i \rangle\)</li>
+            <li>Công thức không chứa toạ độ \(x^*\) hay \(x_i\) riêng lẻ, chỉ chứa \(\langle x^*, x_i \rangle\)</li>
+            <li>Chứng minh chi tiết: xem ESL §12.2.1 (nằm ngoài phạm vi bài)</li>
           </ul>
         </section>
 
@@ -527,44 +530,50 @@
           </h1>
         </section>
 
+        <!-- p.29b: Feature scaling must-have -->
+        <section style="font-size: 0.8em;">
+          <h2>Trước khi chạy SVM: chuẩn hoá đặc trưng</h2>
+          <p style="margin-top:0;">SVM phụ thuộc <span class="keyword">khoảng cách</span> trong
+            không gian đặc trưng. Nếu các biến có đơn vị khác nhau (tuổi theo năm, thu nhập theo triệu),
+            biến có thang lớn sẽ <strong>áp đảo</strong> khái niệm margin và \(\gamma\) của RBF.</p>
+          <div style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:10px 16px;margin-top:10px;">
+            <strong>Luôn chuẩn hoá trước khi fit SVM</strong> — thường dùng <em>standardization</em>
+            (\(z\)-score): \(x_j \to (x_j - \bar{x}_j) / s_j\).
+          </div>
+          <div style="background:#fff5f5;border:1.5px solid #c0392b;border-radius:10px;padding:10px 16px;margin-top:10px;">
+            <strong style="color:#c0392b;">Cạm bẫy:</strong> chuẩn hoá phải nằm <em>bên trong</em>
+            pipeline cross-validation. Fit scaler trên toàn bộ dữ liệu rồi mới chia train/test sẽ
+            gây <span class="keyword">data leakage</span> — kết quả CV bị lạc quan hơn thực tế.
+          </div>
+          <p style="margin-top:10px;font-size:0.92em;color:#555;">Trong sklearn:
+            <code>Pipeline([('scale', StandardScaler()), ('svm', SVC())])</code> +
+            <code>GridSearchCV</code> là công thức chuẩn.</p>
+          <aside class="notes">Nhấn mạnh đây là must-have chứ không phải best-practice. Nhiều kỳ thi
+            thực hành mất điểm vì bỏ bước này hoặc đặt ngoài pipeline CV.</aside>
+        </section>
+
         <!-- p.30: Heart SVM vs LDA -->
         <section style="font-size: 0.78em;">
-          <h2>Ứng dụng: Heart — SVM vs LDA</h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin-top:6px;">
-            <div>
-              <ul style="line-height:1.8em;">
-                <li>13 đặc trưng, nhãn nhị phân (bệnh tim hay không)</li>
-                <li>207 mẫu huấn luyện, 90 mẫu kiểm tra</li>
-                <li>SVM tuyến tính (dùng ngưỡng \(f(x)\)) so với LDA (dùng ngưỡng hàm phân biệt)</li>
-              </ul>
-              <p style="margin-top:10px;">Trên train: tương đương. Trên test của lần chia này:
-                <strong>SVM nhỉnh hơn</strong> một chút. Đừng kết luận phương pháp luận rộng từ
-                một ví dụ — cần nhiều dataset để nói mô hình nào "tốt hơn".</p>
-            </div>
-            <div style="text-align:center;">
-              <img src="img/lec09/heart-svm-vs-lda.svg" alt="ROC Heart: SVM vs LDA"
-                style="max-width:100%;max-height:320px;object-fit:contain;" />
-            </div>
+          <h2>Ứng dụng Heart: SVM vs LDA</h2>
+          <p style="margin-top:0;">13 đặc trưng, nhãn nhị phân (bệnh tim hay không); 207 train, 90 test.
+            ROC trên train và test:</p>
+          <div style="text-align:center;margin-top:4px;">
+            <img src="img/lec09/heart-svm-vs-lda.svg" alt="ROC Heart: SVM vs LDA"
+              style="max-width:92%;max-height:360px;object-fit:contain;" />
           </div>
+          <p style="margin-top:6px;font-size:0.9em;">Hai đường ROC gần như trùng nhau trên cả train và test
+            (AUC chênh ≲ 0.003). <strong>Chỉ là minh hoạ</strong> — kết luận rộng cần nhiều dataset.</p>
         </section>
 
         <!-- p.31: Heart kernels -->
         <section style="font-size: 0.78em;">
           <h2>Heart: linear vs RBF với các \(\gamma\)</h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin-top:6px;">
-            <div>
-              <ul style="line-height:1.8em;">
-                <li>\(\gamma = 10^{-1}\): tốt nhất trên train nhưng tệ nhất trên test — <strong>quá khớp</strong></li>
-                <li>Các \(\gamma\) khác cho kết quả tương đương kernel tuyến tính</li>
-              </ul>
-              <p style="margin-top:10px;">Với dữ liệu nhiều nhiễu, kernel phi tuyến mạnh <em>không</em>
-                luôn tốt hơn kernel tuyến tính đơn giản.</p>
-            </div>
-            <div style="text-align:center;">
-              <img src="img/lec09/heart-kernels.svg" alt="ROC Heart: linear vs RBF γ khác nhau"
-                style="max-width:100%;max-height:320px;object-fit:contain;" />
-            </div>
+          <div style="text-align:center;margin-top:4px;">
+            <img src="img/lec09/heart-kernels.svg" alt="ROC Heart: linear vs RBF γ khác nhau"
+              style="max-width:92%;max-height:360px;object-fit:contain;" />
           </div>
+          <p style="margin-top:6px;font-size:0.9em;">\(\gamma = 10^{-1}\): tốt nhất trên train, tệ nhất
+            trên test — <strong>quá khớp</strong>. Kernel phi tuyến mạnh không luôn tốt hơn kernel tuyến tính.</p>
         </section>
 
         <!-- p.32: SVM vs logistic -->
