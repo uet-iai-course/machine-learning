@@ -38,7 +38,8 @@ ax.scatter(X[sv_mask & (y < 0), 0], X[sv_mask & (y < 0), 1], c="#c0392b",
 ax.scatter(X[sv_mask, 0], X[sv_mask, 1], s=220, facecolors="none",
            edgecolors=C_ARROW, linewidths=2)
 
-ax.text(2.2, 2.8, "SV đậm,\nnon-SV nhạt", fontsize=9.5, color="#444",
+ax.text(2.2, 2.85, "vector hỗ trợ đậm,\nđiểm còn lại nhạt",
+        fontsize=9.5, color="#444",
         ha="center", va="center",
         bbox=dict(boxstyle="round,pad=0.3", facecolor="white", edgecolor="#ccc"))
 

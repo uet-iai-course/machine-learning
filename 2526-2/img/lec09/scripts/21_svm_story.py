@@ -47,7 +47,7 @@ X1 = rng.randn(18, 2) * 0.45 + [1.3, 1.2]
 X2 = rng.randn(18, 2) * 0.45 + [-1.3, -1.2]
 X_hard = np.vstack([X1, X2])
 y_hard = np.concatenate([np.ones(18), -np.ones(18)])
-plot_linear(axes[0], X_hard, y_hard, 1e6, "Hard margin")
+plot_linear(axes[0], X_hard, y_hard, 1e6, "Lề cứng")
 
 # Panel 2: soft margin on slightly overlapping data
 rng2 = np.random.RandomState(7)
@@ -55,7 +55,7 @@ X1 = rng2.randn(22, 2) * 0.95 + [1.0, 1.0]
 X2 = rng2.randn(22, 2) * 0.95 + [-0.9, -0.9]
 X_soft = np.vstack([X1, X2])
 y_soft = np.concatenate([np.ones(22), -np.ones(22)])
-plot_linear(axes[1], X_soft, y_soft, 1.0, "Soft margin")
+plot_linear(axes[1], X_soft, y_soft, 1.0, "Lề mềm")
 
 # Panel 3: kernel on concentric data
 rng3 = np.random.RandomState(1)

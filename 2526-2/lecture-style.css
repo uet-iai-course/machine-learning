@@ -2,6 +2,21 @@
     text-align: left;
 }
 
+/*
+ * KaTeX / MathJax không được biến đổi case (uppercase) bởi parent.
+ * Reveal `white` theme set `text-transform: uppercase` cho h1/h2/h3 →
+ * Greek letters render lệch (\alpha → Α-Latin), ký hiệu toán bị méo.
+ * Fix: tắt text-transform trên mọi math container, áp dụng toàn deck.
+ */
+.reveal .katex,
+.reveal .katex *,
+.reveal mjx-container,
+.reveal mjx-container *,
+.reveal .MathJax,
+.reveal .MathJax * {
+    text-transform: none !important;
+}
+
 .reveal .controls .controls-arrow {
     color: #1E93AB;
 }

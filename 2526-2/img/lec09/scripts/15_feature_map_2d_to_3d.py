@@ -13,7 +13,7 @@ r2 = 2.0 + rng.rand(n) * 0.7
 theta2 = rng.rand(n) * 2 * np.pi
 X_neg = np.stack([r2 * np.cos(theta2), r2 * np.sin(theta2)], axis=1)
 
-fig = plt.figure(figsize=(10, 4.2))
+fig = plt.figure(figsize=(11, 4.4))
 
 # Left: original 2D
 ax1 = fig.add_subplot(1, 2, 1)
@@ -46,6 +46,10 @@ ax2.set_zlabel(r"$X_1^2 + X_2^2$")
 ax2.set_title("Không gian mở rộng — tách được bằng mặt phẳng", fontsize=11)
 ax2.view_init(elev=18, azim=-55)
 
-fig.tight_layout(pad=0.6)
-fig.savefig("../feature-map-2d-to-3d.svg", format="svg", bbox_inches="tight")
+# 3D axis labels (especially the z-label on the right plot) extend beyond
+# tight_layout's default crop box → use a generous pad_inches to keep the
+# right edge from being clipped.
+fig.subplots_adjust(left=0.06, right=0.98, top=0.92, bottom=0.12, wspace=0.08)
+fig.savefig("../feature-map-2d-to-3d.svg", format="svg",
+            bbox_inches="tight", pad_inches=0.35)
 print("Saved feature-map-2d-to-3d.svg")

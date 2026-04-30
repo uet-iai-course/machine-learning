@@ -33,12 +33,12 @@ X_out = np.vstack([X, [[0.8, -0.3]]])
 y_out = np.concatenate([y, [1]])
 
 fig, axes = plt.subplots(1, 2, figsize=(10, 4.4))
-plot_svc(axes[0], X, y, fit_hard(X, y), "Trước khi thêm outlier")
-plot_svc(axes[1], X_out, y_out, fit_hard(X_out, y_out), "Sau khi thêm 1 outlier")
+plot_svc(axes[0], X, y, fit_hard(X, y), "Trước khi thêm điểm ngoại lai")
+plot_svc(axes[1], X_out, y_out, fit_hard(X_out, y_out), "Sau khi thêm 1 điểm ngoại lai")
 
 # Highlight the outlier
 axes[1].scatter([0.8], [-0.3], s=230, facecolors="none", edgecolors=C_ARROW, linewidths=2.2)
-axes[1].annotate("outlier", xy=(0.8, -0.3), xytext=(1.8, -2.4),
+axes[1].annotate("điểm ngoại lai", xy=(0.8, -0.3), xytext=(1.5, -2.7),
                  fontsize=11, color=C_ARROW, fontweight="bold",
                  arrowprops=dict(arrowstyle="->", color=C_ARROW, lw=1.4))
 
