@@ -431,16 +431,16 @@
         </section>
 
         <section>
-          <h2>Bài toán: tìm \(\hat{f}\) gần với \(f\)</h2>
+          <h2>Bài toán: tìm \(\hat{f}\) gần \(f\)</h2>
           <div class="two-col">
             <div>
               <ul>
                 <li>Cho tập huấn luyện \(n\) cặp \((x_i, y_i)\) đã quan sát.</li>
-                <li>Mục tiêu: tìm \(\hat{f}\) sao cho \(\hat{f}(X) \approx Y\) trên mọi cặp \((X, Y)\) — kể cả dữ liệu chưa thấy.</li>
+                <li>Mục tiêu: tìm \(\hat{f}\) sao cho \(\hat{f}(X) \approx Y\) trên mọi \((X, Y)\) — kể cả dữ liệu chưa thấy.</li>
               </ul>
             </div>
             <div class="fig">
-              <img src="img/lec01b/modeling.png" alt="Dữ liệu phi tuyến" />
+              <img src="img/lec01b/modeling.png" alt="Dữ liệu phi tuyến" style="max-width: 100%; max-height: 320px;" />
               <p class="fig-caption">Dữ liệu phi tuyến · đường xanh = hàm thật \(f\) (không biết trước).</p>
             </div>
           </div>
@@ -457,16 +457,13 @@
 
         <section>
           <h2>Mô hình <span class="keyword">có tham số</span></h2>
-          <div class="two-col">
-            <div>
-              <p>Giả sử dạng hàm — đơn giản nhất là tuyến tính:</p>
-              \[ f(X) = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p \]
-              <p style="margin-top: 0.5em;">Học mô hình = ước lượng \(\beta_0, \beta_1, \ldots, \beta_p\) từ dữ liệu.</p>
-            </div>
-            <div class="fig">
-              <img src="img/lec01b/linear-modeling.png" alt="Mô hình tuyến tính" />
-              <p class="fig-caption">Đường khớp là hàm tuyến tính — đơn giản, nhưng có thể chệch khỏi \(f\) thật.</p>
-            </div>
+          <p style="margin: 0.2em 0; font-size: 0.9em; text-align: center;">
+            Giả sử dạng hàm tuyến tính
+            \( f(X) = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p \) → học = ước lượng các \(\beta_j\).
+          </p>
+          <div class="fig" style="margin-top: 0.3em;">
+            <img src="img/lec01b/linear-modeling.png" alt="Mô hình tuyến tính" style="max-width: 78%; max-height: 400px;" />
+            <p class="fig-caption">Đường khớp là hàm tuyến tính — đơn giản, nhưng có thể chệch khỏi \(f\) thật.</p>
           </div>
         </section>
 
@@ -489,7 +486,7 @@
               </ul>
             </div>
             <div class="fig">
-              <img src="img/lec01b/nonparametric-modeling.png" alt="Mô hình phi tham số" />
+              <img src="img/lec01b/nonparametric-modeling.png" alt="Mô hình phi tham số" style="max-width: 100%; max-height: 320px;" />
               <p class="fig-caption">Đường khớp uốn theo dữ liệu — bám sát \(f\) thật hơn.</p>
             </div>
           </div>
@@ -736,15 +733,20 @@
           </ul>
         </section>
 
-        <section style="font-size: 0.85em;">
-          <h2>Đánh giá mô hình hồi quy — MSE</h2>
+        <section>
+          <h2>MSE — đánh giá hồi quy</h2>
           <p>Lỗi bình phương trung bình (MSE) là độ đo phổ biến nhất:</p>
-          \[
-          \text{MSE}_{\text{huấn luyện}} = \frac{1}{n}\sum_{i=1}^n \bigl(y_i - \hat{f}(x_i)\bigr)^2
-          \quad\quad
-          \text{MSE}_{\text{kiểm thử}} = \mathrm{avg}\bigl(y_0 - \hat{f}(x_0)\bigr)^2
-          \]
-          <p>Ta quan tâm chủ yếu đến <strong>MSE kiểm thử</strong> — vì đó là điều đo được khả năng tổng quát hoá.</p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 0.4em 0;">
+            <div style="text-align: center;">
+              <p style="margin: 0; font-size: 0.85em; color: #555;">Trên dữ liệu <strong>huấn luyện</strong></p>
+              \[ \frac{1}{n}\sum_{i=1}^n \bigl(y_i - \hat{f}(x_i)\bigr)^2 \]
+            </div>
+            <div style="text-align: center;">
+              <p style="margin: 0; font-size: 0.85em; color: #555;">Trên dữ liệu <strong>kiểm thử</strong></p>
+              \[ \mathrm{avg}\bigl(y_0 - \hat{f}(x_0)\bigr)^2 \]
+            </div>
+          </div>
+          <p>Ta quan tâm chủ yếu đến <strong>MSE kiểm thử</strong> — đo khả năng tổng quát hoá.</p>
         </section>
 
         <section data-auto-animate>
@@ -768,14 +770,19 @@
           <p class="fig-caption">Mô hình quá phức tạp khớp quá — MSE huấn luyện thấp nhưng kiểm thử tệ.</p>
         </section>
 
-        <section style="font-size: 0.9em;">
+        <section>
           <h2>Đánh giá mô hình phân lớp</h2>
           <p>Thường dùng <strong>tỉ lệ phân lớp sai</strong>. Gọi \(I(\cdot)\) là hàm chỉ thị (\(I=1\) nếu đúng, \(I=0\) nếu sai):</p>
-          \[
-          \text{Lỗi huấn luyện} = \frac{1}{n}\sum_{i=1}^{n} I(y_i \neq \hat{y}_i)
-          \quad\quad
-          \text{Lỗi kiểm thử} = \mathrm{avg}\bigl(I(y_0 \neq \hat{y}_0)\bigr)
-          \]
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 0.6em 0;">
+            <div style="text-align: center;">
+              <p style="margin: 0; font-size: 0.85em; color: #555;"><strong>Lỗi huấn luyện</strong></p>
+              \[ \frac{1}{n}\sum_{i=1}^{n} I(y_i \neq \hat{y}_i) \]
+            </div>
+            <div style="text-align: center;">
+              <p style="margin: 0; font-size: 0.85em; color: #555;"><strong>Lỗi kiểm thử</strong></p>
+              \[ \mathrm{avg}\bigl(I(y_0 \neq \hat{y}_0)\bigr) \]
+            </div>
+          </div>
         </section>
 
         <section style="font-size: 0.9em;">

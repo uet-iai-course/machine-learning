@@ -251,6 +251,15 @@
     align-items: start;
 }
 
+/* Image-dominant layout: text bên trái nhỏ, hình bên phải lớn. */
+.reveal .two-col-img {
+    display: grid;
+    grid-template-columns: 0.6fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+    align-items: center;
+}
+
 .reveal .two-col img,
 .reveal .two-col-narrow img,
 .reveal .two-col-tight img {
