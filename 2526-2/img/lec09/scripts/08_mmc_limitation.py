@@ -21,13 +21,13 @@ X, y = make_separable_2d(n_per=15, sep=3.0, noise=0.5, seed=8)
 X_out = np.vstack([X, [[0.2, 0.5]]])
 y_out = np.concatenate([y, [1]])
 
-fig, axes = plt.subplots(1, 2, figsize=(10, 4.4))
+fig, axes = plt.subplots(1, 2, figsize=(11, 4.6))
 
 plot_hard(axes[0], X_out, y_out)
 scatter_two_class(axes[0], X_out, y_out, s=45)
 # Highlight the outlier
 axes[0].scatter([0.2], [0.5], s=220, facecolors="none", edgecolors=C_ARROW, linewidths=2.2)
-axes[0].annotate("outlier", xy=(0.2, 0.5), xytext=(1.6, 2.3),
+axes[0].annotate("điểm ngoại lai", xy=(0.2, 0.5), xytext=(1.4, 2.4),
                  fontsize=11, color=C_ARROW, fontweight="bold",
                  arrowprops=dict(arrowstyle="->", color=C_ARROW, lw=1.4))
 axes[0].set_xlim(-3.6, 3.6)
@@ -35,7 +35,7 @@ axes[0].set_ylim(-3.2, 3.2)
 axes[0].set_xlabel(r"$X_1$")
 axes[0].set_ylabel(r"$X_2$")
 axes[0].set_aspect("equal")
-axes[0].set_title("Outlier làm lề co lại", fontsize=11)
+axes[0].set_title("Điểm ngoại lai làm lề co lại", fontsize=11)
 
 # ── Right: non-separable dataset (overlapping classes) ──
 rng = np.random.RandomState(9)
@@ -47,7 +47,7 @@ y_ns = np.concatenate([np.ones(n), -np.ones(n)])
 
 scatter_two_class(axes[1], X_ns, y_ns, s=45)
 axes[1].set_xlim(-3.6, 3.6)
-axes[1].set_ylim(-3.2, 3.6)
+axes[1].set_ylim(-3.2, 3.2)
 axes[1].set_xlabel(r"$X_1$")
 axes[1].set_ylabel(r"$X_2$")
 axes[1].set_aspect("equal")

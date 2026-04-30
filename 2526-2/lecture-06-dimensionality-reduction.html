@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="revealjs/dist/reveal.css" />
   <link rel="stylesheet" href="revealjs/dist/theme/white.css" />
   <link rel="stylesheet" href="plugin/highlight/monokai.css" />
-  <link rel="stylesheet" href="lecture-style.css" />
+  <link rel="stylesheet" href="lecture-style.css?v=2" />
 </head>
 
 <body>
@@ -39,7 +39,8 @@
               <span style="color:#888;font-weight:normal;font-size:0.5em;">Sammon mapping, Kruskal-Shepard, quan hệ với
                 PCA</span>
             </li>
-            <li>t-SNE <a href="#tsne">→</a><br>
+            <li>t-SNE <a href="#tsne">→</a>
+              <span class="self-study-badge" style="font-size:0.55em;margin-left:6px;">📖 Tự học</span><br>
               <span style="color:#888;font-weight:normal;font-size:0.5em;">SNE, phân phối t, vấn đề chật chội, ưu nhược
                 điểm</span>
             </li>
@@ -196,19 +197,76 @@
           </ul>
         </section>
 
-        <section style="font-size: 0.72em;" data-auto-animate>
-          <h2>Bài toán tối ưu PCA</h2>
-          <p>Tìm hệ số tải \(\phi_{j1}\) sao cho <strong>phương sai hình chiếu lớn nhất</strong>, với ràng buộc
-            \(\sum_{j=1}^{p}\phi_{j1}^2 = 1\):</p>
-          <p style="text-align:center;">
-            \[ \max_{\phi_{11},\ldots,\phi_{p1}} \underbrace{\frac{1}{n}\sum_{i=1}^{n} z_{i1}^2}_{\text{phương sai}} =
-            \frac{1}{n}\sum_{i=1}^{n}\left(\sum_{j=1}^{p}\phi_{j1}(X_{ij} - \bar{X}_j)\right)^2 \]
-          </p>
+        <!-- PCA optim — slide 1/3: phát biểu bài toán -->
+        <section style="font-size: 0.72em;">
+          <h2>Bài toán tối ưu PCA — phát biểu</h2>
+          <p style="margin-top:0;">Tìm hệ số tải \(\boldsymbol{\phi}_1 = (\phi_{11}, \ldots, \phi_{p1})\)
+            sao cho <strong>phương sai hình chiếu lớn nhất</strong>:</p>
           <div
-            style="background:#e8f4fd;border-left:4px solid #4a90d9;padding:10px 14px;margin-top:14px;border-radius:4px;">
-            <strong>Nghiệm:</strong> \(\boldsymbol{\phi}_1\) là vector riêng ứng với trị riêng lớn nhất của ma trận hiệp
-            phương sai \(\mathbf{S} = \frac{1}{n}\mathbf{X}_c\mathbf{X}_c^\top\) với \(\mathbf{X}_c\) là ma trận dữ liệu
-            đã chuẩn hoá trung bình.
+            style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:8px 18px;margin-top:8px;">
+            \[ \max_{\boldsymbol{\phi}_1}\; \underbrace{\frac{1}{n}\sum_{i=1}^{n} z_{i1}^2}_{\text{phương sai chiếu}}
+               \quad \text{s.t.} \quad \sum_{j=1}^{p}\phi_{j1}^2 = 1 \]
+          </div>
+          <ul style="margin-top:10px;line-height:1.5em;">
+            <li><strong>Vì sao</strong> ràng buộc \(\|\boldsymbol{\phi}_1\| = 1\)? Không cố định độ dài
+              thì có thể nhân \(\boldsymbol{\phi}_1\) với hằng số bất kỳ để phương sai → \(\infty\).
+              Chuẩn hoá tách "<em>hướng</em>" khỏi "<em>biên độ</em>".</li>
+            <li>Bài toán này có nghiệm <em>đẹp</em> liên quan đến vector riêng — slide kế.</li>
+          </ul>
+        </section>
+
+        <!-- PCA optim — slide 2/3: rút gọn theo ma trận hiệp phương sai -->
+        <section style="font-size: 0.66em;">
+          <h2>Bài toán tối ưu PCA — viết theo ma trận hiệp phương sai</h2>
+          <p style="margin-top:0;">Triển khai \(z_{i1} = \boldsymbol{\phi}_1^\top (\mathbf{x}_i - \bar{\mathbf{x}})\):</p>
+          <div style="text-align:center;margin-top:4px;">
+            \[ \frac{1}{n}\sum_i z_{i1}^2
+               = \frac{1}{n}\sum_i \boldsymbol{\phi}_1^\top (\mathbf{x}_i - \bar{\mathbf{x}})
+                                    (\mathbf{x}_i - \bar{\mathbf{x}})^\top \boldsymbol{\phi}_1
+               = \boldsymbol{\phi}_1^\top \mathbf{S}\, \boldsymbol{\phi}_1 \]
+          </div>
+          <p style="margin-top:6px;">với <strong>ma trận hiệp phương sai mẫu</strong>
+            \(\mathbf{S} = \frac{1}{n}\sum_i (\mathbf{x}_i - \bar{\mathbf{x}})(\mathbf{x}_i - \bar{\mathbf{x}})^\top\)
+            (cỡ \(p \times p\), đối xứng, nửa xác định dương).</p>
+          <div
+            style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:6px 18px;margin-top:6px;">
+            Bài toán gọn:
+            \[ \max_{\boldsymbol{\phi}_1}\; \boldsymbol{\phi}_1^\top \mathbf{S}\, \boldsymbol{\phi}_1
+               \quad \text{s.t.} \quad \boldsymbol{\phi}_1^\top \boldsymbol{\phi}_1 = 1 \]
+          </div>
+          <p style="margin-top:8px;font-size:0.94em;color:#555;"><em>Bài toán nay chỉ phụ thuộc vào
+            \(\mathbf{S}\) — toàn bộ thông tin về \(\boldsymbol{\phi}_1\) gói gọn trong
+            \(\boldsymbol{\phi}_1^\top \mathbf{S}\, \boldsymbol{\phi}_1\).</em></p>
+        </section>
+
+        <!-- PCA optim — slide 3/3: Lagrangian → eigenvalue -->
+        <section style="font-size: 0.62em;">
+          <h2>Bài toán tối ưu PCA — giải bằng Lagrangian</h2>
+          <p style="margin-top:0;">Lagrangian (1 ràng buộc đẳng thức → 1 hệ số \(\lambda\)):</p>
+          <div style="text-align:center;margin-top:2px;">
+            \[ L(\boldsymbol{\phi}_1, \lambda) = \boldsymbol{\phi}_1^\top \mathbf{S}\, \boldsymbol{\phi}_1
+               - \lambda\,(\boldsymbol{\phi}_1^\top \boldsymbol{\phi}_1 - 1) \]
+          </div>
+          <p style="margin-top:4px;">Điều kiện dừng \(\partial L / \partial \boldsymbol{\phi}_1 = 0\):</p>
+          <div style="text-align:center;margin-top:2px;">
+            \[ 2\mathbf{S}\boldsymbol{\phi}_1 - 2\lambda \boldsymbol{\phi}_1 = 0
+               \quad\Longleftrightarrow\quad
+               \boxed{\,\mathbf{S}\boldsymbol{\phi}_1 = \lambda \boldsymbol{\phi}_1\,} \]
+          </div>
+          <ul style="margin-top:6px;line-height:1.4em;">
+            <li>\(\boldsymbol{\phi}_1\) là <strong>vector riêng</strong> của \(\mathbf{S}\),
+              \(\lambda\) là <strong>trị riêng</strong> tương ứng.</li>
+            <li>Phương sai hình chiếu tại nghiệm:
+              \(\boldsymbol{\phi}_1^\top \mathbf{S}\boldsymbol{\phi}_1
+              = \lambda \boldsymbol{\phi}_1^\top \boldsymbol{\phi}_1 = \lambda\) →
+              <strong>phương sai = trị riêng</strong>.</li>
+            <li>Để phương sai lớn nhất → chọn \(\boldsymbol{\phi}_1\) là vector riêng ứng với
+              <strong>trị riêng lớn nhất</strong> của \(\mathbf{S}\).</li>
+          </ul>
+          <div
+            style="background:#e8f4fd;border:1.5px solid #4a90d9;border-radius:8px;padding:6px 14px;margin-top:6px;font-size:0.96em;">
+            <strong style="color:#2c6ea3;">Tổng quát:</strong> PC thứ \(m\) = vector riêng ứng với
+            trị riêng lớn thứ \(m\); phương sai do PC \(m\) giải thích = \(\lambda_m\).
           </div>
         </section>
 
@@ -241,22 +299,21 @@
           </div>
         </section> -->
 
-        <section style="font-size: 0.78em;">
+        <section style="font-size: 0.7em;">
           <h2>PCA như biến đổi tọa độ</h2>
-          <div style="display:grid;grid-template-columns:1fr 0.6fr;gap:12px;align-items:center;margin-top:8px;">
-            <div>
-              <ul>
-                <li>PCA tạo ra một hệ tọa độ mới.</li>
-                <li>Các trục mới là các thành phần chính.</li>
-                <li>Các PC không tương quan với nhau.</li>
-              </ul>
-            </div>
-            <div style="text-align:center;">
-              <img src="img/lec06/pca-pc-scores-2d.png" alt="2D PC scores scatter"
-                style="width:100%;object-fit:contain;" />
-              <p style="font-size:0.72em;color:#666;margin:2px 0 0;">Điểm PC sau khi chiếu xuống 2D</p>
-            </div>
+          <div style="text-align:center;margin-top:4px;font-size:0;line-height:0;">
+            <img src="img/lec06/pca-as-rotation.svg?v=2" alt="PCA: từ 3D xuống mặt phẳng PC1-PC2"
+              style="max-width:94%;max-height:300px;object-fit:contain;" />
           </div>
+          <p style="margin-top:6px;margin-bottom:4px;">PCA = <strong>phép xoay hệ trục</strong>
+            từ \((X_1, X_2, X_3)\) sang \((Z_1, Z_2, Z_3)\). Trái → phải: cùng dữ liệu, hai góc nhìn.</p>
+          <ul style="margin:0;line-height:1.4em;">
+            <li><strong>Trục mới sắp theo phương sai giảm dần.</strong> PC1 dài nhất (phương sai
+              lớn nhất), PC3 ngắn nhất — đó là <em>chiều thừa</em> có thể bỏ ⇒ giảm chiều.</li>
+            <li><strong>Tính chất hệ trục PC:</strong> các PC <em>trực giao</em> đôi một
+              <strong>và không tương quan</strong> (\(\mathrm{Cov}(Z_i, Z_j) = 0,\; i \ne j\))
+              — khác với \(X_1, X_2, X_3\) vốn có tương quan.</li>
+          </ul>
         </section>
 
         <section style="font-size: 0.78em;">
@@ -459,10 +516,14 @@
             <span class="text-light">4.</span><br />
             t-SNE
           </h1>
+          <p style="margin-top:1em;font-size:0.55em;color:#666;">
+            <span class="self-study-badge" style="font-size:1.1em;">📖 Toàn bộ phần này là tự học</span>
+          </p>
         </section>
 
         <section style="font-size: 0.78em;">
           <h2>Nhúng láng giềng ngẫu nhiên (SNE)</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:8px;">
             <div>
               <p style="margin-top:0;">MDS bảo toàn <strong>khoảng cách</strong> giữa mọi cặp điểm. SNE đổi góc nhìn: với mỗi điểm, tính <span class="keyword">xác suất láng giềng</span> — điểm nào gần thì xác suất cao, xa thì thấp.</p>
@@ -482,6 +543,7 @@
 
         <section style="font-size: 0.78em;" data-auto-animate>
           <h2>Độ tương đồng chiều cao</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:6px;">
             <div>
               <p style="margin-top:0;"><strong>Dùng Gaussian quanh mỗi điểm \(x_i\):</strong></p>
@@ -517,6 +579,7 @@
 
         <section style="font-size: 0.78em;">
           <h2>Chọn Perplexity</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:8px;">
             <div>
               <p style="margin-top:0;">Chọn \(\sigma_i\) sao cho mỗi điểm có <strong>perplexity cố định</strong>:</p>
@@ -538,6 +601,7 @@
 
         <section style="font-size: 0.7em;">
           <h2>Độ tương đồng chiều thấp</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="display:grid;grid-template-columns:1fr .7fr;gap:16px;align-items:center;margin-top:6px;">
             <div>
               <p style="margin-top:0;"><strong>SNE gốc</strong> dùng Gaussian trong không gian chiều thấp:</p>
@@ -621,6 +685,7 @@
 
         <section style="font-size: 0.75em;">
           <h2>Vấn đề chật chội (Crowding Problem)</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;align-items:center;">
             <div>
               <p style="margin-top:0;"><strong>Vấn đề:</strong> Không gian chiều thấp có ít chỗ hơn nhiều.</p>
@@ -641,6 +706,7 @@
 
         <section style="font-size: 0.78em;">
           <h2>Vấn đề chật chội — Toán học</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;align-items:center;">
             <div>
               <p style="margin-top:0;">Trong không gian 2D, <strong>không đủ chỗ</strong> để bảo toàn tất cả khoảng
@@ -661,6 +727,7 @@
 
         <section style="font-size: 0.78em;">
           <h2>Từ SNE đến t-SNE — Đối xứng hóa</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="margin-top:10px;">
             <p style="margin-top:0;"><strong>Symmetric SNE:</strong></p>
             <p>\[
@@ -675,6 +742,7 @@
 
         <section style="font-size: 0.76em;">
           <h2>Từ SNE đến t-SNE — Phân phối t</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;margin-top:6px;">
             <div>
               <p style="margin-top:0;"><strong>Không gian chiều thấp:</strong></p>
@@ -697,6 +765,7 @@
 
         <section style="font-size: 0.78em;">
           <h2>Thuật toán t-SNE — Tóm tắt</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:16px;align-items:center;margin-top:6px;">
             <div>
               <ol style="line-height:1.55em;">
@@ -715,6 +784,7 @@
 
         <section style="font-size: 0.82em;">
           <h2>t-SNE: Sơ đồ tổng quan</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="text-align:center;margin-top:8px;">
             <img src="img/lec06/sne-pipeline-overview.png" alt="t-SNE pipeline overview"
               style="max-width:90%;max-height:420px;object-fit:contain;" />
@@ -793,6 +863,7 @@
 
         <section>
           <h2>Ưu điểm của t-SNE</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <ul style="margin-top:12px;">
             <li>Rất mạnh cho trực quan hóa dữ liệu chiều cao.</li>
             <li>Bảo toàn cấu trúc láng giềng cục bộ tốt.</li>
@@ -803,6 +874,7 @@
 
         <section style="font-size: 0.76em;">
           <h2>Hạn chế của t-SNE</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div>
             <ul>
               <li>Kích thước và khoảng cách cụm không có nghĩa tuyệt đối.</li>
@@ -817,6 +889,7 @@
 
         <section style="font-size: 0.8em;">
           <h2>Ảnh hưởng của Perplexity</h2>
+          <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <div style="text-align:center;margin-top:8px;">
             <img src="img/lec06/tsne-perplexity-effect.png" alt="Effect of perplexity on t-SNE"
               style="max-width:90%;max-height:330px;object-fit:contain;" />

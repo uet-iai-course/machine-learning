@@ -32,14 +32,14 @@ def plot_c(ax, X, y, C, title):
     ax.set_title(title, fontsize=11)
 
 
-fig, axes = plt.subplots(2, 2, figsize=(8.2, 7.0))
+fig, axes = plt.subplots(1, 4, figsize=(14, 3.7))
 # As C in sklearn is inverse of the "budget" — large C ~ hard margin (thin margin).
 # The slide's "large C" in ISLR notation means large BUDGET → wide margin.
 # In sklearn, this maps to small C. We label with the slide's terminology.
-plot_c(axes[0, 0], X, y, C=0.02, title=r"$C$ rất lớn (budget lớn)")
-plot_c(axes[0, 1], X, y, C=0.1,  title=r"$C$ lớn")
-plot_c(axes[1, 0], X, y, C=1.0,  title=r"$C$ nhỏ")
-plot_c(axes[1, 1], X, y, C=50.0, title=r"$C$ rất nhỏ")
+plot_c(axes[0], X, y, C=0.02, title=r"$C$ rất lớn (budget lớn)")
+plot_c(axes[1], X, y, C=0.1,  title=r"$C$ lớn")
+plot_c(axes[2], X, y, C=1.0,  title=r"$C$ nhỏ")
+plot_c(axes[3], X, y, C=50.0, title=r"$C$ rất nhỏ")
 
 fig.tight_layout(pad=0.6)
 fig.savefig("../effect-of-C.svg", format="svg", bbox_inches="tight")

@@ -1,0 +1,431 @@
+# Glossary thuật ngữ ML cho course "Học máy" (slug: hoc-may).
+#
+# Mục đích:
+# - Tham chiếu nhanh khi soạn / dịch câu hỏi (xem
+#   `docs/dev/question-authoring-standards.md` §8).
+# - Nguồn dữ liệu cho `scripts/audit_question_standards.py` —
+#   union các trường `abbrev` của tất cả file `*.yml` trong thư mục
+#   này dùng để check W-ABBREV (viết tắt phải có intro `(full form, ABBR)`
+#   tại lần đầu xuất hiện trong stem+options).
+#
+# Schema (mỗi entry là dict, thứ tự field tự do):
+#   en:      str  — thuật ngữ tiếng Anh chuẩn (lowercase trừ tên riêng).
+#   vi:      str  — bản dịch tiếng Việt mặc định cho course này.
+#   abbrev:  str  — viết tắt (optional). Audit script sẽ check intro.
+#   notes:   str  — gợi ý dùng / cảnh báo nhầm lẫn (optional).
+#   aliases: list — viết tắt phụ (optional, vd k-NN ↔ kNN).
+#
+# Quy ước: GV course có thể chọn cách dịch khác nếu phù hợp ngữ cảnh, nhưng
+# nên giữ nhất quán trong cùng course. Khi dịch khác, ghi chú trong `notes`
+# hoặc tạo entry mới với cùng `en` nhưng `vi` khác (audit không cấm).
+
+# ── Paradigms + cơ bản ─────────────────────────────────────
+- {en: artificial intelligence, abbrev: AI,  vi: trí tuệ nhân tạo}
+- {en: machine learning,        abbrev: ML,  vi: học máy}
+- {en: deep learning,           abbrev: DL,  vi: học sâu}
+- {en: reinforcement learning,  abbrev: RL,  vi: học tăng cường}
+- {en: supervised learning,                  vi: học có giám sát}
+- {en: unsupervised learning,                vi: học không giám sát}
+- {en: semi-supervised learning,             vi: học bán giám sát}
+
+# ── Datasets / hardware / dữ liệu (Topic 01 abbrevs) ───────
+- {en: MNIST handwritten digits dataset,  abbrev: MNIST, vi: bộ chữ số viết tay MNIST, notes: 'Modified National Institute of Standards and Technology — benchmark Hello World của ML/DL'}
+- {en: graphics processing unit,          abbrev: GPU,   vi: đơn vị xử lý đồ hoạ}
+- {en: exploratory data analysis,         abbrev: EDA,   vi: khám phá dữ liệu}
+- {en: generative adversarial network,    abbrev: GAN,   vi: mạng đối kháng sinh}
+- {en: neural machine translation,        abbrev: NMT,   vi: dịch máy nơ-ron}
+- {en: International Business Machines,   abbrev: IBM,   vi: IBM (công ty công nghệ)}
+- {en: 'DALL·E (text-to-image model)',    abbrev: 'DALL·E', aliases: [DALL], vi: 'DALL·E', notes: 'mô hình tạo sinh ảnh của OpenAI; alias DALL bù cho audit tokenization (\b regex tách ở ·)'}
+- {en: Vietnamese đồng currency,          abbrev: VNĐ,   vi: Việt Nam đồng}
+
+# ── Khung dữ liệu ──────────────────────────────────────────
+- {en: feature,        vi: đặc trưng,            notes: '"thuộc tính" cũng OK'}
+- {en: label,          vi: nhãn}
+- {en: target,         vi: biến mục tiêu}
+- {en: training set,   vi: tập huấn luyện}
+- {en: validation set, vi: tập kiểm định}
+- {en: test set,       vi: tập kiểm thử}
+
+# ── Loại bài toán ──────────────────────────────────────────
+- {en: regression,                vi: hồi quy}
+- {en: classification,            vi: phân lớp}
+- {en: clustering,                vi: phân cụm}
+- {en: dimensionality reduction,  vi: giảm chiều}
+- {en: anomaly detection,         vi: phát hiện bất thường}
+
+# ── Bias-variance + lỗi ────────────────────────────────────
+- {en: overfitting,         vi: quá khớp}
+- {en: underfitting,        vi: dưới khớp}
+- {en: bias,                vi: thiên lệch}
+- {en: variance,            vi: phương sai}
+- {en: noise,               vi: nhiễu}
+- {en: irreducible error,   vi: sai số không thể giảm}
+- {en: generalization,      vi: tổng quát hóa}
+- {en: regularization,      vi: điều chuẩn,  notes: trong ML thường nghĩa là penalize complexity}
+
+# ── Tối ưu / huấn luyện ────────────────────────────────────
+- {en: gradient descent,   vi: xuống đồi gradient}
+- {en: learning rate,      vi: tốc độ học}
+- {en: loss function,      vi: hàm mất mát}
+- {en: maximum likelihood estimation,    abbrev: MLE,  vi: ước lượng hợp lý cực đại}
+- {en: maximum a posteriori,             abbrev: MAP,  vi: cực đại hậu nghiệm}
+
+# ── Hồi quy ────────────────────────────────────────────────
+- {en: linear regression,                          vi: hồi quy tuyến tính}
+- {en: logistic regression,                        vi: hồi quy logistic}
+- {en: ordinary least squares,    abbrev: OLS,     vi: bình phương tối thiểu thông thường}
+- {en: mean squared error,        abbrev: MSE,     vi: sai số bình phương trung bình}
+- {en: root mean squared error,   abbrev: RMSE,    vi: căn sai số bình phương trung bình}
+- {en: mean absolute error,       abbrev: MAE,     vi: sai số tuyệt đối trung bình}
+- {en: residual sum of squares,   abbrev: RSS,     vi: tổng bình phương phần dư}
+- {en: total sum of squares,      abbrev: TSS,     vi: tổng bình phương toàn phần}
+- {en: least absolute deviations, abbrev: LAD,     vi: giá trị tuyệt đối nhỏ nhất}
+- {en: smoothing curve / LOWESS,  vi: đường xu hướng làm trơn}
+- {en: coefficient,  vi: hệ số}
+- {en: intercept,    vi: hệ số chặn}
+- {en: slope,        vi: hệ số góc}
+
+# ── Phân lớp + đánh giá ────────────────────────────────────
+- {en: decision boundary,  vi: đường biên quyết định}
+- {en: confusion matrix,   vi: ma trận nhầm lẫn}
+- {en: precision,          vi: độ chuẩn xác,  notes: '"độ chính xác" gây nhầm với accuracy'}
+- {en: recall,             vi: độ phủ / độ nhạy}
+- {en: accuracy,           vi: độ chính xác}
+- {en: F1-score,           abbrev: F1, vi: điểm F1, notes: 'trung bình điều hoà của Precision và Recall'}
+- {en: ROC curve,          vi: đường cong ROC}
+- {en: area under curve,   abbrev: AUC,    vi: diện tích dưới đường cong}
+- {en: true positive,      abbrev: TP,     vi: dương tính thật}
+- {en: false positive,     abbrev: FP,     vi: dương tính giả}
+- {en: true negative,      abbrev: TN,     vi: âm tính thật}
+- {en: false negative,     abbrev: FN,     vi: âm tính giả}
+- {en: true positive rate, abbrev: TPR,    vi: tỉ lệ dương tính thật}
+- {en: false positive rate, abbrev: FPR,   vi: tỉ lệ dương tính giả}
+- {en: true negative rate, abbrev: TNR,    vi: tỉ lệ âm tính thật}
+- {en: false negative rate, abbrev: FNR,   vi: tỉ lệ âm tính giả}
+
+# ── Validation ─────────────────────────────────────────────
+- {en: cross-validation, abbrev: CV, vi: kiểm định chéo}
+- {en: k-fold,           vi: k-mảnh / kiểm định chéo k-mảnh}
+- {en: bootstrap,        vi: bootstrap,  notes: giữ nguyên — thuật ngữ thống kê}
+
+# ── Ensemble + cây ─────────────────────────────────────────
+- {en: bagging,           vi: bagging / tập hợp bootstrap}
+- {en: boosting,          vi: boosting / tăng cường}
+- {en: ensemble,          vi: học kết hợp}
+- {en: random forest,     vi: rừng ngẫu nhiên}
+- {en: decision tree,     vi: cây quyết định}
+- {en: Gini impurity,     vi: độ tạp Gini}
+- {en: entropy,           vi: entropy}
+- {en: information gain,  vi: độ lợi thông tin}
+- {en: pruning,           vi: cắt tỉa}
+
+# ── Giảm chiều / phân cụm ──────────────────────────────────
+- {en: principal component analysis, abbrev: PCA, vi: phân tích thành phần chính}
+- {en: linear discriminant analysis, abbrev: LDA, vi: phân tích định biệt tuyến tính}
+- {en: quadratic discriminant analysis, abbrev: QDA, vi: phân tích định biệt bậc hai}
+- {en: t-SNE,         vi: t-SNE,             abbrev: t-SNE, aliases: [SNE], notes: giữ nguyên}
+- {en: k-means,       vi: k-means,           notes: giữ nguyên}
+- {en: centroid,      vi: tâm cụm}
+- {en: linkage,       vi: liên kết,          notes: single/complete/average linkage}
+- {en: elbow method,  vi: phương pháp Elbow / phương pháp điểm khuỷu}
+
+# ── Phi tuyến / spline / kernel ────────────────────────────
+- {en: spline,                    vi: spline,           notes: giữ nguyên}
+- {en: knot,                      vi: nút,              notes: trong spline}
+- {en: kernel,                    vi: hàm nhân / kernel}
+- {en: bandwidth,                 vi: băng thông,        notes: trong local regression}
+- {en: local regression,          vi: hồi quy cục bộ}
+- {en: generalized additive model, abbrev: GAM, vi: mô hình cộng tính tổng quát}
+- {en: step function,             vi: hàm bậc thang}
+- {en: polynomial regression,     vi: hồi quy đa thức}
+
+# ── Phi tuyến — Topic 6 mở rộng ────────────────────────────
+- {en: piecewise polynomial,      vi: đa thức từng mảnh,            notes: 'khớp đa thức bậc thấp riêng trên từng đoạn ngăn bởi các nút'}
+- {en: cubic spline,              vi: spline bậc ba,                notes: 'piecewise cubic + ràng buộc liên tục đến đạo hàm bậc 2 tại nút; DoF $= K + 4$'}
+- {en: natural cubic spline,      abbrev: NCS, vi: spline bậc ba tự nhiên,  notes: 'cubic spline + ràng buộc tuyến tính ngoài 2 nút biên; DoF $= K$, ổn định hơn ở biên'}
+- {en: regression spline,         vi: spline hồi quy,               notes: 'spline với số nút cố định chọn thủ công, ngược với smoothing spline'}
+- {en: smoothing spline,          vi: spline làm mượt,              notes: 'tối thiểu RSS + $\lambda \int (f^{\prime\prime})^2$; nghiệm là natural cubic spline với nút tại mọi điểm dữ liệu; chỉnh $\lambda$ thay vì chọn nút'}
+- {en: truncated power basis,     vi: hàm cơ sở luỹ thừa cắt cụt,   notes: '$h(x, \xi) = (x - \xi)_+^d$; cubic spline dùng $d = 3$'}
+- {en: basis function,            vi: hàm cơ sở,                    notes: '1, $x$, $x^2$, $x^3$ cho phần đa thức + truncated power cho mỗi nút'}
+- {en: Loess,                     vi: Loess,                        notes: 'giữ nguyên; viết tắt locally weighted scatterplot smoothing'}
+- {en: tri-cube kernel,           vi: kernel tri-cube,              notes: 'kernel mặc định trong Loess: $D(t) = (1 - |t|^3)^3$ trên $|t| \le 1$'}
+- {en: Epanechnikov kernel,       vi: kernel Epanechnikov,          notes: '$D(t) = 0{,}75(1 - t^2)$ trên $|t| \le 1$; kernel chuẩn'}
+- {en: span,                      vi: span / nhịp,                  notes: 'tỉ lệ dữ liệu trong cửa sổ Loess; thay cho bandwidth khi dùng nearest-neighbor kernel'}
+- {en: backfitting,               vi: backfitting,                  notes: 'giữ nguyên; thuật toán lặp khớp từng $f_j$ trong GAM trên phần dư riêng phần'}
+- {en: partial dependence plot,   abbrev: PDP, vi: biểu đồ phụ thuộc riêng phần,  notes: 'vẽ $f_j(X_j)$ theo $X_j$ trong GAM; cho thấy ảnh hưởng riêng từng biến'}
+- {en: effective degrees of freedom, vi: bậc tự do hiệu dụng,       notes: 'cho smoothing spline: $\mathrm{tr}(\mathbf{S}_\lambda)$ trong $[2, n]$'}
+- {en: parametric,                vi: tham số,                       notes: 'số tham số cố định bất kể $n$ — vd polynomial regression bậc cố định'}
+- {en: non-parametric,            vi: phi tham số,                   notes: 'số tham số hiệu dụng tăng theo $n$ — vd Loess, smoothing spline, k-NN'}
+- {en: link function,             vi: hàm liên kết,                  notes: 'trong GAM: $g(\mathbb{E}[Y \mid X]) = \beta_0 + \sum f_j(X_j)$; identity → hồi quy, logit → phân lớp'}
+
+# ── Lựa chọn mô hình ───────────────────────────────────────
+- {en: ridge regression,             vi: hồi quy ridge,                notes: hoặc "hồi quy điều chuẩn L2"}
+- {en: lasso,                        vi: lasso,                        notes: hoặc "hồi quy điều chuẩn L1"}
+- {en: best subset selection,        vi: lựa chọn tập con tốt nhất}
+- {en: forward stepwise selection,   vi: lựa chọn tiến từng bước}
+- {en: backward stepwise selection,  vi: lựa chọn lùi từng bước}
+
+# ── Phân phối / xác suất ───────────────────────────────────
+- {en: exponential family,    vi: họ phân phối mũ}
+- {en: canonical parameter,   vi: tham số chuẩn tắc}
+- {en: log-odds / logit,      vi: log-odds, notes: giữ nguyên}
+
+# ── Diễn giải mô hình ──────────────────────────────────────
+- {en: black-box,         vi: hộp đen}
+- {en: white-box,         vi: hộp trắng}
+- {en: interpretability,  vi: tính diễn giải}
+
+# ── Mô hình cụ thể ─────────────────────────────────────────
+- {en: support vector machine, abbrev: SVM, vi: máy vectơ hỗ trợ}
+- {en: k-Nearest Neighbors,    abbrev: k-NN, vi: k láng giềng gần nhất, aliases: [kNN, NN]}
+- {en: neural network,                       vi: mạng nơ-ron}
+- {en: deep neural network,                  vi: mạng nơ-ron sâu}
+- {en: Naïve Bayes,                          vi: Naïve Bayes,  notes: giữ nguyên tên — bộ phân lớp ngây thơ Bayes}
+- {en: Bayes classifier,                     vi: bộ phân lớp Bayes}
+
+# ── Validation / model selection mở rộng ───────────────────
+- {en: leave-one-out cross-validation, abbrev: LOOCV, vi: kiểm định chéo chừa một mẫu}
+- {en: Akaike information criterion,   abbrev: AIC,   vi: tiêu chí thông tin Akaike}
+- {en: Bayesian information criterion, abbrev: BIC,   vi: tiêu chí thông tin Bayes}
+- {en: out-of-bag error,               abbrev: OOB,   vi: sai số ngoài túi}
+
+# ── Dimensionality reduction mở rộng ───────────────────────
+- {en: multidimensional scaling,            abbrev: MDS, vi: chia tỷ lệ đa chiều}
+- {en: singular value decomposition,        abbrev: SVD, vi: phân rã giá trị suy biến}
+- {en: proportion of variance explained,    abbrev: PVE, vi: tỷ lệ phương sai được giải thích}
+- {en: eigenvalue,            vi: trị riêng}
+- {en: eigenvector,           vi: vectơ riêng}
+- {en: principal component,   vi: thành phần chính}
+- {en: biplot,                vi: biplot,  notes: giữ nguyên}
+
+# ── Clustering mở rộng ─────────────────────────────────────
+- {en: within-cluster sum of squares, abbrev: WCSS, vi: tổng bình phương trong cụm}
+- {en: Lloyd's algorithm,    vi: thuật toán Lloyd}
+- {en: silhouette score,     vi: điểm silhouette}
+- {en: gap statistic,        vi: thống kê Gap}
+- {en: dendrogram,           vi: cây phân cấp / dendrogram}
+- {en: k-medoids,            vi: k-medoids,  notes: giữ nguyên}
+- {en: Euclidean distance,   vi: khoảng cách Euclid}
+- {en: Manhattan distance,   vi: khoảng cách Manhattan}
+
+# ── SVM / kernels mở rộng ──────────────────────────────────
+- {en: radial basis function kernel,        abbrev: RBF,  vi: kernel hàm cơ sở xuyên tâm}
+- {en: reproducing kernel Hilbert space,    abbrev: RKHS, vi: không gian Hilbert kernel tái sinh}
+- {en: support vector,        vi: vectơ hỗ trợ}
+- {en: margin,                vi: lề}
+- {en: hyperplane,            vi: siêu phẳng}
+- {en: hinge loss,            vi: hàm mất mát hinge}
+- {en: kernel trick,          vi: thủ thuật kernel}
+- {en: one-vs-one,            vi: một-chọi-một}
+- {en: one-vs-rest,           vi: một-chọi-phần-còn-lại}
+- {en: Platt scaling,         vi: hiệu chỉnh Platt}
+
+# ── Linear regression mở rộng (Topic 2) ────────────────────
+- {en: residual standard error,   abbrev: RSE, vi: sai số chuẩn dư,  notes: 'ước lượng $\hat\sigma$ của độ lệch chuẩn nhiễu; $\sqrt{RSS/(n-p-1)}$'}
+- {en: explained sum of squares,  abbrev: ESS, vi: tổng bình phương được giải thích,  notes: '$\sum (\hat{y}_i - \bar{y})^2$ — biến thiên của giá trị dự đoán quanh trung bình'}
+- {en: false discovery rate,      abbrev: FDR, vi: tỉ lệ phát hiện sai,  notes: 'phương pháp Benjamini-Hochberg điều chỉnh đa kiểm định'}
+- {en: television channel,        abbrev: TV,  vi: kênh truyền hình, notes: 'cột TV trong dataset Advertising (ISLR); ngân sách quảng cáo theo kênh'}
+- {en: United States dollar,      abbrev: USD, vi: đô la Mỹ, notes: 'đơn vị tiền tệ trong các ví dụ ngân sách quảng cáo'}
+- {en: hat matrix,                          vi: ma trận chiếu, notes: 'còn gọi là projection matrix; H = X(X^T X)^(-1) X^T'}
+- {en: projection matrix,                   vi: ma trận chiếu}
+- {en: idempotent,                          vi: luỹ đẳng,  notes: 'tính chất H^2 = H của ma trận chiếu'}
+- {en: column space,                        vi: không gian cột}
+- {en: heteroscedasticity,                  vi: phương sai sai số không đồng đều}
+- {en: homoscedasticity,                    vi: phương sai sai số đồng đều}
+- {en: autocorrelation,                     vi: tự tương quan}
+- {en: weighted least squares,    abbrev: WLS, vi: bình phương tối thiểu có trọng số}
+- {en: outlier,                             vi: điểm ngoại lai}
+- {en: leverage point,                      vi: điểm có đòn bẩy cao}
+- {en: leverage statistic,                  vi: thống kê đòn bẩy}
+- {en: studentized residual,                vi: phần dư chuẩn hoá}
+- {en: confidence interval,       abbrev: CI, vi: khoảng tin cậy}
+- {en: prediction interval,       abbrev: PI, vi: khoảng dự đoán}
+- {en: partial F-test,                      vi: F-test riêng phần}
+- {en: nested model,                        vi: mô hình lồng nhau}
+- {en: multiple testing,                    vi: đa kiểm định}
+- {en: dummy variable,                      vi: biến giả}
+- {en: interaction term,                    vi: số hạng tương tác}
+- {en: surrogate variable,                  vi: biến thay thế}
+- {en: forward stepwise selection,          vi: lựa chọn tiến từng bước}
+- {en: backward stepwise selection,         vi: lựa chọn lùi từng bước}
+- {en: best subset selection,               vi: chọn tập con tốt nhất}
+- {en: elasticity,                          vi: độ co giãn,  notes: 'β · X/Y trong hồi quy log-log'}
+- {en: ceteris paribus,                     vi: 'giữ cố định các biến khác', notes: 'thuật ngữ Latin, có thể giữ nguyên trong câu hỏi nâng cao'}
+- {en: Best Linear Unbiased Estimator, abbrev: BLUE, vi: ước lượng tuyến tính không chệch tốt nhất}
+- {en: Gauss-Markov theorem,                vi: định lý Gauss-Markov}
+
+# ── Classification (Topic 3) mở rộng ──────────────────────
+- {en: sigmoid function,                vi: hàm sigmoid,  notes: 'còn gọi là hàm logistic; ánh xạ $\mathbb{R} \to (0, 1)$'}
+- {en: logit,                           vi: logit,  notes: 'log-odds = $\log(p/(1-p))$ — tuyến tính theo $X$ trong logistic regression'}
+- {en: log-odds,                        vi: log-odds,  notes: 'tên gọi khác của logit'}
+- {en: odds,                            vi: tỷ lệ chênh,  notes: '$p/(1-p)$ — tỉ số xác suất xảy ra / không xảy ra'}
+- {en: discriminant function,           vi: hàm biệt thức,  notes: 'còn gọi là hàm định biệt; $\delta_k(x)$ trong LDA/QDA'}
+- {en: masking,                         vi: hiện tượng che lấp,  notes: 'lớp bị "kẹp" giữa hai lớp khác khi linear regression cho $K > 2$'}
+- {en: confounder,                      vi: biến gây nhiễu}
+- {en: confounding,                     vi: hiện tượng gây nhiễu,  notes: 'làm hệ số đổi dấu khi thêm/bớt biến — vd Default dataset'}
+- {en: Simpson's paradox,               vi: nghịch lý Simpson,  notes: 'xu hướng tổng đảo ngược so với từng nhóm con'}
+- {en: stratification,                  vi: phân tầng,  notes: 'phân tích riêng theo biến gây nhiễu'}
+- {en: Type I error,                    vi: lỗi loại I,  notes: 'bác bỏ $H_0$ khi $H_0$ đúng = False Positive (FP)'}
+- {en: Type II error,                   vi: lỗi loại II,  notes: 'chấp nhận $H_0$ khi $H_0$ sai = False Negative (FN)'}
+- {en: pooled variance,                 vi: phương sai gộp,  notes: 'ước lượng $\hat\sigma^2$ chung trong LDA = $\frac{1}{n-K}\sum_k\sum_i(x_i-\hat\mu_k)^2$'}
+- {en: prior probability,               vi: xác suất tiên nghiệm,  notes: '$\pi_k = P(Y=k)$ — trước khi quan sát $X$'}
+- {en: posterior probability,           vi: xác suất hậu nghiệm,  notes: '$P(Y=k|X)$ — sau khi quan sát $X$'}
+- {en: precision-recall curve,  abbrev: PR, vi: đường cong precision-recall,  notes: 'thay thế ROC cho dữ liệu mất cân bằng'}
+- {en: sensitivity,                     vi: độ nhạy,  notes: 'còn gọi là recall; $TP/(TP+FN)$'}
+- {en: specificity,                     vi: độ đặc hiệu,  notes: '$TN/(TN+FP) = 1 - $FPR'}
+- {en: positive class,                  vi: lớp dương tính}
+- {en: negative class,                  vi: lớp âm tính}
+- {en: decision threshold,              vi: ngưỡng quyết định,  notes: 'cũng dùng "ngưỡng phân lớp"'}
+- {en: classification threshold,        vi: ngưỡng phân lớp}
+- {en: normalization constant,          vi: hằng số chuẩn hoá,  notes: 'mẫu số $\sum_l \pi_l f_l(x)$ trong công thức Bayes'}
+- {en: dominance,                       vi: tính ưu trội,  notes: 'một ROC curve dominates curve khác = nằm trên ở mọi điểm'}
+- {en: imbalanced data,                 vi: dữ liệu mất cân bằng}
+- {en: class imbalance,                 vi: mất cân bằng lớp}
+- {en: Newton-Raphson,                  vi: Newton-Raphson,  notes: 'phương pháp lặp tối ưu MLE; còn gọi IRLS'}
+- {en: iteratively reweighted least squares, abbrev: IRLS, vi: bình phương tối thiểu trọng số lặp}
+- {en: dominates (model A dominates B), vi: ưu trội hơn,  notes: 'A ưu trội B trên ROC = TPR(A) ≥ TPR(B) ở mọi FPR'}
+- {en: negative log-likelihood,         abbrev: NLL,  vi: âm log-likelihood,  notes: '$-\ell(\beta) = -\sum_i [y_i\log p_i + (1-y_i)\log(1-p_i)]$ — hàm mất mát cross-entropy nhị phân; tối thiểu hoá NLL ⇔ tối đa hoá likelihood'}
+- {en: Expectation-Maximization,        abbrev: EM,   vi: cực đại hoá kỳ vọng,  notes: 'thuật toán lặp tối ưu likelihood khi có biến ẩn (vd Gaussian Mixture)'}
+- {en: Type I (one-tailed Roman),       abbrev: I,    vi: I,  notes: 'Roman numeral allow-list cho cụm "lỗi loại I"; xuất hiện cùng Type II/III/IV trong stat.'}
+- {en: Type II (two-tailed Roman),      abbrev: II,   vi: II,  notes: 'Roman numeral allow-list cho cụm "lỗi loại II"; xuất hiện cùng Type I/III/IV trong stat.'}
+
+# ── Topic 4 (Generalization and Cross-Validation) mở rộng ──
+- {en: training error,                  vi: sai số huấn luyện,  notes: 'lỗi của mô hình trên tập huấn luyện; luôn lạc quan'}
+- {en: test error,                      vi: sai số kiểm thử,  notes: 'lỗi trên tập kiểm thử (test set); proxy của generalization error'}
+- {en: validation error,                vi: sai số kiểm định,  notes: 'lỗi trên tập kiểm định (validation set); dùng để chọn siêu tham số'}
+- {en: prediction error,                vi: sai số dự đoán,  notes: 'sai số kỳ vọng khi dự đoán điểm mới; ≈ test error'}
+- {en: generalization error,            vi: sai số tổng quát hóa,  notes: 'kỳ vọng lỗi trên phân phối dữ liệu thực; ước lượng qua test/CV error'}
+- {en: expected test error,             vi: sai số kiểm thử kỳ vọng,  notes: '$E[(y-\hat f(x))^2]$ phân rã thành $[\text{Bias}]^2 + \text{Var} + \sigma^2$'}
+- {en: bias-variance tradeoff,          vi: đánh đổi thiên lệch–phương sai,  notes: 'tradeoff cốt lõi giữa bias² và variance khi điều chỉnh độ phức tạp mô hình'}
+- {en: high bias,                       vi: thiên lệch cao,  notes: 'dấu hiệu của dưới khớp; mô hình quá đơn giản'}
+- {en: high variance,                   vi: phương sai cao,  notes: 'dấu hiệu của quá khớp; mô hình quá nhạy với tập huấn luyện'}
+- {en: model complexity,                vi: độ phức tạp mô hình,  notes: 'thường là số tham số / bậc đa thức / chiều sâu cây / ...'}
+- {en: holdout method,                  vi: phương pháp tập kiểm định đơn giản,  notes: 'chia 1 lần thành huấn luyện + kiểm định/kiểm thử'}
+- {en: validation set approach,         vi: phương pháp tập kiểm định,  notes: 'tương đương holdout chia 50/50 hoặc 70/30'}
+- {en: leave-one-out cross-validation, abbrev: LOOCV, vi: kiểm định chéo chừa một mẫu,  notes: 'mỗi lần giữ lại 1 điểm làm validation; chạy $n$ lần; bias thấp variance cao'}
+- {en: stratified k-fold,               vi: K-Fold phân tầng,  notes: 'mỗi fold giữ nguyên tỷ lệ lớp; dùng cho dữ liệu mất cân bằng'}
+- {en: repeated k-fold,                 vi: K-Fold lặp lại,  notes: 'lặp K-Fold nhiều lần với seed khác nhau; giảm phương sai ước lượng CV'}
+- {en: nested cross-validation,         vi: kiểm định chéo lồng nhau,  notes: 'vòng trong chọn siêu tham số, vòng ngoài ước lượng test error không thiên lệch'}
+- {en: time series cross-validation,    vi: kiểm định chéo chuỗi thời gian,  notes: 'expanding/sliding window; luôn train trên quá khứ, validate trên tương lai'}
+- {en: shuffle-split,                   vi: chia ngẫu nhiên lặp lại,  notes: 'mỗi lần chia mới; khác K-Fold ở chỗ tập validation có thể trùng giữa các lần'}
+- {en: group k-fold,                    vi: K-Fold theo nhóm,  notes: 'chia fold theo các nhóm phụ thuộc (vd cùng bệnh nhân); tránh leakage'}
+- {en: out-of-bag,             abbrev: OOB, vi: ngoài túi,  notes: 'phần dữ liệu không xuất hiện trong mẫu bootstrap; $\approx 36{,}8\%$ ($e^{-1}$) khi $n$ lớn'}
+- {en: in-bag,                          vi: trong túi,  notes: 'phần dữ liệu xuất hiện ít nhất 1 lần trong mẫu bootstrap; $\approx 63{,}2\%$ khi $n$ lớn'}
+- {en: data leakage,                    vi: rò rỉ dữ liệu,  notes: 'thông tin từ test/future lọt vào train; vd standardize toàn bộ trước CV'}
+- {en: standardize,                     vi: chuẩn hoá,  notes: 'biến đổi $z = (x - \mu) / \sigma$; nên fit scaler chỉ trên train mỗi fold'}
+- {en: learning curve,                  vi: đường cong học tập,  notes: 'trục hoành: số mẫu huấn luyện; trục tung: sai số train + validation'}
+- {en: one-standard-error rule, abbrev: 1-SE, vi: quy tắc một sai số chuẩn,  notes: 'chọn mô hình đơn giản nhất nằm trong $\pm 1$ sai số chuẩn quanh mô hình tốt nhất'}
+- {en: interpolation,                   vi: nội suy,  notes: 'dự đoán tại điểm trong vùng dữ liệu huấn luyện'}
+- {en: extrapolation,                   vi: ngoại suy,  notes: 'dự đoán tại điểm ngoài vùng dữ liệu huấn luyện; thường kém tin cậy'}
+- {en: oscillation,                     vi: dao động,  notes: 'mô hình bậc cao thường dao động mạnh ở vùng biên (Runge phenomenon)'}
+- {en: outlier,                         vi: ngoại lệ,  notes: 'điểm dữ liệu nằm xa các điểm khác; đặc biệt ảnh hưởng LOOCV'}
+- {en: irreducible,                     vi: không thể giảm,  notes: 'phần $\sigma^2$ trong phân rã sai số; do nhiễu nội tại của dữ liệu'}
+- {en: 0.632 bootstrap,                 vi: bootstrap 0,632,  notes: 'cải tiến của bootstrap trực tiếp; $0{,}368 \cdot \text{train err} + 0{,}632 \cdot \text{OOB err}$'}
+- {en: pattern,                         vi: mẫu hình,  notes: 'cấu trúc / quy luật trong dữ liệu mà mô hình cần học; user prefer "mẫu hình (pattern)"'}
+
+# ── Topic 4 Slice B (coverage gaps) ──
+- {en: pipeline,                        vi: quy trình (pipeline),  notes: 'scikit-learn `Pipeline` wrap nhiều bước; tránh leakage khi dùng trong CV'}
+- {en: expanding window,                vi: cửa sổ mở rộng,  notes: 'TimeSeriesSplit variant: tập huấn luyện tích lũy lớn dần qua các fold'}
+- {en: sliding window,                  vi: cửa sổ trượt,  notes: 'TimeSeriesSplit variant: tập huấn luyện kích thước cố định, trượt theo thời gian'}
+- {en: concept drift,                   vi: trôi khái niệm,  notes: 'phân phối dữ liệu thay đổi theo thời gian; sliding window phù hợp hơn expanding'}
+- {en: high variance,                   vi: phương sai cao,  notes: 'đặc trưng quá khớp; learning curve có gap lớn giữa train + val'}
+- {en: L1 regularization,               vi: điều chuẩn L1 (Lasso),  notes: 'phạt $\lambda \sum_j |\beta_j|$; tạo sparsity, ép một số $\hat\beta_j = 0$'}
+- {en: L2 regularization,               vi: điều chuẩn L2 (Ridge),  notes: 'phạt $\lambda \sum_j \beta_j^2$; co dần $\hat\beta_j$ về 0 nhưng hiếm triệt tiêu'}
+- {en: Lasso,                           vi: Lasso,  notes: 'tên riêng; điều chuẩn L1 cho hồi quy tuyến tính'}
+- {en: Ridge,                           vi: Ridge,  notes: 'tên riêng; điều chuẩn L2 cho hồi quy tuyến tính'}
+- {en: sparsity,                        vi: tính thưa,  notes: 'nhiều hệ số bằng đúng 0; tương đương feature selection'}
+- {en: shrinkage,                       vi: co hệ số,  notes: 'co hệ số về 0 (Ridge); không nhất thiết triệt tiêu'}
+- {en: feature selection,               vi: chọn đặc trưng,  notes: 'L1 tạo feature selection ngầm qua sparsity; cũng có thể là bước tiền xử lý riêng'}
+
+# ── Topic 5 (Model Selection and Regularization) mở rộng ──
+- {en: standard error,                  abbrev: SE,  vi: sai số chuẩn,  notes: 'độ phân tán ước lượng qua nhiều mẫu; dùng trong 1-SE rule'}
+- {en: standard deviation,              abbrev: SD,  vi: độ lệch chuẩn,  notes: 'phân biệt với SE — SD là độ phân tán dữ liệu, SE là độ phân tán ước lượng'}
+- {en: variance inflation factor,       abbrev: VIF, vi: hệ số phóng đại phương sai,  notes: 'VIF > 5 hoặc 10 → đa cộng tuyến đáng kể'}
+- {en: information criterion,           abbrev: IC,  vi: tiêu chí thông tin,  notes: 'ô bao trùm AIC / BIC / Cp'}
+- {en: soft thresholding,               vi: ngưỡng mềm,  notes: 'closed-form Lasso khi $X = I$: $\hat\beta_j^L = \mathrm{sign}(y_j)\max(|y_j| - \lambda/2, 0)$'}
+- {en: Tikhonov regularization,         vi: điều chuẩn Tikhonov,  notes: 'tên gốc của Ridge — cộng $\lambda I$ vào $X^T X$'}
+- {en: effective degrees of freedom,    vi: bậc tự do hiệu dụng,  notes: 'Ridge: $\mathrm{df}(\lambda) = \sum_j d_j^2/(d_j^2+\lambda)$ với $d_j$ là singular values'}
+- {en: regularization path,             vi: đường điều chuẩn,  notes: 'biểu đồ $\hat\beta_j(\lambda)$ — trục hoành $\lambda$, trục tung hệ số'}
+- {en: coefficient path,                vi: đường hệ số,  notes: 'tên gọi khác của regularization path'}
+- {en: curse of dimensionality,         vi: lời nguyền chiều cao,  notes: 'sai số dự đoán tăng khi $p$ lớn dù dùng điều chuẩn'}
+- {en: multicollinearity,               vi: đa cộng tuyến,  notes: 'biến tương quan cao → $X^T X$ gần suy biến → OLS bất ổn; Ridge khắc phục bằng cộng $\lambda I$'}
+- {en: best subset selection,           vi: lựa chọn tập con tốt nhất,  notes: 'duyệt $2^p$ tổ hợp; chỉ khả thi khi $p$ nhỏ'}
+- {en: elastic net,                     vi: elastic net,  notes: 'kết hợp $L_1 + L_2$: $\alpha\sum|\beta_j| + (1-\alpha)\sum\beta_j^2$ — giữ nguyên tên'}
+- {en: dense model,                     vi: mô hình dày,  notes: 'nhiều hệ số nhỏ khác $0$ — Ridge ưu thế hơn Lasso'}
+- {en: sparse model,                    vi: mô hình thưa,  notes: 'chỉ vài hệ số khác $0$ — Lasso ưu thế hơn Ridge'}
+- {en: tuning parameter,                vi: tham số điều chỉnh,  notes: '$\lambda$ trong Ridge/Lasso, $\alpha$ trong Elastic Net; chọn bằng CV'}
+
+# ── Topic 4 Slice C (review fixes — figure-related abbrevs) ──
+- {en: Miles Per Gallon,        abbrev: MPG, vi: dặm trên gallon,  notes: 'biến mục tiêu trong dataset ISLR Auto; đo tiêu hao nhiên liệu'}
+- {en: Introduction to Statistical Learning, abbrev: ISLR, vi: Giới thiệu Học thống kê,  notes: 'textbook + tập dataset đính kèm (Auto, Default, ...)'}
+- {en: cross-validation,        abbrev: CV, vi: kiểm định chéo,  notes: 'viết tắt phổ biến trong câu trắc nghiệm; cần intro per-question theo §3.1'}
+
+# ── Topic 7 (Dimensionality Reduction / PCA) mở rộng ──
+- {en: loading vector,                  vi: vector tải,  notes: 'vector $\boldsymbol{\phi}_m$ — hệ số của các biến gốc trong thành phần chính thứ $m$; trên biplot vẽ mũi tên từ gốc'}
+- {en: principal component score,       vi: điểm số thành phần,  notes: 'toạ độ $z_{im}$ của quan sát $i$ trên thành phần chính thứ $m$; chiếu lên biplot'}
+- {en: biplot,                          vi: biplot,  notes: 'biểu đồ hai trục PC1/PC2; vừa hiển thị điểm số quan sát vừa loading vector của biến — chữ "bi"'}
+- {en: scree plot,                      vi: scree plot,  notes: 'biểu đồ trị riêng giảm dần; tìm "điểm khuỷu" (elbow) để chọn số thành phần'}
+- {en: elbow point,                     vi: điểm khuỷu,  notes: 'điểm gãy mạnh trên scree plot — số thành phần giữ trước khuỷu'}
+- {en: eigendecomposition,              vi: phân rã trị riêng,  notes: 'biểu diễn $\mathbf{S} = \mathbf{V}\mathbf{\Lambda}\mathbf{V}^\top$; PCA = eigendecomposition của ma trận hiệp phương sai'}
+- {en: standardization,                 vi: chuẩn hoá độ lệch chuẩn,  notes: 'biến đổi mỗi biến về phương sai 1 (z-score); cần thiết khi các biến khác thang đo trong PCA'}
+- {en: Lagrangian,                      vi: hàm Lagrange,  notes: 'tối ưu có ràng buộc: $\mathcal{L} = f - \lambda(g - c)$; cho PCA bài toán cực đại $\boldsymbol{\phi}^\top \mathbf{S}\boldsymbol{\phi}$ với $\|\boldsymbol{\phi}\|=1$'}
+- {en: deflation,                       vi: làm phẳng,  notes: 'sau khi tìm PC1, tìm PC2 trên không gian trực giao với PC1; tổng quát hóa cho PC$_m$'}
+- {en: reconstruction error,            vi: sai số tái tạo,  notes: 'tổng bình phương khoảng cách $\sum_i \|\mathbf{x}_i - \hat{\mathbf{x}}_i\|^2$ khi giữ $k$ thành phần đầu; bằng $\sum_{m=k+1}^{p}\lambda_m$'}
+- {en: Sammon mapping,                  vi: ánh xạ Sammon,  notes: 'biến thể MDS chia hạng tử cho khoảng cách gốc; ưu tiên giữ chính xác cặp gần nhau'}
+- {en: Kruskal-Shepard,                 vi: Kruskal–Shepard,  notes: 'hàm chi phí MDS chuẩn — tổng bình phương sai số khoảng cách trên mọi cặp điểm trọng số như nhau'}
+- {en: non-metric MDS,                  vi: MDS phi tham số,  notes: 'biến thể MDS chỉ giữ thứ hạng khoảng cách, không cần giá trị tuyệt đối'}
+- {en: Stochastic Neighbor Embedding,   abbrev: SNE,  vi: nhúng láng giềng ngẫu nhiên,  notes: 'tiền thân của t-SNE; dùng Gauss cho cả P và Q, tối ưu KL divergence'}
+- {en: crowding problem,                vi: vấn đề chật chội,  notes: 't-SNE: chiều thấp không đủ chỗ cho mọi khoảng cách → các điểm trung bình/xa bị dồn vào trung tâm; t-distribution đuôi nặng giải quyết'}
+- {en: Kullback-Leibler divergence,     vi: phân kỳ Kullback–Leibler,  notes: 'đo "khoảng cách" giữa hai phân phối: $\mathrm{KL}(P\|Q) = \sum p_j \log p_j/q_j$; bất đối xứng, hàm mục tiêu của SNE / t-SNE'}
+- {en: perplexity,                      vi: perplexity,  notes: 't-SNE: $\mathrm{Perp}(P_i) = 2^{H(P_i)}$ — số láng giềng hiệu dụng; khuyến nghị 5–50; điều khiển độ rộng $\sigma_i$'}
+- {en: effective neighbors,             vi: láng giềng hiệu dụng,  notes: 'số điểm "có ý nghĩa" quanh một điểm trong phân phối $P_i$ — tỷ lệ với perplexity'}
+- {en: Student-t distribution,          vi: phân phối Student-t,  notes: 'phân phối có đuôi nặng hơn Gauss; t-SNE dùng Student-t (1 df) ở chiều thấp'}
+- {en: heavy-tailed distribution,       vi: phân phối đuôi nặng,  notes: 'mật độ giảm chậm khi xa trung tâm; cho phép các giá trị xa trung tâm có xác suất không quá nhỏ'}
+- {en: out-of-sample extension,         vi: nhúng điểm mới,  notes: 'với PCA: chỉ cần nhân ma trận chiếu; với t-SNE: không có hàm chiếu tường minh, phải xấp xỉ'}
+- {en: parametric t-SNE,                vi: t-SNE tham số,  notes: 'biến thể t-SNE huấn luyện mạng nơ-ron làm hàm chiếu, hỗ trợ điểm mới'}
+- {en: Uniform Manifold Approximation and Projection, abbrev: UMAP, vi: UMAP,  notes: 'phương pháp giảm chiều thay thế t-SNE; nhanh hơn, bảo toàn cấu trúc toàn cục tốt hơn'}
+- {en: KKT conditions,                  abbrev: KKT,  vi: điều kiện Karush–Kuhn–Tucker,  notes: 'điều kiện cần cho cực trị có ràng buộc; tổng quát hóa của Lagrange với bất phương trình'}
+
+# ── Topic 8 (Clustering) mở rộng ──
+- {en: Hierarchical Agglomerative Clustering, abbrev: HAC, vi: phân cụm phân cấp tích tụ, notes: 'tên thuật toán; user dùng abbrev này thay vì gọi đủ tên dài'}
+- {en: Gaussian Mixture Model,            abbrev: GMM,  vi: mô hình hỗn hợp Gauss,  notes: 'phân cụm mềm: mỗi điểm có xác suất hậu nghiệm thuộc về từng thành phần Gauss'}
+- {en: convolutional neural network,      abbrev: CNN,  vi: mạng nơ-ron tích chập,  notes: 'kiến trúc deep learning cho dữ liệu ảnh; trong topic 8 dùng làm bộ trích xuất đặc trưng cho HAC'}
+- {en: 'CIFAR-10 image dataset',          abbrev: 'CIFAR-10',  aliases: [CIFAR], vi: 'tập ảnh CIFAR-10',  notes: 'benchmark 10 lớp ảnh 32×32; Canadian Institute For Advanced Research; alias CIFAR vì audit tokenize tách ở "-"'}
+
+# ── Topic 9 (Trees and Forests) mở rộng ──
+- {en: Classification and Regression Trees, abbrev: CART, vi: cây phân loại và hồi quy, notes: 'tên thuật toán cây quyết định chuẩn (Breiman 1984); tên gốc giữ "phân loại"; concept tổng quát "classification tree" dịch là "cây phân lớp" — entry riêng dưới'}
+- {en: classification tree,                              vi: cây phân lớp, notes: 'concept tổng quát; nhất quán với glossary "classification → phân lớp" (Topic 3)'}
+- {en: regression tree,                                  vi: cây hồi quy}
+- {en: out-of-bag,                        abbrev: OOB,  vi: ngoài bootstrap, notes: 'quan sát không thuộc bootstrap sample của một cây — dùng làm test set nội bộ trong bagging/RF'}
+- {en: residual sum of squares,           abbrev: RSS,  vi: tổng bình phương phần dư, notes: 'tiêu chí split của regression tree'}
+- {en: random forest,                                   vi: rừng ngẫu nhiên, notes: 'Bagging + chọn ngẫu nhiên $m$ đặc trưng tại mỗi split'}
+- {en: bootstrap aggregating,                            vi: bagging (tập hợp bootstrap), notes: 'huấn luyện $B$ cây trên bootstrap samples khác nhau, kết hợp dự đoán; thường gọi tắt là Bagging trong tiếng Việt'}
+- {en: cost complexity,                                  vi: độ phức tạp chi phí, notes: 'tham số $\alpha$ trong cost-complexity pruning $\sum \text{RSS} + \alpha|T|$; từ slide 08; KHÔNG đảo ngữ thành "chi phí phức tạp"'}
+- {en: impurity,                                         vi: tạp chất, notes: 'chỉ số đo độ "lẫn lộn" lớp tại nút phân lớp; bao gồm Gini, entropy, classification error'}
+- {en: pruning,                                          vi: cắt tỉa, notes: 'pre-pruning → cắt tỉa trước; post-pruning → cắt tỉa sau (theo slide 08)'}
+- {en: information gain,                                 vi: thông tin thu được, notes: 'mức giảm tạp chất sau một phép tách; $H_{\text{parent}} - \sum w_k H_k$'}
+- {en: classification error,                             vi: lỗi phân lớp, notes: '$E = 1 - \max_k \hat{p}_k$ tại nút lá; ít nhạy hơn Gini/entropy nên ít dùng làm split criterion'}
+- {en: interaction depth,                                vi: độ sâu tương tác, notes: 'tham số $d$ trong boosting; $d = 1$ tạo decision stumps cộng tính (additive model không tương tác giữa biến)'}
+- {en: shrinkage,                                        vi: co rút, notes: 'tham số $\lambda$ trong boosting điều chỉnh tốc độ học; mỗi cây mới đóng góp $\lambda$ vào dự đoán; trùng en với glossary chính (entry "co hệ số" dùng cho ridge/regularization context)', aliases: [learning rate]}
+
+# ── Topic 9 (SVM) extras phát sinh từ slide ──────────────
+- {en: hard margin,                vi: lề cứng,                    notes: 'SVM cổ điển không cho phép vi phạm; nhạy với điểm ngoại lai'}
+- {en: soft margin,                vi: lề mềm,                     notes: 'cho phép $\epsilon_i \ge 0$ vi phạm có ngân sách'}
+- {en: slack variable,             vi: biến lỏng,                  notes: '$\epsilon_i \ge 0$ trong lề mềm'}
+- {en: budget,                     vi: ngân sách,                  notes: 'ngân sách vi phạm $C$ trong ISLR; sklearn dùng $C$ ngược lại'}
+- {en: primal,                     vi: nguyên thuỷ,                notes: 'dạng nguyên thuỷ của bài toán tối ưu — đối lập với dual'}
+- {en: dual,                       vi: đối ngẫu,                   notes: 'dạng đối ngẫu Lagrangian; tham số là $\alpha_i$ thay vì $\beta$'}
+- {en: Lagrange multiplier,        vi: hệ số Lagrange,             notes: '$\alpha_i \ge 0$ gắn với mỗi ràng buộc; ký hiệu khác: multiplier'}
+- {en: complementary slackness,    vi: độ chùng bù trừ,            notes: 'KKT: $\alpha_i > 0 \Leftrightarrow$ ràng buộc kích hoạt $\Leftrightarrow$ vector hỗ trợ'}
+- {en: stationarity,               vi: điều kiện dừng,             notes: 'KKT: $\nabla_\beta L = 0 \Rightarrow \beta = \sum \alpha_i y_i x_i$'}
+- {en: scaler,                     vi: bộ chuẩn hoá,               notes: 'object thực thi standardize trong sklearn (StandardScaler)'}
+- {en: transform,                  vi: biến đổi,                   notes: 'áp dụng phép biến đổi đã khớp lên dữ liệu; sklearn `transform()`'}
+- {en: feature map,                vi: ánh xạ đặc trưng,           notes: '$\Phi: \mathbb{R}^p \to \Psi$ — đưa dữ liệu vào không gian mở rộng'}
+- {en: robust,                     vi: ổn định,                    notes: 'mô hình ổn định khi dữ liệu nhiễu nhẹ; tránh dùng "vững chắc" để khỏi nhầm với "robust statistics"'}
+- {en: must-have,                  vi: bắt buộc,                   notes: 'phân biệt với "best practice" → khuyến nghị/thực hành tốt'}
+- {en: data leakage,               vi: rò rỉ dữ liệu,              notes: 'fit scaler trên toàn bộ dữ liệu trước khi chia CV → bias optimistic'}
+- {en: quadratic programming,      abbrev: QP,                     vi: quy hoạch bậc hai,        notes: 'mục tiêu $\tfrac{1}{2}x^\top Q x + c^\top x$, ràng buộc tuyến tính; lồi khi $Q$ xác định dương; SVM ở dạng nguyên thuỷ là convex QP'}
+- {en: convex optimization,                                       vi: tối ưu lồi,                notes: 'tổng quát hoá QP, LP; có thuật toán hiệu quả tìm nghiệm toàn cục'}
+
+# Note: ký hiệu một chữ (C, K, γ, λ) cố ý không có `abbrev` để tránh audit
+# noise — chúng quá ngắn và phổ biến trong prose toán học.
