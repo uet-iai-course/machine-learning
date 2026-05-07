@@ -292,7 +292,7 @@
           <h1>
             <span class="text-light">3.</span><br />
             Bộ phân lớp vector hỗ trợ<br>
-            <span style="font-size:0.5em;color:#555;">(Support Vector Classifier — lề mềm)</span>
+            <span style="font-size:0.5em;color:#555;">(Support Vector Classifier)</span>
           </h1>
         </section>
 
@@ -332,7 +332,7 @@
         <!-- p.17a: Bài toán tối ưu lề mềm -->
         <section style="font-size: 0.76em;">
           <h2>Bài toán tối ưu lề mềm</h2>
-          <p style="margin-top:0;">Mỗi điểm được gán một <span class="keyword">biến lỏng</span>
+          <p style="margin-top:0;">Mỗi điểm được gán một <span class="keyword">biến bù / biến lỏng</span>
             (slack variable) \(\epsilon_i \ge 0\) đo độ vi phạm lề:</p>
           <div
             style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:10px 18px;margin-top:8px;">
@@ -349,7 +349,7 @@
 
         <!-- p.17b: Ý nghĩa ngân sách C -->
         <section style="font-size: 0.8em;">
-          <h2>Ngân sách \(C\) điều khiển "độ khoan dung"</h2>
+          <h2>Ngân sách \(C\): "độ khoan dung"</h2>
           <p style="margin-top:0;">\(C\) là <span class="keyword">tổng quota</span> vi phạm
             trên toàn tập huấn luyện:</p>
           <ul style="margin-top:8px;line-height:1.8em;">
@@ -515,7 +515,7 @@
           <ul style="margin-top:6px;line-height:1.45em;">
             <li><strong>Điều kiện dừng</strong> ⇒ \(\beta\) tái diễn qua \(\alpha\):
               \(\;\beta = \sum_{i=1}^{n} \alpha_i y_i x_i\).</li>
-            <li><strong>Độ chùng bù trừ</strong> ⇒ \(\alpha_i > 0 \Leftrightarrow\) ràng buộc kích hoạt
+            <li><strong>Độ bù bổ sung</strong> ⇒ \(\alpha_i > 0 \Leftrightarrow\) ràng buộc kích hoạt
               \(\Leftrightarrow x_i\) là <span class="keyword">vector hỗ trợ</span>; phần lớn
               \(\alpha_i = 0\).</li>
           </ul>
