@@ -38,7 +38,7 @@
                 ưu</span>
             </li>
             <li>Bộ phân lớp vector hỗ trợ <a href="#soft-margin">→</a><br>
-              <span style="color:#888;font-weight:normal;font-size:0.5em;">Lề mềm, biến lỏng, ngân sách C</span>
+              <span style="color:#888;font-weight:normal;font-size:0.5em;">Lề mềm, biến bù, ngân sách C</span>
             </li>
             <li>SVM phi tuyến và Kernel <a href="#kernel">→</a><br>
               <span style="color:#888;font-weight:normal;font-size:0.5em;">Ánh xạ đặc trưng, thủ thuật kernel, RBF</span>
@@ -333,17 +333,17 @@
         <section style="font-size: 0.76em;">
           <h2>Bài toán tối ưu lề mềm</h2>
           <p style="margin-top:0;">Mỗi điểm được gán một <span class="keyword">biến bù / biến lỏng</span>
-            (slack variable) \(\epsilon_i \ge 0\) đo độ vi phạm lề:</p>
+            (slack variable) \(\xi_i \ge 0\) đo độ vi phạm lề:</p>
           <div
             style="background:#fff8e1;border:1.5px solid #d4a017;border-radius:10px;padding:10px 18px;margin-top:8px;">
             \[ \max_{\beta, M} M \quad \text{s.t.} \quad \sum_j \beta_j^2 = 1 \]
-            \[ y_i(\beta_0 + \beta \cdot x_i) \ge M(1 - \epsilon_i), \quad
-            \epsilon_i \ge 0, \quad \sum_i \epsilon_i \le C \]
+            \[ y_i(\beta_0 + \beta \cdot x_i) \ge M(1 - \xi_i), \quad
+            \xi_i \ge 0, \quad \sum_i \xi_i \le C \]
           </div>
           <ul style="margin-top:12px;line-height:1.8em;">
-            <li>\(\epsilon_i = 0\): điểm nằm đúng phía lề</li>
-            <li>\(0 < \epsilon_i < 1\): sai phía lề nhưng vẫn đúng phía siêu phẳng</li>
-            <li>\(\epsilon_i > 1\): sai phía siêu phẳng — phân lớp sai</li>
+            <li>\(\xi_i = 0\): điểm nằm đúng phía lề</li>
+            <li>\(0 < \xi_i < 1\): sai phía lề nhưng vẫn đúng phía siêu phẳng</li>
+            <li>\(\xi_i > 1\): sai phía siêu phẳng — phân lớp sai</li>
           </ul>
         </section>
 
@@ -354,7 +354,7 @@
             trên toàn tập huấn luyện:</p>
           <ul style="margin-top:8px;line-height:1.8em;">
             <li>\(C\) là <strong>siêu tham số</strong>, không học từ dữ liệu</li>
-            <li>Số điểm bị phân lớp sai không vượt quá \(C\) (vì mỗi điểm như vậy đóng \(\epsilon_i > 1\))</li>
+            <li>Số điểm bị phân lớp sai không vượt quá \(C\) (vì mỗi điểm như vậy đóng \(\xi_i > 1\))</li>
             <li>\(C\) lớn → cho phép nhiều vi phạm → lề rộng, mô hình ổn định hơn</li>
             <li>\(C\) nhỏ → ít vi phạm → lề hẹp, mô hình nhạy hơn với từng điểm</li>
           </ul>
@@ -429,14 +429,14 @@
             <div style="border:2px solid #4a90d9;border-radius:10px;padding:10px 14px;">
               <p style="margin:0;font-weight:bold;color:#2c6ea3;">Dạng bài giảng / ISLR</p>
               <p style="margin:6px 0 0;">\(\displaystyle \max_{\beta, M} M\) &nbsp;s.t.
-                \(\|\beta\| = 1, \ y_i(\beta_0 + \beta \cdot x_i) \ge M(1 - \epsilon_i)\)</p>
+                \(\|\beta\| = 1, \ y_i(\beta_0 + \beta \cdot x_i) \ge M(1 - \xi_i)\)</p>
               <p style="margin:6px 0 0;color:#555;">Lề \(M\) hiện diện <strong>trực tiếp</strong> →
                 ý nghĩa hình học rõ.</p>
             </div>
             <div style="border:2px solid #e8732a;border-radius:10px;padding:10px 14px;">
               <p style="margin:0;font-weight:bold;color:#e8732a;">Dạng ESL / sklearn</p>
-              <p style="margin:6px 0 0;">\(\displaystyle \min_{\beta} \tfrac{1}{2}\|\beta\|^2 + C\!\sum_i \epsilon_i\)
-                &nbsp;s.t. \(y_i(\beta_0 + \beta \cdot x_i) \ge 1 - \epsilon_i\)</p>
+              <p style="margin:6px 0 0;">\(\displaystyle \min_{\beta} \tfrac{1}{2}\|\beta\|^2 + C\!\sum_i \xi_i\)
+                &nbsp;s.t. \(y_i(\beta_0 + \beta \cdot x_i) \ge 1 - \xi_i\)</p>
               <p style="margin:6px 0 0;color:#555;">Cố định lề bằng 1, minh hoạ qua \(\|\beta\|\) →
                 quen thuộc trong code.</p>
             </div>
@@ -453,31 +453,31 @@
           <h2>Suy ra bài toán đối ngẫu — 3 bước</h2>
           <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
           <p style="margin-top:0;">Xuất phát từ <em>dạng nguyên thuỷ</em> (lề mềm, ESL):
-            \(\min \tfrac{1}{2}\|\beta\|^2 + C\sum_i \epsilon_i\) s.t.
-            \(y_i(\beta_0 + \beta\cdot x_i) \ge 1 - \epsilon_i,\ \epsilon_i \ge 0\).</p>
+            \(\min \tfrac{1}{2}\|\beta\|^2 + C\sum_i \xi_i\) s.t.
+            \(y_i(\beta_0 + \beta\cdot x_i) \ge 1 - \xi_i,\ \xi_i \ge 0\).</p>
           <ol style="margin-top:4px;line-height:1.35em;">
             <li><strong>Bước 1 — Lagrangian.</strong> Hai ràng buộc trên mỗi điểm:
-              \(y_i(\beta_0 + \beta\cdot x_i) \ge 1 - \epsilon_i\) và \(\epsilon_i \ge 0\)
+              \(y_i(\beta_0 + \beta\cdot x_i) \ge 1 - \xi_i\) và \(\xi_i \ge 0\)
               → mỗi ràng buộc gắn 1 hệ số Lagrange, ký hiệu \(\alpha_i\) và \(\mu_i\)
               (đều \(\ge 0\)). Tổng \(2n\) hệ số:
-              \[ L = \tfrac{1}{2}\|\beta\|^2 + C\!\sum_i \epsilon_i
-                 - \sum_i \alpha_i [y_i(\beta_0 + \beta\cdot x_i) - 1 + \epsilon_i]
-                 - \sum_i \mu_i \epsilon_i \]
+              \[ L = \tfrac{1}{2}\|\beta\|^2 + C\!\sum_i \xi_i
+                 - \sum_i \alpha_i [y_i(\beta_0 + \beta\cdot x_i) - 1 + \xi_i]
+                 - \sum_i \mu_i \xi_i \]
             </li>
             <li><strong>Bước 2 — điều kiện dừng (stationarity).</strong> Đạo hàm \(L\)
               theo biến nguyên thuỷ \(=0\):
               \(\;\partial_\beta L = 0 \Rightarrow \beta = \sum_i \alpha_i y_i x_i\);
               \(\;\partial_{\beta_0} L = 0 \Rightarrow \sum_i \alpha_i y_i = 0\);
-              \(\;\partial_{\epsilon_i} L = 0 \Rightarrow \alpha_i + \mu_i = C\).
+              \(\;\partial_{\xi_i} L = 0 \Rightarrow \alpha_i + \mu_i = C\).
               Vì \(\alpha_i, \mu_i \ge 0\) nên \(0 \le \alpha_i \le C\).</li>
             <li><strong>Bước 3 — Thay vào \(L\):</strong> dùng \(\beta = \sum \alpha_i y_i x_i\)
-              và các đẳng thức trên, các số hạng chứa \(\beta, \beta_0, \epsilon, \mu\)
+              và các đẳng thức trên, các số hạng chứa \(\beta, \beta_0, \xi, \mu\)
               <em>biến mất</em>. Còn lại bài toán chỉ theo \(\alpha\) (slide kế).</li>
           </ol>
           <aside class="notes">Bước 3 chi tiết: thay \(\beta\) vào \(\tfrac{1}{2}\|\beta\|^2\) cho
             \(\tfrac{1}{2}\sum_{ij} \alpha_i \alpha_j y_i y_j \langle x_i, x_j \rangle\); thay \(\beta\)
             vào \(\sum_i \alpha_i y_i \beta\cdot x_i\) cho cùng tổng; chúng triệt tiêu một nửa.
-            Số hạng \(\beta_0\) biến mất do \(\sum \alpha_i y_i = 0\). Các số hạng \(\epsilon_i\)
+            Số hạng \(\beta_0\) biến mất do \(\sum \alpha_i y_i = 0\). Các số hạng \(\xi_i\)
             triệt tiêu do \(C - \alpha_i - \mu_i = 0\). Còn \(\sum_i \alpha_i\). Kết quả: max của
             \(\sum_i \alpha_i - \tfrac{1}{2}\sum_{ij} \alpha_i \alpha_j y_i y_j \langle x_i, x_j \rangle\).</aside>
         </section>
@@ -913,6 +913,10 @@
             <li>Chỉ điểm ngoài ống mới là vector hỗ trợ — tương tự bài toán phân lớp</li>
             <li>Có thể kết hợp với kernel để có hồi quy phi tuyến</li>
           </ul>
+          <p style="margin-top:8px;color:#888;font-size:0.85em;">
+            <em>Lưu ý:</em> \(\epsilon\) ở đây là <strong>bán kính ống</strong> (chuẩn Vapnik / sklearn), khác
+            với biến bù \(\xi_i\) ở lề mềm phân lớp.
+          </p>
         </section>
       </section>
 
