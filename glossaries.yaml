@@ -411,7 +411,7 @@
 # ── Topic 9 (SVM) extras phát sinh từ slide ──────────────
 - {en: hard margin,                vi: lề cứng,                    notes: 'SVM cổ điển không cho phép vi phạm; nhạy với điểm ngoại lai'}
 - {en: soft margin,                vi: lề mềm,                     notes: 'cho phép $\epsilon_i \ge 0$ vi phạm có ngân sách'}
-- {en: slack variable,             vi: biến lỏng,                  notes: '$\epsilon_i \ge 0$ trong lề mềm'}
+- {en: slack variable,             vi: biến bù,                    aliases: [biến lỏng], notes: 'slide dùng $\xi_i \ge 0$ (chuẩn ESL/Vapnik); ISLR dùng $\epsilon_i$ — tránh trùng với nhiễu $\varepsilon$ ở hồi quy và ống $\epsilon$ ở SVR'}
 - {en: budget,                     vi: ngân sách,                  notes: 'ngân sách vi phạm $C$ trong ISLR; sklearn dùng $C$ ngược lại'}
 - {en: primal,                     vi: nguyên thuỷ,                notes: 'dạng nguyên thuỷ của bài toán tối ưu — đối lập với dual'}
 - {en: dual,                       vi: đối ngẫu,                   notes: 'dạng đối ngẫu Lagrangian; tham số là $\alpha_i$ thay vì $\beta$'}
