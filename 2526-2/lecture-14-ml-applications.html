@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Bài 14: Học máy trong thực tế</title>
+<link rel="stylesheet" href="revealjs/dist/reset.css" />
+<link rel="stylesheet" href="revealjs/dist/reveal.css" />
+<link rel="stylesheet" href="revealjs/dist/theme/white.css" />
+<link rel="stylesheet" href="plugin/highlight/monokai.css" />
+<link rel="stylesheet" href="lecture-style.css" />
+<style>
+    .keyword { color: #e06c75; font-weight: bold; }
+    .highlight { background: #fff3cd; padding: 2px 6px; border-radius: 3px; }
+    .demo-box { 
+        background: #f0f8ff; 
+        border-left: 6px solid #4285f4; 
+        padding: 15px; 
+        margin: 20px 0; 
+        font-style: italic;
+    }
+    .question-box {
+        background: #f9f0ff;
+        border: 2px solid #9c27b0;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+    }
+    /* === FIX ẢNH NHÂN VẬT === */
+    .portrait {
+        text-align: center;
+        margin: 25px 0 15px;
+    }
+    .portrait img {
+        max-height: 320px;      /* vừa slide hơn */
+        max-width: 100%;        /* ← quan trọng nhất, ngăn overflow ngang */
+        width: auto;
+        height: auto;
+        object-fit: contain;    /* giữ tỷ lệ gốc, không méo */
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        display: block;
+        margin: 0 auto;
+    }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ==================== TRANG BÌA ==================== -->
+<section>
+    <section>
+        <h1>Học máy</h1>
+        <h3>Bài 14: Học máy trong thực tế</h3>
+        <p>Trường ĐH Công nghệ – Đại học Quốc gia Hà Nội</p>
+    </section>
+    
+    <section>
+        <h2>Nội dung buổi học</h2>
+        <ol>
+            <li>Ứng dụng ML của xử lý ảnh</li>
+            <li>Ứng dụng AI cho text & voice</li>
+            <li>AI trong cuộc sống hàng ngày</li>
+            <li>Nhân vật quan trọng trong thời đại AI</li>
+            <li>Các ông lớn AI: OpenAI & Google DeepMind</li>
+            <li>Tương lai của AI (hype vs thực tế)</li>
+            <li>Tóm tắt & Q&A</li>
+        </ol>
+    </section>
+</section>
+
+<!-- ==================== 1. ỨNG DỤNG ML XỬ LÝ ẢNH ==================== -->
+<section>
+    <section>
+        <h1><span class="text-light">1.</span><br />Ứng dụng ML của xử lý ảnh</h1>
+    </section>
+    
+    <section>
+        <h2>Các công cụ “thần thánh” hiện nay</h2>
+        <ul>
+            <li><strong>DALL·E 3</strong> (OpenAI) – Tạo ảnh từ mô tả văn bản</li>
+            <li><strong>Stable Diffusion</strong> – Miễn phí, chạy được trên máy cá nhân</li>
+            <li><strong>Sora</strong> (OpenAI) – Tạo video từ text (đang thử nghiệm)</li>
+            <li><strong>Segment Anything Model (SAM)</strong> – Meta: phân đoạn bất kỳ vật gì trong ảnh</li>
+            <li><strong>GPT-4o</strong> – Hiểu cả ảnh + text (multimodal)</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Dall-E-2</h2>
+        <div class="portrait">
+            <img src="img/lec14/Dall-E-2.png" alt="Dall-E-2">
+        </div>
+    </section>
+
+    <section>
+        <h2>Dall-E-3</h2>
+        <div class="portrait">
+            <img src="img/lec14/Dall-E-3.png" alt="Dall-E-3">
+        </div>
+    </section>
+
+    <section>
+        <h2>Dall-E-3</h2>
+        <div class="portrait">
+            <img src="img/lec14/Dall-E-3-v2.png" alt="Dall-E-3-v2">
+        </div>
+    </section>
+
+    <section>
+        <h2>Sora</h2>
+        <div class="portrait">
+            <img src="img/lec14/Sora.png" alt="Sora">
+        </div>
+    </section>
+
+    <section>
+        <h2>SAM</h2>
+        <div class="portrait">
+            <img src="img/lec14/Segment Anything Model (SAM).png" alt="SAM">
+        </div>
+    </section>
+    
+    
+    <section>
+        <h2>Ưu điểm của AI tạo ảnh hiện đại</h2>
+        <ul>
+            <li>Tốc độ cực nhanh (vài giây)</li>
+            <li>Giúp designer, marketer, sinh viên tiết kiệm thời gian</li>
+            <li>Khơi nguồn sáng tạo (ý tưởng mới lạ)</li>
+            <li>Dễ tùy chỉnh (thay đổi phong cách, màu sắc…)</li>
+        </ul>
+    </section>
+    
+    <section>
+        <h2>Nhược điểm & rủi ro</h2>
+        <ul>
+            <li>Copyright & bản quyền (ảnh AI lấy ý tưởng từ hàng triệu ảnh thật)</li>
+            <li>Bias: đôi khi tạo ra khuôn mặt, nghề nghiệp theo định kiến</li>
+            <li>Deepfake & hình giả lan truyền</li>
+            <li>Tốn điện & môi trường (huấn luyện model rất “ngốn” điện)</li>
+            <li>Hallucination: tạo ra chi tiết sai sự thật</li>
+        </ul>
+    </section>
+</section>
+
+<!-- ==================== 4. ỨNG DỤNG AI CHO TEXT & VOICE (cũ là 3) ==================== -->
+<section>
+    <section>
+        <h1><span class="text-light">4.</span><br />Ứng dụng AI cho text & voice</h1>
+    </section>
+    <section>
+        <h2>Các công nghệ phổ biến</h2>
+        <ul>
+            <li>Text-to-Speech & Speech Recognition (Google, Whisper)</li>
+            <li>Information Retrieval (tìm kiếm thông minh)</li>
+            <li>Alexa, Siri, Google Assistant</li>
+            <li>BERT, GPT series, Claude, Gemini, Grok</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Classic Transformer</h2>
+        <div class="portrait">
+            <img src="https://cuicaihao.com/wp-content/uploads/2020/09/english-to-chinese.png?w=768" alt="Highlevel">
+        </div>
+    </section>
+
+    <section>
+        <h2>BERT framework</h2>
+        <div class="portrait">
+            <img src="https://www.researchgate.net/publication/365257367/figure/fig1/AS:11431281096477407@1668158497056/BERT-pre-training-method.png" alt="Highlevel">
+        </div>
+    </section>
+
+</section>
+
+<!-- ==================== 5. AI TRONG CUỘC SỐNG (cũ là 4) ==================== -->
+<section>
+    <section>
+        <h1><span class="text-light">5.</span><br />AI trong cuộc sống hàng ngày</h1>
+    </section>
+    <section>
+        <h2>Ví dụ thực tế</h2>
+        <ul>
+            <li><strong>Code:</strong> Claude, Cursor, GitHub Copilot, Devin</li>
+            <li><strong>Xe tự lái:</strong> Tesla Full Self-Driving (FSD)</li>
+            <li><strong>Robot:</strong> Boston Dynamics, Figure AI, robot hút bụi, robot phẫu thuật</li>
+        </ul>
+
+    </section>
+</section>
+
+<!-- ==================== 2. NHÂN VẬT QUAN TRỌNG ==================== -->
+<section>
+    <section>
+        <h1><span class="text-light">2.</span><br />Nhân vật quan trọng trong thời AI</h1>
+    </section>
+    
+    <section>
+        <h2>Geoffrey Hinton</h2>
+        <ul>
+            <li>Nobel Physics 2024</li>
+            <li>Cảnh báo rủi ro AI năm 2023 và rời Google</li>
+        </ul>
+        <div class="portrait">
+            <img src="https://external-content.duåckduckgo.com/iu/?u=https%3A%2F%2Fd3d0lqu00lnqvz.cloudfront.net%2Fgeoffreyhinton%2Fgeoffreyehinton.jpg&f=1&ipt=384acb6da5a145a038e02bd9ad48e9725704c751f49430c01c9b880f5d036807" alt="Geoffrey Hinton">
+        </div>
+    </section>
+    
+    <section>
+        <h2>Sam Altman</h2>
+        
+        <div class="portrait">
+            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.independent.co.uk%2F2026%2F04%2F10%2F20%2F02%2FGettyImages-2214110034.jpg%3Fwidth%3D1200%26auto%3Dwebp%26crop%3D3%3A2&f=1&ipt=32e55541fee1a8caa2ccfec1ff07b8c868caa291b366d0931521f3a2d00353fd" alt="Sam Altman">
+        </div>
+    </section>
+    
+    <section>
+        <h2>Demis Hassabis & John Jumper – DeepMind</h2>
+        <p>Cha đẻ AlphaFold, giải Nobel Chemistry 2024 nhờ dự đoán cấu trúc protein</p>
+        <div class="portrait">
+            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.nature.com%2Flw767%2Fmagazine-assets%2Fd41586-022-02999-9%2Fd41586-022-02999-9_23522070.jpg&f=1&ipt=18f9a4d5a3f3dfebda02129c19a010ccb40b7c7992f361ce294e5f15e1da356a" alt="Demis Hassabis & John Jumper">
+        </div>
+    </section>
+    
+    <section>
+        <h2>Yann LeCun</h2>
+        <p>Chief AI Scientist của Meta - Người tiên phong mạng nơ-ron tích chập</p>
+        <div class="portrait">
+            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.actuia.com%2Fwp-content%2Fuploads%2F2018%2F04%2FYann-LeCun-Entrupy-Technical-Advisor.jpg&f=1&ipt=4713e4eb795664707d90b69a3a88edb043c499cbb8d514b41a552420c1bd166a" alt="Yann LeCun">
+        </div>
+    </section>
+</section>
+
+<!-- ==================== 3. CÁC ÔNG LỚN AI: OPENAI & GOOGLE DEEPMIND (MỚI) ==================== -->
+<section>
+    <section>
+        <h1><span class="text-light">3.</span><br />Các ông lớn AI:<br>OpenAI & Google DeepMind</h1>
+    </section>
+
+    <!-- OpenAI -->
+    <section>
+        <h2>OpenAI – Lịch sử ngắn gọn</h2>
+        <ul>
+            <li>Thành lập năm 2015 bởi: <strong>Sam Altman, Elon Musk, Ilya Sutskever, Greg Brockman</strong>…</li>
+            <li>Ban đầu là tổ chức phi lợi nhuận với sứ mệnh <strong>“kiểm soát AI vì lợi ích nhân loại”</strong></li>
+            <li>Thực tế: Nhiều người sáng lập muốn AI phải được kiểm soát chặt chẽ bởi một nhóm nhỏ (không để ai cũng phát triển tự do)</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>OpenAI – Những xung đột lớn</h2>
+        <ul>
+            <li>Elon Musk bất đồng quan điểm → rời công ty năm 2018</li>
+            <li>2023–2024: OpenAI chuyển sang mô hình có lợi nhuận (for-profit)</li>
+            <li>Xung đột giữa Sam Altman và Hội đồng quản trị → Sam bị sa thải rồi quay lại</li>
+            <li>Hiện tại: OpenAI trở thành công ty thương mại mạnh nhất, hợp tác chặt chẽ với Microsoft</li>
+        </ul>
+    </section>
+
+    <!-- Google DeepMind -->
+    <section>
+        <h2>Google DeepMind</h2>
+        <ul>
+            <li>Thành lập 2010 tại London, mua lại bởi Google năm 2014</li>
+            <li>Là trung tâm nghiên cứu AI hàng đầu thế giới của Google</li>
+            <li>Nhiều thành tựu nghiên cứu nổi bật:
+                <ul>
+                    <li>AlphaGo (2016) – Đánh bại nhà vô địch cờ vây</li>
+                    <li>AlphaFold (2021–2024) – Dự đoán cấu trúc protein → Nobel Chemistry 2024</li>
+                    <li>Nhiều công trình tiên phong về Reinforcement Learning</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Google DeepMind & “Attention is All You Need”</h2>
+        <ul>
+            <li>Paper <strong>“Attention is All You Need”</strong> (2017) – Định nghĩa kiến trúc Transformer</li>
+            <li>Đây là nền tảng cho hầu hết mô hình AI lớn ngày nay (GPT, BERT, Gemini…)</li>
+            <li>Giải Nobel Chemistry 2024 trao cho Demis Hassabis & John Jumper nhờ AlphaFold</li>
+        </ul>
+    </section>
+</section>
+
+
+<!-- ==================== 6. TƯƠNG LAI CỦA AI (cũ là 5) ==================== -->
+<section>
+    <section>
+        <h1><span class="text-light">6.</span><br />Tương lai của AI</h1>
+    </section>
+    <section>
+        <h2>AGI & Hype</h2>
+        <ul>
+            <li>AGI (Artificial General Intelligence) đang được quảng cáo rầm rộ</li>
+            <li>Nhiều CEO AI nói AI sẽ thay thế hầu hết công việc, giải quyết mọi vấn đề nhân loại</li>
+        </ul>
+        <p class="highlight">Hype rất mạnh → nhưng thực tế thì sao?</p>
+    </section>
+    
+    <section>
+        <h2>Thực tế không phải thế</h2>
+        <ul>
+            <li>Hiện tại AI vẫn chỉ là “narrow AI” (chuyên sâu một việc)</li>
+            <li>Vẫn hay sai, vẫn cần con người kiểm soát</li>
+            <li>Hype ≠ thực tế</li>
+        </ul>
+    </section>
+    
+    <section>
+        <h2>Các lỗ hổng của AI hiện đại</h2>
+        <ul>
+            <li>Claude leak code (rò rỉ mã nguồn)</li>
+            <li>App Rabbit R1 – source code bị rò hoàn toàn</li>
+            <li>Builder.ai bị lộ toàn người Ấn Độ hỗ trợ chứ không phải AI</li>
+            <li>Claude AI ăn cắp và dọa người dùng về dữ liệu</li>
+            <li>Fake news, deepfake, propaganda (tạo tin giả lan truyền cực nhanh)</li>
+        </ul>
+    </section>
+    
+    <section>
+        <h2>Rất khó kiểm soát quá trình phát triển AI</h2>
+        <ul>
+            <li>Công nghệ tiến quá nhanh</li>
+            <li>Không có luật toàn cầu thống nhất</li>
+            <li>Lợi nhuận của các công ty lớn thường lớn hơn rủi ro an toàn</li>
+        </ul>
+    </section>
+    
+    <section>
+        <h2>Hướng đi tương lai thực tế</h2>
+        <ul>
+            <li>AI ứng dụng đa ngành (y tế, giáo dục, nông nghiệp, tài chính…)</li>
+            <li>Cơ học lượng tử + AI (tăng tốc tính toán khổng lồ)</li>
+            <li>Robotics (robot thông minh làm việc cùng con người)</li>
+        </ul>
+    </section>
+</section>
+
+<!-- ==================== 7. TÓM TẮT & Q&A (cũ là 6) ==================== -->
+<section>
+    <section>
+        <section>
+            <h1>Tóm tắt 3 takeaway</h1>
+            <ul>
+                <li>AI đang ở khắp nơi và thay đổi công việc của chúng ta mỗi ngày</li>
+                <li>AI là công cụ cực mạnh, nhưng cũng đầy rủi ro (deepfake, rò rỉ dữ liệu, mất việc…)</li>
+                <li>Tương lai thuộc về những người biết dùng AI + hiểu rõ giới hạn của nó</li>
+            </ul>
+            <p style="text-align: center; margin-top: 50px; font-size: 1.2em;">
+                Câu hỏi mở cho các bạn: <strong>Bạn nghĩ AI sẽ thay đổi ngành nghề của mình như thế nào trong 5 năm tới?</strong>
+            </p>
+        </section>
+    </section>
+</section>
+
+<div class="footer">
+    Học máy trong thực tế (Học kỳ 2 2025-2026) § Bài 14
+</div>
+
+</div>
+</div>
+
+<script src="revealjs/dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script src="plugin/math/math.js"></script>
+<script>
+    Reveal.initialize({
+        controlsLayout: "edges",
+        slideNumber: true,
+        hashOneBasedIndex: true,
+        hash: true,
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX],
+        autoAnimateEasing: "ease",
+        transition: "slide"
+    });
+</script>
+</body>
+</html>
