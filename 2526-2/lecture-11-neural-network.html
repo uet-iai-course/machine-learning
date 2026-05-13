@@ -650,6 +650,38 @@ a = σ(z)    ← sigmoid
             </div>
         </div>
     </section>
+    
+    <section>
+        <h2>RNN — Vanishing &amp; Exploding Gradient</h2>
+        <p>Mỗi bước thời gian RNN tính: \(h_t = \tanh(W \cdot h_{t-1} + U \cdot x_t)\)</p>
+        <p>Backprop qua T bước phải nhân gradient liên tiếp:</p>
+        \[ \frac{\partial L}{\partial h_1} = \frac{\partial L}{\partial h_T} \times \prod_{t=2}^{T} \underbrace{W \times \tanh'(h_t)}_{\lambda \text{ — hệ số mỗi bước}} \]
+ 
+        <div class="two-col" style="margin-top:10px">
+            <div>
+                <p><strong>Vanishing — \(\lambda = 0.5\)</strong></p>
+                <pre><code>Bước 5→4:  × 0.5  = 0.5
+Bước 4→3:  × 0.5  = 0.25
+Bước 3→2:  × 0.5  = 0.125
+Bước 2→1:  × 0.5  = 0.0625 ≈ 0</code></pre>
+                <span style="font-size:0.8em">→ h₁ gần như không học được</span>
+            </div>
+            <div>
+                <p><strong>Exploding — \(\lambda = 2.0\)</strong></p>
+                <pre><code>Bước 5→4:  × 2.0  = 2
+Bước 4→3:  × 2.0  = 4
+Bước 3→2:  × 2.0  = 8
+Bước 2→1:  × 2.0  = 16 → ∞</code></pre>
+                <span style="font-size:0.8em">→ weight update loạn, không hội tụ</span>
+            </div>
+        </div>
+        <div class="highlight" style="margin-top:10px">
+            Chuỗi 100 bước: \(0.5^{100} \approx 0\) &nbsp;|&nbsp; \(2^{100} \approx 10^{30}\) — lý do LSTM ra đời<br/>
+            <strong>Exploding</strong>: dùng <span class="keyword">Gradient Clipping</span> &nbsp;|&nbsp;
+            <strong>Vanishing</strong>: cần đổi kiến trúc → <span class="keyword">LSTM / GRU</span>
+        </div>
+    </section>
+    
     <section>
         <h2>LSTM — Long Short-Term Memory</h2>
         <p><em>Ứng dụng: dự báo ngôn ngữ, nhận dạng giọng nói, dịch máy</em></p>
@@ -675,6 +707,15 @@ a = σ(z)    ← sigmoid
         <div class="two-col" style="margin-top:12px">
             <div class="highlight">✅ Nhận dạng pattern không gian xuất sắc — backbone của computer vision</div>
             <div class="highlight">❌ Kém với dữ liệu quan hệ xa; cần nhiều dữ liệu gán nhãn</div>
+        </div>
+    </section>
+
+    <section style="font-size:0.8em;">
+        <h2>Ví dụ CNN</h2>
+        <div style="text-align:center; margin-top:8px;">
+            <img src="img/lec11/CNN.png"
+                 style="max-width:95%; max-height:380px; object-fit:contain;" />
+            
         </div>
     </section>
     <section>
