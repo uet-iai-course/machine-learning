@@ -376,6 +376,41 @@ a = σ(z)    ← sigmoid
     </section>
 
     <section>
+        <h2>Backpropagation — Tổng quan</h2>
+        <p>Mục tiêu: tìm gradient \(\partial L / \partial w\) cho <strong>từng trọng số</strong> để update</p>
+
+        <div style="margin: 18px 0;">
+            <div style="display:flex; align-items:stretch; gap:0; font-size:0.88em;">
+                <div style="background:#fff3cd; border:2px solid #f0a500; border-radius:8px 0 0 8px; padding:12px 16px; flex:1; text-align:center;">
+                    <div style="font-size:1.6em; margin-bottom:4px">①</div>
+                    <strong>Tính Loss</strong><br/>
+                    <span style="font-size:0.85em">So sánh \(\hat{y}\) với \(y_{true}\)<br/>ra một con số đo độ sai</span>
+                </div>
+                <div style="background:#e8f4fd; border:2px solid #4285f4; border-left:none; padding:12px 16px; flex:1; text-align:center;">
+                    <div style="font-size:1.6em; margin-bottom:4px">②</div>
+                    <strong>Đạo hàm từng trọng số</strong><br/>
+                    <span style="font-size:0.85em">Chain rule: \(\partial L/\partial w\)<br/>cho từng \(w\) riêng biệt</span>
+                </div>
+                <div style="background:#f0fff4; border:2px solid #34a853; border-left:none; padding:12px 16px; flex:1; text-align:center;">
+                    <div style="font-size:1.6em; margin-bottom:4px">③</div>
+                    <strong>Update trọng số</strong><br/>
+                    <span style="font-size:0.85em">\(w \leftarrow w - \eta \cdot \partial L/\partial w\)<br/>tìm giá trị \(w\) mới</span>
+                </div>
+                <div style="background:#fdf0ff; border:2px solid #9c27b0; border-left:none; border-radius:0 8px 8px 0; padding:12px 16px; flex:1; text-align:center;">
+                    <div style="font-size:1.6em; margin-bottom:4px">④</div>
+                    <strong>Lan truyền ngược</strong><br/>
+                    <span style="font-size:0.85em">Dùng gradient mới truyền về layer trước — lặp đến layer đầu tiên</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-box">
+            Output layer → Hidden layer 2 → Hidden layer 1 → Input layer<br/>
+            Mỗi layer <strong>phải chờ</strong> layer sau hoàn thành bước ② và ③ mới tính được
+        </div>
+    </section>
+
+    <section>
         <h2>Ý tưởng Gradient Descent</h2>
         <div class="demo-box">
             Hình dung: bạn đứng trên một quả đồi trong sương mù, muốn xuống thung lũng.
@@ -430,41 +465,6 @@ a = σ(z)    ← sigmoid
     </section>
 
     <section>
-        <h2>Backpropagation — Tổng quan</h2>
-        <p>Mục tiêu: tìm gradient \(\partial L / \partial w\) cho <strong>từng trọng số</strong> để update</p>
-
-        <div style="margin: 18px 0;">
-            <div style="display:flex; align-items:stretch; gap:0; font-size:0.88em;">
-                <div style="background:#fff3cd; border:2px solid #f0a500; border-radius:8px 0 0 8px; padding:12px 16px; flex:1; text-align:center;">
-                    <div style="font-size:1.6em; margin-bottom:4px">①</div>
-                    <strong>Tính Loss</strong><br/>
-                    <span style="font-size:0.85em">So sánh \(\hat{y}\) với \(y_{true}\)<br/>ra một con số đo độ sai</span>
-                </div>
-                <div style="background:#e8f4fd; border:2px solid #4285f4; border-left:none; padding:12px 16px; flex:1; text-align:center;">
-                    <div style="font-size:1.6em; margin-bottom:4px">②</div>
-                    <strong>Đạo hàm từng trọng số</strong><br/>
-                    <span style="font-size:0.85em">Chain rule: \(\partial L/\partial w\)<br/>cho từng \(w\) riêng biệt</span>
-                </div>
-                <div style="background:#f0fff4; border:2px solid #34a853; border-left:none; padding:12px 16px; flex:1; text-align:center;">
-                    <div style="font-size:1.6em; margin-bottom:4px">③</div>
-                    <strong>Update trọng số</strong><br/>
-                    <span style="font-size:0.85em">\(w \leftarrow w - \eta \cdot \partial L/\partial w\)<br/>tìm giá trị \(w\) mới</span>
-                </div>
-                <div style="background:#fdf0ff; border:2px solid #9c27b0; border-left:none; border-radius:0 8px 8px 0; padding:12px 16px; flex:1; text-align:center;">
-                    <div style="font-size:1.6em; margin-bottom:4px">④</div>
-                    <strong>Lan truyền ngược</strong><br/>
-                    <span style="font-size:0.85em">Dùng gradient mới truyền về layer trước — lặp đến layer đầu tiên</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="demo-box">
-            Output layer → Hidden layer 2 → Hidden layer 1 → Input layer<br/>
-            Mỗi layer <strong>phải chờ</strong> layer sau hoàn thành bước ② và ③ mới tính được
-        </div>
-    </section>
-
-    <section>
         <h2>Tính Gradient — Chain Rule</h2>
         <p>Để update weight $w$, ta cần \(\partial L / \partial w\) — nhưng $w$ không ảnh hưởng trực tiếp đến $L$:</p>
         \[ w \;\longrightarrow\; z \;\longrightarrow\; \hat{y} \;\longrightarrow\; L \]
@@ -488,6 +488,29 @@ a = σ(z)    ← sigmoid
                     Mọi thứ triệt tiêu nhau!
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Tại sao cần lan truyền ngược?</h2>
+        <p>Mục tiêu: tìm <span class="keyword">∂L/∂w</span> — "nếu tôi thay đổi <strong>w</strong> một chút, <strong>Loss</strong> thay đổi bao nhiêu?"</p>
+ 
+        <div class="demo-box" style="margin-top:12px">
+            Nhưng <strong>w không ảnh hưởng trực tiếp đến L</strong> — nó phải đi qua một chuỗi:
+            \[ w \;\longrightarrow\; z \;\longrightarrow\; a \;\longrightarrow\; L \]
+        </div>
+ 
+        <p style="margin-top:12px">Hình dung theo kiểu <strong>"cú hích nhỏ" (nudge)</strong> của 3Blue1Brown:</p>
+        <ul>
+            <li>Hích <strong>w</strong> một chút nhỏ \(\delta w\)</li>
+            <li>→ <strong>z</strong> thay đổi: \(\delta z = \delta w \cdot x\) &nbsp;&nbsp; (vì \(z = wx + b\))</li>
+            <li>→ <strong>a</strong> thay đổi: \(\delta a = \delta z \cdot \sigma'(z)\) &nbsp;&nbsp; (qua hàm kích hoạt)</li>
+            <li>→ <strong>L</strong> thay đổi: \(\delta L = \delta a \cdot \dfrac{\partial L}{\partial a}\)</li>
+        </ul>
+ 
+        <div class="highlight" style="margin-top:14px">
+            Chia cả hai vế cho \(\delta w\) → ra đúng Chain Rule:
+            \(\dfrac{\partial L}{\partial w} = \dfrac{\partial L}{\partial a} \times \dfrac{\partial a}{\partial z} \times \dfrac{\partial z}{\partial w}\)
         </div>
     </section>
 
@@ -728,7 +751,22 @@ a = σ(z)    ← sigmoid
             <strong>Câu hỏi mở:</strong> Theo bạn, kiến trúc nào sẽ "thay thế" Transformer trong tương lai?
         </p>
     </section>
+
+    <section>
+        <h2>Tài liệu tham khảo</h2>
+        <ul style="font-size:0.85em; line-height:2em;">
+            <li>3Blue1Brown. (2017). <em>Neural Networks</em> [Video series]. YouTube. <a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi" target="_blank">youtube.com/3b1b-neural-networks</a></li>
+            <li>Starmer, J. (2019). <em>Neural Networks</em> [Video series]. StatQuest. <a href="https://www.youtube.com/@statquest" target="_blank">youtube.com/@statquest</a></li>
+            <li>Goodfellow, I., Bengio, Y., &amp; Courville, A. (2016). <em>Deep Learning</em>. MIT Press. <a href="https://www.deeplearningbook.org" target="_blank">deeplearningbook.org</a></li>
+            <li>Zhang, A. et al. (2023). <em>Dive into Deep Learning</em>. <a href="https://d2l.ai" target="_blank">d2l.ai</a></li>
+            <li>Ng, A. (2017). <em>Deep Learning Specialization</em>. Coursera / DeepLearning.AI. <a href="https://www.deeplearning.ai" target="_blank">deeplearning.ai</a></li>
+            <li>Vaswani, A. et al. (2017). Attention is all you need. <em>NeurIPS 2017</em>.</li>
+            <li>LeCun, Y., Bengio, Y., &amp; Hinton, G. (2015). Deep learning. <em>Nature, 521</em>, 436–444.</li>
+        </ul>
+    </section>
 </section>
+
+
 
 <div class="footer">
     Mạng Nơ-ron Nhân Tạo · Từ Lịch Sử Đến Hiện Đại
