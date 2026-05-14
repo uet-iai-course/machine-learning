@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="../../favicon.png">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <title>Học máy | Bài tập về nhà #11</title>
+  <link rel="stylesheet" href="../../index-pages.css">
+  <link rel="stylesheet" href="assignment-pages.css">
+  <script src="mathjax-config.js"></script>
+  <script id="MathJax-script" async src="mathjax4.js"></script>
+</head>
+
+<body>
+  <main class="page-shell assignment-shell">
+    <header class="assignment-header">
+      <a class="secondary-link assignment-backlink" href="../index.html"><span aria-hidden="true">←</span><span>Quay lại học kỳ</span></a>
+      <p class="eyebrow assignment-eyebrow">IAI · UET · VNU</p>
+      <p class="assignment-course">Học máy</p>
+      <h1 class="assignment-topic">Mạng Nơ-ron Nhân Tạo</h1>
+      <p class="assignment-meta">Bài tập về nhà #11 · Học kì 2 · Năm học 2025-2026</p>
+    </header>
+
+    <hr>
+
+    <!-- ── BÀI 1 ── -->
+    <h2>Bài 1 — Lựa chọn Loss Function</h2>
+    <div class="q">
+      <p>
+        Cho ba bài toán thực tế sau. Với <strong>mỗi bài toán</strong>, hãy:
+        (i) chọn loss function phù hợp nhất,
+        (ii) chọn activation function cho output layer,
+        và (iii) giải thích tại sao đó là lựa chọn đúng — bao gồm cả lý do tại sao các lựa chọn khác <em>không</em> phù hợp.
+      </p>
+      <ol>
+        <li>
+          <strong>Hệ thống chẩn đoán ung thư vú:</strong> Cho ảnh chụp X-quang, model dự đoán
+          bệnh nhân có khối u ác tính hay không (có / không).
+        </li>
+        <li>
+          <strong>Nhận dạng chữ số viết tay:</strong> Cho ảnh 28×28 pixel, model phân loại chữ số
+          từ 0 đến 9. Tại sao MSE không phải lựa chọn tối ưu cho bài toán này?
+        </li>
+        <li>
+          <strong>Dự báo nhiệt độ:</strong> Model dự đoán nhiệt độ trung bình ngày mai (đơn vị °C)
+          dựa trên dữ liệu thời tiết 30 ngày qua.
+        </li>
+      </ol>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- ── BÀI 2 ── -->
+    <h2>Bài 2 — Vanishing &amp; Exploding Gradient</h2>
+    <div class="q">
+      <p>
+        Trong quá trình huấn luyện mạng nơ-ron sâu, gradient phải được truyền ngược
+        qua nhiều lớp. Ở mỗi lớp, gradient được nhân với một hệ số
+        \(\lambda = W \times \sigma'(z)\).
+      </p>
+      <ol>
+        <li>
+          <p>
+            Bảng dưới đây ghi lại gradient tại layer đầu tiên sau nhiều lần
+            truyền ngược trong hai mạng khác nhau. Xác định mạng nào đang gặp
+            <strong>vanishing gradient</strong> và mạng nào đang gặp
+            <strong>exploding gradient</strong>. Giải thích dựa trên giá trị số.
+          </p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Bước backprop</th>
+                <th>Mạng A</th>
+                <th>Mạng B</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Bước 1</td><td>1.0000</td><td>1.0000</td></tr>
+              <tr><td>Bước 2</td><td>0.2500</td><td>3.0000</td></tr>
+              <tr><td>Bước 3</td><td>0.0625</td><td>9.0000</td></tr>
+              <tr><td>Bước 4</td><td>0.0156</td><td>27.000</td></tr>
+              <tr><td>Bước 5</td><td>0.0039</td><td>81.000</td></tr>
+            </tbody>
+          </table>
+        </li>
+        <li>
+          Tại sao <strong>RNN</strong> bị ảnh hưởng bởi hai vấn đề này <em>nặng hơn</em>
+          so với feedforward network thông thường? Giải thích bằng ngôn ngữ của bạn,
+          không cần công thức.
+        </li>
+        <li>
+          Với mỗi vấn đề (vanishing / exploding), nêu <strong>một giải pháp cụ thể</strong>
+          và giải thích tại sao giải pháp đó hiệu quả.
+        </li>
+      </ol>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- ── BÀI 3 ── -->
+    <h2>Bài 3 — Forward Propagation</h2>
+    <div class="q">
+      <p>
+        Cho mạng nơ-ron nhỏ sau với <strong>1 hidden layer</strong>, dùng
+        <strong>Sigmoid</strong> làm activation function và <strong>Binary Cross-Entropy</strong>
+        làm loss function:
+      </p>
+      <p>
+        \(x = 2.5, \quad y_{\text{true}} = 1\)
+      </p>
+      <p>
+        Hidden layer: \(w_1 = 0.6,\ b_1 = 0.1\) &nbsp;·&nbsp;
+        Output layer: \(w_2 = 0.8,\ b_2 = -0.2\)
+      </p>
+      <ol>
+        <li>Tính \(z_1 = w_1 \cdot x + b_1\) và \(h = \sigma(z_1)\). Làm tròn đến 4 chữ số thập phân.</li>
+        <li>Tính \(z_2 = w_2 \cdot h + b_2\) và \(\hat{y} = \sigma(z_2)\). Làm tròn đến 4 chữ số thập phân.</li>
+        <li>Tính loss \(L = -\log(\hat{y})\).</li>
+        <li>
+          Dựa vào giá trị \(\hat{y}\) vừa tính, model đang dự đoán đúng hay sai?
+          Gradient descent sẽ tăng hay giảm các trọng số để sửa lỗi này?
+        </li>
+      </ol>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- ── BÀI 4 ── -->
+    <h2>Bài 4 — Backpropagation</h2>
+    <div class="q">
+      <p>
+        Tiếp tục với mạng và kết quả forward pass từ Bài 3.
+        Dùng learning rate \(\eta = 0.1\).
+      </p>
+      <ol>
+        <li>
+          <strong>Output layer:</strong> Tính gradient của loss theo \(w_2\) và \(b_2\),
+          sau đó cập nhật \(w_2\) và \(b_2\) theo công thức gradient descent.
+        </li>
+        <li>
+          <strong>Hidden layer:</strong> Dùng gradient vừa tính ở câu 1 để lan truyền ngược về hidden layer.
+          Tính gradient của loss theo \(w_1\) và \(b_1\),
+          sau đó cập nhật \(w_1\) và \(b_1\).
+        </li>
+        <li>
+          Sau khi cập nhật, hãy chạy lại forward pass với bộ trọng số mới.
+          Loss có giảm không? Điều này nói lên điều gì?
+        </li>
+      </ol>
+    </div>
+
+    <p class="footer">
+      Viện Trí tuệ nhân tạo · Trường Đại học Công nghệ · Đại học Quốc gia Hà Nội
+    </p>
+  </main>
+</body>
+
+</html>
