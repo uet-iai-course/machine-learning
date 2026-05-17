@@ -293,3 +293,68 @@
 .reveal .fig img {
     display: inline-block;
 }
+
+/* Demo box — italic note với border bên trái. Dùng cho ví dụ minh hoạ
+ * hoặc nhận xét phụ. Palette xanh chính của deck. */
+.reveal .demo-box {
+    background: #F3F2EC;
+    border-left: 6px solid #1E93AB;
+    padding: 0.6em 0.9em;
+    margin: 0.6em 0;
+    font-style: italic;
+}
+
+/* Inline highlight — span nền vàng nhạt cho từ/cụm cần làm nổi. */
+.reveal .highlight {
+    background: #fff3cd;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+/* Portrait wrapper — ảnh chân dung / ảnh nhân vật lịch sử. */
+.reveal .portrait {
+    text-align: center;
+    margin: 1em 0 0.6em;
+}
+
+.reveal .portrait img {
+    max-height: 320px;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    display: block;
+    margin: 0 auto;
+}
+
+/* Compare table — bảng so sánh nhiều phương án / kiến trúc theo cột. */
+.reveal .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75em;
+    margin-top: 0.6em;
+}
+
+.reveal .compare-table th {
+    background: #1E93AB;
+    color: white;
+    padding: 0.4em 0.7em;
+    text-align: left;
+    font-weight: 600;
+}
+
+.reveal .compare-table td {
+    padding: 0.4em 0.7em;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top;
+}
+
+.reveal .compare-table tr:nth-child(even) td {
+    background: #F3F2EC;
+}
+
+.reveal .compare-table .arch {
+    font-weight: 700;
+}
