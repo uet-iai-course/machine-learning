@@ -59,7 +59,7 @@
             <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>Hopfield &amp; Hinton — Nobel Vật lý 2024 cho những đóng góp nền tảng về mạng nơ-ron</em></p>
         </div>
     </section>
-    <section>
+    <section style="font-size: 0.78em;">
         <h2>John Hopfield — Hopfield Network (1982)</h2>
         <p><strong>Lý thuyết bộ nhớ liên kết (Tailspin Theory)</strong></p>
         <ul>
@@ -154,7 +154,7 @@ a = σ(z)    ← sigmoid
             </div>
         </div>
     </section>
-    <section>
+    <section style="font-size: 0.75em;">
         <h2>Hàm kích hoạt (Activation Functions)</h2>
         <p>Đưa <span class="keyword">tính phi tuyến</span> vào mạng — nếu không có, nhiều lớp = 1 lớp tuyến tính</p>
         <ul>
@@ -183,7 +183,7 @@ a = σ(z)    ← sigmoid
             <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>GELU cho phép giá trị âm nhỏ lọt qua ở vùng x ≈ −0.5 — không có dead neuron, gradient luôn tồn tại</em></p>
         </div>
     </section>
-    <section>
+    <section style="font-size: 0.9em;">
         <h2>Trọng số (w) và Bias (b)</h2>
         <ul>
             <li><strong>Trọng số w:</strong> điều chỉnh tầm quan trọng của từng kết nối</li>
@@ -206,7 +206,7 @@ a = σ(z)    ← sigmoid
         <p>Đo mức độ sai — để biết phải sửa theo hướng nào</p>
     </section>
 
-    <section>
+    <section style="font-size: 0.7em;">
         <h2>Loss Function (1/4) — Mean Squared Error</h2>
         <p>Dùng cho bài toán <span class="keyword">hồi quy</span> — output là giá trị liên tục</p>
         \[ \mathcal{L}_{\text{MSE}} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 \]
@@ -230,7 +230,7 @@ a = σ(z)    ← sigmoid
         </div>
     </section>
 
-    <section>
+    <section style="font-size: 0.72em;">
         <h2>Loss Function (2/4) — Binary Cross-Entropy</h2>
         <p>Dùng cho bài toán <span class="keyword">phân loại nhị phân</span> — 1 trong 2 lớp</p>
         \[ \mathcal{L}_{\text{BCE}} = -\frac{1}{n}\sum_{i=1}^{n} \Big[ y_i \log\hat{p}_i + (1 - y_i)\log(1 - \hat{p}_i) \Big] \]
@@ -252,7 +252,7 @@ a = σ(z)    ← sigmoid
         </div>
     </section>
 
-    <section>
+    <section style="font-size: 0.65em;">
         <h2>Loss Function (3/4) — Categorical Cross-Entropy</h2>
         <p>Dùng cho bài toán <span class="keyword">phân loại đa lớp</span> — 1 trong K lớp</p>
         \[ \mathcal{L}_{\text{CCE}} = -\sum_{k=1}^{K} p_k^* \log(p_k) = -\log\, p(y = k^* \mid x) \]
@@ -278,7 +278,7 @@ a = σ(z)    ← sigmoid
         </div>
     </section>
 
-    <section>
+    <section style="font-size: 0.75em;">
         <h2>Loss Function (4/4) — Khi nào dùng gì?</h2>
         <table class="compare-table">
             <thead>
@@ -329,7 +329,7 @@ a = σ(z)    ← sigmoid
         <h1><span class="text-light">4.</span><br />Gradient Descent &amp; Backpropagation</h1>
     </section>
 
-    <section>
+    <section style="font-size: 0.75em;">
         <h2>Backpropagation — Tổng quan</h2>
         <p>Mục tiêu: tìm gradient \(\partial L / \partial w\) cho <strong>từng trọng số</strong> để update</p>
 
@@ -364,7 +364,7 @@ a = σ(z)    ← sigmoid
         </div>
     </section>
 
-    <section>
+    <section style="font-size: 0.9em;">
         <h2>Ý tưởng Gradient Descent</h2>
         <div class="demo-box">
             Hình dung: bạn đứng trên một quả đồi trong sương mù, muốn xuống thung lũng.
@@ -381,7 +381,7 @@ a = σ(z)    ← sigmoid
         </div>
     </section>
 
-    <section>
+    <section style="font-size: 0.62em;">
         <h2>Gradient cho biết 2 thứ</h2>
         <div class="two-col">
             <div>
@@ -418,7 +418,7 @@ a = σ(z)    ← sigmoid
         </div>
     </section>
 
-    <section>
+    <section style="font-size: 0.7em;">
         <h2>Tính Gradient — Chain Rule</h2>
         <p>Để update weight $w$, ta cần \(\partial L / \partial w\) — nhưng $w$ không ảnh hưởng trực tiếp đến $L$:</p>
         \[ w \;\longrightarrow\; z \;\longrightarrow\; \hat{y} \;\longrightarrow\; L \]
@@ -445,7 +445,7 @@ a = σ(z)    ← sigmoid
         </div>
     </section>
 
-    <section>
+    <section style="font-size: 0.62em;">
         <h2>Tại sao cần lan truyền ngược?</h2>
         <p>Mục tiêu: tìm <span class="keyword">∂L/∂w</span> — "nếu tôi thay đổi <strong>w</strong> một chút, <strong>Loss</strong> thay đổi bao nhiêu?"</p>
  
@@ -468,7 +468,7 @@ a = σ(z)    ← sigmoid
         </div>
     </section>
 
-    <section>
+    <section style="font-size: 0.8em;">
         <h2>Backpropagation</h2>
         <ul>
             <li>Mạng 13.000 tham số → cần 13.000 đạo hàm riêng</li>
@@ -486,7 +486,7 @@ a = σ(z)    ← sigmoid
         </ul>
     </section>
 
-    <section>
+    <section style="font-size: 0.85em;">
         <h2>Vấn đề thực tế — Dead Neuron &amp; Vanishing Gradient</h2>
         <div class="two-col">
             <div>
@@ -510,7 +510,7 @@ a = σ(z)    ← sigmoid
         </div>
     </section>
 
-    <section>
+    <section style="font-size: 0.8em;">
         <h2>Local Minima &amp; Saddle Point</h2>
         <div class="two-col">
             <div>
@@ -544,7 +544,7 @@ a = σ(z)    ← sigmoid
         </div>
     </section>
 
-    <section>
+    <section style="font-size: 0.8em;">
         <h2>Batch GD vs SGD vs Mini-batch</h2>
         <ul>
             <li><strong>Batch GD:</strong> dùng toàn bộ dữ liệu mỗi bước → chính xác nhưng <em>rất chậm</em></li>
@@ -582,7 +582,7 @@ a = σ(z)    ← sigmoid
         <h1><span class="text-light">5.</span><br />Kiến Trúc Hiện Đại</h1>
         <p>RNN · LSTM · CNN · Transformer</p>
     </section>
-    <section>
+    <section style="font-size: 0.85em;">
         <h2>RNN — Recurrent Neural Network</h2>
         <p><em>Ứng dụng: dịch thuật, phân tích cảm xúc, dự báo chuỗi thời gian</em></p>
         <div class="two-col">
@@ -605,7 +605,7 @@ a = σ(z)    ← sigmoid
         </div>
     </section>
     
-    <section>
+    <section style="font-size: 0.62em;">
         <h2>RNN — Vanishing &amp; Exploding Gradient</h2>
         <p>Mỗi bước thời gian RNN tính: \(h_t = \tanh(W \cdot h_{t-1} + U \cdot x_t)\)</p>
         <p>Backprop qua T bước phải nhân gradient liên tiếp:</p>
@@ -636,7 +636,7 @@ Bước 2→1:  × 2.0  = 16 → ∞</code></pre>
         </div>
     </section>
     
-    <section>
+    <section style="font-size: 0.85em;">
         <h2>LSTM — Long Short-Term Memory</h2>
         <p><em>Ứng dụng: dự báo ngôn ngữ, nhận dạng giọng nói, dịch máy</em></p>
         <ul>
@@ -650,7 +650,7 @@ Bước 2→1:  × 2.0  = 16 → ∞</code></pre>
             <div class="highlight">❌ Phức tạp hơn RNN — 4× tham số; vẫn chậm do tính tuần tự</div>
         </div>
     </section>
-    <section>
+    <section style="font-size: 0.8em;">
         <h2>CNN — Convolutional Neural Network</h2>
         <p><em>Ứng dụng: nhận dạng ảnh, phát hiện vật thể, phân tích ảnh y tế</em></p>
         <ul>
@@ -672,7 +672,7 @@ Bước 2→1:  × 2.0  = 16 → ∞</code></pre>
             
         </div>
     </section>
-    <section>
+    <section style="font-size: 0.85em;">
         <h2>Transformer &amp; Self-Attention</h2>
         <p><em>"Attention is All You Need" (2017) — Google Brain</em></p>
         <ul>
@@ -685,7 +685,7 @@ Bước 2→1:  × 2.0  = 16 → ∞</code></pre>
             <div class="highlight">❌ Độ phức tạp O(n²); cần dữ liệu và tài nguyên tính toán khổng lồ</div>
         </div>
     </section>
-    <section>
+    <section style="font-size: 0.85em;">
         <h2>So sánh tổng hợp</h2>
         <table class="compare-table">
             <thead>
@@ -733,7 +733,7 @@ Bước 2→1:  × 2.0  = 16 → ∞</code></pre>
 
 <!-- ==================== TÓM TẮT ==================== -->
 <section>
-    <section>
+    <section style="font-size: 0.8em;">
         <h1>Tóm tắt</h1>
         <ol>
             <li>Mạng nơ-ron học bằng cách điều chỉnh 13.000+ trọng số qua dữ liệu</li>
@@ -747,7 +747,7 @@ Bước 2→1:  × 2.0  = 16 → ∞</code></pre>
         </p>
     </section>
 
-    <section>
+    <section style="font-size: 0.72em;">
         <h2>Tài liệu tham khảo</h2>
         <ul style="font-size:0.85em; line-height:2em;">
             <li>3Blue1Brown. (2017). <em>Neural Networks</em> [Video series]. YouTube. <a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi" target="_blank">youtube.com/3b1b-neural-networks</a></li>
