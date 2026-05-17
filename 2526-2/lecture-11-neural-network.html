@@ -94,7 +94,7 @@
     <section style="font-size:0.8em;">
         <h2>Kiến trúc Hopfield &amp; Boltzmann Machine</h2>
         <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec11//ann_architectures_hn_bm_1600px.png"
+            <img src="img/lec11/hopfield-vs-rbm.svg"
                  style="max-width:95%; max-height:380px; object-fit:contain;" />
             <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>Hopfield Network (trái) vs Restricted Boltzmann Machine (phải) — RBM tách thành 2 lớp rõ ràng</em></p>
         </div>
@@ -116,7 +116,7 @@
     <section style="font-size:0.8em;">
         <h2>Kiến trúc mạng MNIST</h2>
         <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec11/image.png"
+            <img src="img/lec11/mnist-mlp.svg"
                  style="max-width:95%; max-height:380px; object-fit:contain;" />
             <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>784 → 16 → 16 → 10 neurons — mỗi kết nối là một trọng số cần học</em></p>
         </div>
@@ -170,7 +170,7 @@ a = σ(z)    ← sigmoid
     <section style="font-size:0.8em;">
         <h2>Sigmoid vs ReLU</h2>
         <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec11/SIG_RELU.png"
+            <img src="img/lec11/sigmoid-vs-relu.svg"
                  style="max-width:95%; max-height:380px; object-fit:contain;" />
             <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>Sigmoid bão hòa ở 2 đầu (vanishing gradient) — ReLU tuyến tính ở vùng dương, kill hẳn ở vùng âm</em></p>
         </div>
@@ -178,7 +178,7 @@ a = σ(z)    ← sigmoid
     <section style="font-size:0.8em;">
         <h2>GELU vs ReLU</h2>
         <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec11/GELU_RELU.png"
+            <img src="img/lec11/gelu-vs-relu.svg"
                  style="max-width:95%; max-height:380px; object-fit:contain;" />
             <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>GELU cho phép giá trị âm nhỏ lọt qua ở vùng x ≈ −0.5 — không có dead neuron, gradient luôn tồn tại</em></p>
         </div>
@@ -667,7 +667,7 @@ Bước 2→1:  × 2.0  = 16 → ∞</code></pre>
     <section style="font-size:0.8em;">
         <h2>Ví dụ CNN</h2>
         <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec11/CNN.png"
+            <img src="img/lec11/cnn-pipeline.svg"
                  style="max-width:95%; max-height:380px; object-fit:contain;" />
             
         </div>
