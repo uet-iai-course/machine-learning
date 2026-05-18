@@ -1,836 +1,848 @@
 <!doctype html>
 <html lang="vi">
+
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Bài 11: Mạng nơ-ron nhân tạo</title>
-<link rel="stylesheet" href="revealjs/dist/reset.css" />
-<link rel="stylesheet" href="revealjs/dist/reveal.css" />
-<link rel="stylesheet" href="revealjs/dist/theme/white.css" />
-<link rel="stylesheet" href="plugin/highlight/monokai.css" />
-<link rel="stylesheet" href="lecture-style.css" />
-<style>
-    .reveal .slides section { font-size: 0.78em; }
-    .keyword { color: #e06c75; font-weight: bold; }
-    .highlight { background: #fff3cd; padding: 2px 6px; border-radius: 3px; }
-    .demo-box {
-        background: #f0f8ff;
-        border-left: 6px solid #4285f4;
-        padding: 15px;
-        margin: 20px 0;
-        font-style: italic;
-    }
-    .question-box {
-        background: #f9f0ff;
-        border: 2px solid #9c27b0;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 20px 0;
-    }
-    .portrait { text-align: center; margin: 25px 0 15px; }
-    .portrait img {
-        max-height: 320px; max-width: 100%;
-        width: auto; height: auto; object-fit: contain;
-        border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        display: block; margin: 0 auto;
-    }
-    .two-col {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-        text-align: left;
-    }
-    .compare-table {
-        width: 100%; border-collapse: collapse;
-        font-size: 0.75em; margin-top: 10px;
-    }
-    .compare-table th {
-        background: #4285f4; color: white;
-        padding: 8px 12px; text-align: left; font-weight: 600;
-    }
-    .compare-table td {
-        padding: 8px 12px; border-bottom: 1px solid #ddd; vertical-align: top;
-    }
-    .compare-table tr:nth-child(even) td { background: #f8f9fa; }
-    .compare-table .arch { font-weight: 700; }
-</style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Bài 11: Giới thiệu về Mạng Nơ-ron</title>
+    <link rel="stylesheet" href="revealjs/dist/reset.css" />
+    <link rel="stylesheet" href="revealjs/dist/reveal.css" />
+    <link rel="stylesheet" href="revealjs/dist/theme/white.css" />
+    <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+    <link rel="stylesheet" href="lecture-style.css?v=5" />
 </head>
+
 <body>
-<div class="reveal">
-<div class="slides">
+    <div class="reveal">
+        <div class="slides">
 
-<!-- ==================== TRANG BÌA ==================== -->
-<section>
-    <section>
-        <h1>Học máy</h1>
-        <h3>Bài 11: Mạng Nơ-ron Nhân Tạo</h3>
-        <p>Trường ĐH Công nghệ – Đại học Quốc gia Hà Nội</p>
-    </section>
-    <section>
-        <h2>Nội dung buổi học</h2>
-        <ol>
-            <li>Lịch sử mạng nơ-ron</li>
-            <li>Mạng nơ-ron là gì?</li>
-            <li>Loss Function</li>
-            <li>Gradient Descent &amp; Backpropagation</li>
-            <li>Kiến trúc hiện đại</li>
-        </ol>
-    </section>
-</section>
+            <!-- ==================== TRANG BÌA ==================== -->
+            <section>
+                <section>
+                    <h1>Học máy</h1>
+                    <h3>Bài 11: Giới thiệu về Mạng Nơ-ron</h3>
+                    <p>Trường ĐH Công nghệ – Đại học Quốc gia Hà Nội</p>
+                </section>
+                <section>
+                    <h2>Nội dung buổi học</h2>
+                    <ol>
+                        <li>Lịch sử mạng nơ-ron</li>
+                        <li>Mạng nơ-ron là gì?</li>
+                        <li>Loss Function</li>
+                        <li>Gradient Descent &amp; Backpropagation</li>
+                        <li>Kiến trúc hiện đại</li>
+                    </ol>
+                </section>
+            </section>
 
-<!-- ==================== 1. LỊCH SỬ ==================== -->
-<section>
-    <section>
-        <h1><span class="text-light">1.</span><br />Lịch Sử Mạng Nơ-ron</h1>
-    </section>
-    <section>
-        <h2>Dòng thời gian phát triển</h2>
-        <ul>
-            <li><strong>1943</strong> — McCulloch &amp; Pitts: mô hình neuron nhân tạo đầu tiên</li>
-            <li><strong>1958</strong> — Rosenblatt: <span class="keyword">Perceptron</span> — mạng học đơn giản đầu tiên</li>
-            <li><strong>1982</strong> — John Hopfield: <span class="keyword">Hopfield Network</span></li>
-            <li><strong>1986</strong> — Hinton phổ biến <span class="keyword">Backpropagation</span></li>
-            <li><strong>1998</strong> — LeCun: LeNet — CNN đầu tiên nhận dạng chữ số</li>
-            <li><strong>2012</strong> — AlexNet: bùng nổ Deep Learning</li>
-            <li><strong>2017</strong> — <span class="keyword">Transformer</span>: "Attention is All You Need"</li>
-            <li><strong>2024</strong> — <span class="keyword">Nobel Vật lý</span> trao cho Hopfield &amp; Hinton</li>
-        </ul>
-    </section>
-    <section style="font-size:0.8em;">
-        <h2>Nobel Vật lý 2024</h2>
-        <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec11/2024-nobel-prize-physics-2681549498.webp"
-                 style="max-width:95%; max-height:380px; object-fit:contain;" />
-            <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>Hopfield &amp; Hinton — Nobel Vật lý 2024 cho những đóng góp nền tảng về mạng nơ-ron</em></p>
-        </div>
-    </section>
-    <section>
-        <h2>John Hopfield — Hopfield Network (1982)</h2>
-        <p><strong>Lý thuyết bộ nhớ liên kết (Tailspin Theory)</strong></p>
-        <ul>
-            <li>Mạng hồi quy (Recurrent) — các neuron kết nối lẫn nhau</li>
-            <li>Hệ thống có <span class="keyword">hàm năng lượng</span> — tìm điểm cực tiểu như vật lý thống kê</li>
-            <li>Bộ nhớ = <em>điểm thu hút (attractor)</em> — mạng "nhớ lại" pattern từ dữ liệu nhiễu</li>
-            <li>Ứng dụng: nhận dạng chữ viết tay bị mờ hoặc thiếu</li>
-        </ul>
-        <div class="demo-box">
-            Ví dụ: Đưa vào ảnh chữ "A" bị nhiễu 40% → mạng tự "hoàn thiện" lại ảnh gốc
-        </div>
-    </section>
-    <section style="font-size:0.8em;">
-        <h2>Hopfield Network — Bộ nhớ liên kết</h2>
-        <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec11//hofield.png"
-                 style="max-width:95%; max-height:380px; object-fit:contain;" />
-            <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>Input bị nhiễu → mạng hội tụ về pattern gốc được lưu trong bộ nhớ</em></p>
-        </div>
-    </section>
-    <section>
-        <h2>Geoffrey Hinton — Giải pháp RBM</h2>
-        <p><strong>Vấn đề:</strong> Hopfield Net không học được từ dữ liệu lớn</p>
-        <ul>
-            <li><span class="keyword">Restricted Boltzmann Machines (RBM)</span>: mạng xác suất 2 lớp (ẩn + nhìn)</li>
-            <li>Phổ biến hóa <strong>Backpropagation</strong> (1986) — nền tảng của mọi mạng hiện đại</li>
-        </ul>
-        <div class="highlight">
-            Hinton rời Google năm 2023 để cảnh báo về rủi ro AI → Nobel Vật lý 2024
-        </div>
-    </section>
-    <section style="font-size:0.8em;">
-        <h2>Kiến trúc Hopfield &amp; Boltzmann Machine</h2>
-        <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec11//ann_architectures_hn_bm_1600px.png"
-                 style="max-width:95%; max-height:380px; object-fit:contain;" />
-            <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>Hopfield Network (trái) vs Restricted Boltzmann Machine (phải) — RBM tách thành 2 lớp rõ ràng</em></p>
-        </div>
-    </section>
-</section>
+            <!-- ==================== 1. LỊCH SỬ ==================== -->
+            <section>
+                <section>
+                    <h1><span class="text-light">1.</span><br />Lịch Sử <br /> Mạng Nơ-ron</h1>
+                </section>
+                <section style="font-size: 0.85em;">
+                    <h2>Dòng thời gian phát triển</h2>
+                    <ul>
+                        <li><strong>1943</strong> — McCulloch &amp; Pitts: mô hình neuron nhân tạo đầu tiên</li>
+                        <li><strong>1958</strong> — Rosenblatt: <span class="keyword">Perceptron</span> — mạng học đơn
+                            giản đầu tiên</li>
+                        <li><strong>1982</strong> — John Hopfield: <span class="keyword">Hopfield Network</span></li>
+                        <li><strong>1986</strong> — Hinton phổ biến <span class="keyword">Backpropagation</span></li>
+                        <li><strong>1998</strong> — LeCun: LeNet — CNN đầu tiên nhận dạng chữ số</li>
+                        <li><strong>2012</strong> — AlexNet: bùng nổ Deep Learning</li>
+                        <li><strong>2017</strong> — <span class="keyword">Transformer</span>: "Attention is All You
+                            Need"</li>
+                        <li><strong>2024</strong> — <span class="keyword">Nobel Vật lý</span> trao cho Hopfield &amp;
+                            Hinton</li>
+                    </ul>
+                </section>
+                <section style="font-size:0.8em;">
+                    <h2>Nobel Vật lý 2024</h2>
+                    <div style="text-align:center; margin-top:8px;">
+                        <img src="img/lec11/2024-nobel-prize-physics-2681549498.webp"
+                            style="max-width:95%; max-height:380px; object-fit:contain;" />
+                        <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>Hopfield &amp; Hinton — Nobel Vật
+                                lý 2024 cho những đóng góp nền tảng về mạng nơ-ron</em></p>
+                    </div>
+                </section>
+                <section style="font-size: 0.78em;">
+                    <h2>John Hopfield — Hopfield Network (1982)</h2>
+                    <p><strong>Lý thuyết bộ nhớ liên kết (Tailspin Theory)</strong></p>
+                    <ul>
+                        <li>Mạng hồi quy (Recurrent) — các neuron kết nối lẫn nhau</li>
+                        <li>Hệ thống có <span class="keyword">hàm năng lượng</span> — tìm điểm cực tiểu như vật lý thống
+                            kê</li>
+                        <li>Bộ nhớ = <em>điểm thu hút (attractor)</em> — mạng "nhớ lại" pattern từ dữ liệu nhiễu</li>
+                        <li>Ứng dụng: nhận dạng chữ viết tay bị mờ hoặc thiếu</li>
+                    </ul>
+                    <div class="demo-box">
+                        Ví dụ: Đưa vào ảnh chữ "A" bị nhiễu 40% → mạng tự "hoàn thiện" lại ảnh gốc
+                    </div>
+                </section>
+                <section style="font-size:0.8em;">
+                    <h2>Hopfield Network — Bộ nhớ liên kết</h2>
+                    <div style="text-align:center; margin-top:8px;">
+                        <img src="img/lec11//hofield.png"
+                            style="max-width:95%; max-height:380px; object-fit:contain;" />
+                        <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>Input bị nhiễu → mạng hội tụ về
+                                pattern gốc được lưu trong bộ nhớ</em></p>
+                    </div>
+                </section>
+                <section>
+                    <h2>Geoffrey Hinton — Giải pháp RBM</h2>
+                    <p><strong>Vấn đề:</strong> Hopfield Net không học được từ dữ liệu lớn</p>
+                    <ul>
+                        <li><span class="keyword">Restricted Boltzmann Machines (RBM)</span>: mạng xác suất 2 lớp (ẩn +
+                            nhìn)</li>
+                        <li>Phổ biến hóa <strong>Backpropagation</strong> (1986) — nền tảng của mọi mạng hiện đại</li>
+                    </ul>
+                    <div class="highlight">
+                        Hinton rời Google năm 2023 để cảnh báo về rủi ro AI → Nobel Vật lý 2024
+                    </div>
+                </section>
+                <section style="font-size:0.8em;">
+                    <h2>Kiến trúc Hopfield &amp; Boltzmann Machine</h2>
+                    <div style="text-align:center; margin-top:8px;">
+                        <img src="img/lec11/hopfield-vs-rbm.svg"
+                            style="max-width:95%; max-height:380px; object-fit:contain;" />
+                        <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>Hopfield Network (trái) vs
+                                Restricted Boltzmann Machine (phải) — RBM tách thành 2 lớp rõ ràng</em></p>
+                    </div>
+                </section>
+            </section>
 
-<!-- ==================== 2. MẠNG NƠ-RON LÀ GÌ? ==================== -->
-<section>
-    <section>
-        <h1><span class="text-light">2.</span><br />Mạng Nơ-ron là gì?</h1>
-    </section>
-    <section>
-        <h2>Ví dụ: Nhận dạng chữ số MNIST</h2>
-        <div class="portrait">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/MnistExamples.png" alt="MNIST dataset">
-        </div>
-        <p>Bài toán: Cho ảnh 28×28 pixel (784 điểm ảnh) → phân loại chữ số 0–9</p>
-    </section>
-    <section style="font-size:0.8em;">
-        <h2>Kiến trúc mạng MNIST</h2>
-        <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec11/image.png"
-                 style="max-width:95%; max-height:380px; object-fit:contain;" />
-            <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>784 → 16 → 16 → 10 neurons — mỗi kết nối là một trọng số cần học</em></p>
-        </div>
-    </section>
-    <section>
-        <h2>Cấu trúc mạng — Layers</h2>
-        <ul>
-            <li><strong>Input layer:</strong> 784 neurons (1 neuron = 1 pixel)</li>
-            <li><strong>Hidden layer 1:</strong> 16 neurons</li>
-            <li><strong>Hidden layer 2:</strong> 16 neurons</li>
-            <li><strong>Output layer:</strong> 10 neurons (1 neuron = 1 chữ số 0–9)</li>
-        </ul>
-        <div class="demo-box">
-            Tổng số tham số: 784×16 + 16×16 + 16×10 + các bias ≈ <strong>13.000 tham số</strong>
-        </div>
-    </section>
-    <section>
-        <h2>Neuron (Perceptron) — Đơn vị cơ bản</h2>
-        <div class="two-col">
-            <div>
-                <ul>
-                    <li>Nhận nhiều giá trị đầu vào <strong>x₁, x₂, …</strong></li>
-                    <li>Mỗi đầu vào có <span class="keyword">trọng số w</span></li>
-                    <li>Cộng thêm <span class="keyword">bias b</span></li>
-                    <li>Áp dụng <span class="keyword">hàm kích hoạt</span></li>
-                    <li>Xuất ra một giá trị trong [0, 1]</li>
-                </ul>
-            </div>
-            <div>
-                <p><strong>Công thức:</strong></p>
-                <pre><code>z = w₁x₁ + w₂x₂ + … + b
-a = σ(z)    ← sigmoid
-  = 1 / (1 + e⁻ᶻ)</code></pre>
-                <p style="font-size:0.75em">ReLU: <code>a = max(0, z)</code> — phổ biến hơn hiện nay</p>
-            </div>
-        </div>
-    </section>
-    <section>
-        <h2>Hàm kích hoạt (Activation Functions)</h2>
-        <p>Đưa <span class="keyword">tính phi tuyến</span> vào mạng — nếu không có, nhiều lớp = 1 lớp tuyến tính</p>
-        <ul>
-            <li><strong>Sigmoid:</strong> \( \dfrac{1}{1+e^{-z}} \) — output \(\in(0,1)\), dùng cho xác suất nhị phân</li>
-            <li><strong>Tanh:</strong> output \(\in(-1,1)\) — hay dùng trong RNN/LSTM</li>
-            <li><strong>ReLU:</strong> \( \max(0,z) \) — mặc định cho deep network, nhưng có <span class="keyword">dead neuron</span></li>
-            <li><strong>GELU:</strong> \( x \cdot \sigma(1.702x) \) — mặc định trong Transformer</li>
-        </ul>
-        <div class="highlight" style="margin-top:12px">
-            <strong>Quy tắc:</strong> Hidden → ReLU/GELU &nbsp;|&nbsp; Output binary → Sigmoid &nbsp;|&nbsp; Output multi-class → Softmax
-        </div>
-    </section>
-    <section style="font-size:0.8em;">
-        <h2>Sigmoid vs ReLU</h2>
-        <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec11/SIG_RELU.png"
-                 style="max-width:95%; max-height:380px; object-fit:contain;" />
-            <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>Sigmoid bão hòa ở 2 đầu (vanishing gradient) — ReLU tuyến tính ở vùng dương, kill hẳn ở vùng âm</em></p>
-        </div>
-    </section>
-    <section style="font-size:0.8em;">
-        <h2>GELU vs ReLU</h2>
-        <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec11/GELU_RELU.png"
-                 style="max-width:95%; max-height:380px; object-fit:contain;" />
-            <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>GELU cho phép giá trị âm nhỏ lọt qua ở vùng x ≈ −0.5 — không có dead neuron, gradient luôn tồn tại</em></p>
-        </div>
-    </section>
-    <section>
-        <h2>Trọng số (w) và Bias (b)</h2>
-        <ul>
-            <li><strong>Trọng số w:</strong> điều chỉnh tầm quan trọng của từng kết nối</li>
-            <li><strong>Bias b:</strong> dịch chuyển ngưỡng kích hoạt</li>
-        </ul>
-        <div class="highlight">
-            Toàn bộ quá trình <strong>huấn luyện</strong> = tìm bộ (w, b) tốt nhất cho từng neuron
-        </div>
-        <div class="question-box" style="margin-top:20px">
-            <strong>Câu hỏi:</strong> Mạng có 13.000 tham số — làm sao tìm được bộ giá trị tốt nhất?<br/>
-            → Cần một thước đo sai số, và một thuật toán tối ưu hóa!
-        </div>
-    </section>
-</section>
+            <!-- ==================== 2. MẠNG NƠ-RON LÀ GÌ? ==================== -->
+            <section>
+                <section>
+                    <h1><span class="text-light">2.</span><br />Mạng Nơ-ron <br /> là gì?</h1>
+                </section>
+                <section>
+                    <h2>Ví dụ: MNIST</h2>
+                    <div class="portrait">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/MnistExamples.png"
+                            alt="MNIST dataset">
+                    </div>
+                    <p>Bài toán: Cho ảnh 28×28 pixel (784 điểm ảnh) → phân loại chữ số 0–9</p>
+                </section>
+                <section style="font-size:0.8em;">
+                    <h2>Kiến trúc mạng MNIST</h2>
+                    <div style="text-align:center; margin-top:8px;">
+                        <img src="img/lec11/mnist-mlp.svg"
+                            style="max-width:95%; max-height:380px; object-fit:contain;" />
+                        <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>784 → 16 → 16 → 10 neurons — mỗi
+                                kết nối là một trọng số cần học</em></p>
+                    </div>
+                </section>
+                <section>
+                    <h2>Cấu trúc mạng — Layers</h2>
+                    <ul>
+                        <li><strong>Input layer:</strong> 784 neurons (1 neuron = 1 pixel)</li>
+                        <li><strong>Hidden layer 1:</strong> 16 neurons</li>
+                        <li><strong>Hidden layer 2:</strong> 16 neurons</li>
+                        <li><strong>Output layer:</strong> 10 neurons (1 neuron = 1 chữ số 0–9)</li>
+                    </ul>
+                    <div class="demo-box">
+                        Tổng số tham số: 784×16 + 16×16 + 16×10 + các bias ≈ <strong>13.000 tham số</strong>
+                    </div>
+                </section>
+                <section style="font-size: 0.85em;">
+                    <h2>Neuron (Perceptron) — Đơn vị cơ bản</h2>
+                    <div class="two-col">
+                        <div>
+                            <ul>
+                                <li>Nhận nhiều giá trị đầu vào \(x_1, x_2, \ldots\)</li>
+                                <li>Mỗi đầu vào có <span class="keyword">trọng số \(w_j\)</span></li>
+                                <li>Cộng thêm <span class="keyword">bias \(b\)</span></li>
+                                <li>Áp dụng <span class="keyword">hàm kích hoạt</span></li>
+                                <li>Xuất ra một giá trị trong \([0, 1]\)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><strong>Công thức:</strong></p>
+                            <p>\[ z = w_1 x_1 + w_2 x_2 + \ldots + b \]</p>
+                            <p>\[ a = \sigma(z) = \dfrac{1}{1 + e^{-z}} \]</p>
+                            <p style="font-size:0.85em; margin-top:0.6em;">
+                                ReLU: \(a = \max(0, z)\) — phổ biến hơn hiện nay.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+                <section style="font-size: 0.75em;">
+                    <h2>Hàm kích hoạt (Activation Functions)</h2>
+                    <p>Đưa <span class="keyword">tính phi tuyến</span> vào mạng — nếu không có, nhiều lớp = 1 lớp tuyến
+                        tính</p>
+                    <ul>
+                        <li><strong>Sigmoid:</strong> \( \dfrac{1}{1+e^{-z}} \) — output \(\in(0,1)\), dùng cho xác suất
+                            nhị phân</li>
+                        <li><strong>Tanh:</strong> output \(\in(-1,1)\) — hay dùng trong RNN/LSTM</li>
+                        <li><strong>ReLU:</strong> \( \max(0,z) \) — mặc định cho deep network, nhưng có <span
+                                class="keyword">dead neuron</span></li>
+                        <li><strong>GELU:</strong> \( x \cdot \sigma(1.702x) \) — mặc định trong Transformer</li>
+                    </ul>
+                    <div class="highlight" style="margin-top:12px">
+                        <strong>Quy tắc:</strong> Hidden → ReLU/GELU &nbsp;|&nbsp; Output binary → Sigmoid &nbsp;|&nbsp;
+                        Output multi-class → Softmax
+                    </div>
+                </section>
+                <section style="font-size:0.8em;">
+                    <h2>Sigmoid vs ReLU</h2>
+                    <div style="text-align:center; margin-top:8px;">
+                        <img src="img/lec11/sigmoid-vs-relu.svg"
+                            style="max-width:95%; max-height:380px; object-fit:contain;" />
+                        <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>Sigmoid bão hòa ở 2 đầu (vanishing
+                                gradient) — ReLU tuyến tính ở vùng dương, kill hẳn ở vùng âm</em></p>
+                    </div>
+                </section>
+                <section style="font-size:0.8em;">
+                    <h2>GELU vs ReLU</h2>
+                    <div style="text-align:center; margin-top:8px;">
+                        <img src="img/lec11/gelu-vs-relu.svg"
+                            style="max-width:95%; max-height:380px; object-fit:contain;" />
+                        <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>GELU cho phép giá trị âm nhỏ lọt
+                                qua ở vùng x ≈ −0.5 — không có dead neuron, gradient luôn tồn tại</em></p>
+                    </div>
+                </section>
+                <section style="font-size: 0.9em;">
+                    <h2>Trọng số \(w\) và Bias \(b\)</h2>
+                    <ul>
+                        <li><strong>Trọng số \(w_j\):</strong> điều chỉnh tầm quan trọng của từng kết nối.</li>
+                        <li><strong>Bias \(b\):</strong> dịch chuyển ngưỡng kích hoạt.</li>
+                    </ul>
+                    <div class="highlight">
+                        Toàn bộ quá trình <strong>huấn luyện</strong> = tìm bộ \((w, b)\) tốt nhất cho từng neuron.
+                    </div>
+                    <div class="question-box" style="margin-top:20px">
+                        <strong>Câu hỏi:</strong> Mạng có 13 000 tham số — làm sao tìm được bộ giá trị tốt nhất?<br />
+                        → Cần một thước đo sai số, và một thuật toán tối ưu hoá!
+                    </div>
+                </section>
+            </section>
 
-<!-- ==================== 3. LOSS FUNCTION ==================== -->
-<section>
-    <section>
-        <h1><span class="text-light">3.</span><br />Loss Function</h1>
-        <p>Đo mức độ sai — để biết phải sửa theo hướng nào</p>
-    </section>
+            <!-- ==================== 3. LOSS FUNCTION ==================== -->
+            <section>
+                <section>
+                    <h1><span class="text-light">3.</span><br />Loss Function</h1>
+                    <p>Đo mức độ sai — để biết phải sửa theo hướng nào</p>
+                </section>
 
-    <section>
-        <h2>Loss Function (1/4) — Mean Squared Error</h2>
-        <p>Dùng cho bài toán <span class="keyword">hồi quy</span> — output là giá trị liên tục</p>
-        \[ \mathcal{L}_{\text{MSE}} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 \]
-        <div class="two-col" style="margin-top:10px">
-            <div>
-                <ul>
-                    <li>Phạt nặng lỗi lớn (do bình phương)</li>
-                    <li>Nhạy với <span class="keyword">outlier</span></li>
-                    <li>Gradient: \( \dfrac{\partial \mathcal{L}}{\partial \hat{y}_i} = -\dfrac{2}{n}(y_i - \hat{y}_i) \)</li>
-                </ul>
-            </div>
-            <div>
-                <div class="demo-box">
-                    <strong>Ví dụ:</strong> Dự đoán giá nhà, nhiệt độ<br/><br/>
-                    <strong>Lưu ý:</strong> Có thể dùng Squared Error (không chia n) — cùng hướng gradient, khác hằng số tỉ lệ
-                </div>
-            </div>
-        </div>
-        <div class="highlight" style="margin-top:8px">
-            ⚠️ MSE <strong>không phù hợp</strong> cho bài toán phân loại — dùng Cross-Entropy thay thế
-        </div>
-    </section>
+                <section style="font-size: 0.7em;">
+                    <h2>Loss Function (1/4) — Mean Squared Error</h2>
+                    <p>Dùng cho bài toán <span class="keyword">hồi quy</span> — output là giá trị liên tục</p>
+                    \[ \mathcal{L}_{\text{MSE}} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 \]
+                    <div class="two-col" style="margin-top:10px">
+                        <div>
+                            <ul>
+                                <li>Phạt nặng lỗi lớn (do bình phương)</li>
+                                <li>Nhạy với <span class="keyword">outlier</span></li>
+                                <li>Gradient: \( \dfrac{\partial \mathcal{L}}{\partial \hat{y}_i} = -\dfrac{2}{n}(y_i -
+                                    \hat{y}_i) \)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="demo-box">
+                                <strong>Ví dụ:</strong> Dự đoán giá nhà, nhiệt độ<br /><br />
+                                <strong>Lưu ý:</strong> Có thể dùng Squared Error (không chia n) — cùng hướng gradient,
+                                khác hằng số tỉ lệ
+                            </div>
+                        </div>
+                    </div>
+                    <div class="highlight" style="margin-top:8px">
+                        ⚠️ MSE <strong>không phù hợp</strong> cho bài toán phân loại — dùng Cross-Entropy thay thế
+                    </div>
+                </section>
 
-    <section>
-        <h2>Loss Function (2/4) — Binary Cross-Entropy</h2>
-        <p>Dùng cho bài toán <span class="keyword">phân loại nhị phân</span> — 1 trong 2 lớp</p>
-        \[ \mathcal{L}_{\text{BCE}} = -\frac{1}{n}\sum_{i=1}^{n} \Big[ y_i \log\hat{p}_i + (1 - y_i)\log(1 - \hat{p}_i) \Big] \]
-        <div class="two-col" style="margin-top:10px">
-            <div>
-                <ul>
-                    <li>Output layer dùng <span class="keyword">Sigmoid</span> → \(\hat{p} \in (0,1)\)</li>
-                    <li>Gradient sạch: \(\partial L/\partial z = \hat{y} - y\)</li>
-                    <li>Sigmoid + BCE triệt tiêu nhau khi tính đạo hàm → không vanish</li>
-                </ul>
-            </div>
-            <div>
-                <div class="demo-box">
-                    Email spam / không spam<br/>
-                    Chẩn đoán bệnh: có / không<br/><br/>
-                    <strong>Sigmoid + BCE</strong> luôn đi cùng nhau
-                </div>
-            </div>
-        </div>
-    </section>
+                <section style="font-size: 0.72em;">
+                    <h2>Loss Function (2/4) — Binary Cross-Entropy</h2>
+                    <p>Dùng cho bài toán <span class="keyword">phân loại nhị phân</span> — 1 trong 2 lớp</p>
+                    \[ \mathcal{L}_{\text{BCE}} = -\frac{1}{n}\sum_{i=1}^{n} \Big[ y_i \log\hat{p}_i + (1 - y_i)\log(1 -
+                    \hat{p}_i) \Big] \]
+                    <div class="two-col" style="margin-top:10px">
+                        <div>
+                            <ul>
+                                <li>Output layer dùng <span class="keyword">Sigmoid</span> → \(\hat{p} \in (0,1)\)</li>
+                                <li>Gradient sạch: \(\partial L/\partial z = \hat{y} - y\)</li>
+                                <li>Sigmoid + BCE triệt tiêu nhau khi tính đạo hàm → không vanish</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="demo-box">
+                                Email spam / không spam<br />
+                                Chẩn đoán bệnh: có / không<br /><br />
+                                <strong>Sigmoid + BCE</strong> luôn đi cùng nhau
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-    <section>
-        <h2>Loss Function (3/4) — Categorical Cross-Entropy</h2>
-        <p>Dùng cho bài toán <span class="keyword">phân loại đa lớp</span> — 1 trong K lớp</p>
-        \[ \mathcal{L}_{\text{CCE}} = -\sum_{k=1}^{K} p_k^* \log(p_k) = -\log\, p(y = k^* \mid x) \]
-        <div class="two-col" style="margin-top:10px">
-            <div>
-                <ul>
-                    <li>Output layer dùng <span class="keyword">Softmax</span></li>
-                    <li>Nhãn thực là one-hot vector \(p^* = (0,\ldots,1,\ldots,0)\)</li>
-                    <li>Chỉ class đúng đóng góp vào loss</li>
-                    <li>Phạt rất nặng khi tự tin sai</li>
-                </ul>
-            </div>
-            <div>
-                <div class="demo-box">
-                    MNIST (10 lớp), ImageNet (1000 lớp)<br/><br/>
-                    \(-\log(0.99) \approx 0.01\) ✅ tự tin đúng<br/>
-                    \(-\log(0.01) \approx 4.6\) ❌ tự tin sai
-                </div>
-                <div class="highlight" style="margin-top:8px">
-                    <strong>Softmax + CCE</strong> = cặp chuẩn cho đa lớp
-                </div>
-            </div>
-        </div>
-    </section>
+                <section style="font-size: 0.65em;">
+                    <h2>Loss Function (3/4) — Categorical Cross-Entropy</h2>
+                    <p>Dùng cho bài toán <span class="keyword">phân loại đa lớp</span> — 1 trong K lớp</p>
+                    \[ \mathcal{L}_{\text{CCE}} = -\sum_{k=1}^{K} p_k^* \log(p_k) = -\log\, p(y = k^* \mid x) \]
+                    <div class="two-col" style="margin-top:10px">
+                        <div>
+                            <ul>
+                                <li>Output layer dùng <span class="keyword">Softmax</span></li>
+                                <li>Nhãn thực là one-hot vector \(p^* = (0,\ldots,1,\ldots,0)\)</li>
+                                <li>Chỉ class đúng đóng góp vào loss</li>
+                                <li>Phạt rất nặng khi tự tin sai</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="demo-box">
+                                MNIST (10 lớp), ImageNet (1000 lớp)<br /><br />
+                                \(-\log(0.99) \approx 0.01\) ✅ tự tin đúng<br />
+                                \(-\log(0.01) \approx 4.6\) ❌ tự tin sai
+                            </div>
+                            <div class="highlight" style="margin-top:8px">
+                                <strong>Softmax + CCE</strong> = cặp chuẩn cho đa lớp
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-    <section>
-        <h2>Loss Function (4/4) — Khi nào dùng gì?</h2>
-        <table class="compare-table">
-            <thead>
-                <tr>
-                    <th>Loss Function</th>
-                    <th>Bài toán</th>
-                    <th>Output layer</th>
-                    <th>Ví dụ</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="arch">MSE</td>
-                    <td>Hồi quy</td>
-                    <td>Linear</td>
-                    <td>Dự đoán giá nhà, nhiệt độ</td>
-                </tr>
-                <tr>
-                    <td class="arch">MAE</td>
-                    <td>Hồi quy (có outlier)</td>
-                    <td>Linear</td>
-                    <td>Dự đoán doanh thu</td>
-                </tr>
-                <tr>
-                    <td class="arch">Binary CE</td>
-                    <td>Phân loại nhị phân</td>
-                    <td>Sigmoid</td>
-                    <td>Spam, chẩn đoán bệnh</td>
-                </tr>
-                <tr>
-                    <td class="arch">Categorical CE</td>
-                    <td>Phân loại đa lớp</td>
-                    <td>Softmax</td>
-                    <td>MNIST, ImageNet, NLP</td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="demo-box" style="margin-top:14px">
-            <strong>Quy tắc vàng:</strong> Loss function và output activation luôn đi cùng nhau<br/>
-            Softmax + CCE &nbsp;|&nbsp; Sigmoid + BCE &nbsp;|&nbsp; Linear + MSE/MAE
-        </div>
-    </section>
-</section>
+                <section style="font-size: 0.75em;">
+                    <h2>Loss Function (4/4) — Khi nào dùng gì?</h2>
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>Loss Function</th>
+                                <th>Bài toán</th>
+                                <th>Output layer</th>
+                                <th>Ví dụ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="arch">MSE</td>
+                                <td>Hồi quy</td>
+                                <td>Linear</td>
+                                <td>Dự đoán giá nhà, nhiệt độ</td>
+                            </tr>
+                            <tr>
+                                <td class="arch">MAE</td>
+                                <td>Hồi quy (có outlier)</td>
+                                <td>Linear</td>
+                                <td>Dự đoán doanh thu</td>
+                            </tr>
+                            <tr>
+                                <td class="arch">Binary CE</td>
+                                <td>Phân loại nhị phân</td>
+                                <td>Sigmoid</td>
+                                <td>Spam, chẩn đoán bệnh</td>
+                            </tr>
+                            <tr>
+                                <td class="arch">Categorical CE</td>
+                                <td>Phân loại đa lớp</td>
+                                <td>Softmax</td>
+                                <td>MNIST, ImageNet, NLP</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="demo-box" style="margin-top:14px">
+                        <strong>Quy tắc vàng:</strong> Loss function và output activation luôn đi cùng nhau<br />
+                        Softmax + CCE &nbsp;|&nbsp; Sigmoid + BCE &nbsp;|&nbsp; Linear + MSE/MAE
+                    </div>
+                </section>
+            </section>
 
-<!-- ==================== 4. GRADIENT DESCENT & BACKPROP ==================== -->
-<section>
-    <section>
-        <h1><span class="text-light">4.</span><br />Gradient Descent &amp; Backpropagation</h1>
-    </section>
+            <!-- ==================== 4. GRADIENT DESCENT & BACKPROP ==================== -->
+            <section>
+                <section>
+                    <h1><span class="text-light">4.</span><br />Gradient Descent &amp; Backpropagation</h1>
+                </section>
 
-    <section>
-        <h2>Backpropagation — Tổng quan</h2>
-        <p>Mục tiêu: tìm gradient \(\partial L / \partial w\) cho <strong>từng trọng số</strong> để update</p>
+                <section style="font-size: 0.75em;">
+                    <h2>Backpropagation — Tổng quan</h2>
+                    <p>Mục tiêu: tìm gradient \(\partial L / \partial w\) cho <strong>từng trọng số</strong> để update
+                    </p>
 
-        <div style="margin: 18px 0;">
-            <div style="display:flex; align-items:stretch; gap:0; font-size:0.88em;">
-                <div style="background:#fff3cd; border:2px solid #f0a500; border-radius:8px 0 0 8px; padding:12px 16px; flex:1; text-align:center;">
-                    <div style="font-size:1.6em; margin-bottom:4px">①</div>
-                    <strong>Tính Loss</strong><br/>
-                    <span style="font-size:0.85em">So sánh \(\hat{y}\) với \(y_{true}\)<br/>ra một con số đo độ sai</span>
-                </div>
-                <div style="background:#e8f4fd; border:2px solid #4285f4; border-left:none; padding:12px 16px; flex:1; text-align:center;">
-                    <div style="font-size:1.6em; margin-bottom:4px">②</div>
-                    <strong>Đạo hàm từng trọng số</strong><br/>
-                    <span style="font-size:0.85em">Chain rule: \(\partial L/\partial w\)<br/>cho từng \(w\) riêng biệt</span>
-                </div>
-                <div style="background:#f0fff4; border:2px solid #34a853; border-left:none; padding:12px 16px; flex:1; text-align:center;">
-                    <div style="font-size:1.6em; margin-bottom:4px">③</div>
-                    <strong>Update trọng số</strong><br/>
-                    <span style="font-size:0.85em">\(w \leftarrow w - \eta \cdot \partial L/\partial w\)<br/>tìm giá trị \(w\) mới</span>
-                </div>
-                <div style="background:#fdf0ff; border:2px solid #9c27b0; border-left:none; border-radius:0 8px 8px 0; padding:12px 16px; flex:1; text-align:center;">
-                    <div style="font-size:1.6em; margin-bottom:4px">④</div>
-                    <strong>Lan truyền ngược</strong><br/>
-                    <span style="font-size:0.85em">Dùng gradient mới truyền về layer trước — lặp đến layer đầu tiên</span>
-                </div>
-            </div>
-        </div>
+                    <div style="margin: 18px 0;">
+                        <div style="display:flex; align-items:stretch; gap:0; font-size:0.88em;">
+                            <div
+                                style="background:#fff3cd; border:2px solid #f0a500; border-radius:8px 0 0 8px; padding:12px 16px; flex:1; text-align:center;">
+                                <div style="font-size:1.6em; margin-bottom:4px">①</div>
+                                <strong>Tính Loss</strong><br />
+                                <span style="font-size:0.85em">So sánh \(\hat{y}\) với \(y_{true}\)<br />ra một con số
+                                    đo độ sai</span>
+                            </div>
+                            <div
+                                style="background:#e8f4fd; border:2px solid #4285f4; border-left:none; padding:12px 16px; flex:1; text-align:center;">
+                                <div style="font-size:1.6em; margin-bottom:4px">②</div>
+                                <strong>Đạo hàm từng trọng số</strong><br />
+                                <span style="font-size:0.85em">Chain rule: \(\partial L/\partial w\)<br />cho từng \(w\)
+                                    riêng biệt</span>
+                            </div>
+                            <div
+                                style="background:#f0fff4; border:2px solid #34a853; border-left:none; padding:12px 16px; flex:1; text-align:center;">
+                                <div style="font-size:1.6em; margin-bottom:4px">③</div>
+                                <strong>Update trọng số</strong><br />
+                                <span style="font-size:0.85em">\(w \leftarrow w - \eta \cdot \partial L/\partial
+                                    w\)<br />tìm giá trị \(w\) mới</span>
+                            </div>
+                            <div
+                                style="background:#fdf0ff; border:2px solid #9c27b0; border-left:none; border-radius:0 8px 8px 0; padding:12px 16px; flex:1; text-align:center;">
+                                <div style="font-size:1.6em; margin-bottom:4px">④</div>
+                                <strong>Lan truyền ngược</strong><br />
+                                <span style="font-size:0.85em">Dùng gradient mới truyền về layer trước — lặp đến layer
+                                    đầu tiên</span>
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="demo-box">
-            Output layer → Hidden layer 2 → Hidden layer 1 → Input layer<br/>
-            Mỗi layer <strong>phải chờ</strong> layer sau hoàn thành bước ② và ③ mới tính được
-        </div>
-    </section>
+                    <div class="demo-box">
+                        Output layer → Hidden layer 2 → Hidden layer 1 → Input layer<br />
+                        Mỗi layer <strong>phải chờ</strong> layer sau hoàn thành bước ② và ③ mới tính được
+                    </div>
+                </section>
 
-    <section>
-        <h2>Ý tưởng Gradient Descent</h2>
-        <div class="demo-box">
-            Hình dung: bạn đứng trên một quả đồi trong sương mù, muốn xuống thung lũng.
-            Mỗi bước, bạn nhìn xung quanh và bước về hướng dốc nhất đi xuống.
-        </div>
-        <ul>
-            <li><span class="keyword">Gradient</span>: hướng tăng nhanh nhất của loss</li>
-            <li>Ta đi <strong>ngược chiều gradient</strong> → loss giảm nhanh nhất</li>
-            <li>Công thức: <code>w ← w − η · ∂L/∂w</code></li>
-            <li><span class="keyword">η (learning rate)</span>: bước đi dài hay ngắn</li>
-        </ul>
-        <div class="highlight" style="margin-top:12px">
-            Mục tiêu: tìm <strong>global minimum</strong> — nhưng local minimum thường đã đủ tốt trong thực tế
-        </div>
-    </section>
+                <section style="font-size: 0.72em;">
+                    <h2>Ý tưởng Gradient Descent</h2>
+                    <div class="demo-box">
+                        Hình dung: bạn đứng trên một quả đồi trong sương mù, muốn xuống thung lũng.
+                        Mỗi bước, bạn nhìn xung quanh và bước về hướng dốc nhất đi xuống.
+                    </div>
+                    <ul>
+                        <li><span class="keyword">Gradient</span> \(\nabla_w \mathcal{L}\): hướng tăng nhanh nhất của loss.</li>
+                        <li>Ta đi <strong>ngược chiều gradient</strong> → loss giảm nhanh nhất.</li>
+                        <li>Công thức cập nhật:
+                            \[ w \leftarrow w - \eta \, \dfrac{\partial \mathcal{L}}{\partial w} \]
+                        </li>
+                        <li><span class="keyword">\(\eta\) (learning rate)</span>: bước đi dài hay ngắn.</li>
+                    </ul>
+                    <div class="highlight" style="margin-top:12px">
+                        Mục tiêu: tìm <strong>global minimum</strong> — nhưng local minimum thường đã đủ tốt trong thực tế.
+                    </div>
+                </section>
 
-    <section>
-        <h2>Gradient cho biết 2 thứ</h2>
-        <div class="two-col">
-            <div>
-                <p><strong>1. Hướng — nên tăng hay giảm w?</strong></p>
-                <ul>
-                    <li>Gradient <span class="keyword">âm</span> → loss giảm khi w tăng → <strong>tăng w</strong></li>
-                    <li>Gradient <span class="keyword">dương</span> → loss tăng khi w tăng → <strong>giảm w</strong></li>
-                </ul>
-                <div class="demo-box" style="margin-top:10px; font-size:0.85em;">
-                    Gradient = <strong>−22</strong> (âm)<br/>
-                    → w_mới = 0 − (0.01 × −22) = <strong>+0.22</strong> ✅<br/><br/>
-                    Gradient = <strong>+15</strong> (dương)<br/>
-                    → w_mới = w − (0.01 × 15) → <strong>giảm xuống</strong> ✅
-                </div>
-            </div>
-            <div>
-                <p><strong>2. Độ lớn — còn xa minimum không?</strong></p>
-                <ul>
-                    <li>Gradient lớn → đang ở sườn dốc, còn <strong>xa</strong> minimum</li>
-                    <li>Gradient nhỏ → gần phẳng, <strong>gần</strong> minimum</li>
-                    <li>Gradient ≈ 0 → đã đến đáy, <strong>dừng</strong></li>
-                </ul>
-                <div class="demo-box" style="margin-top:10px; font-size:0.85em;">
-                    Step 1: Gradient = −22.00 → dốc, còn xa<br/>
-                    Step 2: Gradient = −20.68 → bớt dốc<br/>
-                    Step 3: Gradient = −19.44 → tiếp tục giảm<br/>
-                    ···<br/>
-                    Step n: Gradient ≈ 0.00 &nbsp;→ dừng ✅
-                </div>
-            </div>
-        </div>
-        <div class="highlight" style="margin-top:8px">
-            Gradient = <strong>la bàn</strong> (chỉ hướng) + <strong>tốc độ kế</strong> (cho biết còn dốc bao nhiêu)
-        </div>
-    </section>
+                <section style="font-size: 0.62em;">
+                    <h2>Gradient cho biết 2 thứ</h2>
+                    <div class="two-col">
+                        <div>
+                            <p><strong>1. Hướng — nên tăng hay giảm \(w\)?</strong></p>
+                            <ul>
+                                <li>\(\partial \mathcal{L} / \partial w\) <span class="keyword">âm</span> → loss giảm khi \(w\) tăng → <strong>tăng \(w\)</strong>.</li>
+                                <li>\(\partial \mathcal{L} / \partial w\) <span class="keyword">dương</span> → loss tăng khi \(w\) tăng → <strong>giảm \(w\)</strong>.</li>
+                            </ul>
+                            <div class="demo-box" style="margin-top:10px; font-size:0.85em;">
+                                \(\partial \mathcal{L} / \partial w = -22\) (âm) <br />
+                                → \(w_{\text{mới}} = 0 - 0.01 \cdot (-22) = +0.22\) ✅ <br /><br />
+                                \(\partial \mathcal{L} / \partial w = +15\) (dương) <br />
+                                → \(w_{\text{mới}} = w - 0.01 \cdot 15\) → <strong>giảm xuống</strong> ✅
+                            </div>
+                        </div>
+                        <div>
+                            <p><strong>2. Độ lớn — còn xa minimum không?</strong></p>
+                            <ul>
+                                <li>\(|\nabla \mathcal{L}|\) lớn → đang ở sườn dốc, còn <strong>xa</strong> minimum.</li>
+                                <li>\(|\nabla \mathcal{L}|\) nhỏ → gần phẳng, <strong>gần</strong> minimum.</li>
+                                <li>\(\nabla \mathcal{L} \approx 0\) → đã đến đáy, <strong>dừng</strong>.</li>
+                            </ul>
+                            <div class="demo-box" style="margin-top:10px; font-size:0.85em;">
+                                Bước 1: \(\nabla \mathcal{L} = -22.00\) → dốc, còn xa <br />
+                                Bước 2: \(\nabla \mathcal{L} = -20.68\) → bớt dốc <br />
+                                Bước 3: \(\nabla \mathcal{L} = -19.44\) → tiếp tục giảm <br />
+                                \(\vdots\) <br />
+                                Bước \(n\): \(\nabla \mathcal{L} \approx 0\) → dừng ✅
+                            </div>
+                        </div>
+                    </div>
+                    <div class="highlight" style="margin-top:8px">
+                        Gradient = <strong>la bàn</strong> (chỉ hướng) + <strong>tốc độ kế</strong> (cho biết còn dốc bao nhiêu).
+                    </div>
+                </section>
 
-    <section>
-        <h2>Tính Gradient — Chain Rule</h2>
-        <p>Để update weight $w$, ta cần \(\partial L / \partial w\) — nhưng $w$ không ảnh hưởng trực tiếp đến $L$:</p>
-        \[ w \;\longrightarrow\; z \;\longrightarrow\; \hat{y} \;\longrightarrow\; L \]
-        <p>Phải dùng <span class="keyword">chain rule</span> — tính từng mắt xích:</p>
-        \[ \frac{\partial L}{\partial w}
-        = \frac{\partial L}{\partial \hat{y}}
-        \times \frac{\partial \hat{y}}{\partial z}
-        \times \frac{\partial z}{\partial w} \]
-        <div class="two-col" style="margin-top:12px">
-            <div>
-                <ul>
-                    <li>\(\partial L/\partial \hat{y}\) — đạo hàm loss</li>
-                    <li>\(\partial \hat{y}/\partial z\) — đạo hàm activation</li>
-                    <li>\(\partial z/\partial w = x\) — đạo hàm linear</li>
-                </ul>
-            </div>
-            <div>
-                <div class="demo-box">
-                    Sigmoid + BCE cho gradient cực sạch:<br/>
-                    \(\partial L / \partial z = \hat{y} - y\)<br/>
-                    Mọi thứ triệt tiêu nhau!
-                </div>
-            </div>
-        </div>
-    </section>
+                <section style="font-size: 0.7em;">
+                    <h2>Tính Gradient — Chain Rule</h2>
+                    <p>Để cập nhật trọng số \(w\), ta cần \(\partial L / \partial w\) — nhưng \(w\) không ảnh hưởng
+                        trực tiếp đến \(L\):</p>
+                    \[ w \;\longrightarrow\; z \;\longrightarrow\; \hat{y} \;\longrightarrow\; L \]
+                    <p>Phải dùng <span class="keyword">chain rule</span> — tính từng mắt xích:</p>
+                    \[ \frac{\partial L}{\partial w}
+                    = \frac{\partial L}{\partial \hat{y}}
+                    \cdot \frac{\partial \hat{y}}{\partial z}
+                    \cdot \frac{\partial z}{\partial w} \]
+                    <div class="two-col" style="margin-top:12px">
+                        <div>
+                            <ul>
+                                <li>\(\partial L / \partial \hat{y}\) — đạo hàm loss.</li>
+                                <li>\(\partial \hat{y} / \partial z\) — đạo hàm activation.</li>
+                                <li>\(\partial z / \partial w = x\) — đạo hàm linear.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="demo-box">
+                                Sigmoid + BCE cho gradient cực sạch:<br />
+                                \(\partial L / \partial z = \hat{y} - y\)<br />
+                                Mọi thứ triệt tiêu nhau!
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-    <section>
-        <h2>Tại sao cần lan truyền ngược?</h2>
-        <p>Mục tiêu: tìm <span class="keyword">∂L/∂w</span> — "nếu tôi thay đổi <strong>w</strong> một chút, <strong>Loss</strong> thay đổi bao nhiêu?"</p>
- 
-        <div class="demo-box" style="margin-top:12px">
-            Nhưng <strong>w không ảnh hưởng trực tiếp đến L</strong> — nó phải đi qua một chuỗi:
-            \[ w \;\longrightarrow\; z \;\longrightarrow\; a \;\longrightarrow\; L \]
-        </div>
- 
-        <p style="margin-top:12px">Hình dung theo kiểu <strong>"cú hích nhỏ" (nudge)</strong> của 3Blue1Brown:</p>
-        <ul>
-            <li>Hích <strong>w</strong> một chút nhỏ \(\delta w\)</li>
-            <li>→ <strong>z</strong> thay đổi: \(\delta z = \delta w \cdot x\) &nbsp;&nbsp; (vì \(z = wx + b\))</li>
-            <li>→ <strong>a</strong> thay đổi: \(\delta a = \delta z \cdot \sigma'(z)\) &nbsp;&nbsp; (qua hàm kích hoạt)</li>
-            <li>→ <strong>L</strong> thay đổi: \(\delta L = \delta a \cdot \dfrac{\partial L}{\partial a}\)</li>
-        </ul>
- 
-        <div class="highlight" style="margin-top:14px">
-            Chia cả hai vế cho \(\delta w\) → ra đúng Chain Rule:
-            \(\dfrac{\partial L}{\partial w} = \dfrac{\partial L}{\partial a} \times \dfrac{\partial a}{\partial z} \times \dfrac{\partial z}{\partial w}\)
-        </div>
-    </section>
+                <section style="font-size: 0.62em;">
+                    <h2>Tại sao cần lan truyền ngược?</h2>
+                    <p>Mục tiêu: tính \(\dfrac{\partial L}{\partial w}\) — "nếu tôi thay đổi \(w\) một chút,
+                        \(L\) thay đổi bao nhiêu?"</p>
 
-    <section>
-        <h2>Backpropagation</h2>
-        <ul>
-            <li>Mạng 13.000 tham số → cần 13.000 đạo hàm riêng</li>
-            <li><span class="keyword">Backprop</span>: tính tất cả gradient trong <strong>một lần truyền ngược</strong></li>
-        </ul>
-        <div class="demo-box" style="margin-top:12px">
-            Loss → gradient lan ra output layer → hidden layer 2 → hidden layer 1 → ...<br/>
-            Mỗi layer <strong>phải chờ</strong> layer sau tính xong mới tính được
-        </div>
-        <ul style="margin-top:12px">
-            <li><strong>Forward pass:</strong> tính output, lưu lại giá trị trung gian</li>
-            <li><strong>Tính loss:</strong> so sánh với nhãn thực</li>
-            <li><strong>Backward pass:</strong> chain rule từ output ngược về input</li>
-            <li><strong>Update:</strong> <code>w ← w − η · ∂L/∂w</code></li>
-        </ul>
-    </section>
+                    <div class="demo-box" style="margin-top:12px">
+                        Nhưng \(w\) <strong>không ảnh hưởng trực tiếp đến \(L\)</strong> — phải đi qua một chuỗi:
+                        \[ w \;\longrightarrow\; z \;\longrightarrow\; a \;\longrightarrow\; L \]
+                    </div>
 
-    <section>
-        <h2>Vấn đề thực tế — Dead Neuron &amp; Vanishing Gradient</h2>
-        <div class="two-col">
-            <div>
-                <p><strong>Dead Neuron (ReLU)</strong></p>
-                <ul>
-                    <li>ReLU: \(\max(0, z)\) → đạo hàm = 0 khi \(z \le 0\)</li>
-                    <li>Gradient = 0 → weight không bao giờ được update</li>
-                    <li>Neuron "chết" mãi mãi</li>
-                    <li>Giải pháp: <span class="keyword">Leaky ReLU</span>, <span class="keyword">GELU</span></li>
-                </ul>
-            </div>
-            <div>
-                <p><strong>Vanishing Gradient (Sigmoid)</strong></p>
-                <ul>
-                    <li>Đạo hàm sigmoid tối đa = 0.25</li>
-                    <li>Nhân qua nhiều lớp → gradient tiệm cận 0</li>
-                    <li>Layer đầu không học được</li>
-                    <li>Giải pháp: <span class="keyword">ReLU</span>, <span class="keyword">Batch Norm</span>, <span class="keyword">ResNet</span></li>
-                </ul>
-            </div>
-        </div>
-    </section>
+                    <p style="margin-top:12px">Hình dung theo kiểu <strong>"cú hích nhỏ" (nudge)</strong> của
+                        3Blue1Brown:</p>
+                    <ul>
+                        <li>Hích \(w\) một chút nhỏ \(\delta w\).</li>
+                        <li>→ \(z\) thay đổi: \(\delta z = \delta w \cdot x\) &nbsp;&nbsp; (vì \(z = wx + b\)).</li>
+                        <li>→ \(a\) thay đổi: \(\delta a = \delta z \cdot \sigma'(z)\) &nbsp;&nbsp; (qua hàm kích hoạt).</li>
+                        <li>→ \(L\) thay đổi: \(\delta L = \delta a \cdot \dfrac{\partial L}{\partial a}\).</li>
+                    </ul>
 
-    <section>
-        <h2>Local Minima &amp; Saddle Point</h2>
-        <div class="two-col">
-            <div>
-                <p><strong>Local Minima</strong></p>
-                <ul>
-                    <li>Gradient = 0 nhưng chưa phải đáy thật</li>
-                    <li>Trong không gian 13.000 chiều, local minima <em>rất hiếm</em></li>
-                    <li>Local minima tìm được thường <em>gần bằng</em> global minima</li>
-                </ul>
-            </div>
-            <div>
-                <p><strong>Saddle Point</strong></p>
-                <ul>
-                    <li>Gradient = 0, nhưng một số chiều dốc lên, chiều khác dốc xuống</li>
-                    <li>Phổ biến hơn local minima trong mạng sâu</li>
-                    <li>GD dễ bị kẹt ở đây hơn</li>
-                </ul>
-            </div>
-        </div>
-        <div class="highlight" style="margin-top:16px">
-            Noise từ SGD giúp thoát khỏi cả hai — đây là lý do mini-batch SGD tốt hơn Batch GD
-        </div>
-    </section>
+                    <div class="highlight" style="margin-top:14px">
+                        Chia cả hai vế cho \(\delta w\) → ra đúng chain rule:
+                        \(\;\dfrac{\partial L}{\partial w} = \dfrac{\partial L}{\partial a} \cdot \dfrac{\partial a}{\partial z} \cdot \dfrac{\partial z}{\partial w}\).
+                    </div>
+                </section>
 
-    <section style="font-size:0.8em;">
-        <h2>Ví dụ Saddle Point</h2>
-        <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec11/Saddle_point.svg"
-                 style="max-width:95%; max-height:380px; object-fit:contain;" />
-            
-        </div>
-    </section>
+                <section style="font-size: 0.8em;">
+                    <h2>Backpropagation</h2>
+                    <ul>
+                        <li>Mạng 13 000 tham số → cần 13 000 đạo hàm riêng \(\partial L / \partial w_j\).</li>
+                        <li><span class="keyword">Backprop</span>: tính tất cả gradient trong <strong>một lần truyền ngược</strong>.</li>
+                    </ul>
+                    <div class="demo-box" style="margin-top:12px">
+                        Loss → gradient lan ra output layer → hidden layer 2 → hidden layer 1 → \(\ldots\) <br />
+                        Mỗi layer <strong>phải chờ</strong> layer sau tính xong mới tính được.
+                    </div>
+                    <ul style="margin-top:12px">
+                        <li><strong>Forward pass:</strong> tính \(\hat{y}\), lưu lại giá trị trung gian \(z^{(\ell)}, a^{(\ell)}\).</li>
+                        <li><strong>Tính loss:</strong> so sánh \(\hat{y}\) với nhãn thực \(y\).</li>
+                        <li><strong>Backward pass:</strong> chain rule từ output ngược về input.</li>
+                        <li><strong>Cập nhật:</strong>
+                            \(w \leftarrow w - \eta \, \dfrac{\partial L}{\partial w}\).
+                        </li>
+                    </ul>
+                </section>
 
-    <section>
-        <h2>Batch GD vs SGD vs Mini-batch</h2>
-        <ul>
-            <li><strong>Batch GD:</strong> dùng toàn bộ dữ liệu mỗi bước → chính xác nhưng <em>rất chậm</em></li>
-            <li><strong>SGD:</strong> dùng 1 mẫu ngẫu nhiên mỗi bước → nhanh nhưng <em>dao động nhiều</em></li>
-            <li><strong>Mini-batch SGD:</strong> dùng 32–256 mẫu → cân bằng tốt nhất ✅</li>
-        </ul>
-        <div class="demo-box" style="margin-top:12px">
-            10.000 mẫu, batch size = 32 → <strong>312 lần update mỗi epoch</strong><br/>
-            Batch GD chỉ update <strong>1 lần</strong> mỗi epoch
-        </div>
-        <div class="highlight">
-            <strong>Epoch:</strong> 1 lần đi qua toàn bộ tập dữ liệu huấn luyện<br/>
-            Noise của mini-batch giúp thoát local minima &amp; saddle point tốt hơn Batch GD
-        </div>
-    </section>
+                <section style="font-size: 0.85em;">
+                    <h2>Vấn đề thực tế — Dead Neuron &amp; Vanishing Gradient</h2>
+                    <div class="two-col">
+                        <div>
+                            <p><strong>Dead Neuron (ReLU)</strong></p>
+                            <ul>
+                                <li>ReLU: \(\max(0, z)\) → đạo hàm = 0 khi \(z \le 0\)</li>
+                                <li>Gradient = 0 → weight không bao giờ được update</li>
+                                <li>Neuron "chết" mãi mãi</li>
+                                <li>Giải pháp: <span class="keyword">Leaky ReLU</span>, <span
+                                        class="keyword">GELU</span></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><strong>Vanishing Gradient (Sigmoid)</strong></p>
+                            <ul>
+                                <li>Đạo hàm sigmoid tối đa = 0.25</li>
+                                <li>Nhân qua nhiều lớp → gradient tiệm cận 0</li>
+                                <li>Layer đầu không học được</li>
+                                <li>Giải pháp: <span class="keyword">ReLU</span>, <span class="keyword">Batch
+                                        Norm</span>, <span class="keyword">ResNet</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
 
-    <section>
-        <h2>Learning Rate &amp; Optimizer</h2>
-        <ul>
-            <li>🐌 <strong>η quá nhỏ:</strong> học rất chậm, dễ bị kẹt</li>
-            <li>🐇 <strong>η quá lớn:</strong> dao động, không hội tụ</li>
-            <li>✅ <strong>η vừa:</strong> hội tụ nhanh và ổn định</li>
-        </ul>
-        <div class="demo-box" style="margin-top:12px">
-            <strong>Thực tế:</strong> Dùng <span class="keyword">Adam optimizer</span> —
-            tự động điều chỉnh learning rate cho từng tham số,
-            tích lũy "đà" từ các bước trước để vượt qua saddle point nhanh hơn SGD thuần túy
-        </div>
-    </section>
-</section>
+                <section style="font-size: 0.8em;">
+                    <h2>Local Minima &amp; Saddle Point</h2>
+                    <div class="two-col">
+                        <div>
+                            <p><strong>Local Minima</strong></p>
+                            <ul>
+                                <li>Gradient = 0 nhưng chưa phải đáy thật</li>
+                                <li>Trong không gian 13.000 chiều, local minima <em>rất hiếm</em></li>
+                                <li>Local minima tìm được thường <em>gần bằng</em> global minima</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><strong>Saddle Point</strong></p>
+                            <ul>
+                                <li>Gradient = 0, nhưng một số chiều dốc lên, chiều khác dốc xuống</li>
+                                <li>Phổ biến hơn local minima trong mạng sâu</li>
+                                <li>GD dễ bị kẹt ở đây hơn</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="highlight" style="margin-top:16px">
+                        Noise từ SGD giúp thoát khỏi cả hai — đây là lý do mini-batch SGD tốt hơn Batch GD
+                    </div>
+                </section>
 
-<!-- ==================== 5. KIẾN TRÚC HIỆN ĐẠI ==================== -->
-<section>
-    <section>
-        <h1><span class="text-light">5.</span><br />Kiến Trúc Hiện Đại</h1>
-        <p>RNN · LSTM · CNN · Transformer</p>
-    </section>
-    <section>
-        <h2>RNN — Recurrent Neural Network</h2>
-        <p><em>Ứng dụng: dịch thuật, phân tích cảm xúc, dự báo chuỗi thời gian</em></p>
-        <div class="two-col">
-            <div>
-                <p><strong>✅ Ưu điểm</strong></p>
-                <ul>
-                    <li>Xử lý được chuỗi dữ liệu (văn bản, âm thanh)</li>
-                    <li>Chia sẻ trọng số theo thời gian</li>
-                    <li>Có "bộ nhớ" về các bước trước</li>
-                </ul>
-            </div>
-            <div>
-                <p><strong>❌ Nhược điểm</strong></p>
-                <ul>
-                    <li><span class="keyword">Vanishing gradient</span> — quên dữ liệu xa</li>
-                    <li>Không song song hóa được — chậm</li>
-                    <li>Khó học phụ thuộc dài hạn</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-    
-    <section>
-        <h2>RNN — Vanishing &amp; Exploding Gradient</h2>
-        <p>Mỗi bước thời gian RNN tính: \(h_t = \tanh(W \cdot h_{t-1} + U \cdot x_t)\)</p>
-        <p>Backprop qua T bước phải nhân gradient liên tiếp:</p>
-        \[ \frac{\partial L}{\partial h_1} = \frac{\partial L}{\partial h_T} \times \prod_{t=2}^{T} \underbrace{W \times \tanh'(h_t)}_{\lambda \text{ — hệ số mỗi bước}} \]
- 
-        <div class="two-col" style="margin-top:10px">
-            <div>
-                <p><strong>Vanishing — \(\lambda = 0.5\)</strong></p>
-                <pre><code>Bước 5→4:  × 0.5  = 0.5
+                <section style="font-size:0.8em;">
+                    <h2>Ví dụ Saddle Point</h2>
+                    <div style="text-align:center; margin-top:8px;">
+                        <img src="img/lec11/Saddle_point.svg"
+                            style="max-width:95%; max-height:380px; object-fit:contain;" />
+
+                    </div>
+                </section>
+
+                <section style="font-size: 0.8em;">
+                    <h2>Batch GD vs SGD vs Mini-batch</h2>
+                    <ul>
+                        <li><strong>Batch GD:</strong> dùng toàn bộ dữ liệu mỗi bước → chính xác nhưng <em>rất chậm</em>
+                        </li>
+                        <li><strong>SGD:</strong> dùng 1 mẫu ngẫu nhiên mỗi bước → nhanh nhưng <em>dao động nhiều</em>
+                        </li>
+                        <li><strong>Mini-batch SGD:</strong> dùng 32–256 mẫu → cân bằng tốt nhất ✅</li>
+                    </ul>
+                    <div class="demo-box" style="margin-top:12px">
+                        10.000 mẫu, batch size = 32 → <strong>312 lần update mỗi epoch</strong><br />
+                        Batch GD chỉ update <strong>1 lần</strong> mỗi epoch
+                    </div>
+                    <div class="highlight">
+                        <strong>Epoch:</strong> 1 lần đi qua toàn bộ tập dữ liệu huấn luyện<br />
+                        Noise của mini-batch giúp thoát local minima &amp; saddle point tốt hơn Batch GD
+                    </div>
+                </section>
+
+                <section style="font-size: 0.92em;">
+                    <h2>Learning Rate &amp; Optimizer</h2>
+                    <p>Quy tắc cập nhật cơ bản: \( w \leftarrow w - \eta \, \dfrac{\partial L}{\partial w} \).</p>
+                    <ul>
+                        <li>🐌 <strong>\(\eta\) quá nhỏ:</strong> học rất chậm, dễ bị kẹt.</li>
+                        <li>🐇 <strong>\(\eta\) quá lớn:</strong> dao động, không hội tụ.</li>
+                        <li>✅ <strong>\(\eta\) vừa:</strong> hội tụ nhanh và ổn định.</li>
+                    </ul>
+                    <div class="demo-box" style="margin-top:12px">
+                        <strong>Thực tế:</strong> dùng <span class="keyword">Adam</span> —
+                        tự động điều chỉnh \(\eta\) cho từng tham số, tích luỹ "đà" từ các bước trước
+                        để vượt qua saddle point nhanh hơn SGD thuần tuý.
+                    </div>
+                </section>
+            </section>
+
+            <!-- ==================== 5. KIẾN TRÚC HIỆN ĐẠI ==================== -->
+            <section>
+                <section>
+                    <h1><span class="text-light">5.</span><br />Kiến Trúc Hiện Đại</h1>
+                    <p>RNN · LSTM · CNN · Transformer</p>
+                </section>
+                <section style="font-size: 0.85em;">
+                    <h2>RNN — Recurrent Neural Network</h2>
+                    <p><em>Ứng dụng: dịch thuật, phân tích cảm xúc, dự báo chuỗi thời gian</em></p>
+                    <div class="two-col">
+                        <div>
+                            <p><strong>✅ Ưu điểm</strong></p>
+                            <ul>
+                                <li>Xử lý được chuỗi dữ liệu (văn bản, âm thanh)</li>
+                                <li>Chia sẻ trọng số theo thời gian</li>
+                                <li>Có "bộ nhớ" về các bước trước</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><strong>❌ Nhược điểm</strong></p>
+                            <ul>
+                                <li><span class="keyword">Vanishing gradient</span> — quên dữ liệu xa</li>
+                                <li>Không song song hóa được — chậm</li>
+                                <li>Khó học phụ thuộc dài hạn</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section style="font-size: 0.62em;">
+                    <h2>RNN — Vanishing &amp; Exploding Gradient</h2>
+                    <p>Mỗi bước thời gian RNN tính: \(h_t = \tanh(W \cdot h_{t-1} + U \cdot x_t)\)</p>
+                    <p>Backprop qua T bước phải nhân gradient liên tiếp:</p>
+                    \[ \frac{\partial L}{\partial h_1} = \frac{\partial L}{\partial h_T} \times \prod_{t=2}^{T}
+                    \underbrace{W \times \tanh'(h_t)}_{\lambda \text{ — hệ số mỗi bước}} \]
+
+                    <div class="two-col" style="margin-top:10px">
+                        <div>
+                            <p><strong>Vanishing — \(\lambda = 0.5\)</strong></p>
+                            <pre><code>Bước 5→4:  × 0.5  = 0.5
 Bước 4→3:  × 0.5  = 0.25
 Bước 3→2:  × 0.5  = 0.125
 Bước 2→1:  × 0.5  = 0.0625 ≈ 0</code></pre>
-                <span style="font-size:0.8em">→ h₁ gần như không học được</span>
-            </div>
-            <div>
-                <p><strong>Exploding — \(\lambda = 2.0\)</strong></p>
-                <pre><code>Bước 5→4:  × 2.0  = 2
+                            <span style="font-size:0.8em">→ h₁ gần như không học được</span>
+                        </div>
+                        <div>
+                            <p><strong>Exploding — \(\lambda = 2.0\)</strong></p>
+                            <pre><code>Bước 5→4:  × 2.0  = 2
 Bước 4→3:  × 2.0  = 4
 Bước 3→2:  × 2.0  = 8
 Bước 2→1:  × 2.0  = 16 → ∞</code></pre>
-                <span style="font-size:0.8em">→ weight update loạn, không hội tụ</span>
+                            <span style="font-size:0.8em">→ weight update loạn, không hội tụ</span>
+                        </div>
+                    </div>
+                    <div class="highlight" style="margin-top:10px">
+                        Chuỗi 100 bước: \(0.5^{100} \approx 0\) &nbsp;|&nbsp; \(2^{100} \approx 10^{30}\) — lý do LSTM
+                        ra đời<br />
+                        <strong>Exploding</strong>: dùng <span class="keyword">Gradient Clipping</span> &nbsp;|&nbsp;
+                        <strong>Vanishing</strong>: cần đổi kiến trúc → <span class="keyword">LSTM / GRU</span>
+                    </div>
+                </section>
+
+                <section style="font-size: 0.85em;">
+                    <h2>LSTM — Long Short-Term Memory</h2>
+                    <p><em>Ứng dụng: dự báo ngôn ngữ, nhận dạng giọng nói, dịch máy</em></p>
+                    <ul>
+                        <li>Giải quyết vanishing gradient của RNN qua <span class="keyword">cơ chế cổng (gate)</span>
+                        </li>
+                        <li><strong>Forget gate:</strong> quyết định bỏ thông tin cũ</li>
+                        <li><strong>Input gate:</strong> quyết định lưu thông tin mới</li>
+                        <li><strong>Output gate:</strong> quyết định xuất thông tin nào</li>
+                    </ul>
+                    <div class="two-col" style="margin-top:12px">
+                        <div class="highlight">✅ Nhớ được phụ thuộc dài hạn</div>
+                        <div class="highlight">❌ Phức tạp hơn RNN — 4× tham số; vẫn chậm do tính tuần tự</div>
+                    </div>
+                </section>
+                <section style="font-size: 0.8em;">
+                    <h2>CNN — Convolutional Neural Network</h2>
+                    <p><em>Ứng dụng: nhận dạng ảnh, phát hiện vật thể, phân tích ảnh y tế</em></p>
+                    <ul>
+                        <li><span class="keyword">Convolution</span>: bộ lọc trượt qua ảnh để phát hiện pattern cục bộ
+                        </li>
+                        <li><strong>Pooling:</strong> giảm kích thước, giữ thông tin quan trọng</li>
+                        <li><strong>Chia sẻ trọng số:</strong> cùng bộ lọc áp dụng cho toàn ảnh → ít tham số hơn</li>
+                    </ul>
+                    <div class="two-col" style="margin-top:12px">
+                        <div class="highlight">✅ Nhận dạng pattern không gian xuất sắc — backbone của computer vision
+                        </div>
+                        <div class="highlight">❌ Kém với dữ liệu quan hệ xa; cần nhiều dữ liệu gán nhãn</div>
+                    </div>
+                </section>
+
+                <section style="font-size:0.8em;">
+                    <h2>Ví dụ CNN</h2>
+                    <div style="text-align:center; margin-top:8px;">
+                        <img src="img/lec11/cnn-pipeline.svg"
+                            style="max-width:95%; max-height:380px; object-fit:contain;" />
+
+                    </div>
+                </section>
+                <section style="font-size: 0.85em;">
+                    <h2>Transformer &amp; Self-Attention</h2>
+                    <p><em>"Attention is All You Need" (2017) — Google Brain</em></p>
+                    <ul>
+                        <li><span class="keyword">Self-Attention</span>: mỗi từ "nhìn" tất cả các từ khác để hiểu ngữ
+                            cảnh</li>
+                        <li>Song song hóa hoàn toàn → nhanh hơn RNN/LSTM rất nhiều</li>
+                        <li>Nền tảng của: GPT, BERT, Gemini, Claude, LLaMA…</li>
+                    </ul>
+                    <div class="two-col" style="margin-top:12px">
+                        <div class="highlight">✅ Song song hóa hoàn toàn; nắm bắt quan hệ rất xa; linh hoạt đa dạng bài
+                            toán</div>
+                        <div class="highlight">❌ Độ phức tạp O(n²); cần dữ liệu và tài nguyên tính toán khổng lồ</div>
+                    </div>
+                </section>
+                <section style="font-size: 0.85em;">
+                    <h2>So sánh tổng hợp</h2>
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>Kiến trúc</th>
+                                <th>Dữ liệu tốt nhất</th>
+                                <th>Ưu điểm chính</th>
+                                <th>Nhược điểm chính</th>
+                                <th>Ví dụ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="arch">RNN</td>
+                                <td>Chuỗi ngắn</td>
+                                <td>Xử lý tuần tự</td>
+                                <td>Vanishing gradient</td>
+                                <td>Sentiment analysis</td>
+                            </tr>
+                            <tr>
+                                <td class="arch">LSTM</td>
+                                <td>Chuỗi dài</td>
+                                <td>Bộ nhớ dài hạn</td>
+                                <td>Phức tạp, chậm</td>
+                                <td>Dịch máy, ASR</td>
+                            </tr>
+                            <tr>
+                                <td class="arch">CNN</td>
+                                <td>Hình ảnh, âm thanh</td>
+                                <td>Nhận dạng pattern</td>
+                                <td>Kém quan hệ xa</td>
+                                <td>ImageNet, YOLO</td>
+                            </tr>
+                            <tr>
+                                <td class="arch">Transformer</td>
+                                <td>Văn bản, đa phương thức</td>
+                                <td>Song song, attention</td>
+                                <td>Chi phí khổng lồ</td>
+                                <td>GPT, BERT, Gemini</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </section>
+
+            <!-- ==================== TÓM TẮT ==================== -->
+            <section>
+                <section style="font-size: 0.8em;">
+                    <h1>Tóm tắt</h1>
+                    <ol>
+                        <li>Mạng nơ-ron học bằng cách điều chỉnh 13.000+ trọng số qua dữ liệu</li>
+                        <li>Loss function đo sai số — chọn đúng loss cho đúng bài toán</li>
+                        <li>Gradient Descent + Backprop = "động cơ" tối ưu hóa toàn bộ tham số</li>
+                        <li>SGD, dead neuron, vanishing gradient — những vấn đề thực tế cần giải quyết</li>
+                        <li>Transformer đang thống trị nhờ song song hóa và self-attention</li>
+                    </ol>
+                    <p style="text-align:center; margin-top:40px; font-size:1.1em;">
+                        <strong>Câu hỏi mở:</strong> Theo bạn, kiến trúc nào sẽ "thay thế" Transformer trong tương lai?
+                    </p>
+                </section>
+
+                <section style="font-size: 0.72em;">
+                    <h2>Tài liệu tham khảo</h2>
+                    <ul style="font-size:0.85em; line-height:2em;">
+                        <li>3Blue1Brown. (2017). <em>Neural Networks</em> [Video series]. YouTube. <a
+                                href="https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi"
+                                target="_blank">youtube.com/3b1b-neural-networks</a></li>
+                        <li>Starmer, J. (2019). <em>Neural Networks</em> [Video series]. StatQuest. <a
+                                href="https://www.youtube.com/@statquest" target="_blank">youtube.com/@statquest</a>
+                        </li>
+                        <li>Goodfellow, I., Bengio, Y., &amp; Courville, A. (2016). <em>Deep Learning</em>. MIT Press.
+                            <a href="https://www.deeplearningbook.org" target="_blank">deeplearningbook.org</a></li>
+                        <li>Zhang, A. et al. (2023). <em>Dive into Deep Learning</em>. <a href="https://d2l.ai"
+                                target="_blank">d2l.ai</a></li>
+                        <li>Ng, A. (2017). <em>Deep Learning Specialization</em>. Coursera / DeepLearning.AI. <a
+                                href="https://www.deeplearning.ai" target="_blank">deeplearning.ai</a></li>
+                        <li>Vaswani, A. et al. (2017). Attention is all you need. <em>NeurIPS 2017</em>.</li>
+                        <li>LeCun, Y., Bengio, Y., &amp; Hinton, G. (2015). Deep learning. <em>Nature, 521</em>,
+                            436–444.</li>
+                    </ul>
+                </section>
+            </section>
+
+
+            <div class="footer">
+                Học máy (Học kỳ 2 2025-2026) §10: Giới thiệu về mạng nơ-ron<br />
             </div>
+
         </div>
-        <div class="highlight" style="margin-top:10px">
-            Chuỗi 100 bước: \(0.5^{100} \approx 0\) &nbsp;|&nbsp; \(2^{100} \approx 10^{30}\) — lý do LSTM ra đời<br/>
-            <strong>Exploding</strong>: dùng <span class="keyword">Gradient Clipping</span> &nbsp;|&nbsp;
-            <strong>Vanishing</strong>: cần đổi kiến trúc → <span class="keyword">LSTM / GRU</span>
-        </div>
-    </section>
-    
-    <section>
-        <h2>LSTM — Long Short-Term Memory</h2>
-        <p><em>Ứng dụng: dự báo ngôn ngữ, nhận dạng giọng nói, dịch máy</em></p>
-        <ul>
-            <li>Giải quyết vanishing gradient của RNN qua <span class="keyword">cơ chế cổng (gate)</span></li>
-            <li><strong>Forget gate:</strong> quyết định bỏ thông tin cũ</li>
-            <li><strong>Input gate:</strong> quyết định lưu thông tin mới</li>
-            <li><strong>Output gate:</strong> quyết định xuất thông tin nào</li>
-        </ul>
-        <div class="two-col" style="margin-top:12px">
-            <div class="highlight">✅ Nhớ được phụ thuộc dài hạn</div>
-            <div class="highlight">❌ Phức tạp hơn RNN — 4× tham số; vẫn chậm do tính tuần tự</div>
-        </div>
-    </section>
-    <section>
-        <h2>CNN — Convolutional Neural Network</h2>
-        <p><em>Ứng dụng: nhận dạng ảnh, phát hiện vật thể, phân tích ảnh y tế</em></p>
-        <ul>
-            <li><span class="keyword">Convolution</span>: bộ lọc trượt qua ảnh để phát hiện pattern cục bộ</li>
-            <li><strong>Pooling:</strong> giảm kích thước, giữ thông tin quan trọng</li>
-            <li><strong>Chia sẻ trọng số:</strong> cùng bộ lọc áp dụng cho toàn ảnh → ít tham số hơn</li>
-        </ul>
-        <div class="two-col" style="margin-top:12px">
-            <div class="highlight">✅ Nhận dạng pattern không gian xuất sắc — backbone của computer vision</div>
-            <div class="highlight">❌ Kém với dữ liệu quan hệ xa; cần nhiều dữ liệu gán nhãn</div>
-        </div>
-    </section>
+    </div>
 
-    <section style="font-size:0.8em;">
-        <h2>Ví dụ CNN</h2>
-        <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec11/CNN.png"
-                 style="max-width:95%; max-height:380px; object-fit:contain;" />
-            
-        </div>
-    </section>
-    <section>
-        <h2>Transformer &amp; Self-Attention</h2>
-        <p><em>"Attention is All You Need" (2017) — Google Brain</em></p>
-        <ul>
-            <li><span class="keyword">Self-Attention</span>: mỗi từ "nhìn" tất cả các từ khác để hiểu ngữ cảnh</li>
-            <li>Song song hóa hoàn toàn → nhanh hơn RNN/LSTM rất nhiều</li>
-            <li>Nền tảng của: GPT, BERT, Gemini, Claude, LLaMA…</li>
-        </ul>
-        <div class="two-col" style="margin-top:12px">
-            <div class="highlight">✅ Song song hóa hoàn toàn; nắm bắt quan hệ rất xa; linh hoạt đa dạng bài toán</div>
-            <div class="highlight">❌ Độ phức tạp O(n²); cần dữ liệu và tài nguyên tính toán khổng lồ</div>
-        </div>
-    </section>
-    <section>
-        <h2>So sánh tổng hợp</h2>
-        <table class="compare-table">
-            <thead>
-                <tr>
-                    <th>Kiến trúc</th>
-                    <th>Dữ liệu tốt nhất</th>
-                    <th>Ưu điểm chính</th>
-                    <th>Nhược điểm chính</th>
-                    <th>Ví dụ</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="arch">RNN</td>
-                    <td>Chuỗi ngắn</td>
-                    <td>Xử lý tuần tự</td>
-                    <td>Vanishing gradient</td>
-                    <td>Sentiment analysis</td>
-                </tr>
-                <tr>
-                    <td class="arch">LSTM</td>
-                    <td>Chuỗi dài</td>
-                    <td>Bộ nhớ dài hạn</td>
-                    <td>Phức tạp, chậm</td>
-                    <td>Dịch máy, ASR</td>
-                </tr>
-                <tr>
-                    <td class="arch">CNN</td>
-                    <td>Hình ảnh, âm thanh</td>
-                    <td>Nhận dạng pattern</td>
-                    <td>Kém quan hệ xa</td>
-                    <td>ImageNet, YOLO</td>
-                </tr>
-                <tr>
-                    <td class="arch">Transformer</td>
-                    <td>Văn bản, đa phương thức</td>
-                    <td>Song song, attention</td>
-                    <td>Chi phí khổng lồ</td>
-                    <td>GPT, BERT, Gemini</td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
-</section>
-
-<!-- ==================== TÓM TẮT ==================== -->
-<section>
-    <section>
-        <h1>Tóm tắt</h1>
-        <ol>
-            <li>Mạng nơ-ron học bằng cách điều chỉnh 13.000+ trọng số qua dữ liệu</li>
-            <li>Loss function đo sai số — chọn đúng loss cho đúng bài toán</li>
-            <li>Gradient Descent + Backprop = "động cơ" tối ưu hóa toàn bộ tham số</li>
-            <li>SGD, dead neuron, vanishing gradient — những vấn đề thực tế cần giải quyết</li>
-            <li>Transformer đang thống trị nhờ song song hóa và self-attention</li>
-        </ol>
-        <p style="text-align:center; margin-top:40px; font-size:1.1em;">
-            <strong>Câu hỏi mở:</strong> Theo bạn, kiến trúc nào sẽ "thay thế" Transformer trong tương lai?
-        </p>
-    </section>
-
-    <section>
-        <h2>Tài liệu tham khảo</h2>
-        <ul style="font-size:0.85em; line-height:2em;">
-            <li>3Blue1Brown. (2017). <em>Neural Networks</em> [Video series]. YouTube. <a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi" target="_blank">youtube.com/3b1b-neural-networks</a></li>
-            <li>Starmer, J. (2019). <em>Neural Networks</em> [Video series]. StatQuest. <a href="https://www.youtube.com/@statquest" target="_blank">youtube.com/@statquest</a></li>
-            <li>Goodfellow, I., Bengio, Y., &amp; Courville, A. (2016). <em>Deep Learning</em>. MIT Press. <a href="https://www.deeplearningbook.org" target="_blank">deeplearningbook.org</a></li>
-            <li>Zhang, A. et al. (2023). <em>Dive into Deep Learning</em>. <a href="https://d2l.ai" target="_blank">d2l.ai</a></li>
-            <li>Ng, A. (2017). <em>Deep Learning Specialization</em>. Coursera / DeepLearning.AI. <a href="https://www.deeplearning.ai" target="_blank">deeplearning.ai</a></li>
-            <li>Vaswani, A. et al. (2017). Attention is all you need. <em>NeurIPS 2017</em>.</li>
-            <li>LeCun, Y., Bengio, Y., &amp; Hinton, G. (2015). Deep learning. <em>Nature, 521</em>, 436–444.</li>
-        </ul>
-    </section>
-</section>
-
-
-
-<div class="footer">
-    Mạng Nơ-ron Nhân Tạo · Từ Lịch Sử Đến Hiện Đại
-</div>
-
-</div>
-</div>
-
-<script src="revealjs/dist/reveal.js"></script>
-<script src="plugin/notes/notes.js"></script>
-<script src="plugin/markdown/markdown.js"></script>
-<script src="plugin/highlight/highlight.js"></script>
-<script src="plugin/math/math.js"></script>
-<script>
-    Reveal.initialize({
-        controlsLayout: "edges",
-        slideNumber: true,
-        hashOneBasedIndex: true,
-        hash: true,
-        plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX],
-        autoAnimateEasing: "ease",
-        transition: "slide"
-    });
-</script>
+    <script src="revealjs/dist/reveal.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/math/math.js"></script>
+    <script>
+        Reveal.initialize({
+            controlsLayout: "edges",
+            slideNumber: true,
+            hashOneBasedIndex: true,
+            hash: true,
+            plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX],
+            autoAnimateEasing: "ease",
+            transition: "slide"
+        });
+    </script>
 </body>
+
 </html>
