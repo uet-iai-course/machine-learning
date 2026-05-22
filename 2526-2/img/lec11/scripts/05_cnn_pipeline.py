@@ -88,37 +88,37 @@ def main():
     ax.text(x4 + 0.45, yc - h_box / 2 - 0.25, "Gộp\n5×5×16",
             ha="center", va="top", fontsize=9, color="#333")
 
-    # ===== Flatten + FC ===== (wider gap so label has room)
+    # ===== Flatten + FC ===== (label well ABOVE — at y=1.4, clear of cube depth)
     x5 = x4 + 1.6
     draw_arrow(ax, x4 + 1.0, x5 - 0.05, yc, label="trải phẳng",
-               label_y_offset=0.2)
+               label_y_offset=1.4)
     fc = Rectangle((x5, yc - 0.9), 0.32, 1.8,
                    facecolor="#fff4d2", edgecolor="#b58d00", lw=1.2)
     ax.add_patch(fc)
     ax.text(x5 + 0.16, yc - h_box / 2 - 0.25, "FC\n120",
             ha="center", va="top", fontsize=9, color="#333")
 
-    # ===== Output / Softmax ===== (wider gap)
+    # ===== Output / Softmax ===== (label well ABOVE)
     x6 = x5 + 1.4
     draw_arrow(ax, x5 + 0.42, x6 - 0.05, yc, label="softmax",
-               label_y_offset=0.2)
+               label_y_offset=1.4)
     out = Rectangle((x6, yc - 0.6), 0.28, 1.2,
                     facecolor="#fde2c4", edgecolor=C_OUTPUT, lw=1.2)
     ax.add_patch(out)
     ax.text(x6 + 0.14, yc - h_box / 2 - 0.25, "Đầu ra\n10 lớp",
             ha="center", va="top", fontsize=9, color="#333")
 
-    # ===== Stage labels (top) =====
-    ax.text(2.85, yc + 1.7, "Học đặc trưng", ha="center", fontsize=11,
+    # ===== Stage labels (top, higher to clear arrow labels at y=1.4) =====
+    ax.text(2.85, yc + 2.3, "Học đặc trưng", ha="center", fontsize=11,
             fontweight="bold", color=C_BLUE)
-    ax.text(x5 + 0.16 + (x6 - x5) / 2, yc + 1.7, "Phân loại",
+    ax.text(x5 + 0.16 + (x6 - x5) / 2, yc + 2.3, "Phân loại",
             ha="center", fontsize=11, fontweight="bold", color=C_OUTPUT)
-    # Bracket lines
-    ax.plot([x1, x4 + 0.85], [yc + 1.4, yc + 1.4], color=C_BLUE, lw=1.0)
-    ax.plot([x5, x6 + 0.28], [yc + 1.4, yc + 1.4], color=C_OUTPUT, lw=1.0)
+    # Bracket lines at y=2.0 (above arrow labels at y=1.4)
+    ax.plot([x1, x4 + 0.85], [yc + 2.0, yc + 2.0], color=C_BLUE, lw=1.0)
+    ax.plot([x5, x6 + 0.28], [yc + 2.0, yc + 2.0], color=C_OUTPUT, lw=1.0)
 
     ax.set_xlim(-0.3, x6 + 0.6)
-    ax.set_ylim(-2.0, 2.4)
+    ax.set_ylim(-2.0, 2.9)
     ax.set_aspect("equal")
     ax.axis("off")
 

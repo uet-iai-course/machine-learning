@@ -65,12 +65,12 @@ def main():
             ax.text((x + x_next) / 2, y_cell + 0.32, f"$h_{t}$",
                     ha="center", fontsize=10, color=C_RED, style="italic")
 
-    # Initial h_0 input from left
+    # Initial h_0 input from left (extend arrow further left + label well outside cell)
     x0 = 0.5
-    ax.add_patch(FancyArrowPatch((-0.15, y_cell), (x0 - cell_w / 2, y_cell),
+    ax.add_patch(FancyArrowPatch((-0.7, y_cell), (x0 - cell_w / 2, y_cell),
                                  arrowstyle="-|>", mutation_scale=12,
                                  color=C_RED, lw=1.5))
-    ax.text(-0.05, y_cell + 0.32, "$h_0$", ha="center", fontsize=10,
+    ax.text(-0.55, y_cell + 0.32, "$h_0$", ha="center", fontsize=10,
             color=C_RED, style="italic")
 
     # x_t labels go BELOW the box (avoid collision with caption)
@@ -81,7 +81,7 @@ def main():
             "Đầu vào theo thời gian — cùng một khối $A$ áp dụng lặp lại",
             ha="center", va="top", fontsize=10, color="#555", style="italic")
 
-    ax.set_xlim(-0.6, T * x_step + 0.3)
+    ax.set_xlim(-1.1, T * x_step + 0.3)
     ax.set_ylim(-2.0, y_out + 0.7)
     ax.set_aspect("equal")
     ax.axis("off")
