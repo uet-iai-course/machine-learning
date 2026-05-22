@@ -26,14 +26,16 @@ def draw_cube(ax, x, y, w, h, depth, color, edge="#333"):
                 color=edge, lw=0.8)
 
 
-def draw_arrow(ax, x1, x2, y, label=None, color=C_GRAY):
+def draw_arrow(ax, x1, x2, y, label=None, color=C_GRAY, label_y_offset=1.05):
+    """label_y_offset = distance above arrow center, in axis units."""
     arr = FancyArrowPatch((x1, y), (x2, y),
                           arrowstyle="-|>", mutation_scale=12,
                           color=color, lw=1.2)
     ax.add_patch(arr)
     if label:
-        ax.text((x1 + x2) / 2, y + 0.3, label, ha="center", va="bottom",
-                fontsize=9, color="#555", style="italic")
+        ax.text((x1 + x2) / 2, y + label_y_offset, label,
+                ha="center", va="bottom",
+                fontsize=8.5, color="#555", style="italic")
 
 
 def main():
@@ -86,18 +88,20 @@ def main():
     ax.text(x4 + 0.45, yc - h_box / 2 - 0.25, "Gộp\n5×5×16",
             ha="center", va="top", fontsize=9, color="#333")
 
-    # ===== Flatten + FC =====
-    x5 = x4 + 1.1
-    draw_arrow(ax, x4 + 1.0, x5 - 0.05, yc, label="trải phẳng")
+    # ===== Flatten + FC ===== (wider gap so label has room)
+    x5 = x4 + 1.6
+    draw_arrow(ax, x4 + 1.0, x5 - 0.05, yc, label="trải phẳng",
+               label_y_offset=0.2)
     fc = Rectangle((x5, yc - 0.9), 0.32, 1.8,
                    facecolor="#fff4d2", edgecolor="#b58d00", lw=1.2)
     ax.add_patch(fc)
     ax.text(x5 + 0.16, yc - h_box / 2 - 0.25, "FC\n120",
             ha="center", va="top", fontsize=9, color="#333")
 
-    # ===== Output / Softmax =====
-    x6 = x5 + 1.0
-    draw_arrow(ax, x5 + 0.42, x6 - 0.05, yc, label="softmax")
+    # ===== Output / Softmax ===== (wider gap)
+    x6 = x5 + 1.4
+    draw_arrow(ax, x5 + 0.42, x6 - 0.05, yc, label="softmax",
+               label_y_offset=0.2)
     out = Rectangle((x6, yc - 0.6), 0.28, 1.2,
                     facecolor="#fde2c4", edgecolor=C_OUTPUT, lw=1.2)
     ax.add_patch(out)
@@ -105,16 +109,16 @@ def main():
             ha="center", va="top", fontsize=9, color="#333")
 
     # ===== Stage labels (top) =====
-    ax.text(2.85, yc + 1.5, "Học đặc trưng", ha="center", fontsize=11,
+    ax.text(2.85, yc + 1.7, "Học đặc trưng", ha="center", fontsize=11,
             fontweight="bold", color=C_BLUE)
-    ax.text(x5 + 0.16 + (x6 - x5) / 2, yc + 1.5, "Phân loại",
+    ax.text(x5 + 0.16 + (x6 - x5) / 2, yc + 1.7, "Phân loại",
             ha="center", fontsize=11, fontweight="bold", color=C_OUTPUT)
     # Bracket lines
-    ax.plot([x1, x4 + 0.85], [yc + 1.2, yc + 1.2], color=C_BLUE, lw=1.0)
-    ax.plot([x5, x6 + 0.28], [yc + 1.2, yc + 1.2], color=C_OUTPUT, lw=1.0)
+    ax.plot([x1, x4 + 0.85], [yc + 1.4, yc + 1.4], color=C_BLUE, lw=1.0)
+    ax.plot([x5, x6 + 0.28], [yc + 1.4, yc + 1.4], color=C_OUTPUT, lw=1.0)
 
     ax.set_xlim(-0.3, x6 + 0.6)
-    ax.set_ylim(-2.0, 2.2)
+    ax.set_ylim(-2.0, 2.4)
     ax.set_aspect("equal")
     ax.axis("off")
 
