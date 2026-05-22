@@ -47,10 +47,9 @@ def main():
         ax_t.text(x, y_tok, tok, ha="center", va="center", fontsize=11,
                   fontweight=("bold" if i == 1 else "normal"), zorder=4)
 
-    # Arrows from "cat" (i=1) to ALL other tokens — go ABOVE token boxes.
-    # matplotlib arc3 rad convention: positive curls CCW (left of travel).
-    # → For LEFT-going arrow, positive rad curls UP.
-    # → For RIGHT-going arrow, NEGATIVE rad curls UP.
+    # Arrows from "cat" (i=1) to ALL other tokens — gentle arcs above boxes.
+    # arc3 rad: peak ≈ |rad| * chord_length / 2. Use small rad to keep arrows
+    # well below the caption (y≈3.4).
     src = positions[1]
     src_top_y = src[1] + 0.3
     for j, target in enumerate(positions):
@@ -58,9 +57,9 @@ def main():
             continue
         weight = attn[1, j]
         dist = abs(j - 1)
-        # Sign: left target (j<1) → +; right target (j>1) → -
+        # Sign: left target (j<1) → +; right target (j>1) → -  (curls UP both ways)
         sign = 1 if j < 1 else -1
-        rad = sign * (0.55 + 0.15 * dist)
+        rad = sign * (0.22 + 0.04 * dist)  # 0.26..0.38 — gentle
         arr = FancyArrowPatch((src[0], src_top_y),
                               (target[0], target[1] + 0.3),
                               arrowstyle="-|>", mutation_scale=8,
@@ -69,12 +68,13 @@ def main():
                               zorder=5)
         ax_t.add_patch(arr)
 
-    ax_t.text(4.7, y_tok + 2.3,
+    # Caption placed WELL ABOVE max arc peak (≈ y=1.9) — clearance >1 unit.
+    ax_t.text(4.7, 3.3,
               "Từ 'cat' (cam) nhìn các từ khác — độ dày mũi tên = trọng số chú ý",
               fontsize=10, color="#444", style="italic", ha="center")
 
     ax_t.set_xlim(0, 9.5)
-    ax_t.set_ylim(-0.2, 3.0)
+    ax_t.set_ylim(-0.2, 3.7)
     # Don't lock aspect — let matplotlib use full subplot width
     ax_t.axis("off")
 
