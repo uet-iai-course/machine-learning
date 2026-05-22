@@ -67,7 +67,7 @@
                     </div>
                 </section>
                 <section style="font-size: 0.78em;">
-                    <h2>John Hopfield — mạng Hopfield (1982)</h2>
+                    <h2>John Hopfield (1982)</h2>
                     <p><strong>Lý thuyết bộ nhớ liên kết (associative memory)</strong></p>
                     <ul>
                         <li>Mạng hồi quy — các neuron kết nối lẫn nhau.</li>
@@ -90,7 +90,7 @@
                     </div>
                 </section>
                 <section>
-                    <h2>Geoffrey Hinton — giải pháp RBM</h2>
+                    <h2>Geoffrey Hinton &amp; RBM</h2>
                     <p><strong>Vấn đề:</strong> mạng Hopfield không học được từ dữ liệu lớn.</p>
                     <ul>
                         <li><span class="keyword">Máy Boltzmann hạn chế</span> (Restricted Boltzmann Machine, RBM): mạng
@@ -102,7 +102,7 @@
                     </div>
                 </section>
                 <section style="font-size:0.8em;">
-                    <h2>Kiến trúc Hopfield &amp; Boltzmann Machine</h2>
+                    <h2>Hopfield vs RBM — kiến trúc</h2>
                     <div style="text-align:center; margin-top:8px;">
                         <img src="img/lec11/hopfield-vs-rbm.svg"
                             style="max-width:95%; max-height:380px; object-fit:contain;" />
@@ -128,13 +128,13 @@
                 <section style="font-size:0.8em;">
                     <h2>Kiến trúc mạng MNIST</h2>
                     <div style="text-align:center; margin-top:8px;">
-                        <img src="img/lec11/mnist-mlp.svg"
+                        <img src="img/lec11/mnist-mlp.svg?v=2"
                             style="max-width:95%; max-height:380px; object-fit:contain;" />
                         <p style="font-size:0.75em; color:#666; margin-top:4px;"><em>784 → 16 → 16 → 10 neurons — mỗi
                                 kết nối là một trọng số cần học</em></p>
                     </div>
                 </section>
-                <section>
+                <section style="font-size: 0.95em;">
                     <h2>Cấu trúc mạng — các lớp</h2>
                     <ul>
                         <li><strong>Lớp đầu vào</strong> (input layer): 784 neuron (1 neuron = 1 pixel).</li>
@@ -148,7 +148,7 @@
                     </div>
                 </section>
                 <section style="font-size: 0.85em;">
-                    <h2>Neuron (Perceptron) — Đơn vị cơ bản</h2>
+                    <h2>Neuron — đơn vị cơ bản</h2>
                     <div class="two-col">
                         <div>
                             <ul>
@@ -169,19 +169,22 @@
                         </div>
                     </div>
                 </section>
-                <section style="font-size: 0.75em;">
+                <section style="font-size: 0.7em;">
                     <h2>Hàm kích hoạt (activation function)</h2>
                     <p>Đưa <span class="keyword">tính phi tuyến</span> vào mạng — nếu không có, nhiều lớp = 1 lớp tuyến
                         tính.</p>
                     <ul>
-                        <li><strong>Sigmoid:</strong> \( \dfrac{1}{1+e^{-z}} \) — đầu ra \(\in(0,1)\), dùng cho xác
-                            suất nhị phân.</li>
+                        <li><strong>Sigmoid:</strong> \( \sigma(z) = \dfrac{1}{1+e^{-z}} \) — đầu ra \(\in(0,1)\), dùng
+                            cho xác suất nhị phân.</li>
                         <li><strong>Tanh:</strong> đầu ra \(\in(-1,1)\) — hay dùng trong RNN/LSTM.</li>
                         <li><strong>ReLU:</strong> \( \max(0,z) \) — mặc định cho mạng sâu, nhưng có hiện tượng
                             <span class="keyword">neuron chết</span>.</li>
                         <li><strong>GELU:</strong> \( x \cdot \sigma(1.702x) \) — mặc định trong Transformer.</li>
+                        <li><strong>Softmax</strong> (cho đầu ra đa lớp):
+                            \(\mathrm{softmax}(z)_i = \dfrac{e^{z_i}}{\sum_{j=1}^K e^{z_j}}\)
+                            — biến vector logits thành phân phối xác suất, \(\sum_i p_i = 1\).</li>
                     </ul>
-                    <div class="highlight" style="margin-top:12px">
+                    <div class="highlight" style="margin-top:8px">
                         <strong>Quy tắc:</strong> lớp ẩn → ReLU/GELU &nbsp;|&nbsp; đầu ra nhị phân → Sigmoid
                         &nbsp;|&nbsp; đầu ra đa lớp → Softmax.
                     </div>
@@ -238,7 +241,7 @@
                 </section>
 
                 <section style="font-size: 0.66em;">
-                    <h2>Hàm mất mát (1/4) — Sai số bình phương trung bình</h2>
+                    <h2>MSE — sai số bình phương trung bình</h2>
                     <p>Dùng cho bài toán <span class="keyword">hồi quy</span> — đầu ra là giá trị liên tục.</p>
                     \[ \mathcal{L}_{\text{MSE}} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 \]
                     <div class="two-col" style="margin-top:10px">
@@ -264,7 +267,7 @@
                 </section>
 
                 <section style="font-size: 0.72em;">
-                    <h2>Hàm mất mát (2/4) — Cross-Entropy nhị phân</h2>
+                    <h2>Cross-Entropy nhị phân (BCE)</h2>
                     <p>Dùng cho bài toán <span class="keyword">phân loại nhị phân</span> — một trong 2 lớp.</p>
                     \[ \mathcal{L}_{\text{BCE}} = -\frac{1}{n}\sum_{i=1}^{n} \Big[ y_i \log\hat{p}_i + (1 - y_i)\log(1 -
                     \hat{p}_i) \Big] \]
@@ -287,7 +290,7 @@
                 </section>
 
                 <section style="font-size: 0.65em;">
-                    <h2>Hàm mất mát (3/4) — Cross-Entropy đa lớp</h2>
+                    <h2>Cross-Entropy đa lớp (CCE)</h2>
                     <p>Dùng cho bài toán <span class="keyword">phân loại đa lớp</span> — một trong \(K\) lớp.</p>
                     \[ \mathcal{L}_{\text{CCE}} = -\sum_{k=1}^{K} p_k^* \log(p_k) = -\log\, p(y = k^* \mid x) \]
                     <div class="two-col" style="margin-top:10px">
@@ -313,7 +316,7 @@
                 </section>
 
                 <section style="font-size: 0.75em;">
-                    <h2>Hàm mất mát (4/4) — Khi nào dùng gì?</h2>
+                    <h2>Hàm mất mát — khi nào dùng gì?</h2>
                     <table class="compare-table">
                         <thead>
                             <tr>
@@ -360,7 +363,8 @@
             <!-- ==================== 4. GRADIENT DESCENT & BACKPROP ==================== -->
             <section>
                 <section>
-                    <h1><span class="text-light">4.</span><br />Xuống đồi gradient<br />&amp; Lan truyền ngược</h1>
+                    <h1 style="font-size: 1.5em;"><span class="text-light">4.</span><br />Xuống đồi gradient
+                        &amp; lan truyền ngược</h1>
                 </section>
 
                 <section style="font-size: 0.75em;">
@@ -549,7 +553,7 @@
                     </ul>
                 </section>
 
-                <section style="font-size: 0.85em;">
+                <section style="font-size: 0.8em;">
                     <h2>Vấn đề thực tế — neuron chết &amp; triệt tiêu gradient</h2>
                     <div class="two-col">
                         <div>
@@ -575,7 +579,7 @@
                     </div>
                 </section>
 
-                <section style="font-size: 0.8em;">
+                <section style="font-size: 0.75em;">
                     <h2>Cực tiểu địa phương &amp; điểm yên ngựa</h2>
                     <div class="two-col">
                         <div>
@@ -611,7 +615,7 @@
                     </div>
                 </section>
 
-                <section style="font-size: 0.8em;">
+                <section style="font-size: 0.75em;">
                     <h2>Xuống đồi gradient: toàn lô vs ngẫu nhiên vs mini-batch</h2>
                     <ul>
                         <li><strong>Toàn lô (batch GD):</strong> dùng toàn bộ dữ liệu mỗi bước → chính xác nhưng
@@ -659,7 +663,7 @@
                     <p style="margin-top:0.3em; font-size:0.85em;"><em>Ứng dụng: dịch máy, phân tích cảm xúc, dự báo
                         chuỗi thời gian.</em></p>
                     <div style="text-align:center; margin-top:8px;">
-                        <img src="img/lec11/rnn-unrolled.svg" style="max-width:95%; max-height:340px;" />
+                        <img src="img/lec11/rnn-unrolled.svg?v=2" style="max-width:95%; max-height:340px;" />
                         <p style="font-size:0.7em; color:#666; margin-top:4px;"><em>Cùng cell $A$ áp dụng lặp qua các
                             bước thời gian — hidden state $h_t$ truyền thông tin từ quá khứ.</em></p>
                     </div>
@@ -707,9 +711,9 @@
                     <p style="margin-top:0.3em; font-size:0.85em;"><em>Ứng dụng: nhận dạng ảnh, phát hiện vật thể, phân
                         tích ảnh y tế.</em></p>
                     <div style="text-align:center; margin-top:8px;">
-                        <img src="img/lec11/cnn-pipeline.svg" style="max-width:95%; max-height:340px;" />
-                        <p style="font-size:0.7em; color:#666; margin-top:4px;"><em>Khối "học đặc trưng" (Conv + Pool)
-                            → khối "phân loại" (FC + Softmax). Bộ lọc trượt qua ảnh, chia sẻ trọng số → ít tham
+                        <img src="img/lec11/cnn-pipeline.svg?v=2" style="max-width:95%; max-height:340px;" />
+                        <p style="font-size:0.7em; color:#666; margin-top:4px;"><em>Khối "học đặc trưng" (tích chập +
+                            gộp) → khối "phân loại" (FC + softmax). Bộ lọc trượt qua ảnh, chia sẻ trọng số → ít tham
                             số.</em></p>
                     </div>
                 </section>
@@ -719,7 +723,7 @@
                     <p style="margin-top:0.2em; font-size:0.82em;"><em>"Attention is All You Need" (2017) — Google
                         Brain. Nền tảng của GPT, BERT, Gemini, Claude, LLaMA…</em></p>
                     <div style="text-align:center; margin-top:4px;">
-                        <img src="img/lec11/transformer-attention.svg" style="max-width:92%; max-height:320px;" />
+                        <img src="img/lec11/transformer-attention.svg?v=2" style="max-width:92%; max-height:320px;" />
                         <p style="font-size:0.68em; color:#666; margin-top:2px;"><em>Mỗi từ "nhìn" mọi từ khác qua trọng
                             số chú ý — song song hoá hoàn toàn, bắt được phụ thuộc rất xa.</em></p>
                     </div>
@@ -772,7 +776,7 @@
 
             <!-- ==================== TÓM TẮT ==================== -->
             <section>
-                <section style="font-size: 0.75em;">
+                <section style="font-size: 0.85em;">
                     <h1>Tóm tắt</h1>
                     <ol>
                         <li>Mạng nơ-ron học bằng cách điều chỉnh hơn 13 000 trọng số qua dữ liệu.</li>
@@ -781,9 +785,6 @@
                         <li>SGD, neuron chết, triệt tiêu gradient — những vấn đề thực tế cần giải quyết.</li>
                         <li>Transformer là kiến trúc chủ đạo nhờ song song hoá và cơ chế tự chú ý.</li>
                     </ol>
-                    <p style="text-align:center; margin-top:28px; font-size:1.05em;">
-                        <strong>Câu hỏi mở:</strong> Theo bạn, kiến trúc nào sẽ "thay thế" Transformer trong tương lai?
-                    </p>
                 </section>
 
                 <section style="font-size: 0.72em;">

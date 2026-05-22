@@ -55,40 +55,40 @@ def main():
             shade = "#1E93AB" if (ix + iy) % 2 == 0 else "#bfe2eb"
             ax.add_patch(Rectangle((x + 0.15 + ix * 0.23, yc - 0.35 + iy * 0.23),
                                    0.23, 0.23, facecolor=shade, edgecolor="none"))
-    ax.text(x + w_in / 2, yc - h_box / 2 - 0.25, "Input\n28×28×1",
+    ax.text(x + w_in / 2, yc - h_box / 2 - 0.25, "Đầu vào\n28×28×1",
             ha="center", va="top", fontsize=9, color="#333")
 
     # ===== Conv1 + ReLU =====
     x1 = x + w_in + 0.7
     draw_arrow(ax, x + w_in + 0.05, x1 - 0.05, yc)
     draw_cube(ax, x1, yc - 0.75, 0.9, 1.5, 0.5, "#bfe2eb")
-    ax.text(x1 + 0.65, yc - h_box / 2 - 0.25, "Conv + ReLU\n28×28×6",
+    ax.text(x1 + 0.65, yc - h_box / 2 - 0.25, "Tích chập + ReLU\n28×28×6",
             ha="center", va="top", fontsize=9, color="#333")
 
     # ===== Pool1 =====
     x2 = x1 + 1.7
     draw_arrow(ax, x1 + 1.4, x2 - 0.05, yc)
     draw_cube(ax, x2, yc - 0.55, 0.7, 1.1, 0.5, "#e0e0e0")
-    ax.text(x2 + 0.55, yc - h_box / 2 - 0.25, "Pool\n14×14×6",
+    ax.text(x2 + 0.55, yc - h_box / 2 - 0.25, "Gộp\n14×14×6",
             ha="center", va="top", fontsize=9, color="#333")
 
     # ===== Conv2 + ReLU =====
     x3 = x2 + 1.4
     draw_arrow(ax, x2 + 1.2, x3 - 0.05, yc)
     draw_cube(ax, x3, yc - 0.45, 0.6, 0.9, 0.5, "#bfe2eb")
-    ax.text(x3 + 0.5, yc - h_box / 2 - 0.25, "Conv + ReLU\n10×10×16",
+    ax.text(x3 + 0.5, yc - h_box / 2 - 0.25, "Tích chập + ReLU\n10×10×16",
             ha="center", va="top", fontsize=9, color="#333")
 
     # ===== Pool2 =====
     x4 = x3 + 1.2
     draw_arrow(ax, x3 + 1.0, x4 - 0.05, yc)
     draw_cube(ax, x4, yc - 0.3, 0.45, 0.6, 0.5, "#e0e0e0")
-    ax.text(x4 + 0.45, yc - h_box / 2 - 0.25, "Pool\n5×5×16",
+    ax.text(x4 + 0.45, yc - h_box / 2 - 0.25, "Gộp\n5×5×16",
             ha="center", va="top", fontsize=9, color="#333")
 
     # ===== Flatten + FC =====
     x5 = x4 + 1.1
-    draw_arrow(ax, x4 + 1.0, x5 - 0.05, yc, label="flatten")
+    draw_arrow(ax, x4 + 1.0, x5 - 0.05, yc, label="trải phẳng")
     fc = Rectangle((x5, yc - 0.9), 0.32, 1.8,
                    facecolor="#fff4d2", edgecolor="#b58d00", lw=1.2)
     ax.add_patch(fc)
@@ -101,13 +101,13 @@ def main():
     out = Rectangle((x6, yc - 0.6), 0.28, 1.2,
                     facecolor="#fde2c4", edgecolor=C_OUTPUT, lw=1.2)
     ax.add_patch(out)
-    ax.text(x6 + 0.14, yc - h_box / 2 - 0.25, "Output\n10 classes",
+    ax.text(x6 + 0.14, yc - h_box / 2 - 0.25, "Đầu ra\n10 lớp",
             ha="center", va="top", fontsize=9, color="#333")
 
     # ===== Stage labels (top) =====
-    ax.text(2.85, yc + 1.5, "Feature learning", ha="center", fontsize=11,
+    ax.text(2.85, yc + 1.5, "Học đặc trưng", ha="center", fontsize=11,
             fontweight="bold", color=C_BLUE)
-    ax.text(x5 + 0.16 + (x6 - x5) / 2, yc + 1.5, "Classification",
+    ax.text(x5 + 0.16 + (x6 - x5) / 2, yc + 1.5, "Phân loại",
             ha="center", fontsize=11, fontweight="bold", color=C_OUTPUT)
     # Bracket lines
     ax.plot([x1, x4 + 0.85], [yc + 1.2, yc + 1.2], color=C_BLUE, lw=1.0)

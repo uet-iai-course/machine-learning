@@ -61,7 +61,8 @@ def main():
                               connectionstyle=f"arc3,rad={rad}")
         ax_t.add_patch(arr)
 
-    ax_t.text(0.5, y_tok + 1.4, "Từ 'cat' (cam) nhìn các từ khác — độ đậm = trọng số chú ý",
+    ax_t.text(0.5, y_tok + 1.4,
+              "Từ 'cat' (cam) nhìn các từ khác — độ dày mũi tên = trọng số chú ý",
               fontsize=10, color="#444", style="italic", ha="left")
 
     ax_t.set_xlim(0, 9)
