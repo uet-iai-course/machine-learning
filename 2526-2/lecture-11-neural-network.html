@@ -349,43 +349,29 @@
                 <section>
                     <h1 style="font-size: 1.5em;"><span class="text-light">4.</span><br />Xuống đồi gradient
                         &amp; lan truyền ngược</h1>
+                    <p style="margin-top:0.6em; font-size:0.85em; color:#555;"><em>Phần A — Xuống đồi gradient: ý tưởng,
+                            gradient nói gì, tốc độ học.<br />
+                            Phần B — Lan truyền ngược: quy tắc chuỗi + thuật toán.<br />
+                            Phần C — Vấn đề thực tế khi huấn luyện.</em></p>
                 </section>
 
-                <section style="font-size: 0.8em;">
-                    <h2>Lan truyền ngược — tổng quan</h2>
-                    <p>Huấn luyện mạng = lặp lại <strong>hai lượt</strong> qua mạng cho mỗi mẫu:</p>
-                    <div style="text-align:center; margin-top:6px;">
-                        <img src="img/lec11/backprop-forward-backward.svg?v=2"
-                            style="max-width:92%; max-height:280px;" />
-                    </div>
-                    <ol style="margin-top:10px; line-height:1.6em;">
-                        <li><strong style="color:#1E93AB;">Lan truyền tiến</strong>: đi từ đầu vào → đầu ra, tính
-                            \(\hat{y}\) và mất mát \(\mathcal{L}\).</li>
-                        <li><strong style="color:#E62727;">Lan truyền ngược</strong>: đi từ \(\mathcal{L}\) ngược về,
-                            tính \(\partial \mathcal{L} / \partial w\) cho <em>từng</em> trọng số → cập nhật bằng xuống
-                            đồi gradient.</li>
-                    </ol>
-                </section>
-
-                <section style="font-size: 0.72em;">
+                <!-- ===== Phần A: Gradient descent ===== -->
+                <section style="font-size: 0.74em;">
                     <h2>Ý tưởng xuống đồi gradient</h2>
                     <div class="demo-box">
                         Bạn đứng trên một quả đồi trong sương mù, muốn xuống thung lũng.
-                        Mỗi bước, bạn nhìn xung quanh và bước về hướng dốc nhất đi xuống.
+                        Mỗi bước, nhìn xung quanh và bước về hướng dốc nhất đi xuống.
                     </div>
-                    <ul>
-                        <li><span class="keyword">Gradient</span> \(\nabla_w \mathcal{L}\): hướng <em>tăng nhanh nhất</em>
-                            của mất mát.</li>
-                        <li>Ta đi <strong>ngược chiều gradient</strong> → mất mát giảm nhanh nhất.</li>
-                        <li>Công thức cập nhật:
-                            \[ w \leftarrow w - \eta \, \dfrac{\partial \mathcal{L}}{\partial w} \]
-                        </li>
-                        <li><span class="keyword">\(\eta\)</span> là <strong>tốc độ học</strong> (learning rate) — bước
+                    <p style="text-align:center; margin-top:10px; margin-bottom:0;">Quy tắc cập nhật:</p>
+                    \[ w \leftarrow w - \eta \, \dfrac{\partial \mathcal{L}}{\partial w} \]
+                    <ul style="margin-top:4px;">
+                        <li><span class="keyword">Gradient</span> \(\nabla_w \mathcal{L}\): hướng <em>tăng nhanh
+                                nhất</em> của mất mát → đi <strong>ngược chiều</strong> để giảm nhanh nhất.</li>
+                        <li><span class="keyword">\(\eta\)</span> = <strong>tốc độ học</strong> (learning rate) — bước
                             đi dài hay ngắn.</li>
                     </ul>
-                    <div class="highlight" style="margin-top:12px">
-                        Mục tiêu: tìm <strong>cực tiểu toàn cục</strong> — nhưng cực tiểu địa phương thường đã đủ tốt
-                        trong thực tế.
+                    <div class="highlight" style="margin-top:6px">
+                        Mục tiêu: cực tiểu toàn cục — nhưng cực tiểu địa phương thường đã đủ tốt trong thực tế.
                     </div>
                 </section>
 
@@ -430,87 +416,72 @@
                     </div>
                 </section>
 
+                <section style="font-size: 0.85em;">
+                    <h2>Tốc độ học (\(\eta\)) &amp; bộ tối ưu</h2>
+                    <p>Quy tắc cập nhật: \( w \leftarrow w - \eta \, \dfrac{\partial \mathcal{L}}{\partial w}\). Chọn
+                        \(\eta\) thế nào?</p>
+                    <ul>
+                        <li>🐌 <strong>\(\eta\) quá nhỏ:</strong> học rất chậm, dễ bị kẹt.</li>
+                        <li>🐇 <strong>\(\eta\) quá lớn:</strong> dao động, không hội tụ.</li>
+                        <li>✅ <strong>\(\eta\) vừa:</strong> hội tụ nhanh và ổn định.</li>
+                    </ul>
+                    <div class="demo-box" style="margin-top:10px">
+                        <strong>Thực tế:</strong> dùng <span class="keyword">Adam</span> — bộ tối ưu tự động điều chỉnh
+                        \(\eta\) cho <em>từng</em> tham số, tích luỹ "đà" từ các bước trước để vượt qua điểm yên ngựa
+                        nhanh hơn SGD thuần tuý.
+                    </div>
+                </section>
+
+                <!-- ===== Phần B: Backpropagation ===== -->
                 <section style="font-size: 0.7em;">
-                    <h2>Tính gradient — quy tắc chuỗi</h2>
-                    <p>Để cập nhật trọng số \(w\), ta cần \(\partial \mathcal{L} / \partial w\) — nhưng \(w\) không ảnh
-                        hưởng trực tiếp đến \(\mathcal{L}\):</p>
-                    \[ w \;\longrightarrow\; z \;\longrightarrow\; \hat{y} \;\longrightarrow\; \mathcal{L} \]
-                    <p>Phải dùng <span class="keyword">quy tắc chuỗi</span> (chain rule) — tính từng mắt xích:</p>
-                    \[ \frac{\partial \mathcal{L}}{\partial w}
-                    = \frac{\partial \mathcal{L}}{\partial \hat{y}}
-                    \cdot \frac{\partial \hat{y}}{\partial z}
-                    \cdot \frac{\partial z}{\partial w} \]
-                    <div class="two-col" style="margin-top:12px">
+                    <h2>Quy tắc chuỗi — chìa khoá tính gradient</h2>
+                    <p>Trọng số \(w\) <strong>không tác động trực tiếp</strong> đến mất mát — phải đi qua chuỗi:</p>
+                    \[ w \;\longrightarrow\; z \;\longrightarrow\; a \;\longrightarrow\; \mathcal{L} \]
+                    <div class="two-col" style="margin-top:8px">
                         <div>
-                            <ul>
-                                <li>\(\partial \mathcal{L} / \partial \hat{y}\) — đạo hàm hàm mất mát.</li>
-                                <li>\(\partial \hat{y} / \partial z\) — đạo hàm hàm kích hoạt.</li>
-                                <li>\(\partial z / \partial w = x\) — đạo hàm phần tuyến tính.</li>
-                            </ul>
+                            <p><strong>Cú hích nhỏ</strong> — hích \(w\) một chút \(\delta w\):</p>
+                            \[ \begin{aligned}
+                              \delta z &amp;= x \cdot \delta w \\
+                              \delta a &amp;= \sigma'(z) \cdot \delta z \\
+                              \delta \mathcal{L} &amp;= \tfrac{\partial \mathcal{L}}{\partial a} \cdot \delta a
+                            \end{aligned} \]
                         </div>
                         <div>
-                            <div class="demo-box">
-                                Sigmoid + BCE cho gradient cực gọn:<br />
-                                \(\partial \mathcal{L} / \partial z = \hat{y} - y\)<br />
-                                Mọi thứ triệt tiêu nhau!
+                            <p><strong>Chia chuỗi cho \(\delta w\) → quy tắc chuỗi:</strong></p>
+                            \[ \frac{\partial \mathcal{L}}{\partial w}
+                              = \frac{\partial \mathcal{L}}{\partial a}
+                              \cdot \frac{\partial a}{\partial z}
+                              \cdot \frac{\partial z}{\partial w} \]
+                            <div class="demo-box" style="margin-top:6px; font-size:0.92em">
+                                <strong>Mẹo:</strong> Sigmoid + BCE → \(\partial \mathcal{L} / \partial z = \hat{y} -
+                                y\). Rất gọn!
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <section style="font-size: 0.62em;">
-                    <h2>Tại sao cần lan truyền ngược?</h2>
-                    <p>Mục tiêu: tính \(\dfrac{\partial \mathcal{L}}{\partial w}\) — "nếu tôi thay đổi \(w\) một chút,
-                        \(\mathcal{L}\) thay đổi bao nhiêu?"</p>
-
-                    <div class="demo-box" style="margin-top:12px">
-                        Nhưng \(w\) <strong>không ảnh hưởng trực tiếp đến \(\mathcal{L}\)</strong> — phải đi qua một
-                        chuỗi:
-                        \[ w \;\longrightarrow\; z \;\longrightarrow\; a \;\longrightarrow\; \mathcal{L} \]
+                <section style="font-size: 0.66em;">
+                    <h2>Lan truyền ngược — forward + backward</h2>
+                    <p>Mạng MNIST ~13 000 tham số → cần 13 000 đạo hàm riêng. Backprop tính
+                        <strong>tất cả</strong> trong <em>một lần duyệt</em>:</p>
+                    <div style="text-align:center; margin-top:2px;">
+                        <img src="img/lec11/backprop-forward-backward.svg?v=2"
+                            style="max-width:84%; max-height:210px;" />
                     </div>
-
-                    <p style="margin-top:12px">Hình dung theo kiểu <strong>"cú hích nhỏ" (nudge)</strong> của
-                        3Blue1Brown:</p>
-                    <ul>
-                        <li>Hích \(w\) một chút nhỏ \(\delta w\).</li>
-                        <li>→ \(z\) thay đổi: \(\delta z = \delta w \cdot x\) &nbsp;&nbsp; (vì \(z = wx + b\)).</li>
-                        <li>→ \(a\) thay đổi: \(\delta a = \delta z \cdot \sigma'(z)\) &nbsp;&nbsp; (qua hàm kích hoạt).
+                    <ol style="margin-top:4px; line-height:1.45em;">
+                        <li><strong style="color:#1E93AB;">Lan truyền tiến:</strong> đi từ đầu vào → đầu ra, tính
+                            \(\hat{y}\) và mất mát \(\mathcal{L}\); lưu giá trị trung gian \(z^{(\ell)}, a^{(\ell)}\).
                         </li>
-                        <li>→ \(\mathcal{L}\) thay đổi: \(\delta \mathcal{L} = \delta a \cdot \dfrac{\partial
-                            \mathcal{L}}{\partial a}\).</li>
-                    </ul>
-
-                    <div class="highlight" style="margin-top:14px">
-                        Chia cả hai vế cho \(\delta w\) → ra đúng quy tắc chuỗi:
-                        \(\;\dfrac{\partial \mathcal{L}}{\partial w} = \dfrac{\partial \mathcal{L}}{\partial a} \cdot
-                        \dfrac{\partial a}{\partial z} \cdot \dfrac{\partial z}{\partial w}\).
-                    </div>
+                        <li><strong style="color:#E62727;">Lan truyền ngược:</strong> áp dụng quy tắc chuỗi từ
+                            \(\mathcal{L}\) ngược về — mỗi lớp <em>chờ lớp sau tính xong</em> mới tính được.</li>
+                        <li><strong>Cập nhật:</strong> \(w \leftarrow w - \eta \, \partial \mathcal{L} / \partial w\)
+                            cho từng \(w\).</li>
+                    </ol>
                 </section>
 
-                <section style="font-size: 0.72em;">
-                    <h2>Lan truyền ngược (backpropagation)</h2>
-                    <ul>
-                        <li>Mạng 13 000 tham số → cần 13 000 đạo hàm riêng \(\partial \mathcal{L} / \partial w_j\).</li>
-                        <li><span class="keyword">Lan truyền ngược</span>: tính tất cả gradient trong <strong>một lần
-                            duyệt ngược</strong>.</li>
-                    </ul>
-                    <div class="demo-box" style="margin-top:12px">
-                        Mất mát → gradient lan ra lớp đầu ra → lớp ẩn 2 → lớp ẩn 1 → \(\ldots\) <br />
-                        Mỗi lớp <strong>phải chờ</strong> lớp sau tính xong mới tính được.
-                    </div>
-                    <ul style="margin-top:12px">
-                        <li><strong>Lan truyền tiến:</strong> tính \(\hat{y}\), lưu lại giá trị trung gian \(z^{(\ell)},
-                            a^{(\ell)}\).</li>
-                        <li><strong>Tính mất mát:</strong> so sánh \(\hat{y}\) với nhãn thật \(y\).</li>
-                        <li><strong>Lan truyền ngược:</strong> quy tắc chuỗi từ đầu ra ngược về đầu vào.</li>
-                        <li><strong>Cập nhật:</strong>
-                            \(w \leftarrow w - \eta \, \dfrac{\partial \mathcal{L}}{\partial w}\).
-                        </li>
-                    </ul>
-                </section>
-
+                <!-- ===== Phần C: Vấn đề thực tế ===== -->
                 <section style="font-size: 0.8em;">
-                    <h2>Vấn đề thực tế — neuron chết &amp; triệt tiêu gradient</h2>
+                    <h2>Neuron chết &amp; triệt tiêu gradient</h2>
                     <div class="two-col">
                         <div>
                             <p><strong>Neuron chết</strong> (dead neuron — với ReLU)</p>
@@ -555,9 +526,8 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="highlight" style="margin-top:16px">
-                        Nhiễu từ SGD giúp thoát khỏi cả hai — đây là lý do mini-batch SGD tốt hơn xuống đồi gradient trên toàn
-                        lô.
+                    <div class="highlight" style="margin-top:14px">
+                        Lối thoát: <strong>nhiễu của SGD</strong> giúp thoát cả hai → mini-batch SGD (slide tiếp).
                     </div>
                 </section>
 
@@ -571,39 +541,20 @@
                     </div>
                 </section>
 
-                <section style="font-size: 0.75em;">
-                    <h2>Xuống đồi gradient: toàn lô vs ngẫu nhiên vs mini-batch</h2>
+                <section style="font-size: 0.78em;">
+                    <h2>Batch / SGD / Mini-batch SGD</h2>
                     <ul>
                         <li><strong>Toàn lô (batch GD):</strong> dùng toàn bộ dữ liệu mỗi bước → chính xác nhưng
                             <em>rất chậm</em>.</li>
-                        <li><strong>Ngẫu nhiên (SGD):</strong> dùng 1 mẫu ngẫu nhiên mỗi bước → nhanh nhưng <em>dao
-                            động nhiều</em>.</li>
-                        <li><strong>Mini-batch SGD:</strong> dùng 32–256 mẫu → cân bằng tốt nhất ✅.</li>
+                        <li><strong>Ngẫu nhiên (SGD):</strong> dùng 1 mẫu mỗi bước → nhanh nhưng <em>dao động
+                            nhiều</em>.</li>
+                        <li><strong>Mini-batch SGD:</strong> dùng 32–256 mẫu → cân bằng tốt nhất ✅ — mặc định
+                            trong mọi framework hiện đại.</li>
                     </ul>
                     <div class="demo-box" style="margin-top:12px">
-                        10 000 mẫu, kích thước lô = 32 → <strong>312 lần cập nhật mỗi epoch</strong>.<br />
-                        Xuống đồi gradient toàn lô chỉ cập nhật <strong>1 lần</strong> mỗi epoch.
-                    </div>
-                    <div class="highlight">
-                        <strong>Epoch:</strong> một lượt đi qua toàn bộ tập huấn luyện.<br />
-                        Nhiễu của mini-batch giúp thoát cực tiểu địa phương &amp; điểm yên ngựa tốt hơn xuống đồi gradient toàn
-                        lô.
-                    </div>
-                </section>
-
-                <section style="font-size: 0.92em;">
-                    <h2>Tốc độ học &amp; bộ tối ưu</h2>
-                    <p>Quy tắc cập nhật cơ bản: \( w \leftarrow w - \eta \, \dfrac{\partial \mathcal{L}}{\partial w}
-                        \).</p>
-                    <ul>
-                        <li>🐌 <strong>\(\eta\) quá nhỏ:</strong> học rất chậm, dễ bị kẹt.</li>
-                        <li>🐇 <strong>\(\eta\) quá lớn:</strong> dao động, không hội tụ.</li>
-                        <li>✅ <strong>\(\eta\) vừa:</strong> hội tụ nhanh và ổn định.</li>
-                    </ul>
-                    <div class="demo-box" style="margin-top:12px">
-                        <strong>Thực tế:</strong> dùng <span class="keyword">Adam</span> — bộ tối ưu tự động điều chỉnh
-                        \(\eta\) cho từng tham số, tích luỹ "đà" từ các bước trước để vượt qua điểm yên ngựa nhanh hơn
-                        SGD thuần tuý.
+                        <strong>Ví dụ:</strong> 10 000 mẫu, lô = 32 → <strong>312 cập nhật / epoch</strong>
+                        (vs <strong>1</strong> với batch GD). <em>Epoch</em> = một lượt qua toàn bộ tập huấn luyện.<br />
+                        Nhiễu mini-batch giúp thoát cực tiểu địa phương &amp; yên ngựa tốt hơn toàn lô.
                     </div>
                 </section>
             </section>
@@ -679,7 +630,7 @@
                     <p style="margin-top:0.2em; font-size:0.82em;"><em>"Attention is All You Need" (2017) — Google
                         Brain. Nền tảng của GPT, BERT, Gemini, Claude, LLaMA…</em></p>
                     <div style="text-align:center; margin-top:4px;">
-                        <img src="img/lec11/transformer-attention.svg?v=7" style="max-width:92%; max-height:320px;" />
+                        <img src="img/lec11/transformer-attention.svg?v=8" style="max-width:92%; max-height:320px;" />
                         <p style="font-size:0.68em; color:#666; margin-top:2px;"><em>Mỗi từ "nhìn" mọi từ khác qua trọng
                             số chú ý — song song hoá hoàn toàn, bắt được phụ thuộc rất xa.</em></p>
                     </div>
