@@ -74,7 +74,8 @@ def main():
             color=C_RED, style="italic")
 
     # Annotations
-    ax.text(T * x_step / 2, -0.9, "Đầu vào theo thời gian — cùng một cell $A$ áp dụng lặp lại",
+    ax.text(T * x_step / 2, -0.9,
+            "Đầu vào theo thời gian — cùng một khối $A$ áp dụng lặp lại",
             ha="center", va="top", fontsize=10, color="#555", style="italic")
 
     ax.set_xlim(-0.6, T * x_step + 0.3)
