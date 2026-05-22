@@ -73,13 +73,16 @@ def main():
     ax.text(-0.05, y_cell + 0.32, "$h_0$", ha="center", fontsize=10,
             color=C_RED, style="italic")
 
-    # Annotations
-    ax.text(T * x_step / 2, -0.9,
+    # x_t labels go BELOW the box (avoid collision with caption)
+    # Note: x_t labels already rendered inside boxes via text() above.
+
+    # Caption — well below x_t row
+    ax.text(T * x_step / 2, -1.5,
             "Đầu vào theo thời gian — cùng một khối $A$ áp dụng lặp lại",
             ha="center", va="top", fontsize=10, color="#555", style="italic")
 
     ax.set_xlim(-0.6, T * x_step + 0.3)
-    ax.set_ylim(-1.3, y_out + 0.7)
+    ax.set_ylim(-2.0, y_out + 0.7)
     ax.set_aspect("equal")
     ax.axis("off")
 
