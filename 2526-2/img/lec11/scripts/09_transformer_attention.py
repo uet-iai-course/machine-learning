@@ -48,20 +48,23 @@ def main():
                   fontweight=("bold" if i == 1 else "normal"), zorder=4)
 
     # Arrows from "cat" (i=1) to ALL other tokens — go ABOVE token boxes.
-    # All start from cat's TOP edge, route up & over, land on target top edge.
+    # matplotlib arc3 rad convention: positive curls CCW (left of travel).
+    # → For LEFT-going arrow, positive rad curls UP.
+    # → For RIGHT-going arrow, NEGATIVE rad curls UP.
     src = positions[1]
     src_top_y = src[1] + 0.3
     for j, target in enumerate(positions):
         if j == 1:
             continue
         weight = attn[1, j]
-        # Negative rad — curve UP (above tokens). Further targets need more arc.
         dist = abs(j - 1)
-        rad = -0.6 - 0.18 * dist
+        # Sign: left target (j<1) → +; right target (j>1) → -
+        sign = 1 if j < 1 else -1
+        rad = sign * (0.55 + 0.15 * dist)
         arr = FancyArrowPatch((src[0], src_top_y),
                               (target[0], target[1] + 0.3),
                               arrowstyle="-|>", mutation_scale=8,
-                              color=C_RED, lw=0.5 + weight * 8, alpha=0.75,
+                              color=C_RED, lw=0.5 + weight * 7, alpha=0.75,
                               connectionstyle=f"arc3,rad={rad}",
                               zorder=5)
         ax_t.add_patch(arr)
