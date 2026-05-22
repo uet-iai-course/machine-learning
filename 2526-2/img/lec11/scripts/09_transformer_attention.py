@@ -27,8 +27,8 @@ def main():
         [0.05, 0.05, 0.10, 0.20, 0.20, 0.40],  # mat
     ])
 
-    fig = plt.figure(figsize=(9.0, 5.0))
-    gs = fig.add_gridspec(2, 1, height_ratios=[0.7, 2.4], hspace=0.3)
+    fig = plt.figure(figsize=(9.0, 5.6))
+    gs = fig.add_gridspec(2, 1, height_ratios=[1.0, 2.2], hspace=0.05)
 
     # ---- Top: tokens + arrows from "cat" to all others ----
     ax_t = fig.add_subplot(gs[0])
@@ -47,7 +47,7 @@ def main():
         ax_t.text(x, y_tok, tok, ha="center", va="center", fontsize=11,
                   fontweight=("bold" if i == 1 else "normal"), zorder=4)
 
-    # Arrows from "cat" (i=1) to other tokens — go ABOVE token boxes
+    # Arrows from "cat" (i=1) to ALL other tokens — go ABOVE token boxes.
     # All start from cat's TOP edge, route up & over, land on target top edge.
     src = positions[1]
     src_top_y = src[1] + 0.3
@@ -55,25 +55,23 @@ def main():
         if j == 1:
             continue
         weight = attn[1, j]
-        if weight < 0.06:
-            continue
-        # Stronger negative radius — more arc height above tokens
+        # Negative rad — curve UP (above tokens). Further targets need more arc.
         dist = abs(j - 1)
-        rad = -0.6 - 0.15 * dist  # further targets get higher arcs
+        rad = -0.6 - 0.18 * dist
         arr = FancyArrowPatch((src[0], src_top_y),
                               (target[0], target[1] + 0.3),
                               arrowstyle="-|>", mutation_scale=8,
-                              color=C_RED, lw=0.6 + weight * 6, alpha=0.7,
+                              color=C_RED, lw=0.5 + weight * 8, alpha=0.75,
                               connectionstyle=f"arc3,rad={rad}",
-                              zorder=1)
+                              zorder=5)
         ax_t.add_patch(arr)
 
-    ax_t.text(4.7, y_tok + 2.0,
+    ax_t.text(4.7, y_tok + 2.3,
               "Từ 'cat' (cam) nhìn các từ khác — độ dày mũi tên = trọng số chú ý",
               fontsize=10, color="#444", style="italic", ha="center")
 
     ax_t.set_xlim(0, 9.5)
-    ax_t.set_ylim(-0.2, 2.6)
+    ax_t.set_ylim(-0.2, 3.0)
     # Don't lock aspect — let matplotlib use full subplot width
     ax_t.axis("off")
 
