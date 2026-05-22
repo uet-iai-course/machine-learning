@@ -124,23 +124,11 @@
 
                 <section style="font-size: 0.82em;">
                     <h2>Tác tử &amp; môi trường — vòng lặp tương tác</h2>
-                    <div
-                        style="display:flex; align-items:center; justify-content:center; gap:0; margin:24px 0;">
-                        <div
-                            style="background:#bfe2eb; border:2px solid #1E93AB; border-radius:10px; padding:18px 28px; min-width:130px; text-align:center; font-weight:700;">
-                            🤖<br />Tác tử</div>
-                        <div
-                            style="display:flex; flex-direction:column; gap:10px; padding:0 24px; font-size:0.88em; text-align:center;">
-                            <div>→ Hành động \(a_t\) →</div>
-                            <div style="height:14px"></div>
-                            <div>← Trạng thái \(s_{t+1}\) ←</div>
-                            <div>← Phần thưởng \(r_{t+1}\) ←</div>
-                        </div>
-                        <div
-                            style="background:#d8f0d8; border:2px solid #34a853; border-radius:10px; padding:18px 28px; min-width:130px; text-align:center; font-weight:700;">
-                            🌍<br />Môi trường</div>
+                    <div style="text-align:center; margin-top:4px;">
+                        <img src="img/lec12/agent-env-loop.svg?v=1"
+                            style="max-width:78%; max-height:250px;" />
                     </div>
-                    <p style="margin-top:4px"><strong>Mỗi bước thời gian \(t\):</strong> tác tử chọn hành động → môi
+                    <p style="margin-top:6px"><strong>Mỗi bước thời gian \(t\):</strong> tác tử chọn hành động → môi
                         trường trả về trạng thái mới + phần thưởng. Vòng lặp tiếp tục…</p>
                     <div class="highlight" style="margin-top:8px">
                         Mục tiêu của tác tử: học cách hành động để <strong>tối đa hoá tổng phần thưởng</strong> theo
