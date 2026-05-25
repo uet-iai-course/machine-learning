@@ -202,19 +202,34 @@ def render_values(dist: list[list[int | None]]) -> list[str]:
 
 
 def render_arrow(r: int, c: int, dr: int, dc: int) -> str:
-    """Vẽ mũi tên từ tâm ô (r,c) theo hướng (dr,dc)."""
+    """Vẽ mũi tên 1 polygon (shaft + head) — không dùng marker để tránh
+    'đầu tròn lòi ra' khi marker overlap với line stroke."""
     cx, cy = cell_center(r, c)
-    length = CELL * 0.32
-    # Direction vector — line dừng trước tâm marker để arrowhead nối khít
-    tx = cx + dc * length
-    ty = cy + dr * length
-    sx = cx - dc * length * 0.6
-    sy = cy - dr * length * 0.6
-    return (
-        f'<line x1="{sx:.1f}" y1="{sy:.1f}" x2="{tx:.1f}" y2="{ty:.1f}" '
-        f'stroke="{ARROW}" stroke-width="3.5" stroke-linecap="butt" '
-        f'marker-end="url(#arrowhead)"/>'
-    )
+    L = CELL * 0.34          # nửa độ dài tổng (tip cách tâm L)
+    BACK = L * 0.6           # đuôi cách tâm (ngắn hơn tip để cân thị giác)
+    SHAFT_W = 2.0            # nửa bề dày shaft
+    HEAD_W = 6.5             # nửa bề rộng đáy đầu mũi tên
+    HEAD_LEN = 8.5           # chiều dài đầu mũi tên (tính từ tip)
+
+    # Hướng & pháp tuyến
+    tip_x, tip_y = cx + dc * L, cy + dr * L
+    back_x, back_y = cx - dc * BACK, cy - dr * BACK
+    head_base_x = tip_x - dc * HEAD_LEN
+    head_base_y = tip_y - dr * HEAD_LEN
+    # Vector vuông góc (xoay 90°)
+    px, py = -dr, dc
+
+    pts = [
+        (back_x + px * SHAFT_W, back_y + py * SHAFT_W),       # đuôi-trái
+        (head_base_x + px * SHAFT_W, head_base_y + py * SHAFT_W),  # cổ đầu-trái
+        (head_base_x + px * HEAD_W, head_base_y + py * HEAD_W),    # cánh đầu-trái
+        (tip_x, tip_y),                                            # đỉnh tip
+        (head_base_x - px * HEAD_W, head_base_y - py * HEAD_W),    # cánh đầu-phải
+        (head_base_x - px * SHAFT_W, head_base_y - py * SHAFT_W),  # cổ đầu-phải
+        (back_x - px * SHAFT_W, back_y - py * SHAFT_W),       # đuôi-phải
+    ]
+    pts_str = ' '.join(f'{x:.1f},{y:.1f}' for x, y in pts)
+    return f'<polygon points="{pts_str}" fill="{ARROW}"/>'
 
 
 def best_action(r: int, c: int, dist: list[list[int | None]]) -> tuple[int, int] | None:
@@ -255,16 +270,6 @@ def svg_header(extra_defs: str = "") -> str:
     )
 
 
-ARROW_DEF = (
-    '  <defs>\n'
-    '    <marker id="arrowhead" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" '
-    'orient="auto" markerUnits="strokeWidth">\n'
-    f'      <polygon points="0 0, 5 2.5, 0 5" fill="{ARROW}"/>\n'
-    '    </marker>\n'
-    '  </defs>\n'
-)
-
-
 # ---------- Generate 3 SVGs ----------
 
 def make_maze() -> str:
@@ -293,7 +298,7 @@ def make_value() -> str:
 
 def make_policy() -> str:
     dist = compute_distances()
-    parts = [svg_header(ARROW_DEF)]
+    parts = [svg_header()]
     parts.extend('  ' + s for s in render_cells())
     parts.extend('  ' + s for s in render_start_goal_labels(start_corner=True))
     parts.extend('  ' + s for s in render_policy(dist))
