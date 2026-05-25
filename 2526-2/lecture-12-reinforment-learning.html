@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Bài 12: Học tăng cường</title>
+    <title>Bài 12: Giới thiệu Học tăng cường</title>
     <link rel="stylesheet" href="revealjs/dist/reset.css" />
     <link rel="stylesheet" href="revealjs/dist/reveal.css" />
     <link rel="stylesheet" href="revealjs/dist/theme/white.css" />
@@ -20,7 +20,7 @@
             <section>
                 <section>
                     <h1>Học máy</h1>
-                    <h3>Bài 12: Học tăng cường</h3>
+                    <h3>Bài 12: Giới thiệu Học tăng cường</h3>
                     <p>Trường ĐH Công nghệ – Đại học Quốc gia Hà Nội</p>
                 </section>
                 <section>
@@ -123,7 +123,7 @@
                 </section>
 
                 <section style="font-size: 0.82em;">
-                    <h2>Tác tử &amp; môi trường — vòng lặp tương tác</h2>
+                    <h2>Tác tử &amp; môi trường</h2>
                     <div style="text-align:center; margin-top:4px;">
                         <img src="img/lec12/agent-env-loop.svg?v=1"
                             style="max-width:78%; max-height:250px;" />
@@ -136,9 +136,9 @@
                     </div>
                 </section>
 
-                <section style="font-size: 0.68em;">
-                    <h2>Quá trình quyết định Markov — bộ 5 thành phần</h2>
-                    <p>Khung toán học chuẩn của RL: \(\langle S, A, T, R, \gamma \rangle\).</p>
+                <section style="font-size: 0.72em;">
+                    <h2>Quá trình quyết định Markov</h2>
+                    <p>Khung toán học chuẩn của học tăng cường: \(\langle S, A, T, R, \gamma \rangle\).</p>
                     <ul style="line-height:1.5em">
                         <li>\(S\) — tập <strong>trạng thái</strong> (state). Mỗi tình huống tác tử có thể gặp.</li>
                         <li>\(A\) — tập <strong>hành động</strong> (action). Lựa chọn của tác tử ở mỗi trạng thái.</li>
@@ -166,7 +166,7 @@
                         <li>Tác tử <strong>không cần nhớ</strong> toàn bộ lịch sử.</li>
                     </ul>
                     <div class="highlight" style="margin-top:10px">
-                        Tính chất Markov là nền móng của MDP — giúp bài toán giải được. Không có nó, tác tử phải lưu
+                        Tính chất Markov là nền móng của Quá trình quyết định Markov (Markov Decision Process, MDP) — giúp bài toán giải được. Không có nó, tác tử phải lưu
                         toàn bộ lịch sử.
                     </div>
                 </section>
@@ -228,10 +228,10 @@
                 </section>
 
                 <section style="font-size: 0.82em;">
-                    <h2>Ví dụ chạy xuyên suốt — bài toán mê cung</h2>
+                    <h2>Ví dụ: Bài toán mê cung</h2>
                     <div style="text-align:center; margin-top:6px;">
-                        <img src="img/lec12/Maze.png"
-                            style="max-width:60%; max-height:380px; object-fit:contain;" />
+                        <img src="img/lec12/maze.svg?v=2"
+                            style="max-width:72%; max-height:380px; object-fit:contain;" />
                         <p style="font-size:0.78em; color:#666; margin-top:8px;"><em>Tác tử bắt đầu ở
                                 <strong>Start</strong>, muốn đến <strong>Goal</strong>. Mỗi bước tốn 1 điểm (\(R =
                                 -1\)). Có tường chắn → phải đi vòng.</em></p>
@@ -255,8 +255,8 @@
                         </div>
                         <div>
                             <div class="demo-box" style="font-style:normal; font-size:0.95em">
-                                <strong>Mê cung:</strong> ô gần Goal có giá trị cao (\(-2\)), ô xa có giá trị thấp
-                                (\(-18\)). Tác tử dùng \(V\) để so sánh ô lân cận và chọn hướng tốt.
+                                <strong>Mê cung:</strong> ô gần Goal có giá trị cao (\(-1, -2\)), ô xa có giá trị
+                                thấp (\(-14\)). Tác tử dùng \(V\) để so sánh ô lân cận và chọn hướng tốt.
                             </div>
                         </div>
                     </div>
@@ -265,10 +265,10 @@
                 <section style="font-size: 0.82em;">
                     <h2>Hàm giá trị — minh hoạ mê cung</h2>
                     <div style="text-align:center; margin-top:6px;">
-                        <img src="img/lec12/Value.png"
-                            style="max-width:88%; max-height:380px; object-fit:contain;" />
+                        <img src="img/lec12/maze-value.svg?v=2"
+                            style="max-width:78%; max-height:380px; object-fit:contain;" />
                         <p style="font-size:0.78em; color:#666; margin-top:8px;"><em>Số ở mỗi ô = \(V^\pi(s)\). Ô kề
-                                Goal = \(-2\), ô xa = \(-22\). Tác tử so sánh giá trị các ô lân cận → đi về phía giá
+                                Goal = \(-1\), ô xa = \(-14\). Tác tử so sánh giá trị các ô lân cận → đi về phía giá
                                 trị cao hơn.</em></p>
                     </div>
                 </section>
@@ -298,10 +298,10 @@
                 </section>
 
                 <section style="font-size: 0.8em;">
-                    <h2>Chính sách rút từ \(Q\) — minh hoạ mê cung</h2>
+                    <h2>Chính sách rút từ \(Q\) — minh hoạ</h2>
                     <div style="text-align:center; margin-top:6px;">
-                        <img src="img/lec12/Policy.png"
-                            style="max-width:85%; max-height:360px; object-fit:contain;" />
+                        <img src="img/lec12/maze-policy.svg?v=3"
+                            style="max-width:78%; max-height:360px; object-fit:contain;" />
                         <p style="font-size:0.78em; color:#666; margin-top:6px;"><em>Mũi tên ở mỗi ô = \(\pi^*(s) =
                                 \arg\max_a Q^*(s, a)\). Đây là chính sách tối ưu sau khi học xong — đi theo mũi tên
                                 là đường ngắn nhất đến Goal.</em></p>
@@ -318,7 +318,7 @@
                 </section>
 
                 <section style="font-size: 0.66em;">
-                    <h2>Khám phá vs khai thác — tension cơ bản</h2>
+                    <h2>Khám phá vs khai thác</h2>
                     <div class="demo-box">
                         <strong>Bạn đang ở thành phố mới, giờ ăn tối:</strong><br />
                         <strong>Khai thác:</strong> quay lại nhà hàng quen đã biết là ngon.<br />
@@ -330,7 +330,7 @@
                             <ul>
                                 <li>Thu thập thêm thông tin về môi trường.</li>
                                 <li>Có thể mất phần thưởng ngắn hạn.</li>
-                                <li>Cần để tìm chính sách tốt hơn.</li>
+                                <li>Cần thiết để tìm chính sách tốt hơn.</li>
                             </ul>
                         </div>
                         <div>
@@ -342,7 +342,7 @@
                         </div>
                     </div>
                     <div class="highlight" style="margin-top:8px">
-                        Không có công thức hoàn hảo — đây là một trong những tension cơ bản nhất của RL.
+                        Không có công thức hoàn hảo — đây là một trong những sự đánh đổi cơ bản nhất của học tăng cường.
                     </div>
                 </section>
 
@@ -380,7 +380,7 @@
                     <p>Trong thực tế, ta <strong>không biết</strong> hàm chuyển \(T\) và phần thưởng \(R\) → học \(Q\)
                         trực tiếp qua kinh nghiệm \((s, a, r, s')\).</p>
                     \[ Q(s, a) \;\leftarrow\; Q(s, a) + \alpha \underbrace{\Big[\, r + \gamma \max_{a'} Q(s', a') -
-                    Q(s, a)\,\Big]}_{\text{sai số TD}} \]
+                    Q(s, a)\,\Big]}_{\text{sai số chênh lệch thời gian}} \]
                     <div class="two-col" style="margin-top:4px">
                         <div>
                             <ul>
@@ -527,7 +527,7 @@
             </section>
 
             <div class="footer">
-                Học máy (Học kỳ 2 2025-2026) §12: Học tăng cường
+                Học máy (Học kỳ 2 2025-2026) §12: Giới thiệu Học tăng cường
             </div>
 
         </div>
