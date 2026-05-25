@@ -28,9 +28,9 @@
                     <ol>
                         <li>Học tăng cường là gì?</li>
                         <li>Quá trình quyết định Markov (MDP)</li>
-                        <li>Mục tiêu &amp; hàm giá trị</li>
-                        <li>Khám phá vs khai thác</li>
-                        <li>Thuật toán &amp; ứng dụng hiện đại</li>
+                        <li>Hàm giá trị &amp; phương trình Bellman</li>
+                        <li>Khám phá vs khai thác &amp; Q-learning</li>
+                        <li>RL hiện đại: từ DQN đến RLHF/DPO/GRPO</li>
                     </ol>
                 </section>
             </section>
@@ -46,13 +46,12 @@
                     <div class="two-col" style="margin-top:10px">
                         <div>
                             <ul style="line-height:1.55em">
-                                <li><strong>Học có giám sát</strong> (supervised) — học từ dữ liệu có nhãn.<br />
-                                    Ví dụ: MNIST, lọc thư rác.</li>
-                                <li><strong>Học không giám sát</strong> (unsupervised) — tìm cấu trúc ẩn trong dữ liệu
-                                    không nhãn.<br />Ví dụ: phân cụm, giảm chiều.</li>
-                                <li><span class="keyword">Học tăng cường</span> (reinforcement) — học qua
-                                    <strong>tương tác</strong> với môi trường. Chỉ có tín hiệu phần thưởng, không có
-                                    nhãn.</li>
+                                <li><strong>Học có giám sát</strong> — học từ dữ liệu có nhãn.<br />
+                                    <em>Ví dụ:</em> MNIST, lọc thư rác.</li>
+                                <li><strong>Học không giám sát</strong> — tìm cấu trúc ẩn trong dữ liệu không nhãn.<br />
+                                    <em>Ví dụ:</em> phân cụm, giảm chiều.</li>
+                                <li><span class="keyword">Học tăng cường</span> — học qua <strong>tương tác</strong>
+                                    với môi trường. Chỉ có tín hiệu phần thưởng, không có nhãn.</li>
                             </ul>
                         </div>
                         <div>
@@ -81,6 +80,27 @@
                     </div>
                 </section>
 
+                <section style="font-size: 0.74em;">
+                    <h2>Ví dụ chạy: Pac-Man</h2>
+                    <p>Cả bài giảng ta sẽ dùng Pac-Man làm ví dụ minh hoạ — vì ai cũng từng chơi.</p>
+                    <table class="compare-table" style="margin-top:8px">
+                        <thead>
+                            <tr>
+                                <th>Khái niệm RL</th>
+                                <th>Trong Pac-Man</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Tác tử</strong> (agent)</td><td>Pac-Man</td></tr>
+                            <tr><td><strong>Môi trường</strong> (environment)</td><td>Mê cung + bóng ma + viên đậu</td></tr>
+                            <tr><td><strong>Trạng thái</strong> (state)</td><td>Toạ độ Pac-Man &amp; ma, đậu còn lại</td></tr>
+                            <tr><td><strong>Hành động</strong> (action)</td><td>Lên / xuống / trái / phải</td></tr>
+                            <tr><td><strong>Phần thưởng</strong> (reward)</td><td>+10 ăn đậu, +100 ăn cherry, &minus;500 chạm ma</td></tr>
+                            <tr><td><strong>Chính sách</strong> (policy)</td><td>"Nếu ma trong 2 ô → tránh; còn lại → đi đến đậu gần nhất."</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+
                 <section style="font-size: 0.78em;">
                     <h2>Ứng dụng nổi bật</h2>
                     <div class="two-col">
@@ -106,8 +126,8 @@
                             </ul>
                             <p style="margin-top:10px"><strong>AI hiện đại</strong></p>
                             <ul>
-                                <li><span class="keyword">RLHF</span> — cách ChatGPT, Claude, Gemini được tinh chỉnh
-                                    từ phản hồi con người.</li>
+                                <li><span class="keyword">RLHF</span> — cách ChatGPT, Claude, Gemini, DeepSeek được
+                                    tinh chỉnh từ phản hồi con người.</li>
                             </ul>
                         </div>
                     </div>
@@ -118,12 +138,12 @@
             <section>
                 <section>
                     <h1><span class="text-light">2.</span><br />Quá trình <br /> quyết định Markov</h1>
-                    <p style="margin-top:0.5em; font-size:0.85em; color:#555;"><em>Tác tử · Môi trường · Trạng thái ·
-                            Hành động · Phần thưởng · Chính sách</em></p>
+                    <p style="margin-top:0.5em; font-size:0.85em; color:#555;"><em>Khung toán học chuẩn cho mọi bài
+                            toán RL.</em></p>
                 </section>
 
                 <section style="font-size: 0.82em;">
-                    <h2>Tác tử &amp; môi trường</h2>
+                    <h2>Tác tử &amp; môi trường — vòng lặp tương tác</h2>
                     <div style="text-align:center; margin-top:4px;">
                         <img src="img/lec12/agent-env-loop.svg?v=1"
                             style="max-width:78%; max-height:250px;" />
@@ -137,7 +157,7 @@
                 </section>
 
                 <section style="font-size: 0.72em;">
-                    <h2>Quá trình quyết định Markov</h2>
+                    <h2>Quá trình quyết định Markov (MDP)</h2>
                     <p>Khung toán học chuẩn của học tăng cường: \(\langle S, A, T, R, \gamma \rangle\).</p>
                     <ul style="line-height:1.5em">
                         <li>\(S\) — tập <strong>trạng thái</strong> (state). Mỗi tình huống tác tử có thể gặp.</li>
@@ -150,24 +170,36 @@
                             trị thấp hơn hiện tại.</li>
                     </ul>
                     <div class="demo-box" style="margin-top:8px">
-                        <strong>Ví dụ mê cung:</strong> \(S\) = các ô; \(A\) = {trái, phải, lên, xuống}; \(T\) = bước
-                        đi (có thể trượt); \(R = -1\) mỗi bước (khuyến khích đi nhanh đến đích).
+                        <strong>Pac-Man:</strong> \(S\) = mọi cấu hình bàn chơi; \(A\) = {trái, phải, lên, xuống};
+                        \(R\) = +10 (đậu), &minus;500 (ma); \(T\) gần như đơn định (trừ khi có power-up).
                     </div>
                 </section>
 
-                <section style="font-size: 0.82em;">
+                <section style="font-size: 0.74em;">
                     <h2>Tính chất Markov</h2>
                     <div class="demo-box">
                         <em>"Tương lai chỉ phụ thuộc hiện tại, không cần biết quá khứ."</em>
                     </div>
                     \[ P(s_{t+1} \mid s_t) = P(s_{t+1} \mid s_t, s_{t-1}, \ldots, s_0) \]
-                    <ul style="margin-top:10px">
-                        <li>Trạng thái hiện tại \(s_t\) <strong>chứa đủ thông tin</strong> để dự đoán \(s_{t+1}\).</li>
-                        <li>Tác tử <strong>không cần nhớ</strong> toàn bộ lịch sử.</li>
-                    </ul>
-                    <div class="highlight" style="margin-top:10px">
-                        Tính chất Markov là nền móng của Quá trình quyết định Markov (Markov Decision Process, MDP) — giúp bài toán giải được. Không có nó, tác tử phải lưu
-                        toàn bộ lịch sử.
+                    <div class="two-col" style="margin-top:8px">
+                        <div>
+                            <p><strong>Cờ vua — Markovian ✓</strong></p>
+                            <ul>
+                                <li>Chỉ cần nhìn <em>bàn cờ hiện tại</em> để chọn nước đi.</li>
+                                <li>Không cần biết các nước trước đó.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><strong>Giao dịch cổ phiếu — không Markov ✗</strong></p>
+                            <ul>
+                                <li>Chỉ giá hiện tại <em>không đủ</em> — cần lịch sử (xu hướng, MA, RSI…).</li>
+                                <li>Muốn Markov → nhồi lịch sử vào trong định nghĩa trạng thái.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="highlight" style="margin-top:8px">
+                        Tính Markov là nền móng của MDP — giúp bài toán giải được. Không có nó, tác tử phải nhớ toàn
+                        bộ lịch sử.
                     </div>
                 </section>
 
@@ -221,10 +253,10 @@
                 </section>
             </section>
 
-            <!-- ==================== 3. MỤC TIÊU & HÀM GIÁ TRỊ ==================== -->
+            <!-- ==================== 3. HÀM GIÁ TRỊ & BELLMAN ==================== -->
             <section>
                 <section>
-                    <h1><span class="text-light">3.</span><br />Mục tiêu &amp; <br /> hàm giá trị</h1>
+                    <h1><span class="text-light">3.</span><br />Hàm giá trị &amp; <br /> phương trình Bellman</h1>
                 </section>
 
                 <section style="font-size: 0.82em;">
@@ -260,6 +292,49 @@
                             </div>
                         </div>
                     </div>
+                </section>
+
+                <section style="font-size: 0.74em;">
+                    <h2>Trực giác Bellman — "Ông chú giàu"</h2>
+                    <div class="demo-box">
+                        <strong>Tưởng tượng:</strong> bạn có một ông chú giàu sống trong biệt thự. Khi bạn đến nhà
+                        chú, chú cho <strong>$100</strong> (phần thưởng).
+                    </div>
+                    <ul style="margin-top:10px; line-height:1.55em">
+                        <li>Đứng <strong>ngay trước cửa</strong> nhà chú: chưa có tiền, nhưng sắp có → giá trị
+                            \(\approx \$99\).</li>
+                        <li>Đứng <strong>cách 1 dãy phố</strong>: phải đi mất thời gian → giá trị \(\approx \$90\).
+                        </li>
+                        <li>Đứng <strong>cách 10 km</strong>: còn xa, giá trị nhỏ hơn nữa.</li>
+                    </ul>
+                    <div class="highlight" style="margin-top:10px">
+                        <strong>Ý tưởng Bellman:</strong> giá trị của vị trí hiện tại = phần thưởng tức thì +
+                        giá trị (chiết khấu) của vị trí kế tiếp tốt nhất.
+                    </div>
+                </section>
+
+                <section style="font-size: 0.7em;">
+                    <h2>Phương trình Bellman</h2>
+                    <p>Biểu diễn ý tưởng trên thành công thức truy hồi:</p>
+                    \[ V^*(s) = \max_{a} \Big[\, R(s, a) + \gamma \cdot V^*(s')\,\Big] \]
+                    <div class="two-col" style="margin-top:6px">
+                        <div>
+                            <ul>
+                                <li>\(V^*(s)\) là giá trị <strong>tối ưu</strong> — giả sử chọn hành động tốt nhất ở
+                                    mọi bước.</li>
+                                <li>Định nghĩa <strong>đệ quy</strong>: để biết \(V^*(s)\), cần biết \(V^*(s')\).</li>
+                                <li>Giải bằng <em>quy hoạch động</em> (value iteration).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="demo-box" style="font-style:normal">
+                                <strong>Vì sao quan trọng?</strong> Đây là nền tảng của hầu hết thuật toán RL — từ
+                                Q-learning đến DQN đều xuất phát từ Bellman.
+                            </div>
+                        </div>
+                    </div>
+                    <p style="margin-top:6px; font-size:0.9em; color:#666">📖 Tự học: chi tiết value iteration /
+                        policy iteration — giáo trình SML §8.</p>
                 </section>
 
                 <section style="font-size: 0.82em;">
@@ -309,12 +384,10 @@
                 </section>
             </section>
 
-            <!-- ==================== 4. KHÁM PHÁ VS KHAI THÁC ==================== -->
+            <!-- ==================== 4. KHÁM PHÁ VS KHAI THÁC & Q-LEARNING ==================== -->
             <section>
                 <section>
-                    <h1><span class="text-light">4.</span><br />Khám phá vs <br /> khai thác</h1>
-                    <p style="margin-top:0.5em; font-size:0.85em; color:#555;"><em>Một trong những bài toán cốt lõi
-                            của RL.</em></p>
+                    <h1><span class="text-light">4.</span><br />Khám phá vs khai thác <br /> &amp; Q-learning</h1>
                 </section>
 
                 <section style="font-size: 0.66em;">
@@ -342,11 +415,12 @@
                         </div>
                     </div>
                     <div class="highlight" style="margin-top:8px">
-                        Không có công thức hoàn hảo — đây là một trong những sự đánh đổi cơ bản nhất của học tăng cường.
+                        Không có công thức hoàn hảo — đây là một trong những sự đánh đổi cơ bản nhất của học tăng
+                        cường.
                     </div>
                 </section>
 
-                <section style="font-size: 0.74em;">
+                <section style="font-size: 0.72em;">
                     <h2>Chính sách \(\varepsilon\)-tham lam</h2>
                     <p>Giải pháp đơn giản và phổ biến nhất: thỉnh thoảng ngẫu nhiên để khám phá.</p>
                     \[ a = \begin{cases} \arg\max_{a'} Q(s, a') &amp; \text{với xác suất } 1 - \varepsilon \\
@@ -361,117 +435,279 @@
                         </div>
                         <div>
                             <div class="demo-box" style="font-style:normal">
-                                <strong>Ví dụ:</strong> bắt đầu \(\varepsilon = 1.0\) (toàn ngẫu nhiên), giảm dần
-                                đến \(\varepsilon = 0.05\) vào cuối quá trình huấn luyện.
+                                <strong>Lịch giảm điển hình:</strong> bắt đầu \(\varepsilon = 1.0\) (toàn ngẫu nhiên),
+                                nhân \(0.99\) mỗi episode, ổn định ở \(\varepsilon \approx 0.01\) sau ~500 episode.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section style="font-size: 0.64em;">
+                    <h2>Q-learning — học hàm \(Q\) từ kinh nghiệm</h2>
+                    <p>Trong thực tế, ta <strong>không biết</strong> hàm chuyển \(T\) và phần thưởng \(R\) → học \(Q\)
+                        trực tiếp qua kinh nghiệm \((s, a, r, s')\).</p>
+                    \[ Q(s, a) \;\leftarrow\; Q(s, a) + \alpha \underbrace{\Big[\, r + \gamma \max_{a'} Q(s', a') -
+                    Q(s, a)\,\Big]}_{\text{TD error}} \]
+                    <div class="two-col" style="margin-top:4px">
+                        <div>
+                            <ul>
+                                <li>\(\alpha\) = tốc độ học.</li>
+                                <li>\(r + \gamma \max_{a'} Q(s', a')\) = <strong>giá trị mục tiêu</strong>.</li>
+                                <li>TD error = <em>thực tế − kỳ vọng</em> → "sự ngạc nhiên".</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="demo-box" style="font-style:normal">
+                                <strong>Mô hình tự do:</strong> mỗi tương tác → cập nhật \(Q\) theo TD error. Lặp đủ
+                                nhiều → hội tụ về \(Q^*\).
+                            </div>
+                        </div>
+                    </div>
+                    <p style="margin-top:4px; font-size:0.9em; color:#666">📖 Tự học: phiên bản SARSA, chứng minh
+                        hội tụ — giáo trình SML §8.</p>
+                </section>
+
+                <section style="font-size: 0.66em;">
+                    <h2>Walkthrough: một bước cập nhật Q</h2>
+                    <p><strong>Tình huống:</strong> tác tử ở \(s = (1,1)\), làm <em>Right</em>, nhận \(r = -1\),
+                        đến \(s' = (1,2)\). Tham số: \(\alpha = 0.1\), \(\gamma = 0.9\).</p>
+                    <div class="two-col" style="margin-top:6px">
+                        <div>
+                            <p><strong>1. Giá trị cũ:</strong></p>
+                            <p>\(Q_{\text{cũ}}(s, \text{Right}) = 0\)</p>
+                            <p style="margin-top:6px"><strong>2. Ước lượng tương lai:</strong></p>
+                            <p>\(\max_{a'} Q(s', a') = 10\)</p>
+                            <p style="margin-top:6px"><strong>3. Giá trị mục tiêu:</strong></p>
+                            <p>\(r + \gamma \max Q(s', \cdot) = -1 + 0.9 \times 10 = 8\)</p>
+                        </div>
+                        <div>
+                            <p><strong>4. TD error:</strong></p>
+                            <p>\(\delta = 8 - 0 = 8\) (ngạc nhiên dương)</p>
+                            <p style="margin-top:6px"><strong>5. Cập nhật:</strong></p>
+                            <p>\(Q_{\text{mới}} = 0 + 0.1 \times 8 = \mathbf{0.8}\)</p>
+                            <div class="highlight" style="margin-top:8px">
+                                Lần đầu \(Q\) tăng nhẹ. Sau hàng nghìn lần lặp, \(Q\) hội tụ về giá trị đúng.
                             </div>
                         </div>
                     </div>
                 </section>
             </section>
 
-            <!-- ==================== 5. THUẬT TOÁN & ỨNG DỤNG ==================== -->
+            <!-- ==================== 5. RL HIỆN ĐẠI ==================== -->
             <section>
                 <section>
-                    <h1><span class="text-light">5.</span><br />Thuật toán &amp; <br /> ứng dụng hiện đại</h1>
+                    <h1><span class="text-light">5.</span><br />RL hiện đại: <br /> từ DQN đến RLHF</h1>
                 </section>
 
-                <section style="font-size: 0.66em;">
-                    <h2>Q-learning — học hàm \(Q\) từ kinh nghiệm</h2>
-                    <p>Trong thực tế, ta <strong>không biết</strong> hàm chuyển \(T\) và phần thưởng \(R\) → học \(Q\)
-                        trực tiếp qua kinh nghiệm \((s, a, r, s')\).</p>
-                    \[ Q(s, a) \;\leftarrow\; Q(s, a) + \alpha \underbrace{\Big[\, r + \gamma \max_{a'} Q(s', a') -
-                    Q(s, a)\,\Big]}_{\text{sai số chênh lệch thời gian}} \]
-                    <div class="two-col" style="margin-top:4px">
+                <section style="font-size: 0.74em;">
+                    <h2>Vì sao cần Deep RL?</h2>
+                    <p>Q-learning lưu bảng \(Q\) — nhưng <strong>không gian trạng thái thực tế quá lớn</strong>.</p>
+                    <div class="two-col" style="margin-top:10px">
                         <div>
-                            <ul>
-                                <li>\(\alpha\) = tốc độ học (tương tự xuống đồi gradient).</li>
-                                <li>\(r + \gamma \max_{a'} Q(s', a')\) = <strong>giá trị mục tiêu</strong>.</li>
-                                <li>Hội tụ về \(Q^*\) nếu mọi cặp \((s, a)\) được thăm đủ nhiều.</li>
-                            </ul>
+                            <div class="demo-box" style="font-style:normal">
+                                <strong>Mê cung 3×3:</strong> 9 trạng thái → bảng 9 hàng. OK.
+                            </div>
+                            <div class="demo-box" style="margin-top:8px; font-style:normal">
+                                <strong>Game Atari (84×84 pixel, 256 mức xám):</strong> \(\sim 10^{67}\) trạng thái —
+                                nhiều hơn số nguyên tử trong vũ trụ. Bảng \(Q\) <em>không thể</em> lưu.
+                            </div>
                         </div>
                         <div>
-                            <div class="demo-box" style="font-style:normal; font-size:0.95em">
-                                <strong>Cốt lõi:</strong> mỗi lần tương tác → cập nhật \(Q\) gần thêm với <em>"ước
-                                    lượng tốt nhất hiện tại"</em>. Lặp đủ nhiều → hội tụ.
+                            <div class="highlight" style="font-size:0.95em">
+                                <strong>Giải pháp:</strong> dùng <span class="keyword">mạng nơ-ron</span> để
+                                <em>xấp xỉ</em> hàm \(Q\) — đầu vào là trạng thái (pixels), đầu ra là \(Q(s, a)\)
+                                cho mỗi hành động.
                             </div>
                         </div>
                     </div>
-                    <p style="margin-top:4px; font-size:0.92em; color:#555">📖 Tự học: phiên bản theo chính sách
-                        (SARSA), phương trình Bellman — giáo trình SML §8.</p>
                 </section>
 
                 <section style="font-size: 0.72em;">
-                    <h2>Deep Q-Network (DQN) — kết hợp RL + mạng nơ-ron</h2>
-                    <p style="font-size:0.92em"><em>DeepMind 2015 — "Human-level control through deep reinforcement
-                            learning", Nature.</em></p>
-                    <div class="two-col">
+                    <h2>Deep Q-Network (DQN) — DeepMind 2015</h2>
+                    <p style="font-size:0.92em"><em>"Human-level control through deep reinforcement learning",
+                            Nature 2015.</em></p>
+                    <p style="margin-top:8px"><strong>Hai mẹo quyết định để huấn luyện ổn định:</strong></p>
+                    <div class="two-col" style="margin-top:8px">
                         <div>
-                            <p><strong>Vấn đề:</strong> game Atari có \(\sim 10^{67}\) trạng thái — bảng \(Q\) không
-                                thể lưu được.</p>
-                            <p><strong>Ý tưởng:</strong> thay bảng \(Q\) bằng <span class="keyword">mạng nơ-ron</span>:
-                            </p>
+                            <p><strong>1. Experience Replay</strong> (bộ nhớ kinh nghiệm)</p>
                             <ul>
-                                <li>Đầu vào: pixels của khung hình game.</li>
-                                <li>Đầu ra: \(Q(s, a)\) cho mỗi hành động khả dĩ.</li>
+                                <li>Lưu các tuple \((s, a, r, s')\) vào buffer (cỡ triệu).</li>
+                                <li>Mỗi bước, lấy <em>ngẫu nhiên</em> 1 batch để huấn luyện.</li>
+                                <li>Phá tương quan giữa các frame liên tiếp → giống "học i.i.d".</li>
                             </ul>
                         </div>
                         <div>
-                            <div class="demo-box">
-                                <strong>Kết quả:</strong> DQN chơi 49 game Atari ở mức siêu nhân — chỉ từ pixels,
-                                không có kiến thức game được lập trình tay.<br /><br />
-                                <strong>Mẹo quan trọng:</strong> experience replay + target network để ổn định huấn
-                                luyện.
+                            <p><strong>2. Target Network</strong> (mạng đích)</p>
+                            <ul>
+                                <li>Dùng <em>hai bản sao</em> mạng \(Q\).</li>
+                                <li>Mạng chính cập nhật mỗi bước; mạng đích bị "đóng băng".</li>
+                                <li>Đồng bộ mạng đích từ mạng chính mỗi \(\sim 1000\) bước.</li>
+                                <li>Giúp mục tiêu ổn định, tránh "chó đuổi đuôi".</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="highlight" style="margin-top:8px">
+                        <strong>Kết quả:</strong> DQN chơi 49 game Atari ở mức siêu nhân — chỉ từ pixels, không có
+                        kiến thức game được lập trình tay.
+                    </div>
+                </section>
+
+                <section style="font-size: 0.74em;">
+                    <h2>Policy Gradient — học chính sách trực tiếp</h2>
+                    <p>Q-learning: agent là <strong>nhà phân tích</strong> — tính \(Q\) cho mọi hành động, rồi chọn
+                        cao nhất. <em>Hai bước, rời rạc.</em></p>
+                    <p style="margin-top:8px">Policy Gradient: agent là <strong>bản năng</strong> — mạng nơ-ron
+                        trực tiếp output xác suất hành động. <em>Một bước, có thể liên tục.</em></p>
+                    <div class="two-col" style="margin-top:8px">
+                        <div>
+                            <div class="demo-box" style="font-style:normal">
+                                <strong>Khi nào cần?</strong> Khi hành động là <em>liên tục</em> — robot điều khiển
+                                lực 14.52 N hay 14.53 N. Q-table không thể có vô số cột; chính sách dạng phân phối
+                                Gauss (\(\mu, \sigma\)) là tự nhiên.
                             </div>
+                        </div>
+                        <div>
+                            <p><strong>REINFORCE — ý tưởng:</strong></p>
+                            <ul>
+                                <li>Chạy thử một quỹ đạo, đo tổng phần thưởng \(G_t\).</li>
+                                <li>\(G_t > 0\) → <em>tăng</em> xác suất hành động đã chọn.</li>
+                                <li>\(G_t < 0\) → <em>giảm</em> xác suất.</li>
+                            </ul>
                         </div>
                     </div>
                 </section>
 
-                <section style="font-size: 0.78em;">
-                    <h2>Một số thuật toán &amp; ứng dụng nổi bật</h2>
-                    <table class="compare-table">
+                <section style="font-size: 0.74em;">
+                    <h2>Sức mạnh của chính sách ngẫu nhiên — "Bluffing"</h2>
+                    <div class="demo-box">
+                        <strong>Trò Oẳn tù tì (Rock-Paper-Scissors):</strong> đâu là chính sách tối ưu?
+                    </div>
+                    <div class="two-col" style="margin-top:10px">
+                        <div>
+                            <p><strong>Đơn định (Q-learning):</strong></p>
+                            <ul>
+                                <li>Học rằng "Búa" cho thắng nhiều nhất → luôn chơi Búa.</li>
+                                <li>Đối thủ phát hiện → luôn chơi Bao → <strong>thua trắng</strong>.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><strong>Ngẫu nhiên (Policy Gradient):</strong></p>
+                            <ul>
+                                <li>Học chính sách tối ưu = <em>33% / 33% / 33%</em>.</li>
+                                <li>Đối thủ không có cách khai thác → kỳ vọng hoà.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="highlight" style="margin-top:10px">
+                        Đôi khi <strong>chính sách tối ưu phải ngẫu nhiên</strong> — Q-learning không làm được điều
+                        này, Policy Gradient thì có.
+                    </div>
+                </section>
+
+                <section style="font-size: 0.7em;">
+                    <h2>Actor-Critic &amp; PPO — chuẩn mực hiện đại</h2>
+                    <p>REINFORCE bị <strong>nhiễu cao</strong> — một quỹ đạo xui có thể phá update.
+                        Cách khắc phục: kết hợp hai thành phần.</p>
+                    <div class="two-col" style="margin-top:8px">
+                        <div>
+                            <p><strong>Actor</strong> (chính sách) — "người làm". Output: phân phối xác suất hành
+                                động.</p>
+                            <p style="margin-top:6px"><strong>Critic</strong> (giá trị) — "thầy giáo". Output:
+                                \(V(s)\) = kỳ vọng tổng thưởng.</p>
+                        </div>
+                        <div>
+                            <div class="demo-box" style="font-style:normal">
+                                Actor cập nhật theo <em>advantage</em> \(A = R - V(s)\) — "tốt hơn dự kiến bao
+                                nhiêu" — thay vì raw reward. Update ít nhiễu hơn nhiều.
+                            </div>
+                        </div>
+                    </div>
+                    <p style="margin-top:8px; font-size:0.9em; color:#666">📖 Tự học: <strong>PPO</strong>
+                        (Schulman 2017) là biến thể Actor-Critic ổn định nhất — dùng trong robot, OpenAI Five, và là
+                        nền cho RLHF.</p>
+                </section>
+
+                <section style="font-size: 0.7em;">
+                    <h2>RLHF — RL cho mô hình ngôn ngữ lớn</h2>
+                    <p><strong>Bài toán:</strong> làm sao dạy LLM trả lời "lịch sự &amp; hữu ích"? Không có hàm Python
+                        nào tính được điểm "lịch sự". Chỉ con người judge được.</p>
+                    <p style="margin-top:8px"><strong>Giải pháp 3 bước (OpenAI, InstructGPT 2022):</strong></p>
+                    <ol style="margin-top:6px; line-height:1.5em">
+                        <li><strong>SFT</strong> (Supervised Fine-Tuning) — fine-tune model trên dữ liệu mẫu chất
+                            lượng cao do con người viết.</li>
+                        <li><strong>Reward Model</strong> — cho model sinh 2 câu trả lời (A, B), con người chọn câu
+                            tốt hơn. Train 1 mạng nơ-ron riêng để dự đoán "con người sẽ thích câu nào hơn".</li>
+                        <li><strong>PPO</strong> — dùng Reward Model làm phần thưởng, dùng PPO để tinh chỉnh LLM
+                            tối đa hoá điểm này.</li>
+                    </ol>
+                    <div class="highlight" style="margin-top:8px">
+                        Đây là <strong>cách ChatGPT, Claude, Gemini đầu được tinh chỉnh</strong> từ phản hồi con
+                        người.
+                    </div>
+                </section>
+
+                <section style="font-size: 0.74em;">
+                    <h2>"Dây xích" KL — chống reward hacking</h2>
+                    <p><strong>Vấn đề:</strong> sau vài vòng PPO, LLM có thể tìm ra cách "lừa" Reward Model — sinh
+                        text vô nghĩa nhưng được điểm cao (ví dụ: lặp đi lặp lại các từ khoá "helpful, nice, great").
+                    </p>
+                    <p style="margin-top:8px"><strong>Giải pháp:</strong> giữ một bản sao "đóng băng" của model gốc
+                        (sau SFT), phạt nếu model mới lệch quá xa:</p>
+                    \[ R_{\text{total}} = R_{\text{preference}} - \beta \cdot \mathrm{KL}\!\left(\pi_{\text{RL}}
+                    \,\Vert\, \pi_{\text{gốc}}\right) \]
+                    <div class="highlight" style="margin-top:10px">
+                        <em>"Tối đa hoá điểm con người chấm, nhưng đừng nói khác cách con người nói quá nhiều."</em>
+                    </div>
+                </section>
+
+                <section style="font-size: 0.6em;">
+                    <h2>Bộ ba huấn luyện LLM hiện đại — PPO, DPO, GRPO</h2>
+                    <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
+                    <table class="compare-table" style="margin-top:6px">
                         <thead>
                             <tr>
-                                <th>Thuật toán</th>
-                                <th>Ý tưởng chính</th>
-                                <th>Ứng dụng</th>
-                                <th>Năm</th>
+                                <th>Tiêu chí</th>
+                                <th>PPO (RLHF)</th>
+                                <th>DPO</th>
+                                <th>GRPO</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Q-Learning</td>
-                                <td>Học bảng \(Q\) từ kinh nghiệm</td>
-                                <td>Bài toán nhỏ, mê cung</td>
-                                <td>1989</td>
+                                <td><strong>Triết lý</strong></td>
+                                <td>Thử &amp; sai</td>
+                                <td>Phân loại có giám sát</td>
+                                <td>So sánh trong nhóm</td>
                             </tr>
                             <tr>
-                                <td>DQN</td>
-                                <td>Mạng nơ-ron xấp xỉ \(Q\)</td>
-                                <td>Game Atari</td>
-                                <td>2013</td>
+                                <td><strong>Số mô hình cần load</strong></td>
+                                <td>4 (Actor + Ref + Reward + Critic)</td>
+                                <td>2 (Actor + Ref)</td>
+                                <td>2 (Actor + Ref) — bỏ Critic</td>
                             </tr>
                             <tr>
-                                <td>PPO</td>
-                                <td>Tối ưu chính sách ổn định</td>
-                                <td>Robot, OpenAI Five</td>
-                                <td>2017</td>
+                                <td><strong>Độ phức tạp</strong></td>
+                                <td>Cao, hyperparameter khó chỉnh</td>
+                                <td>Thấp, hội tụ như supervised</td>
+                                <td>Trung bình</td>
                             </tr>
                             <tr>
-                                <td>AlphaZero</td>
-                                <td>Self-play + tìm kiếm cây MCTS</td>
-                                <td>Cờ vây, cờ vua</td>
-                                <td>2017</td>
+                                <td><strong>Phù hợp với</strong></td>
+                                <td>Robot, game phức tạp</td>
+                                <td>Chatbot — văn phong, an toàn</td>
+                                <td>Suy luận — toán, code</td>
                             </tr>
                             <tr>
-                                <td>RLHF</td>
-                                <td>Phần thưởng từ phản hồi người</td>
-                                <td>ChatGPT, Claude, Gemini</td>
-                                <td>2022+</td>
+                                <td><strong>Ví dụ nổi tiếng</strong></td>
+                                <td>ChatGPT (3.5/4 đầu)</td>
+                                <td>Llama 3, Zephyr</td>
+                                <td>DeepSeek-R1 (2024)</td>
                             </tr>
                         </tbody>
                     </table>
-                    <p style="margin-top:12px; font-size:0.9em; color:#555">📖 Tự học: chi tiết PPO, AlphaZero, RLHF
-                        — môn <em>Học sâu</em> hoặc các tài liệu chuyên đề.</p>
+                    <p style="margin-top:8px; font-size:0.95em; color:#555">DPO (Rafailov 2023): bỏ Reward Model, biến
+                        bài toán RL thành phân loại trực tiếp trên cặp (chosen, rejected). GRPO (DeepSeek 2024): bỏ
+                        Critic, dùng <em>trung bình điểm của nhóm \(G\) câu trả lời</em> làm baseline.</p>
                 </section>
 
                 <section style="font-size: 0.78em;">
@@ -490,22 +726,25 @@
 
             <!-- ==================== TÓM TẮT ==================== -->
             <section>
-                <section style="font-size: 0.78em;">
+                <section style="font-size: 0.74em;">
                     <h2>Tóm tắt</h2>
-                    <ol style="line-height:1.6em">
+                    <ol style="line-height:1.55em">
                         <li><strong>RL</strong> = học bằng tương tác — không nhãn, chỉ có phần thưởng từ môi trường.
                         </li>
-                        <li><strong>MDP</strong> \(\langle S, A, T, R, \gamma \rangle\) là khung toán học chuẩn.</li>
-                        <li>Mục tiêu: tìm chính sách \(\pi^*\) tối đa hoá <em>kỳ vọng tổng phần thưởng chiết
-                                khấu</em>.</li>
+                        <li><strong>MDP</strong> \(\langle S, A, T, R, \gamma \rangle\) + tính Markov là khung toán
+                            học chuẩn.</li>
+                        <li><strong>Hàm giá trị \(V\) / \(Q\)</strong> + phương trình Bellman là nền tảng tính toán.
+                        </li>
                         <li><strong>Khám phá vs khai thác</strong> — tension cốt lõi; \(\varepsilon\)-tham lam là giải
                             pháp đơn giản.</li>
-                        <li>Q-learning + mạng nơ-ron sâu = <strong>DQN</strong> → nền tảng Deep RL hiện đại.</li>
-                        <li>RL hiện đại đứng sau AlphaGo, OpenAI Five, RLHF cho LLM (ChatGPT, Claude).</li>
+                        <li><strong>Q-learning</strong> học \(Q\) từ kinh nghiệm theo TD error.</li>
+                        <li><strong>DQN</strong> = Q-learning + mạng nơ-ron sâu + experience replay + target net.</li>
+                        <li><strong>RLHF / DPO / GRPO</strong> là cách RL biến ChatGPT, Llama, DeepSeek thành các
+                            mô hình hữu ích như hiện nay.</li>
                     </ol>
                 </section>
 
-                <section style="font-size: 0.64em;">
+                <section style="font-size: 0.62em;">
                     <h2>Tài liệu tham khảo</h2>
                     <ul style="line-height:1.5em;">
                         <li>Phạm Lê Cường &amp; cộng sự. <em>Học máy thống kê</em>, chương 8 (Học tăng cường).</li>
@@ -516,12 +755,14 @@
                             DeepMind.</li>
                         <li>Mnih, V. et al. (2015). Human-level control through deep reinforcement learning.
                             <em>Nature, 518</em>, 529–533.</li>
-                        <li>Silver, D. et al. (2017). Mastering Chess and Shogi by Self-Play with a General RL
-                            Algorithm. <em>arXiv:1712.01815</em>.</li>
                         <li>Schulman, J. et al. (2017). Proximal Policy Optimization Algorithms.
                             <em>arXiv:1707.06347</em>.</li>
                         <li>Ouyang, L. et al. (2022). Training language models to follow instructions with human
-                            feedback. <em>NeurIPS 2022</em>.</li>
+                            feedback (InstructGPT). <em>NeurIPS 2022</em>.</li>
+                        <li>Rafailov, R. et al. (2023). Direct Preference Optimization: Your Language Model is
+                            Secretly a Reward Model. <em>arXiv:2305.18290</em>.</li>
+                        <li>DeepSeek-AI (2025). DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via
+                            Reinforcement Learning (GRPO). <em>arXiv:2501.12948</em>.</li>
                     </ul>
                 </section>
             </section>
