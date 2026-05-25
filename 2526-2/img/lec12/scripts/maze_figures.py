@@ -31,10 +31,12 @@ ROWS = len(MAZE)
 COLS = len(MAZE[0])
 
 # ---------- Visual config ----------
-CELL = 64           # pixel size of each cell
+SLOT = 66           # khoảng cách giữa các tâm ô (bao gồm gap)
+GAP = 4             # gap giữa hai ô liền kề
+CELL = SLOT - GAP   # kích thước thực của ô vẽ ra
 PAD = 12
-WIDTH = COLS * CELL + 2 * PAD
-HEIGHT = ROWS * CELL + 2 * PAD
+WIDTH = COLS * SLOT + 2 * PAD - GAP
+HEIGHT = ROWS * SLOT + 2 * PAD - GAP
 
 # Palette (đồng bộ với lecture-style.css)
 WALL = "#1a2332"
@@ -85,7 +87,7 @@ def compute_distances() -> list[list[int | None]]:
 
 def cell_xy(r: int, c: int) -> tuple[float, float]:
     """Top-left pixel of cell (r, c)."""
-    return PAD + c * CELL, PAD + r * CELL
+    return PAD + c * SLOT, PAD + r * SLOT
 
 
 def cell_center(r: int, c: int) -> tuple[float, float]:
@@ -140,16 +142,24 @@ def render_cells(fill_override: dict[tuple[int, int], str] | None = None) -> lis
     return out
 
 
-def render_start_goal_labels() -> list[str]:
-    """Nhãn S, G ở trong ô start/goal."""
-    sx, sy = cell_center(*START)
+def render_start_goal_labels(start_corner: bool = False) -> list[str]:
+    """Nhãn S, G ở trong ô start/goal. start_corner=True đặt S ở góc (slide policy)."""
     gx, gy = cell_center(*GOAL)
-    return [
-        f'<text x="{sx:.1f}" y="{sy + 8:.1f}" text-anchor="middle" '
-        f'font-size="26" font-weight="700" fill="{START_EDGE}">S</text>',
+    out = [
         f'<text x="{gx:.1f}" y="{gy + 8:.1f}" text-anchor="middle" '
         f'font-size="26" font-weight="700" fill="{GOAL_EDGE}">G</text>',
     ]
+    if start_corner:
+        sx, sy = cell_xy(*START)
+        out.insert(0,
+            f'<text x="{sx + 7:.1f}" y="{sy + 18:.1f}" '
+            f'font-size="15" font-weight="700" fill="{START_EDGE}">S</text>')
+    else:
+        sx, sy = cell_center(*START)
+        out.insert(0,
+            f'<text x="{sx:.1f}" y="{sy + 8:.1f}" text-anchor="middle" '
+            f'font-size="26" font-weight="700" fill="{START_EDGE}">S</text>')
+    return out
 
 
 def render_values(dist: list[list[int | None]]) -> list[str]:
@@ -194,15 +204,15 @@ def render_values(dist: list[list[int | None]]) -> list[str]:
 def render_arrow(r: int, c: int, dr: int, dc: int) -> str:
     """Vẽ mũi tên từ tâm ô (r,c) theo hướng (dr,dc)."""
     cx, cy = cell_center(r, c)
-    length = CELL * 0.35
-    # Direction vector
+    length = CELL * 0.32
+    # Direction vector — line dừng trước tâm marker để arrowhead nối khít
     tx = cx + dc * length
     ty = cy + dr * length
-    sx = cx - dc * length * 0.4
-    sy = cy - dr * length * 0.4
+    sx = cx - dc * length * 0.6
+    sy = cy - dr * length * 0.6
     return (
         f'<line x1="{sx:.1f}" y1="{sy:.1f}" x2="{tx:.1f}" y2="{ty:.1f}" '
-        f'stroke="{ARROW}" stroke-width="4" stroke-linecap="round" '
+        f'stroke="{ARROW}" stroke-width="3.5" stroke-linecap="butt" '
         f'marker-end="url(#arrowhead)"/>'
     )
 
@@ -247,9 +257,9 @@ def svg_header(extra_defs: str = "") -> str:
 
 ARROW_DEF = (
     '  <defs>\n'
-    '    <marker id="arrowhead" markerWidth="6" markerHeight="5" refX="5" refY="2.5" '
-    'orient="auto">\n'
-    f'      <polygon points="0 0, 6 2.5, 0 5" fill="{ARROW}"/>\n'
+    '    <marker id="arrowhead" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" '
+    'orient="auto" markerUnits="strokeWidth">\n'
+    f'      <polygon points="0 0, 5 2.5, 0 5" fill="{ARROW}"/>\n'
     '    </marker>\n'
     '  </defs>\n'
 )
@@ -285,7 +295,7 @@ def make_policy() -> str:
     dist = compute_distances()
     parts = [svg_header(ARROW_DEF)]
     parts.extend('  ' + s for s in render_cells())
-    parts.extend('  ' + s for s in render_start_goal_labels())
+    parts.extend('  ' + s for s in render_start_goal_labels(start_corner=True))
     parts.extend('  ' + s for s in render_policy(dist))
     parts.append('</svg>\n')
     return '\n'.join(parts)
