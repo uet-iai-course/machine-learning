@@ -477,59 +477,70 @@
                     </ol>
                 </section>
 
-                <section style="font-size: 0.8em;">
-                    <h2>Khám phá và khai thác</h2>
+                <section style="font-size: 0.76em;">
+                    <h2>Bài toán 1 — khám phá vs khai thác</h2>
                     <div class="demo-box">
-                        Đang ở thành phố mới vào giờ ăn tối:<br />
-                        <strong>Khai thác</strong> = quay lại quán đã thử và biết là ngon.<br />
-                        <strong>Khám phá</strong> = thử quán mới — có thể ngon hơn, có thể tệ hơn.
+                        <strong>Bạn ở thành phố mới vào giờ ăn tối:</strong> quay lại quán đã thử và biết là ngon
+                        (<em>khai thác</em>) — hay thử quán mới có thể ngon hơn (<em>khám phá</em>)?
                     </div>
                     <div class="two-col" style="margin-top:14px">
-                        <div>
-                            <p><strong>Khám phá</strong></p>
-                            <p>Thu thập thêm thông tin; chấp nhận mất điểm ngắn hạn để tìm chính sách tốt hơn.</p>
+                        <div
+                            style="border-left:4px solid #1E93AB; padding:10px 16px; background:#f4fafc; border-radius:4px;">
+                            <strong>Khai thác</strong>
+                            <p style="margin-top:6px">Chọn hành động tốt nhất theo \(Q\) hiện tại: \(\arg\max_a Q(s, a)\).</p>
+                            <p style="margin-top:4px"><em>An toàn — nhưng dễ bỏ sót phương án thực sự tốt hơn.</em></p>
                         </div>
-                        <div>
-                            <p><strong>Khai thác</strong></p>
-                            <p>Dùng thông tin đã biết; an toàn hơn nhưng dễ mắc kẹt trong lựa chọn quen thuộc.</p>
+                        <div
+                            style="border-left:4px solid #e8732a; padding:10px 16px; background:#fef5ee; border-radius:4px;">
+                            <strong>Khám phá</strong>
+                            <p style="margin-top:6px">Thử hành động khác để thu thông tin mới.</p>
+                            <p style="margin-top:4px"><em>Mất điểm ngắn hạn — nhưng cần để hội tụ về \(Q^*\).</em></p>
                         </div>
                     </div>
                     <div class="highlight" style="margin-top:12px">
-                        Đây là đánh đổi cơ bản của RL — không có một công thức chung cho mọi bài toán.
+                        Đánh đổi cốt lõi của RL — không có công thức chung cho mọi bài toán.
                     </div>
                 </section>
 
                 <section style="font-size: 0.76em;">
-                    <h2>Chính sách \(\varepsilon\)-tham lam</h2>
-                    <p>Giải pháp phổ biến nhất: thỉnh thoảng chọn ngẫu nhiên để khám phá.</p>
-                    \[ a = \begin{cases} \arg\max_{a'} Q(s, a') &amp; \text{xác suất } 1 - \varepsilon \\
-                    \text{ngẫu nhiên} &amp; \text{xác suất } \varepsilon \end{cases} \]
+                    <h2>Giải pháp đơn giản: \(\varepsilon\)-tham lam</h2>
+                    <p>Mỗi bước tung "đồng xu lệch": với xác suất \(\varepsilon\) → khám phá; ngược lại → khai thác.</p>
+                    \[ a = \begin{cases} \arg\max_{a'} Q(s, a') &amp; \text{xác suất } 1 - \varepsilon \quad
+                       (\text{khai thác}) \\
+                    \text{ngẫu nhiên} &amp; \text{xác suất } \varepsilon \quad (\text{khám phá}) \end{cases} \]
                     <ul style="line-height:1.7em; margin-top:10px">
                         <li>\(\varepsilon\) lớn → khám phá nhiều, học chậm.</li>
                         <li>\(\varepsilon\) nhỏ → khai thác nhiều, có thể bỏ sót phương án tốt.</li>
                     </ul>
                     <div class="highlight" style="margin-top:10px">
-                        <strong>Thực tế:</strong> có thể bắt đầu với \(\varepsilon = 1.0\), nhân \(0.99\) sau mỗi lượt
-                        chơi, rồi giữ quanh \(\approx 0.01\).
+                        <strong>Thực tế:</strong> bắt đầu \(\varepsilon = 1.0\), nhân \(0.99\) sau mỗi episode, giữ
+                        quanh \(\approx 0.01\).
                     </div>
                 </section>
 
-                <section style="font-size: 0.7em;">
-                    <h2>Q-learning — học \(Q\) từ kinh nghiệm</h2>
-                    <p>Thực tế, ta không biết \(T\) hay \(R\) → học \(Q\) trực tiếp qua kinh nghiệm
-                        \((s, a, r, s')\).</p>
-                    \[ Q(s, a) \;\leftarrow\; Q(s, a) + \alpha \underbrace{\Big[\, r + \gamma \max_{a'} Q(s', a') -
-                    Q(s, a)\,\Big]}_{\text{sai số chênh lệch thời gian (TD)}} \]
-                    <ul style="line-height:1.7em; margin-top:8px">
-                        <li>\(\alpha\) — tốc độ học.</li>
-                        <li>Sai số TD = <em>thực tế − kỳ vọng</em>, tức mức độ "ngạc nhiên" của tác tử.</li>
-                    </ul>
-                    <div class="highlight" style="margin-top:10px">
-                        <strong>Không cần mô hình</strong>: mỗi tương tác cập nhật \(Q\) theo sai số TD → hội tụ về
-                        \(Q^*\).
+                <section style="font-size: 0.68em;">
+                    <h2>Bài toán 2 — cập nhật \(Q\) từ kinh nghiệm</h2>
+                    <p>Sau mỗi tương tác \((s, a, r, s')\), cập nhật \(Q(s, a)\) theo "mức độ ngạc nhiên":</p>
+                    \[ Q(s, a) \;\leftarrow\; \underbrace{Q(s, a)}_{\text{kỳ vọng cũ}} + \alpha
+                       \underbrace{\Big[\, \underbrace{r + \gamma \max_{a'} Q(s', a')}_{\text{thực tế (mục tiêu)}}
+                       - Q(s, a)\,\Big]}_{\text{TD error}} \]
+                    <div class="two-col" style="margin-top:8px">
+                        <div>
+                            <ul style="line-height:1.7em">
+                                <li><strong>Kỳ vọng:</strong> \(Q(s, a)\) — agent từng nghĩ là đáng giá.</li>
+                                <li><strong>Thực tế:</strong> \(r + \gamma \max Q(s', \cdot)\) — vừa quan sát được.</li>
+                                <li><strong>\(\alpha\):</strong> tốc độ học (thường 0.1).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="demo-box" style="font-style:normal">
+                                Thực tế > kỳ vọng → <em>tăng</em> \(Q\). Thực tế < kỳ vọng → <em>giảm</em> \(Q\).
+                                Lặp đủ nhiều → \(Q \to Q^*\) <strong>mà không cần biết \(T\) hay \(R\)</strong>.
+                            </div>
+                        </div>
                     </div>
-                    <p style="margin-top:8px; font-size:0.9em; color:#666">📖 Tự học: SARSA, chứng minh hội tụ — SML
-                        §8.</p>
+                    <p style="margin-top:6px; font-size:0.92em; color:#666">📖 Tự học: SARSA (on-policy), chứng minh
+                        hội tụ — SML §8.</p>
                 </section>
 
                 <section style="font-size: 0.72em;">
@@ -551,6 +562,26 @@
                                 Sau nhiều ngàn lần lặp, \(Q\) hội tụ về giá trị đúng.
                             </div>
                         </div>
+                    </div>
+                </section>
+
+                <section style="font-size: 0.7em;">
+                    <h2>Kết hợp lại: thuật toán Q-learning</h2>
+                    <p>\(\varepsilon\)-tham lam (chọn hành động) + công thức cập nhật (học từ kinh nghiệm):</p>
+<pre style="background:#f8f9fa; border-left:4px solid #1E93AB; padding:14px 20px; margin-top:8px; font-family:'SF Mono', Monaco, Consolas, monospace; font-size:0.85em; line-height:1.6em; border-radius:4px;">
+<strong>Khởi tạo</strong> Q(s, a) ← 0
+<strong>Lặp</strong> nhiều episode:
+    s ← trạng thái đầu
+    <strong>Trong khi</strong> chưa kết thúc:
+        a ← ε-greedy(Q, s)               <span style="color:#888"># chọn</span>
+        Thực hiện a, quan sát r, s'
+        Q(s, a) ← Q(s, a) + α · TD_error <span style="color:#888"># cập nhật</span>
+        s ← s'</pre>
+                    <p style="font-size:0.92em; color:#555; margin-top:4px">trong đó
+                        <strong>TD_error</strong> = \(r + \gamma \max_{a'} Q(s', a') - Q(s, a)\).</p>
+                    <div class="highlight" style="margin-top:8px">
+                        <strong>Hội tụ:</strong> nếu mọi cặp \((s, a)\) được thăm vô hạn lần và \(\alpha\) giảm phù
+                        hợp, \(Q \to Q^*\).
                     </div>
                 </section>
             </section>
