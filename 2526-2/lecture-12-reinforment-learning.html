@@ -48,7 +48,7 @@
                             <ul style="line-height:1.75em">
                                 <li><strong>Có giám sát</strong> — học từ dữ liệu có nhãn.</li>
                                 <li><strong>Không giám sát</strong> — tìm cấu trúc ẩn, không nhãn.</li>
-                                <li><span class="keyword">Học tăng cường</span> — học qua tương tác, dựa vào phần thưởng.
+                                <li><span class="keyword">Học tăng cường</span> (Reinforcement Learning, RL) — học qua tương tác, dựa vào phần thưởng.
                                 </li>
                             </ul>
                         </div>
@@ -62,7 +62,7 @@
                 </section>
 
                 <section style="font-size: 0.86em;">
-                    <h2>Đặc điểm riêng của học tăng cường</h2>
+                    <h2>Đặc điểm riêng của RL</h2>
                     <ul style="line-height:1.8em">
                         <li><strong>Không có đáp án đúng sẵn</strong> — chỉ có tín hiệu phần thưởng.</li>
                         <li><strong>Phản hồi trễ</strong> — hậu quả có thể nhiều bước sau mới rõ.</li>
@@ -74,9 +74,13 @@
                     </div>
                 </section>
 
-                <section style="font-size: 0.8em;">
-                    <h2>Ví dụ xuyên suốt: Pac-Man</h2>
-                    <p>Cả bài giảng sẽ dùng Pac-Man để minh hoạ — quen thuộc và dễ hình dung.</p>
+                <section data-auto-animate>
+                    <h2>Ví dụ: Pac-Man</h2>
+                    <img src="img/lec12/Pacman.gif" alt="Pac-Man" style="max-width:80%; margin-top:12px;" />
+                </section>
+
+                <section data-auto-animate>
+                    <h2>Ví dụ: Pac-Man</h2>
                     <table class="compare-table" style="margin-top:10px">
                         <thead>
                             <tr>
@@ -89,10 +93,46 @@
                             <tr><td><strong>Môi trường</strong></td><td>Mê cung, bóng ma, viên đậu</td></tr>
                             <tr><td><strong>Trạng thái</strong></td><td>Vị trí Pac-Man, bóng ma và các viên đậu còn lại</td></tr>
                             <tr><td><strong>Hành động</strong></td><td>Lên / xuống / trái / phải</td></tr>
-                            <tr><td><strong>Phần thưởng</strong></td><td>+10 ăn đậu, &minus;500 chạm bóng ma</td></tr>
-                            <tr><td><strong>Chính sách</strong></td><td>"Tránh bóng ma gần nhất, đi tới viên đậu gần nhất."</td></tr>
+                            <tr><td><strong>Phần thưởng</strong></td><td>+10 ăn đậu, +100 ăn cherry, &minus;500 chạm bóng ma</td></tr>
+                            <!-- <tr><td><strong>Chính sách</strong></td><td>"Tránh bóng ma gần nhất, đi tới viên đậu gần nhất."</td></tr> -->
                         </tbody>
                     </table>
+                </section>
+
+                <section style="font-size: 0.8em;">
+                    <h2>Vòng lặp RL</h2>
+                    <p>Toàn bộ quá trình diễn ra theo chu kỳ liên tục:</p>
+                    <ol style="line-height:1.7em; margin-top:12px">
+                        <li><strong>Quan sát</strong> — tác tử nhìn thấy trạng thái hiện tại.<br />
+                            <em style="color:#666">Pac-Man: "Tôi ở đây, bóng ma ở kia."</em>
+                        </li>
+                        <li><strong>Quyết định</strong> — dựa vào đó, chọn một hành động.<br />
+                            <em style="color:#666">Pac-Man: "Đi sang trái."</em>
+                        </li>
+                        <li><strong>Phản hồi</strong> — môi trường thay đổi: trạng thái mới + phần thưởng.<br />
+                            <em style="color:#666">Pac-Man: ăn được viên đậu, +10 điểm.</em>
+                        </li>
+                        <li><strong>Lặp lại</strong> — cập nhật chiến lược dựa vào phần thưởng rồi tiếp tục.</li>
+                    </ol>
+                </section>
+
+                <section style="font-size: 0.8em;">
+                    <h2>Một khái niệm nữa: chính sách (\(\pi\))</h2>
+                    <p>Nếu tác tử là <em>cơ thể</em>, chính sách là <em>bộ não</em> — chiến lược để chọn hành động
+                        kế tiếp dựa vào trạng thái hiện tại.</p>
+                    <div class="two-col" style="margin-top:16px">
+                        <div
+                            style="border-left:4px solid #e8732a; padding:10px 16px; background:#fef5ee; border-radius:4px;">
+                            <p><strong>Chính sách ngẫu nhiên</strong></p>
+                            <p>"Đi theo hướng ngẫu nhiên, bất kể tình huống."</p>
+                            <p style="margin-top:8px"><em>→ Pac-Man chết rất nhanh.</em></p>
+                        </div>
+                        <div
+                            style="border-left:4px solid #4a9d3f; padding:10px 16px; background:#f1f8ef; border-radius:4px;">
+                            <p><strong>Chính sách tối ưu</strong></p>
+                            <p>"Nếu bóng ma cách ≤ 2 ô → tránh xa; ngược lại → đi tới viên đậu gần nhất."</p>
+                        </div>
+                    </div>
                 </section>
 
                 <section style="font-size: 0.86em;">
@@ -135,8 +175,8 @@
                             RL.</em></p>
                 </section>
 
-                <section style="font-size: 0.84em;">
-                    <h2>Tác tử và môi trường — vòng lặp tương tác</h2>
+                <section style="font-size: 0.85em;">
+                    <h2>Tác tử và môi trường</h2>
                     <div style="text-align:center; margin-top:6px;">
                         <img src="img/lec12/agent-env-loop.svg?v=1"
                             style="max-width:72%; max-height:250px;" />
@@ -173,11 +213,11 @@
                     <div class="two-col" style="margin-top:10px">
                         <div>
                             <p><strong>Cờ vua ✓</strong></p>
-                            <p>Nhìn bàn cờ hiện tại là đủ chọn nước đi.</p>
+                            <p>Nhìn bàn cờ hiện tại là đủ chọn nước đi tiếp theo.</p>
                         </div>
                         <div>
                             <p><strong>Giá cổ phiếu ✗</strong></p>
-                            <p>Nếu chỉ nhìn giá hiện tại, thường cần thêm lịch sử — chưa đủ Markov.</p>
+                            <p>Không chỉ cần nhìn giá hiện tại, thường cần thêm lịch sử — chưa đủ Markov.</p>
                         </div>
                     </div>
                     <div class="highlight" style="margin-top:12px">
@@ -186,45 +226,50 @@
                     </div>
                 </section>
 
-                <section style="font-size: 0.7em;">
+                <section style="font-size: 0.72em;">
                     <h2>Quỹ đạo và tổng phần thưởng</h2>
-                    <p>Một <span class="keyword">quỹ đạo</span> là chuỗi trạng thái – hành động:</p>
-                    \[ \tau = \{s_0, a_0, s_1, a_1, \ldots, s_L\} \]
-                    <p style="margin-top:6px">Tổng phần thưởng (chiết khấu theo thời gian):</p>
-                    \[ U(\tau) = \sum_{t=0}^{L-1} \gamma^t \, R(s_t, a_t, s_{t+1}) \]
-                    <div class="two-col" style="margin-top:8px">
-                        <div>
-                            <ul style="line-height:1.65em">
-                                <li>\(\gamma\) gần 0 → ưu tiên phần thưởng trước mắt.</li>
-                                <li>\(\gamma\) gần 1 → nhìn xa hơn, coi trọng phần thưởng về sau.</li>
-                            </ul>
+                    <p>Tác tử tương tác với môi trường, sinh ra một <span class="keyword">quỹ đạo</span> —
+                        chuỗi trạng thái, hành động kèm phần thưởng:</p>
+                    \[ s_0 \xrightarrow{a_0} s_1,\, r_1 \xrightarrow{a_1} s_2,\, r_2 \xrightarrow{a_2} \cdots \]
+                    <p style="margin-top:8px">Mục tiêu: tối đa hoá <strong>tổng phần thưởng chiết khấu</strong>
+                        dọc quỹ đạo:</p>
+                    \[ U = r_1 + \gamma\, r_2 + \gamma^2 r_3 + \cdots \]
+                    <div class="two-col" style="margin-top:10px">
+                        <div
+                            style="border-left:4px solid #e8732a; padding:8px 14px; background:#fef5ee; border-radius:4px;">
+                            <strong>\(\gamma\) nhỏ</strong> → thiển cận, chỉ thấy phần thưởng ngay.
                         </div>
-                        <div>
-                            <div class="demo-box" style="font-style:normal">
-                                Với \(\gamma = 0.9\): phần thưởng \(+10\) sau 5 bước có giá trị hiện tại
-                                \(0.9^5 \cdot 10 \approx 5.9\).
-                            </div>
+                        <div
+                            style="border-left:4px solid #1E93AB; padding:8px 14px; background:#f4fafc; border-radius:4px;">
+                            <strong>\(\gamma\) lớn</strong> → viễn kiến, coi trọng cả phần thưởng xa.
                         </div>
+                    </div>
+                    <div class="highlight" style="margin-top:10px">
+                        <strong>Với \(\gamma = 0.9\):</strong> phần thưởng \(+10\) — ngay = 10; sau 5 bước \(\approx 5.9\);
+                        sau 20 bước chỉ còn \(\approx 1.2\).
                     </div>
                 </section>
 
-                <section style="font-size: 0.82em;">
-                    <h2>Chính sách \(\pi\) — quy tắc ra quyết định</h2>
-                    <p>Quy tắc tác tử dùng để chọn hành động ở mỗi trạng thái.</p>
-                    <div class="two-col" style="margin-top:16px">
-                        <div>
-                            <p><strong>Đơn định</strong> — mỗi trạng thái → một hành động duy nhất:</p>
+                <section style="font-size: 0.8em;">
+                    <h2>Chính sách \(\pi\): quy tắc ra quyết định</h2>
+                    <p>\(\pi\) cho biết tác tử nên làm gì ở mỗi trạng thái. Có 2 dạng:</p>
+                    <div class="two-col" style="margin-top:14px">
+                        <div
+                            style="border-left:4px solid #1E93AB; padding:10px 16px; background:#f4fafc; border-radius:4px;">
+                            <p><strong>Đơn định</strong> — trả về 1 hành động:</p>
                             \[ a = \pi(s) \]
-                            <p style="margin-top:6px"><em>Ô (3,2) → sang phải.</em></p>
+                            <p style="margin-top:6px"><em>Pac-Man: bóng ma sát trái → đi phải.</em></p>
                         </div>
-                        <div>
-                            <p><strong>Ngẫu nhiên</strong> — phân phối xác suất trên hành động:</p>
-                            \[ \pi(a \mid s) = P(a \mid s) \]
-                            <p style="margin-top:6px"><em>70% phải, 20% lên, 10% xuống.</em></p>
+                        <div
+                            style="border-left:4px solid #4a9d3f; padding:10px 16px; background:#f1f8ef; border-radius:4px;">
+                            <p><strong>Ngẫu nhiên</strong> — trả về phân phối xác suất:</p>
+                            \[ \pi(a \mid s) \]
+                            <p style="margin-top:6px"><em>Pac-Man: 60% phải, 30% lên, 10% xuống.</em></p>
                         </div>
                     </div>
                     <div class="highlight" style="margin-top:14px">
-                        Mục tiêu của RL: tìm \(\pi^* = \arg\max_{\pi} \mathbb{E}_{\tau \sim \pi} U(\tau)\).
+                        Mục tiêu RL: tìm <strong>chính sách tối ưu \(\pi^*\)</strong> — cho tổng phần thưởng kỳ
+                        vọng cao nhất.
                     </div>
                 </section>
             </section>
@@ -259,7 +304,7 @@
                 </section>
 
                 <section style="font-size: 0.8em;">
-                    <h2>Trực giác Bellman — "người chú giàu"</h2>
+                    <h2>"Người chú giàu"</h2>
                     <div class="demo-box">
                         Giả sử có một người chú sống trong biệt thự; tới được nhà chú thì nhận <strong>$100</strong>.
                     </div>
@@ -282,10 +327,34 @@
                         <li><strong>Đệ quy</strong>: muốn biết \(V^*(s)\), phải biết \(V^*(s')\).</li>
                     </ul>
                     <div class="highlight" style="margin-top:10px">
-                        Đây là nền tảng của hầu hết các thuật toán RL — từ Q-learning đến DQN.
+                        Đây là nền tảng của hầu hết các thuật toán RL — từ Q-learning đến Deep Q-Network (DQN).
                     </div>
                     <p style="margin-top:8px; font-size:0.9em; color:#666">📖 Tự học: lặp giá trị (value iteration),
                         lặp chính sách (policy iteration) — giáo trình SML §8.</p>
+                </section>
+
+                <section style="font-size: 0.78em;">
+                    <h2>Mô hình MDP cho mê cung</h2>
+                    <p>Để hiểu giá trị \(V\) ở mỗi ô, cần biết bài toán được mô hình hoá thế nào:</p>
+                    <div class="two-col" style="margin-top:14px">
+                        <div>
+                            <ul style="line-height:1.8em">
+                                <li><strong>\(R = -1\)</strong> mỗi bước → khuyến khích đi nhanh.</li>
+                                <li><strong>\(\gamma = 1\)</strong> (Goal hấp thụ → quỹ đạo hữu hạn).</li>
+                                <li><strong>\(\pi^*\)</strong>: tối ưu — luôn chọn ô gần Goal nhất.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="demo-box" style="font-style:normal">
+                                <strong>Suy ra:</strong>
+                                \[ V^{\pi^*}(s) = -d(s) \]
+                                trong đó \(d(s)\) = số bước ngắn nhất từ \(s\) đến Goal (tính bằng BFS).
+                            </div>
+                        </div>
+                    </div>
+                    <div class="highlight" style="margin-top:12px">
+                        Ô càng xa Goal → \(V\) càng âm. <em>Slide sau hiển thị bản đồ cụ thể.</em>
+                    </div>
                 </section>
 
                 <section style="font-size: 0.82em;">
@@ -300,7 +369,7 @@
                 </section>
 
                 <section style="font-size: 0.76em;">
-                    <h2>Hàm \(Q^\pi(s, a)\) — giá trị cặp (trạng thái, hành động)</h2>
+                    <h2>Hàm \(Q^\pi(s, a)\)</h2>
                     <p>Không chỉ hỏi "ô này tốt không?", mà hỏi <strong>"hành động \(a\) ở ô này tốt không?"</strong></p>
                     \[ Q^\pi(s, a) = \mathbb{E}_\pi\!\left[\sum_{k=0}^{\infty} \gamma^k\, r_{t+k+1} \;\middle|\;
                     s_t=s,\, a_t=a \right] \]
@@ -311,6 +380,62 @@
                     <div class="highlight" style="margin-top:10px">
                         Khi đã học được \(Q\), tác tử biết nên làm gì — <strong>không cần biết trước \(T\) hay
                             \(R\)</strong>.
+                    </div>
+                </section>
+
+                <section style="font-size: 0.64em;">
+                    <h2>Bảng \(Q\) cho một ô — ví dụ</h2>
+                    <p style="text-align:center; margin-top:2px">Xét ô \(s = (4, 5)\) (viền cam trong mê cung).
+                        Áp dụng \(Q^*(s, a) = -1 + V^*(s')\):</p>
+
+                    <div
+                        style="display:grid; grid-template-columns:340px 1fr; gap:18px; margin-top:10px; align-items:center; justify-items:center;">
+                        <!-- LEFT: maze with cell (4,5) highlighted -->
+                        <div>
+                            <img src="img/lec12/maze-value-cell45.svg?v=1"
+                                style="width:100%; max-height:260px; object-fit:contain;" />
+                        </div>
+
+                        <!-- RIGHT: cross pattern -->
+                        <div
+                            style="display:grid; grid-template-columns:repeat(3, 145px); gap:5px; line-height:1.25em;">
+                            <div></div>
+                            <div
+                                style="border:2px solid #b0b9c2; background:#f7f8fa; border-radius:6px; padding:5px; text-align:center;">
+                                <div style="font-weight:600">↑ Lên</div>
+                                <div>V'=−5 → <strong>Q=−6</strong></div>
+                            </div>
+                            <div></div>
+
+                            <div
+                                style="border:2px solid #888; background:#1a2332; color:#fff; border-radius:6px; padding:5px; text-align:center;">
+                                <div style="font-weight:600">← Trái (tường)</div>
+                                <div><strong>Q = −5</strong></div>
+                            </div>
+                            <div
+                                style="border:3px solid #1E93AB; background:#e8f4f8; border-radius:6px; padding:8px 5px; text-align:center; font-weight:700;">
+                                <div>s = (4, 5)</div>
+                                <div>V* = −4</div>
+                            </div>
+                            <div
+                                style="border:3px solid #4a9d3f; background:#dff3df; border-radius:6px; padding:5px; text-align:center;">
+                                <div style="font-weight:700">→ Phải ✓</div>
+                                <div>V'=−3 → <strong>Q=−4</strong></div>
+                            </div>
+
+                            <div></div>
+                            <div
+                                style="border:2px solid #b0b9c2; background:#f7f8fa; border-radius:6px; padding:5px; text-align:center;">
+                                <div style="font-weight:600">↓ Xuống</div>
+                                <div>V'=−5 → <strong>Q=−6</strong></div>
+                            </div>
+                            <div></div>
+                        </div>
+                    </div>
+
+                    <div class="highlight"
+                        style="margin-top:8px; text-align:center; padding:6px 12px; font-size:0.95em">
+                        \(\pi^*(4, 5) = \arg\max_a Q^* =\) <strong>Phải</strong> — đúng mũi tên ở slide sau.
                     </div>
                 </section>
 
@@ -329,7 +454,27 @@
             <!-- ==================== 4. KHÁM PHÁ VÀ KHAI THÁC & Q-LEARNING ==================== -->
             <section>
                 <section>
-                    <h1><span class="text-light">4.</span><br />Khám phá và khai thác<br />&amp; Q-learning</h1>
+                    <h1><span class="text-light">4.</span><br />Khám phá, <br /> khai thác<br />&amp; Q-learning</h1>
+                </section>
+
+                <section style="font-size: 0.74em;">
+                    <h2>Vấn đề: ta chưa có \(Q\)!</h2>
+
+                    <p>Mục 3 cho thấy: <em>nếu đã có \(V^*\) hoặc \(Q^*\)</em>, suy ra chính sách tối ưu rất dễ
+                        — chỉ cần lấy \(\arg\max\). Nhưng trong thực tế:</p>
+
+                    <div class="demo-box" style="margin-top:10px">
+                        Tác tử mới đặt vào môi trường <strong>không biết trước \(R\), \(T\), hay \(Q^*\)</strong>.
+                        Nó phải <strong>tự học</strong> các giá trị này qua tương tác.
+                    </div>
+
+                    <p style="margin-top:12px"><strong>Hai bài toán mới xuất hiện:</strong></p>
+                    <ol style="line-height:1.75em">
+                        <li><strong>Khám phá vs khai thác</strong> — chưa biết \(Q\), chọn hành động sao cho
+                            vừa thu thập thông tin, vừa không quá lỗ?</li>
+                        <li><strong>Q-learning</strong> — sau mỗi tương tác \((s, a, r, s')\), cập nhật ước lượng
+                            \(Q\) thế nào để dần hội tụ về \(Q^*\)?</li>
+                    </ol>
                 </section>
 
                 <section style="font-size: 0.8em;">
@@ -374,7 +519,7 @@
                     <p>Thực tế, ta không biết \(T\) hay \(R\) → học \(Q\) trực tiếp qua kinh nghiệm
                         \((s, a, r, s')\).</p>
                     \[ Q(s, a) \;\leftarrow\; Q(s, a) + \alpha \underbrace{\Big[\, r + \gamma \max_{a'} Q(s', a') -
-                    Q(s, a)\,\Big]}_{\text{TD error}} \]
+                    Q(s, a)\,\Big]}_{\text{sai số chênh lệch thời gian (TD)}} \]
                     <ul style="line-height:1.7em; margin-top:8px">
                         <li>\(\alpha\) — tốc độ học.</li>
                         <li>Sai số TD = <em>thực tế − kỳ vọng</em>, tức mức độ "ngạc nhiên" của tác tử.</li>
@@ -420,24 +565,20 @@
                     <h2>Vì sao cần học tăng cường sâu?</h2>
                     <p>Bảng \(Q\) không mở rộng được — không gian trạng thái thực tế quá lớn.</p>
                     <div class="two-col" style="margin-top:14px">
-                        <div>
-                            <div class="demo-box" style="font-style:normal">
-                                <strong>Mê cung 3×3:</strong> 9 trạng thái → bảng 9 hàng, vẫn ổn.
-                            </div>
-                            <div class="demo-box" style="margin-top:10px; font-style:normal">
-                                <strong>Atari 84×84:</strong> \(\sim 10^{67}\) trạng thái — bảng không thể lưu.
-                            </div>
+                        <div class="demo-box" style="font-style:normal">
+                            <strong>Mê cung 3×3:</strong> 9 trạng thái → bảng 9 hàng, vẫn ổn.
                         </div>
-                        <div>
-                            <div class="highlight">
-                                <strong>Giải pháp:</strong> dùng <span class="keyword">mạng nơ-ron</span> để xấp xỉ
-                                \(Q\): đầu vào là pixel, đầu ra là \(Q(s, a)\) cho từng hành động.
-                            </div>
+                        <div class="demo-box" style="font-style:normal">
+                            <strong>Atari 84×84:</strong> \(\sim 10^{67}\) trạng thái — bảng không thể lưu.
                         </div>
+                    </div>
+                    <div class="highlight">
+                        <strong>Giải pháp:</strong> dùng <span class="keyword">mạng nơ-ron</span> để xấp xỉ
+                        \(Q\): đầu vào là pixel, đầu ra là \(Q(s, a)\) cho từng hành động.
                     </div>
                 </section>
 
-                <section style="font-size: 0.74em;">
+                <section style="font-size: 0.7em;">
                     <h2>Deep Q-Network (DQN) — DeepMind 2015</h2>
                     <p><strong>Hai mẹo quyết định</strong> để huấn luyện ổn định:</p>
                     <div class="two-col" style="margin-top:10px">
@@ -464,7 +605,7 @@
                     </div>
                 </section>
 
-                <section style="font-size: 0.78em;">
+                <section style="font-size: 0.7em;">
                     <h2>Policy Gradient — học chính sách trực tiếp</h2>
                     <div class="two-col" style="margin-top:10px">
                         <div>
@@ -611,9 +752,9 @@
                 </section>
 
                 <section style="font-size: 0.78em;">
-                    <h2>Ví dụ thực tế — OpenAI Five học chơi Dota 2</h2>
-                    <p>5 mạng nơ-ron tự đấu, tạo ra lượng kinh nghiệm tương đương <strong>180 năm chơi mỗi ngày</strong>.
-                        Thanh phần trăm trên màn là hàm giá trị theo thời gian thực.</p>
+                    <h2>Ví dụ thực tế</h2>
+                    <h4>OpenAI Five học chơi Dota 2</h4>
+                    <p>5 mạng nơ-ron tự đấu, tạo ra lượng kinh nghiệm tương đương <strong>180 năm chơi mỗi ngày</strong>.</p>
                     <div
                         style="position:relative; width:74%; margin:8px auto 0; padding-bottom:41.625%; height:0; overflow:hidden;">
                         <iframe src="https://www.youtube.com/embed/UZHTNBMAfAA"

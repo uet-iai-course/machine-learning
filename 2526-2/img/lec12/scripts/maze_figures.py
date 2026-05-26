@@ -280,7 +280,7 @@ def make_maze() -> str:
     return '\n'.join(parts)
 
 
-def make_value() -> str:
+def make_value(highlight: tuple[int, int] | None = None) -> str:
     dist = compute_distances()
     vmax = max(d for row in dist for d in row if d is not None)
     # Heatmap fill per open cell (NOT start/goal — they keep their fill)
@@ -292,6 +292,15 @@ def make_value() -> str:
     parts = [svg_header()]
     parts.extend('  ' + s for s in render_cells(fill_override=heatmap))
     parts.extend('  ' + s for s in render_values(dist))
+    if highlight is not None:
+        hr, hc = highlight
+        x, y = cell_xy(hr, hc)
+        # Vẽ viền vàng/cam dày bao quanh ô được highlight
+        parts.append(
+            f'  <rect x="{x - 3:.1f}" y="{y - 3:.1f}" '
+            f'width="{CELL + 6}" height="{CELL + 6}" rx="5" '
+            f'fill="none" stroke="#e8732a" stroke-width="5"/>'
+        )
     parts.append('</svg>\n')
     return '\n'.join(parts)
 
@@ -311,6 +320,7 @@ def main() -> None:
     files = {
         "maze.svg": make_maze(),
         "maze-value.svg": make_value(),
+        "maze-value-cell45.svg": make_value(highlight=(4, 5)),
         "maze-policy.svg": make_policy(),
     }
     for name, content in files.items():
