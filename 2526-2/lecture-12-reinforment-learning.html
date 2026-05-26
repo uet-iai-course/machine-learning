@@ -30,7 +30,7 @@
                         <li>Quá trình quyết định Markov (MDP)</li>
                         <li>Hàm giá trị &amp; phương trình Bellman</li>
                         <li>Khám phá, khai thác và Q-learning</li>
-                        <li>RL hiện đại: từ DQN đến RLHF/DPO/GRPO</li>
+                        <li>RL hiện đại: từ Atari đến ChatGPT</li>
                     </ol>
                 </section>
             </section>
@@ -609,12 +609,12 @@
                         <div
                             style="border-left:4px solid #1E93AB; padding:8px 14px; background:#f4fafc; border-radius:4px;">
                             <strong>Họ 1 — Value-based</strong><br />
-                            NN xấp xỉ \(Q(s, a)\), rồi suy ra π = argmax. <em>Ví dụ: DQN.</em>
+                            NN xấp xỉ \(Q(s, a)\), rồi suy ra \(\pi = \arg\max_a Q(s, a)\). <em>Ví dụ: DQN.</em>
                         </div>
                         <div
                             style="border-left:4px solid #4a9d3f; padding:8px 14px; background:#f1f8ef; border-radius:4px;">
                             <strong>Họ 2 — Policy-based</strong><br />
-                            NN xuất thẳng π(a|s), bỏ qua \(Q\). <em>Ví dụ: REINFORCE, PPO.</em>
+                            NN xuất thẳng \(\pi(a|s)\), bỏ qua \(Q\). <em>Ví dụ: REINFORCE, PPO.</em>
                         </div>
                     </div>
                 </section>
@@ -647,7 +647,7 @@
                 </section>
 
                 <section style="font-size: 0.72em;">
-                    <h2>Họ 2 — Policy Gradient: học π trực tiếp</h2>
+                    <h2>Họ 2 — Policy Gradient: học \(\pi\) trực tiếp</h2>
                     <p>Mạng nơ-ron xuất thẳng \(\pi(a \mid s)\), <strong>không cần qua \(Q\)</strong>.</p>
                     <div class="two-col" style="margin-top:10px">
                         <div
