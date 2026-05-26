@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Bài 12: Giới thiệu Học tăng cường</title>
+    <title>Bài 12: Giới thiệu về học tăng cường</title>
     <link rel="stylesheet" href="revealjs/dist/reset.css" />
     <link rel="stylesheet" href="revealjs/dist/reveal.css" />
     <link rel="stylesheet" href="revealjs/dist/theme/white.css" />
@@ -20,7 +20,7 @@
             <section>
                 <section>
                     <h1>Học máy</h1>
-                    <h3>Bài 12: Giới thiệu Học tăng cường</h3>
+                    <h3>Bài 12: Giới thiệu về học tăng cường</h3>
                     <p>Trường ĐH Công nghệ – Đại học Quốc gia Hà Nội</p>
                 </section>
                 <section>
@@ -29,7 +29,7 @@
                         <li>Học tăng cường là gì?</li>
                         <li>Quá trình quyết định Markov (MDP)</li>
                         <li>Hàm giá trị &amp; phương trình Bellman</li>
-                        <li>Khám phá vs khai thác &amp; Q-learning</li>
+                        <li>Khám phá, khai thác và Q-learning</li>
                         <li>RL hiện đại: từ DQN đến RLHF/DPO/GRPO</li>
                     </ol>
                 </section>
@@ -38,7 +38,7 @@
             <!-- ==================== 1. RL LÀ GÌ? ==================== -->
             <section>
                 <section>
-                    <h1><span class="text-light">1.</span><br />Học tăng cường <br /> là gì?</h1>
+                    <h1><span class="text-light">1.</span><br />Học tăng cường<br />là gì?</h1>
                 </section>
 
                 <section style="font-size: 0.82em;">
@@ -48,14 +48,14 @@
                             <ul style="line-height:1.75em">
                                 <li><strong>Có giám sát</strong> — học từ dữ liệu có nhãn.</li>
                                 <li><strong>Không giám sát</strong> — tìm cấu trúc ẩn, không nhãn.</li>
-                                <li><span class="keyword">Tăng cường</span> — học qua tương tác, chỉ có phần thưởng.
+                                <li><span class="keyword">Học tăng cường</span> — học qua tương tác, dựa vào phần thưởng.
                                 </li>
                             </ul>
                         </div>
                         <div>
                             <div class="demo-box">
-                                <em>Có giám sát:</em> "Đây là đúng, học đi."<br /><br />
-                                <em>Tăng cường:</em> "Tự khám phá — tôi chỉ chấm điểm kết quả."
+                                <em>Có giám sát:</em> "Đây là đáp án đúng, hãy học theo."<br /><br />
+                                <em>Tăng cường:</em> "Cứ tự thử; tôi chỉ báo kết quả tốt hay xấu."
                             </div>
                         </div>
                     </div>
@@ -64,18 +64,19 @@
                 <section style="font-size: 0.86em;">
                     <h2>Đặc điểm riêng của học tăng cường</h2>
                     <ul style="line-height:1.8em">
-                        <li><strong>Không có giáo viên</strong> — chỉ có tín hiệu phần thưởng.</li>
+                        <li><strong>Không có đáp án đúng sẵn</strong> — chỉ có tín hiệu phần thưởng.</li>
                         <li><strong>Phản hồi trễ</strong> — hậu quả có thể nhiều bước sau mới rõ.</li>
-                        <li><strong>Hành động sinh dữ liệu kế tiếp</strong> — chuỗi tuần tự, không i.i.d.</li>
+                        <li><strong>Hành động tạo ra quan sát tiếp theo</strong> — dữ liệu tuần tự, không i.i.d.</li>
                     </ul>
                     <div class="demo-box" style="margin-top:16px">
-                        Dạy trẻ đi xe đạp: không ai chỉ từng bước — trẻ tự thử, ngã, thử lại. Phần thưởng = không ngã.
+                        Giống như tập đi xe đạp: không ai viết sẵn từng động tác — ta thử, ngã, điều chỉnh rồi thử
+                        tiếp. Phần thưởng là đi được mà không ngã.
                     </div>
                 </section>
 
                 <section style="font-size: 0.8em;">
-                    <h2>Ví dụ chạy: Pac-Man</h2>
-                    <p>Cả bài giảng dùng Pac-Man minh hoạ — quen thuộc, dễ hình dung.</p>
+                    <h2>Ví dụ xuyên suốt: Pac-Man</h2>
+                    <p>Cả bài giảng sẽ dùng Pac-Man để minh hoạ — quen thuộc và dễ hình dung.</p>
                     <table class="compare-table" style="margin-top:10px">
                         <thead>
                             <tr>
@@ -86,10 +87,10 @@
                         <tbody>
                             <tr><td><strong>Tác tử</strong></td><td>Pac-Man</td></tr>
                             <tr><td><strong>Môi trường</strong></td><td>Mê cung, bóng ma, viên đậu</td></tr>
-                            <tr><td><strong>Trạng thái</strong></td><td>Toạ độ Pac-Man &amp; ma, đậu còn lại</td></tr>
+                            <tr><td><strong>Trạng thái</strong></td><td>Vị trí Pac-Man, bóng ma và các viên đậu còn lại</td></tr>
                             <tr><td><strong>Hành động</strong></td><td>Lên / xuống / trái / phải</td></tr>
-                            <tr><td><strong>Phần thưởng</strong></td><td>+10 ăn đậu, &minus;500 chạm ma</td></tr>
-                            <tr><td><strong>Chính sách</strong></td><td>"Tránh ma gần, đến đậu gần nhất."</td></tr>
+                            <tr><td><strong>Phần thưởng</strong></td><td>+10 ăn đậu, &minus;500 chạm bóng ma</td></tr>
+                            <tr><td><strong>Chính sách</strong></td><td>"Tránh bóng ma gần nhất, đi tới viên đậu gần nhất."</td></tr>
                         </tbody>
                     </table>
                 </section>
@@ -101,23 +102,24 @@
                             <p><strong>Trò chơi</strong></p>
                             <ul style="line-height:1.65em">
                                 <li>AlphaGo — cờ vây.</li>
-                                <li>DQN — 49 game Atari.</li>
+                                <li>DQN — 49 trò chơi Atari.</li>
                                 <li>OpenAI Five — Dota 2.</li>
                             </ul>
                             <p style="margin-top:12px"><strong>Robot &amp; điều khiển</strong></p>
                             <ul style="line-height:1.65em">
-                                <li>Robot học đi, leo trèo.</li>
+                                <li>Robot học đi bộ, leo trèo.</li>
                             </ul>
                         </div>
                         <div>
                             <p><strong>Công nghiệp</strong></p>
                             <ul style="line-height:1.65em">
                                 <li>Hệ gợi ý, tối ưu quảng cáo.</li>
-                                <li>Điều khiển lưới điện.</li>
+                                <li>Vận hành lưới điện.</li>
                             </ul>
                             <p style="margin-top:12px"><strong>AI hiện đại</strong></p>
                             <ul style="line-height:1.65em">
-                                <li><span class="keyword">RLHF</span> tinh chỉnh ChatGPT, Claude, Gemini, DeepSeek.
+                                <li><span class="keyword">RLHF</span> giúp tinh chỉnh các mô hình như ChatGPT, Claude,
+                                    Gemini, DeepSeek.
                                 </li>
                             </ul>
                         </div>
@@ -129,18 +131,18 @@
             <section>
                 <section>
                     <h1><span class="text-light">2.</span><br />Quá trình <br /> quyết định Markov</h1>
-                    <p style="margin-top:0.5em; font-size:0.85em; color:#555;"><em>Khung toán học chuẩn cho mọi bài
-                            toán RL.</em></p>
+                    <p style="margin-top:0.5em; font-size:0.85em; color:#555;"><em>Khung toán học chuẩn cho bài toán
+                            RL.</em></p>
                 </section>
 
                 <section style="font-size: 0.84em;">
-                    <h2>Tác tử &amp; môi trường — vòng lặp tương tác</h2>
+                    <h2>Tác tử và môi trường — vòng lặp tương tác</h2>
                     <div style="text-align:center; margin-top:6px;">
                         <img src="img/lec12/agent-env-loop.svg?v=1"
                             style="max-width:72%; max-height:250px;" />
                     </div>
-                    <p style="margin-top:8px; text-align:center"><em>Mỗi bước \(t\): tác tử chọn hành động → môi
-                            trường trả về trạng thái mới + phần thưởng.</em></p>
+                    <p style="margin-top:8px; text-align:center"><em>Mỗi bước \(t\): tác tử chọn hành động; môi trường
+                            trả về trạng thái mới và phần thưởng.</em></p>
                     <div class="highlight" style="margin-top:8px">
                         Mục tiêu: học cách hành động để <strong>tối đa hoá tổng phần thưởng</strong>.
                     </div>
@@ -148,17 +150,17 @@
 
                 <section style="font-size: 0.78em;">
                     <h2>Quá trình quyết định Markov (MDP)</h2>
-                    <p>Khung toán học chuẩn: \(\langle S, A, T, R, \gamma \rangle\).</p>
+                    <p>MDP mô tả bài toán bằng bộ \(\langle S, A, T, R, \gamma \rangle\).</p>
                     <ul style="line-height:1.7em; margin-top:8px">
                         <li>\(S\) — tập <strong>trạng thái</strong>.</li>
                         <li>\(A\) — tập <strong>hành động</strong>.</li>
-                        <li>\(T(s, a, s') = P(s' \mid s, a)\) — <strong>hàm chuyển</strong>.</li>
+                        <li>\(T(s, a, s') = P(s' \mid s, a)\) — <strong>xác suất chuyển trạng thái</strong>.</li>
                         <li>\(R(s, a, s')\) — <strong>phần thưởng</strong> tức thì.</li>
                         <li>\(\gamma \in [0, 1)\) — <strong>hệ số chiết khấu</strong>.</li>
                     </ul>
                     <div class="demo-box" style="margin-top:10px">
-                        <strong>Pac-Man:</strong> \(S\) = cấu hình bàn chơi; \(A\) = 4 hướng; \(R\) = +10 (đậu),
-                        &minus;500 (ma).
+                        <strong>Pac-Man:</strong> \(S\) = cấu hình bàn chơi; \(A\) = 4 hướng; \(R\) = +10 (ăn đậu),
+                        &minus;500 (chạm bóng ma).
                     </div>
                 </section>
 
@@ -174,42 +176,44 @@
                             <p>Nhìn bàn cờ hiện tại là đủ chọn nước đi.</p>
                         </div>
                         <div>
-                            <p><strong>Cổ phiếu ✗</strong></p>
-                            <p>Cần cả lịch sử giá — không Markov.</p>
+                            <p><strong>Giá cổ phiếu ✗</strong></p>
+                            <p>Nếu chỉ nhìn giá hiện tại, thường cần thêm lịch sử — chưa đủ Markov.</p>
                         </div>
                     </div>
                     <div class="highlight" style="margin-top:12px">
-                        Nhờ Markov, tác tử <strong>không cần nhớ toàn bộ lịch sử</strong> — bài toán mới giải được.
+                        Nếu trạng thái đã đủ Markov, tác tử <strong>không cần mang theo toàn bộ lịch sử</strong> — bài
+                        toán gọn hơn nhiều.
                     </div>
                 </section>
 
                 <section style="font-size: 0.7em;">
-                    <h2>Quỹ đạo &amp; tổng phần thưởng</h2>
-                    <p>Một <span class="keyword">quỹ đạo</span> = chuỗi trạng thái – hành động:</p>
+                    <h2>Quỹ đạo và tổng phần thưởng</h2>
+                    <p>Một <span class="keyword">quỹ đạo</span> là chuỗi trạng thái – hành động:</p>
                     \[ \tau = \{s_0, a_0, s_1, a_1, \ldots, s_L\} \]
                     <p style="margin-top:6px">Tổng phần thưởng (chiết khấu theo thời gian):</p>
                     \[ U(\tau) = \sum_{t=0}^{L-1} \gamma^t \, R(s_t, a_t, s_{t+1}) \]
                     <div class="two-col" style="margin-top:8px">
                         <div>
                             <ul style="line-height:1.65em">
-                                <li>\(\gamma\) gần 0 → thiển cận, chỉ thấy phần thưởng tức thì.</li>
-                                <li>\(\gamma\) gần 1 → viễn kiến, coi trọng phần thưởng xa.</li>
+                                <li>\(\gamma\) gần 0 → ưu tiên phần thưởng trước mắt.</li>
+                                <li>\(\gamma\) gần 1 → nhìn xa hơn, coi trọng phần thưởng về sau.</li>
                             </ul>
                         </div>
                         <div>
                             <div class="demo-box" style="font-style:normal">
-                                Với \(\gamma = 0.9\): \(+10\) cách 5 bước chỉ đáng \(0.9^5 \cdot 10 \approx 5.9\).
+                                Với \(\gamma = 0.9\): phần thưởng \(+10\) sau 5 bước có giá trị hiện tại
+                                \(0.9^5 \cdot 10 \approx 5.9\).
                             </div>
                         </div>
                     </div>
                 </section>
 
                 <section style="font-size: 0.82em;">
-                    <h2>Chính sách \(\pi\) — luật ra quyết định</h2>
+                    <h2>Chính sách \(\pi\) — quy tắc ra quyết định</h2>
                     <p>Quy tắc tác tử dùng để chọn hành động ở mỗi trạng thái.</p>
                     <div class="two-col" style="margin-top:16px">
                         <div>
-                            <p><strong>Đơn định</strong> — mỗi trạng thái → đúng 1 hành động:</p>
+                            <p><strong>Đơn định</strong> — mỗi trạng thái → một hành động duy nhất:</p>
                             \[ a = \pi(s) \]
                             <p style="margin-top:6px"><em>Ô (3,2) → sang phải.</em></p>
                         </div>
@@ -220,7 +224,7 @@
                         </div>
                     </div>
                     <div class="highlight" style="margin-top:14px">
-                        Mục tiêu RL: tìm \(\pi^* = \arg\max_{\pi} \mathbb{E}_{\tau \sim \pi} U(\tau)\).
+                        Mục tiêu của RL: tìm \(\pi^* = \arg\max_{\pi} \mathbb{E}_{\tau \sim \pi} U(\tau)\).
                     </div>
                 </section>
             </section>
@@ -232,35 +236,36 @@
                 </section>
 
                 <section style="font-size: 0.82em;">
-                    <h2>Ví dụ: Bài toán mê cung</h2>
+                    <h2>Ví dụ: bài toán mê cung</h2>
                     <div style="text-align:center; margin-top:6px;">
                         <img src="img/lec12/maze.svg?v=2"
                             style="max-width:72%; max-height:380px; object-fit:contain;" />
                         <p style="font-size:0.78em; color:#666; margin-top:8px;"><em>Tác tử bắt đầu ở
-                                <strong>Start</strong>, muốn đến <strong>Goal</strong>. Mỗi bước tốn 1 điểm (\(R =
-                                -1\)). Có tường chắn → phải đi vòng.</em></p>
+                                <strong>Start</strong>, muốn đến <strong>Goal</strong>. Mỗi bước bị phạt 1 điểm (\(R =
+                                -1\)). Có tường chắn nên phải đi vòng.</em></p>
                     </div>
                 </section>
 
                 <section style="font-size: 0.8em;">
                     <h2>Hàm giá trị \(V^\pi(s)\)</h2>
-                    <p><em>"Theo chính sách \(\pi\), về lâu dài ở \(s\) tôi được bao nhiêu thưởng?"</em></p>
+                    <p><em>"Nếu đang ở \(s\) và đi theo chính sách \(\pi\), về lâu dài tôi kỳ vọng nhận bao nhiêu phần
+                            thưởng?"</em></p>
                     \[ V^\pi(s) = \mathbb{E}_\pi\!\left[\sum_{k=0}^{\infty} \gamma^k\, r_{t+k+1} \;\middle|\; s_t = s
                     \right] \]
                     <div class="highlight" style="margin-top:14px">
-                        <strong>Phần thưởng \(\neq\) giá trị:</strong> phần thưởng là tức thì, giá trị là tổng kỳ
-                        vọng về lâu dài.
+                        <strong>Phần thưởng \(\neq\) giá trị:</strong> phần thưởng là tín hiệu tức thì; giá trị là tổng
+                        phần thưởng kỳ vọng trong tương lai.
                     </div>
                 </section>
 
                 <section style="font-size: 0.8em;">
-                    <h2>Trực giác Bellman — "Ông chú giàu"</h2>
+                    <h2>Trực giác Bellman — "người chú giàu"</h2>
                     <div class="demo-box">
-                        Có ông chú sống trong biệt thự. Đến nhà chú = nhận <strong>$100</strong>.
+                        Giả sử có một người chú sống trong biệt thự; tới được nhà chú thì nhận <strong>$100</strong>.
                     </div>
                     <ul style="margin-top:12px; line-height:1.75em">
                         <li>Đứng trước cửa nhà chú → giá trị \(\approx \$99\).</li>
-                        <li>Cách 1 dãy phố → giá trị \(\approx \$90\).</li>
+                        <li>Cách một dãy phố → giá trị \(\approx \$90\).</li>
                         <li>Cách 10 km → giá trị nhỏ hơn nữa.</li>
                     </ul>
                     <div class="highlight" style="margin-top:12px">
@@ -270,17 +275,17 @@
 
                 <section style="font-size: 0.78em;">
                     <h2>Phương trình Bellman</h2>
-                    <p>Ý tưởng "ông chú giàu" thành công thức truy hồi:</p>
+                    <p>Ý tưởng "người chú giàu" có thể viết thành công thức truy hồi:</p>
                     \[ V^*(s) = \max_{a} \Big[\, R(s, a) + \gamma \cdot V^*(s')\,\Big] \]
                     <ul style="line-height:1.7em; margin-top:8px">
                         <li>\(V^*(s)\) — giá trị <strong>tối ưu</strong> (luôn chọn hành động tốt nhất).</li>
                         <li><strong>Đệ quy</strong>: muốn biết \(V^*(s)\), phải biết \(V^*(s')\).</li>
                     </ul>
                     <div class="highlight" style="margin-top:10px">
-                        Nền tảng của hầu hết thuật toán RL — từ Q-learning đến DQN đều xuất phát từ đây.
+                        Đây là nền tảng của hầu hết các thuật toán RL — từ Q-learning đến DQN.
                     </div>
-                    <p style="margin-top:8px; font-size:0.9em; color:#666">📖 Tự học: value iteration, policy
-                        iteration — giáo trình SML §8.</p>
+                    <p style="margin-top:8px; font-size:0.9em; color:#666">📖 Tự học: lặp giá trị (value iteration),
+                        lặp chính sách (policy iteration) — giáo trình SML §8.</p>
                 </section>
 
                 <section style="font-size: 0.82em;">
@@ -288,15 +293,15 @@
                     <div style="text-align:center; margin-top:6px;">
                         <img src="img/lec12/maze-value.svg?v=2"
                             style="max-width:78%; max-height:380px; object-fit:contain;" />
-                        <p style="font-size:0.78em; color:#666; margin-top:8px;"><em>Số ở mỗi ô = \(V^\pi(s)\). Ô kề
-                                Goal = \(-1\), ô xa = \(-14\). Tác tử so sánh giá trị các ô lân cận → đi về phía giá
-                                trị cao hơn.</em></p>
+                        <p style="font-size:0.78em; color:#666; margin-top:8px;"><em>Số ở mỗi ô là \(V^\pi(s)\). Ô sát
+                                Goal có giá trị \(-1\), ô xa hơn có thể là \(-14\). Tác tử so sánh các ô lân cận rồi đi
+                                về phía giá trị cao hơn.</em></p>
                     </div>
                 </section>
 
                 <section style="font-size: 0.76em;">
                     <h2>Hàm \(Q^\pi(s, a)\) — giá trị cặp (trạng thái, hành động)</h2>
-                    <p>Không chỉ "ô này tốt không?" mà <strong>"hành động \(a\) ở ô này tốt không?"</strong></p>
+                    <p>Không chỉ hỏi "ô này tốt không?", mà hỏi <strong>"hành động \(a\) ở ô này tốt không?"</strong></p>
                     \[ Q^\pi(s, a) = \mathbb{E}_\pi\!\left[\sum_{k=0}^{\infty} \gamma^k\, r_{t+k+1} \;\middle|\;
                     s_t=s,\, a_t=a \right] \]
                     <ul style="line-height:1.7em; margin-top:8px">
@@ -304,62 +309,63 @@
                         <li>Chính sách tham lam: \(\pi(s) = \arg\max_a Q^\pi(s, a)\).</li>
                     </ul>
                     <div class="highlight" style="margin-top:10px">
-                        Có \(Q\), tác tử biết ngay nên làm gì — <strong>không cần biết \(T\) hay \(R\)</strong>.
+                        Khi đã học được \(Q\), tác tử biết nên làm gì — <strong>không cần biết trước \(T\) hay
+                            \(R\)</strong>.
                     </div>
                 </section>
 
                 <section style="font-size: 0.8em;">
-                    <h2>Chính sách rút từ \(Q\) — minh hoạ</h2>
+                    <h2>Chính sách suy ra từ \(Q\) — minh hoạ</h2>
                     <div style="text-align:center; margin-top:6px;">
                         <img src="img/lec12/maze-policy.svg?v=3"
                             style="max-width:78%; max-height:360px; object-fit:contain;" />
-                        <p style="font-size:0.78em; color:#666; margin-top:6px;"><em>Mũi tên ở mỗi ô = \(\pi^*(s) =
-                                \arg\max_a Q^*(s, a)\). Đây là chính sách tối ưu sau khi học xong — đi theo mũi tên
-                                là đường ngắn nhất đến Goal.</em></p>
+                        <p style="font-size:0.78em; color:#666; margin-top:6px;"><em>Mũi tên ở mỗi ô là \(\pi^*(s) =
+                                \arg\max_a Q^*(s, a)\). Sau khi học xong, đi theo mũi tên sẽ dẫn tác tử tới Goal theo
+                                đường ngắn nhất.</em></p>
                     </div>
                 </section>
             </section>
 
-            <!-- ==================== 4. KHÁM PHÁ VS KHAI THÁC & Q-LEARNING ==================== -->
+            <!-- ==================== 4. KHÁM PHÁ VÀ KHAI THÁC & Q-LEARNING ==================== -->
             <section>
                 <section>
-                    <h1><span class="text-light">4.</span><br />Khám phá vs khai thác <br /> &amp; Q-learning</h1>
+                    <h1><span class="text-light">4.</span><br />Khám phá và khai thác<br />&amp; Q-learning</h1>
                 </section>
 
                 <section style="font-size: 0.8em;">
-                    <h2>Khám phá vs khai thác</h2>
+                    <h2>Khám phá và khai thác</h2>
                     <div class="demo-box">
-                        Thành phố mới, giờ ăn tối:<br />
-                        <strong>Khai thác</strong> = quán quen đã biết ngon.<br />
+                        Đang ở thành phố mới vào giờ ăn tối:<br />
+                        <strong>Khai thác</strong> = quay lại quán đã thử và biết là ngon.<br />
                         <strong>Khám phá</strong> = thử quán mới — có thể ngon hơn, có thể tệ hơn.
                     </div>
                     <div class="two-col" style="margin-top:14px">
                         <div>
                             <p><strong>Khám phá</strong></p>
-                            <p>Thu thập thông tin; mất thưởng ngắn hạn để tìm chính sách tốt hơn.</p>
+                            <p>Thu thập thêm thông tin; chấp nhận mất điểm ngắn hạn để tìm chính sách tốt hơn.</p>
                         </div>
                         <div>
                             <p><strong>Khai thác</strong></p>
-                            <p>Dùng thông tin đã biết; an toàn nhưng dễ kẹt ở cực tiểu địa phương.</p>
+                            <p>Dùng thông tin đã biết; an toàn hơn nhưng dễ mắc kẹt trong lựa chọn quen thuộc.</p>
                         </div>
                     </div>
                     <div class="highlight" style="margin-top:12px">
-                        Đánh đổi cơ bản nhất của RL — không có công thức hoàn hảo.
+                        Đây là đánh đổi cơ bản của RL — không có một công thức chung cho mọi bài toán.
                     </div>
                 </section>
 
                 <section style="font-size: 0.76em;">
                     <h2>Chính sách \(\varepsilon\)-tham lam</h2>
-                    <p>Giải pháp phổ biến nhất: thỉnh thoảng ngẫu nhiên để khám phá.</p>
+                    <p>Giải pháp phổ biến nhất: thỉnh thoảng chọn ngẫu nhiên để khám phá.</p>
                     \[ a = \begin{cases} \arg\max_{a'} Q(s, a') &amp; \text{xác suất } 1 - \varepsilon \\
                     \text{ngẫu nhiên} &amp; \text{xác suất } \varepsilon \end{cases} \]
                     <ul style="line-height:1.7em; margin-top:10px">
                         <li>\(\varepsilon\) lớn → khám phá nhiều, học chậm.</li>
-                        <li>\(\varepsilon\) nhỏ → khai thác, có thể bỏ sót.</li>
+                        <li>\(\varepsilon\) nhỏ → khai thác nhiều, có thể bỏ sót phương án tốt.</li>
                     </ul>
                     <div class="highlight" style="margin-top:10px">
-                        <strong>Thực tế:</strong> bắt đầu \(\varepsilon = 1.0\), nhân \(0.99\) mỗi episode, ổn định ở
-                        \(\approx 0.01\).
+                        <strong>Thực tế:</strong> có thể bắt đầu với \(\varepsilon = 1.0\), nhân \(0.99\) sau mỗi lượt
+                        chơi, rồi giữ quanh \(\approx 0.01\).
                     </div>
                 </section>
 
@@ -371,10 +377,10 @@
                     Q(s, a)\,\Big]}_{\text{TD error}} \]
                     <ul style="line-height:1.7em; margin-top:8px">
                         <li>\(\alpha\) — tốc độ học.</li>
-                        <li>TD error = <em>thực tế − kỳ vọng</em>, tức "sự ngạc nhiên".</li>
+                        <li>Sai số TD = <em>thực tế − kỳ vọng</em>, tức mức độ "ngạc nhiên" của tác tử.</li>
                     </ul>
                     <div class="highlight" style="margin-top:10px">
-                        <strong>Không cần mô hình</strong>: mỗi tương tác cập nhật \(Q\) theo TD error → hội tụ về
+                        <strong>Không cần mô hình</strong>: mỗi tương tác cập nhật \(Q\) theo sai số TD → hội tụ về
                         \(Q^*\).
                     </div>
                     <p style="margin-top:8px; font-size:0.9em; color:#666">📖 Tự học: SARSA, chứng minh hội tụ — SML
@@ -382,13 +388,14 @@
                 </section>
 
                 <section style="font-size: 0.72em;">
-                    <h2>Walkthrough: một bước cập nhật Q</h2>
-                    <p>Tác tử ở \(s = (1,1)\), làm <em>Right</em>, nhận \(r = -1\), đến \(s' = (1,2)\).
+                    <h2>Minh hoạ: một bước cập nhật Q</h2>
+                    <p>Tác tử ở \(s = (1,1)\), chọn <em>Sang phải</em>, nhận \(r = -1\), đến \(s' = (1,2)\).
                         Tham số: \(\alpha = 0.1\), \(\gamma = 0.9\).</p>
                     <div class="two-col" style="margin-top:10px">
                         <div>
                             <p><strong>1. Giá trị cũ:</strong> \(Q_{\text{cũ}} = 0\)</p>
-                            <p style="margin-top:8px"><strong>2. Tương lai:</strong> \(\max_{a'} Q(s', a') = 10\)</p>
+                            <p style="margin-top:8px"><strong>2. Giá trị tương lai tốt nhất:</strong>
+                                \(\max_{a'} Q(s', a') = 10\)</p>
                             <p style="margin-top:8px"><strong>3. Mục tiêu:</strong> \(-1 + 0.9 \times 10 = 8\)</p>
                         </div>
                         <div>
@@ -410,12 +417,12 @@
                 </section>
 
                 <section style="font-size: 0.78em;">
-                    <h2>Vì sao cần Deep RL?</h2>
-                    <p>Bảng \(Q\) không scale được — không gian trạng thái thực tế quá lớn.</p>
+                    <h2>Vì sao cần học tăng cường sâu?</h2>
+                    <p>Bảng \(Q\) không mở rộng được — không gian trạng thái thực tế quá lớn.</p>
                     <div class="two-col" style="margin-top:14px">
                         <div>
                             <div class="demo-box" style="font-style:normal">
-                                <strong>Mê cung 3×3:</strong> 9 trạng thái → bảng 9 hàng. OK.
+                                <strong>Mê cung 3×3:</strong> 9 trạng thái → bảng 9 hàng, vẫn ổn.
                             </div>
                             <div class="demo-box" style="margin-top:10px; font-style:normal">
                                 <strong>Atari 84×84:</strong> \(\sim 10^{67}\) trạng thái — bảng không thể lưu.
@@ -423,8 +430,8 @@
                         </div>
                         <div>
                             <div class="highlight">
-                                <strong>Giải pháp:</strong> dùng <span class="keyword">mạng nơ-ron</span> xấp xỉ \(Q\):
-                                vào là pixel, ra là \(Q(s, a)\) cho mỗi hành động.
+                                <strong>Giải pháp:</strong> dùng <span class="keyword">mạng nơ-ron</span> để xấp xỉ
+                                \(Q\): đầu vào là pixel, đầu ra là \(Q(s, a)\) cho từng hành động.
                             </div>
                         </div>
                     </div>
@@ -437,9 +444,9 @@
                         <div>
                             <p><strong>1. Bộ nhớ kinh nghiệm</strong></p>
                             <ul style="line-height:1.65em">
-                                <li>Lưu \((s, a, r, s')\) vào buffer (cỡ triệu).</li>
-                                <li>Lấy ngẫu nhiên 1 batch để huấn luyện.</li>
-                                <li>Phá tương quan giữa các frame.</li>
+                                <li>Lưu \((s, a, r, s')\) vào bộ đệm kinh nghiệm (cỡ hàng triệu mẫu).</li>
+                                <li>Lấy ngẫu nhiên một lô mẫu để huấn luyện.</li>
+                                <li>Giảm tương quan giữa các khung hình liên tiếp.</li>
                             </ul>
                         </div>
                         <div>
@@ -447,12 +454,13 @@
                             <ul style="line-height:1.65em">
                                 <li>Hai bản sao mạng \(Q\): chính &amp; đích.</li>
                                 <li>Đích bị đóng băng, đồng bộ mỗi \(\sim 1000\) bước.</li>
-                                <li>Tránh "chó đuổi đuôi" do mục tiêu di động.</li>
+                                <li>Tránh việc mục tiêu thay đổi liên tục trong khi học.</li>
                             </ul>
                         </div>
                     </div>
                     <div class="highlight" style="margin-top:10px">
-                        DQN chơi 49 game Atari ở mức siêu nhân — chỉ từ pixel, không cần lập trình luật.
+                        DQN chơi 49 trò Atari ở mức vượt người chơi trung bình — chỉ từ pixel, không cần lập trình
+                        luật.
                     </div>
                 </section>
 
@@ -460,33 +468,33 @@
                     <h2>Policy Gradient — học chính sách trực tiếp</h2>
                     <div class="two-col" style="margin-top:10px">
                         <div>
-                            <p><strong>Q-learning</strong> — "nhà phân tích":</p>
+                            <p><strong>Q-learning</strong> — học bằng cách đánh giá:</p>
                             <p>tính \(Q\) cho mọi hành động → chọn cao nhất.</p>
-                            <p style="margin-top:10px"><strong>Policy Gradient</strong> — "bản năng":</p>
-                            <p>mạng nơ-ron trực tiếp xuất xác suất hành động.</p>
+                            <p style="margin-top:10px"><strong>Policy Gradient</strong> — học chính sách trực tiếp:</p>
+                            <p>mạng nơ-ron xuất thẳng phân phối xác suất của hành động.</p>
                         </div>
                         <div>
                             <div class="demo-box" style="font-style:normal">
-                                <strong>Khi nào cần?</strong> Khi hành động <em>liên tục</em> (robot điều khiển lực
-                                14.52 N) — bảng \(Q\) không có vô số cột.
+                                <strong>Khi nào cần?</strong> Khi hành động <em>liên tục</em> (ví dụ robot điều khiển
+                                lực 14.52 N) — bảng \(Q\) không thể có một cột cho mọi giá trị lực.
                             </div>
                         </div>
                     </div>
                     <div class="highlight" style="margin-top:10px">
-                        <strong>REINFORCE:</strong> chạy thử quỹ đạo, đo \(G_t\). \(G_t > 0\) → tăng xác suất hành
-                        động đó; \(G_t < 0\) → giảm.
+                        <strong>REINFORCE:</strong> lấy mẫu một quỹ đạo rồi đo \(G_t\). Nếu \(G_t > 0\), tăng xác suất
+                        hành động đó; nếu \(G_t < 0\), giảm xác suất.
                     </div>
                 </section>
 
                 <section style="font-size: 0.8em;">
-                    <h2>Sức mạnh chính sách ngẫu nhiên — "Bluffing"</h2>
+                    <h2>Khi chính sách ngẫu nhiên là cần thiết</h2>
                     <div class="demo-box">
                         <strong>Oẳn tù tì:</strong> đâu là chính sách tối ưu?
                     </div>
                     <div class="two-col" style="margin-top:12px">
                         <div>
                             <p><strong>Đơn định</strong> (Q-learning)</p>
-                            <p>Luôn chơi Búa → đối thủ luôn chơi Bao → <strong>thua trắng</strong>.</p>
+                            <p>Luôn chơi Búa → đối thủ luôn chơi Bao → <strong>thua chắc</strong>.</p>
                         </div>
                         <div>
                             <p><strong>Ngẫu nhiên</strong> (Policy Gradient)</p>
@@ -494,62 +502,66 @@
                         </div>
                     </div>
                     <div class="highlight" style="margin-top:12px">
-                        Đôi khi chính sách tối ưu <strong>buộc phải ngẫu nhiên</strong> — Q-learning không làm được.
+                        Đôi khi chính sách tối ưu <strong>buộc phải ngẫu nhiên</strong>; một chính sách tham lam đơn
+                        định là chưa đủ.
                     </div>
                 </section>
 
                 <section style="font-size: 0.74em;">
-                    <h2>Actor-Critic &amp; PPO — chuẩn mực hiện đại</h2>
-                    <p>REINFORCE nhiễu cao — 1 quỹ đạo xui có thể phá update. Khắc phục: kết hợp 2 thành phần.</p>
+                    <h2>Actor-Critic &amp; PPO — cách làm phổ biến hiện nay</h2>
+                    <p>REINFORCE nhiễu cao — một quỹ đạo không may có thể làm cập nhật lệch mạnh. Cách khắc phục là
+                        kết hợp hai thành phần.</p>
                     <div class="two-col" style="margin-top:10px">
                         <div>
-                            <p><strong>Actor</strong> — "người làm"</p>
-                            <p>Output phân phối xác suất hành động.</p>
-                            <p style="margin-top:8px"><strong>Critic</strong> — "thầy giáo"</p>
-                            <p>Output \(V(s)\) — kỳ vọng tổng thưởng.</p>
+                            <p><strong>Actor</strong> — bộ chọn hành động</p>
+                            <p>Đầu ra là phân phối xác suất hành động.</p>
+                            <p style="margin-top:8px"><strong>Critic</strong> — bộ đánh giá</p>
+                            <p>Đầu ra là \(V(s)\) — tổng phần thưởng kỳ vọng.</p>
                         </div>
                         <div>
                             <div class="demo-box" style="font-style:normal">
-                                Actor cập nhật theo <em>advantage</em> \(A = R - V(s)\) — "tốt hơn dự kiến bao nhiêu",
-                                ít nhiễu hơn raw reward.
+                                Actor cập nhật theo <em>advantage</em> \(A = R - V(s)\) — "kết quả tốt hơn dự kiến bao
+                                nhiêu", ít nhiễu hơn phần thưởng thô.
                             </div>
                         </div>
                     </div>
                     <p style="margin-top:8px; font-size:0.9em; color:#666">📖 Tự học: <strong>PPO</strong>
-                        (Schulman 2017) — biến thể Actor-Critic ổn định nhất, là nền cho RLHF.</p>
+                        (Schulman 2017) — một biến thể Actor-Critic ổn định, làm nền cho nhiều hệ RLHF.</p>
                 </section>
 
                 <section style="font-size: 0.74em;">
-                    <h2>RLHF — RL cho mô hình ngôn ngữ lớn</h2>
-                    <p>Làm sao dạy LLM trả lời "lịch sự &amp; hữu ích"? Không có hàm Python nào chấm — chỉ con người
-                        đánh giá được.</p>
+                    <h2>RLHF — học tăng cường cho mô hình ngôn ngữ lớn</h2>
+                    <p>Làm sao dạy LLM trả lời lịch sự và hữu ích? Không có hàm chấm điểm đơn giản — con người vẫn là
+                        nguồn đánh giá quan trọng nhất.</p>
                     <p style="margin-top:10px"><strong>Quy trình 3 bước</strong> (OpenAI InstructGPT 2022):</p>
                     <ol style="margin-top:8px; line-height:1.7em">
                         <li><strong>Tinh chỉnh có giám sát</strong> — học từ câu trả lời mẫu do người viết.</li>
-                        <li><strong>Mô hình phần thưởng</strong> — người chọn câu A hay B tốt hơn, huấn luyện mạng
-                            riêng đoán "người thích câu nào".</li>
+                        <li><strong>Mô hình phần thưởng</strong> — người đánh giá chọn câu A hay B tốt hơn, rồi huấn
+                            luyện một mạng riêng để dự đoán lựa chọn đó.</li>
                         <li><strong>PPO</strong> — dùng mô hình phần thưởng làm \(R\), tối đa hoá bằng PPO.</li>
                     </ol>
                     <div class="highlight" style="margin-top:10px">
-                        Đây là cách <strong>ChatGPT, Claude, Gemini đầu</strong> được tinh chỉnh từ phản hồi con người.
+                        Đây là cách nhiều hệ như <strong>ChatGPT, Claude, Gemini</strong> được tinh chỉnh từ phản hồi
+                        con người.
                     </div>
                 </section>
 
                 <section style="font-size: 0.78em;">
-                    <h2>"Dây xích" KL — chống mánh khoé</h2>
-                    <p><strong>Vấn đề:</strong> LLM có thể "lừa" mô hình phần thưởng — sinh câu vô nghĩa lặp các từ
+                    <h2>Ràng buộc KL — hạn chế học lệch</h2>
+                    <p><strong>Vấn đề:</strong> LLM có thể "lách" mô hình phần thưởng — sinh câu vô nghĩa lặp các từ
                         khoá "helpful, nice, great" để được điểm cao.</p>
                     <p style="margin-top:10px"><strong>Giải pháp:</strong> giữ bản sao đóng băng của mô hình gốc, phạt
                         nếu lệch quá xa:</p>
                     \[ R_{\text{total}} = R_{\text{preference}} - \beta \cdot \mathrm{KL}\!\left(\pi_{\text{RL}}
                     \,\Vert\, \pi_{\text{gốc}}\right) \]
                     <div class="highlight" style="margin-top:12px">
-                        <em>"Tối đa hoá điểm người chấm, nhưng đừng nói khác con người quá nhiều."</em>
+                        <em>"Tăng điểm theo phản hồi con người, nhưng đừng đi quá xa cách diễn đạt tự nhiên ban
+                            đầu."</em>
                     </div>
                 </section>
 
                 <section style="font-size: 0.66em;">
-                    <h2>Bộ ba huấn luyện LLM hiện đại — PPO, DPO, GRPO</h2>
+                    <h2>Ba cách tinh chỉnh LLM hiện đại — PPO, DPO, GRPO</h2>
                     <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
                     <table class="compare-table" style="margin-top:8px">
                         <thead>
@@ -563,7 +575,7 @@
                         <tbody>
                             <tr>
                                 <td><strong>Triết lý</strong></td>
-                                <td>Thử &amp; sai</td>
+                                <td>Thử và sai</td>
                                 <td>Phân loại có giám sát</td>
                                 <td>So sánh trong nhóm</td>
                             </tr>
@@ -581,9 +593,9 @@
                             </tr>
                             <tr>
                                 <td><strong>Phù hợp</strong></td>
-                                <td>Robot, game</td>
+                                <td>Robot, trò chơi</td>
                                 <td>Chatbot, an toàn</td>
-                                <td>Toán, code</td>
+                                <td>Toán, lập trình</td>
                             </tr>
                             <tr>
                                 <td><strong>Ví dụ</strong></td>
@@ -594,16 +606,16 @@
                         </tbody>
                     </table>
                     <p style="margin-top:10px; font-size:0.95em; color:#555"><strong>DPO</strong> (2023): bỏ mô hình
-                        phần thưởng. <strong>GRPO</strong> (2024): bỏ Critic, dùng trung bình điểm nhóm \(G\) câu
-                        làm baseline.</p>
+                        phần thưởng. <strong>GRPO</strong> (2024): bỏ Critic, dùng trung bình điểm của nhóm \(G\) câu
+                        làm mốc so sánh.</p>
                 </section>
 
                 <section style="font-size: 0.78em;">
-                    <h2>Ví dụ thực tế — OpenAI Five học Dota 2</h2>
-                    <p>5 mạng nơ-ron, self-play <strong>180 năm game/ngày</strong>. Thanh % trên màn = hàm giá trị
-                        realtime.</p>
+                    <h2>Ví dụ thực tế — OpenAI Five học chơi Dota 2</h2>
+                    <p>5 mạng nơ-ron tự đấu, tạo ra lượng kinh nghiệm tương đương <strong>180 năm chơi mỗi ngày</strong>.
+                        Thanh phần trăm trên màn là hàm giá trị theo thời gian thực.</p>
                     <div
-                        style="position:relative; width:90%; margin:8px auto 0; padding-bottom:50.625%; height:0; overflow:hidden;">
+                        style="position:relative; width:74%; margin:8px auto 0; padding-bottom:41.625%; height:0; overflow:hidden;">
                         <iframe src="https://www.youtube.com/embed/UZHTNBMAfAA"
                             style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
                             allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -616,14 +628,15 @@
                 <section style="font-size: 0.84em;">
                     <h2>Tóm tắt</h2>
                     <ol style="line-height:1.75em">
-                        <li><strong>RL</strong> = học bằng tương tác, chỉ có phần thưởng.</li>
-                        <li><strong>MDP</strong> \(\langle S, A, T, R, \gamma \rangle\) + tính Markov là khung chuẩn.
+                        <li><strong>RL</strong> = học thông qua tương tác, dựa trên tín hiệu phần thưởng.</li>
+                        <li><strong>MDP</strong> \(\langle S, A, T, R, \gamma \rangle\) cùng tính Markov là khung chuẩn.
                         </li>
                         <li><strong>Bellman</strong> nối \(V(s)\) hiện tại với \(V(s')\) kế tiếp — nền tảng mọi thuật
                             toán.</li>
                         <li><strong>Q-learning + \(\varepsilon\)-tham lam</strong>: học từ kinh nghiệm, cân bằng
-                            khám phá &amp; khai thác.</li>
-                        <li><strong>DQN → PPO → RLHF/DPO/GRPO</strong>: RL hiện đại đứng sau ChatGPT, Claude, DeepSeek.
+                            khám phá và khai thác.</li>
+                        <li><strong>DQN → PPO → RLHF/DPO/GRPO</strong>: RL hiện đại góp phần tạo nên các hệ như ChatGPT,
+                            Claude, DeepSeek.
                         </li>
                     </ol>
                 </section>
@@ -653,7 +666,7 @@
             </section>
 
             <div class="footer">
-                Học máy (Học kỳ 2 2025-2026) §12: Giới thiệu Học tăng cường
+                Học máy (Học kỳ 2 2025-2026) §12: Giới thiệu về học tăng cường
             </div>
 
         </div>
