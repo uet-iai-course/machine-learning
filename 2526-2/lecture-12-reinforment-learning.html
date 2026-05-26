@@ -589,35 +589,46 @@
             <!-- ==================== 5. RL HIỆN ĐẠI ==================== -->
             <section>
                 <section>
-                    <h1><span class="text-light">5.</span><br />RL hiện đại: <br /> từ DQN đến RLHF</h1>
+                    <h1><span class="text-light">5.</span><br />RL hiện đại: <br />từ Atari đến ChatGPT</h1>
                 </section>
 
-                <section style="font-size: 0.78em;">
-                    <h2>Vì sao cần học tăng cường sâu?</h2>
-                    <p>Bảng \(Q\) không mở rộng được — không gian trạng thái thực tế quá lớn.</p>
-                    <div class="two-col" style="margin-top:14px">
+                <section style="font-size: 0.74em;">
+                    <h2>Vì sao cần Deep RL? Hai họ thuật toán</h2>
+                    <p>Q-learning cổ điển không scale — không gian trạng thái thực tế quá lớn:</p>
+                    <div class="two-col" style="margin-top:10px">
                         <div class="demo-box" style="font-style:normal">
-                            <strong>Mê cung 3×3:</strong> 9 trạng thái → bảng 9 hàng, vẫn ổn.
+                            <strong>Mê cung 3×3:</strong> 9 trạng thái → bảng \(Q\) 9 hàng, OK.
                         </div>
                         <div class="demo-box" style="font-style:normal">
-                            <strong>Atari 84×84:</strong> \(\sim 10^{67}\) trạng thái — bảng không thể lưu.
+                            <strong>Atari 84×84 pixel:</strong> \(\sim 10^{67}\) trạng thái — bảng không thể lưu.
                         </div>
                     </div>
-                    <div class="highlight">
-                        <strong>Giải pháp:</strong> dùng <span class="keyword">mạng nơ-ron</span> để xấp xỉ
-                        \(Q\): đầu vào là pixel, đầu ra là \(Q(s, a)\) cho từng hành động.
+                    <p style="margin-top:10px"><strong>Giải pháp:</strong> dùng <span class="keyword">mạng nơ-ron</span>
+                        thay bảng. Sinh ra <strong>hai họ thuật toán Deep RL</strong>:</p>
+                    <div class="two-col" style="margin-top:8px">
+                        <div
+                            style="border-left:4px solid #1E93AB; padding:8px 14px; background:#f4fafc; border-radius:4px;">
+                            <strong>Họ 1 — Value-based</strong><br />
+                            NN xấp xỉ \(Q(s, a)\), rồi suy ra π = argmax. <em>Ví dụ: DQN.</em>
+                        </div>
+                        <div
+                            style="border-left:4px solid #4a9d3f; padding:8px 14px; background:#f1f8ef; border-radius:4px;">
+                            <strong>Họ 2 — Policy-based</strong><br />
+                            NN xuất thẳng π(a|s), bỏ qua \(Q\). <em>Ví dụ: REINFORCE, PPO.</em>
+                        </div>
                     </div>
                 </section>
 
                 <section style="font-size: 0.7em;">
-                    <h2>Deep Q-Network (DQN) — DeepMind 2015</h2>
-                    <p><strong>Hai mẹo quyết định</strong> để huấn luyện ổn định:</p>
+                    <h2>Họ 1 — DQN: dùng NN xấp xỉ \(Q\)</h2>
+                    <p><em>Deep Q-Network (DeepMind, 2015).</em> Vào: pixel màn hình. Ra: \(Q(s, a)\) cho từng
+                        hành động. <strong>Hai mẹo</strong> để huấn luyện ổn định:</p>
                     <div class="two-col" style="margin-top:10px">
                         <div>
                             <p><strong>1. Bộ nhớ kinh nghiệm</strong></p>
                             <ul style="line-height:1.65em">
-                                <li>Lưu \((s, a, r, s')\) vào bộ đệm kinh nghiệm (cỡ hàng triệu mẫu).</li>
-                                <li>Lấy ngẫu nhiên một lô mẫu để huấn luyện.</li>
+                                <li>Lưu \((s, a, r, s')\) vào bộ đệm (cỡ hàng triệu mẫu).</li>
+                                <li>Lấy ngẫu nhiên 1 lô để huấn luyện.</li>
                                 <li>Giảm tương quan giữa các khung hình liên tiếp.</li>
                             </ul>
                         </div>
@@ -626,35 +637,35 @@
                             <ul style="line-height:1.65em">
                                 <li>Hai bản sao mạng \(Q\): chính &amp; đích.</li>
                                 <li>Đích bị đóng băng, đồng bộ mỗi \(\sim 1000\) bước.</li>
-                                <li>Tránh việc mục tiêu thay đổi liên tục trong khi học.</li>
+                                <li>Tránh mục tiêu thay đổi liên tục trong khi học.</li>
                             </ul>
                         </div>
                     </div>
                     <div class="highlight" style="margin-top:10px">
-                        DQN chơi 49 trò Atari ở mức vượt người chơi trung bình — chỉ từ pixel, không cần lập trình
-                        luật.
+                        Chơi 49 game Atari ở mức vượt người chơi trung bình — chỉ từ pixel, không cần lập trình luật.
                     </div>
                 </section>
 
-                <section style="font-size: 0.7em;">
-                    <h2>Policy Gradient — học chính sách trực tiếp</h2>
+                <section style="font-size: 0.72em;">
+                    <h2>Họ 2 — Policy Gradient: học π trực tiếp</h2>
+                    <p>Mạng nơ-ron xuất thẳng \(\pi(a \mid s)\), <strong>không cần qua \(Q\)</strong>.</p>
                     <div class="two-col" style="margin-top:10px">
-                        <div>
-                            <p><strong>Q-learning</strong> — học bằng cách đánh giá:</p>
-                            <p>tính \(Q\) cho mọi hành động → chọn cao nhất.</p>
-                            <p style="margin-top:10px"><strong>Policy Gradient</strong> — học chính sách trực tiếp:</p>
-                            <p>mạng nơ-ron xuất thẳng phân phối xác suất của hành động.</p>
+                        <div
+                            style="border-left:4px solid #1E93AB; padding:8px 14px; background:#f4fafc; border-radius:4px;">
+                            <strong>Q-learning</strong>
+                            <p style="margin-top:4px">Tính \(Q(s, a)\) cho mọi hành động → chọn argmax. Cần hành động
+                                <em>rời rạc</em>.</p>
                         </div>
-                        <div>
-                            <div class="demo-box" style="font-style:normal">
-                                <strong>Khi nào cần?</strong> Khi hành động <em>liên tục</em> (ví dụ robot điều khiển
-                                lực 14.52 N) — bảng \(Q\) không thể có một cột cho mọi giá trị lực.
-                            </div>
+                        <div
+                            style="border-left:4px solid #4a9d3f; padding:8px 14px; background:#f1f8ef; border-radius:4px;">
+                            <strong>Policy Gradient</strong>
+                            <p style="margin-top:4px">NN xuất \(\pi(a \mid s)\). Xử lý được hành động <em>liên tục</em>
+                                (ví dụ: robot điều khiển lực 14.52 N).</p>
                         </div>
                     </div>
                     <div class="highlight" style="margin-top:10px">
-                        <strong>REINFORCE:</strong> lấy mẫu một quỹ đạo rồi đo \(G_t\). Nếu \(G_t > 0\), tăng xác suất
-                        hành động đó; nếu \(G_t < 0\), giảm xác suất.
+                        <strong>REINFORCE</strong> — thuật toán PG cơ bản: chạy 1 quỹ đạo, đo tổng thưởng \(G_t\).
+                        \(G_t > 0\) → tăng xác suất hành động đã chọn; \(G_t < 0\) → giảm.
                     </div>
                 </section>
 
@@ -701,20 +712,19 @@
                         (Schulman 2017) — một biến thể Actor-Critic ổn định, làm nền cho nhiều hệ RLHF.</p>
                 </section>
 
-                <section style="font-size: 0.74em;">
-                    <h2>RLHF — học tăng cường cho mô hình ngôn ngữ lớn</h2>
-                    <p>Làm sao dạy LLM trả lời lịch sự và hữu ích? Không có hàm chấm điểm đơn giản — con người vẫn là
-                        nguồn đánh giá quan trọng nhất.</p>
-                    <p style="margin-top:10px"><strong>Quy trình 3 bước</strong> (OpenAI InstructGPT 2022):</p>
-                    <ol style="margin-top:8px; line-height:1.7em">
-                        <li><strong>Tinh chỉnh có giám sát</strong> — học từ câu trả lời mẫu do người viết.</li>
-                        <li><strong>Mô hình phần thưởng</strong> — người đánh giá chọn câu A hay B tốt hơn, rồi huấn
-                            luyện một mạng riêng để dự đoán lựa chọn đó.</li>
+                <section style="font-size: 0.72em;">
+                    <h2>RLHF — PPO áp dụng cho mô hình ngôn ngữ</h2>
+                    <p>PPO đã thành công với robot và game. Áp dụng lên LLM gặp <strong>thách thức mới</strong>:
+                        không có hàm Python nào chấm điểm "lịch sự" hay "hữu ích" — chỉ con người làm được.</p>
+                    <p style="margin-top:10px"><strong>RLHF — Quy trình 3 bước</strong> (OpenAI InstructGPT, 2022):</p>
+                    <ol style="margin-top:6px; line-height:1.7em">
+                        <li><strong>Tinh chỉnh có giám sát (SFT)</strong> — học từ câu trả lời mẫu do người viết.</li>
+                        <li><strong>Mô hình phần thưởng</strong> — người chọn câu A/B tốt hơn → huấn luyện 1 mạng
+                            dự đoán lựa chọn đó.</li>
                         <li><strong>PPO</strong> — dùng mô hình phần thưởng làm \(R\), tối đa hoá bằng PPO.</li>
                     </ol>
-                    <div class="highlight" style="margin-top:10px">
-                        Đây là cách nhiều hệ như <strong>ChatGPT, Claude, Gemini</strong> được tinh chỉnh từ phản hồi
-                        con người.
+                    <div class="highlight" style="margin-top:8px">
+                        Cách <strong>ChatGPT, Claude, Gemini đầu</strong> được tinh chỉnh từ phản hồi con người.
                     </div>
                 </section>
 
@@ -782,10 +792,10 @@
                         làm mốc so sánh.</p>
                 </section>
 
-                <section style="font-size: 0.78em;">
-                    <h2>Ví dụ thực tế</h2>
-                    <h4>OpenAI Five học chơi Dota 2</h4>
-                    <p>5 mạng nơ-ron tự đấu, tạo ra lượng kinh nghiệm tương đương <strong>180 năm chơi mỗi ngày</strong>.</p>
+                <section style="font-size: 0.8em;">
+                    <h2>OpenAI Five — Deep RL trong đời thực</h2>
+                    <p>5 mạng nơ-ron dùng PPO, tự đấu tạo ra kinh nghiệm tương đương
+                        <strong>180 năm chơi mỗi ngày</strong> — đánh bại nhà vô địch Dota 2 năm 2019.</p>
                     <div
                         style="position:relative; width:74%; margin:8px auto 0; padding-bottom:41.625%; height:0; overflow:hidden;">
                         <iframe src="https://www.youtube.com/embed/UZHTNBMAfAA"
