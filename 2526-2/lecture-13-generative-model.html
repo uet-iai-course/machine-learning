@@ -260,8 +260,8 @@
     <section style="font-size:0.84em;">
         <h2>RNN — kiến trúc trải qua thời gian</h2>
         <div style="text-align:center; margin-top:8px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Recurrent_neural_network_unfold.svg"
-                style="max-width:95%; max-height:380px; object-fit:contain;" />
+            <img src="img/lec11/rnn-unrolled.svg?v=1"
+                style="max-width:92%; max-height:330px;" />
             <p style="font-size:0.78em; color:#666; margin-top:8px;">
                 <em>RNN trải qua thời gian — cùng \(W\) dùng lại mỗi bước. Trạng thái ẩn \(h_t\) chứa
                     "bộ nhớ" của toàn bộ chuỗi đến thời điểm \(t\).</em>
@@ -326,8 +326,8 @@ Bước 2→1:  × 2.0 = 16 → ∞</code></pre>
     <section style="font-size:0.84em;">
         <h2>LSTM — kiến trúc chi tiết</h2>
         <div style="text-align:center; margin-top:8px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/LSTM_Cell.svg"
-                style="max-width:90%; max-height:360px; object-fit:contain;" />
+            <img src="img/lec11/lstm-cell.svg?v=1"
+                style="max-width:90%; max-height:340px;" />
             <p style="font-size:0.78em; color:#666; margin-top:8px;">
                 <em>Trạng thái ô \(c_t\) (đường thẳng trên cùng) là "đường cao tốc" cho gradient — chỉ có
                     phép cộng, không qua tanh → không bị tiêu biến. Ba cổng (quên, thu, xuất) kiểm soát
@@ -618,14 +618,14 @@ x → Encoder → μ, σ
     </section>
 
     <section style="font-size:0.84em;">
-        <h2>VAE — không gian ẩn &amp; sinh mẫu</h2>
-        <div style="text-align:center; margin-top:8px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/Reparameterized_Variational_Autoencoder.png"
-                style="max-width:90%; max-height:360px; object-fit:contain;" />
-            <p style="font-size:0.78em; color:#666; margin-top:8px;">
-                <em>Không gian ẩn của VAE train trên MNIST — mỗi màu là một chữ số. Nội suy 2 điểm trong
-                    không gian ẩn → chuyển tiếp mượt giữa 2 chữ số. Lấy mẫu \(z \sim \mathcal{N}(0, I)\) →
-                    decode → ra chữ số mới.</em>
+        <h2>VAE — kiến trúc encoder–decoder</h2>
+        <div style="text-align:center; margin-top:10px;">
+            <img src="img/lec13/vae-architecture.svg?v=1"
+                style="max-width:88%; max-height:300px;" />
+            <p style="font-size:0.78em; color:#666; margin-top:10px;">
+                <em>Encoder nén \(x\) thành \((\mu, \sigma)\); lấy mẫu \(z \sim \mathcal{N}(\mu, \sigma^2)\);
+                    decoder sinh lại \(\hat{x}\). Khi sinh ảnh mới: lấy \(z \sim \mathcal{N}(0, I)\) rồi
+                    decode.</em>
             </p>
         </div>
     </section>
@@ -796,11 +796,11 @@ x₀ (ảnh sinh ra)</code></pre>
     <section style="font-size:0.84em;">
         <h2>Diffusion — minh hoạ quá trình</h2>
         <div style="text-align:center; margin-top:8px;">
-            <img src="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/generative-overview.png"
-                style="max-width:90%; max-height:360px; object-fit:contain;" />
+            <img src="img/lec13/diffusion-process.svg?v=1"
+                style="max-width:92%; max-height:340px;" />
             <p style="font-size:0.78em; color:#666; margin-top:8px;">
-                <em>Quá trình xuôi (trái → phải): thêm nhiễu Gaussian từng bước cho đến khi thành nhiễu thuần.
-                    Quá trình ngược (phải → trái): mô hình học khử nhiễu từng bước → sinh ảnh mới từ nhiễu.</em>
+                <em>Xuôi (cam): thêm nhiễu Gauss từng bước đến khi thành nhiễu thuần — cố định. Ngược (xanh):
+                    mạng học khử nhiễu từng bước → sinh ảnh mới từ nhiễu.</em>
             </p>
         </div>
     </section>
@@ -863,12 +863,11 @@ x₀ (ảnh sinh ra)</code></pre>
     <section style="font-size:0.84em;">
         <h2>Stable Diffusion — text-to-image trong thực tế</h2>
         <div style="text-align:center; margin-top:8px;">
-            <img src="https://raw.githubusercontent.com/CompVis/stable-diffusion/main/assets/stable-samples/txt2img/merged-0006.png"
-                style="max-width:90%; max-height:360px; object-fit:contain;" />
+            <img src="img/lec13/stable-diffusion-pipeline.svg?v=1"
+                style="max-width:94%; max-height:300px;" />
             <p style="font-size:0.78em; color:#666; margin-top:8px;">
                 <em>Stable Diffusion (Rombach et al., 2021) — diffuse trong <strong>không gian ẩn</strong> của
-                    VAE thay vì không gian pixel. Quy trình: prompt → CLIP text encoder → diffusion trong không
-                    gian ẩn → VAE decoder → ảnh.</em>
+                    VAE thay vì pixel, nên nhanh hơn nhiều. CLIP mã hoá câu lệnh để điều khiển nội dung.</em>
             </p>
         </div>
     </section>
