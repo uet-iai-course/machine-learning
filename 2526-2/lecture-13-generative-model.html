@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Bài 13: Mô hình tạo sinh</title>
+<title>Bài 13: Mô hình sinh</title>
 <link rel="stylesheet" href="revealjs/dist/reset.css" />
 <link rel="stylesheet" href="revealjs/dist/reveal.css" />
 <link rel="stylesheet" href="revealjs/dist/theme/white.css" />
@@ -32,14 +32,14 @@
 <section>
     <section>
         <h1>Học máy</h1>
-        <h3>Bài 13: Mô hình tạo sinh</h3>
+        <h3>Bài 13: Mô hình sinh</h3>
         <p>Trường ĐH Công nghệ – Đại học Quốc gia Hà Nội</p>
     </section>
     <section style="font-size:0.86em">
         <h2>Nội dung</h2>
         <ol style="line-height:1.55em">
-            <li>Mô hình tạo sinh vs mô hình phán đoán</li>
-            <li>Mô hình tạo sinh vs Generative AI</li>
+            <li>Mô hình sinh vs mô hình phán đoán</li>
+            <li>Mô hình sinh vs Generative AI</li>
             <li>RNN, LSTM — nền tảng cho sinh chuỗi</li>
             <li>Tự hồi quy: PixelRNN/CNN và GPT</li>
             <li>Autoencoder &amp; VAE</li>
@@ -55,7 +55,7 @@
 <!-- ==================== 1. TẠO SINH vs PHÁN ĐOÁN ==================== -->
 <section>
     <section>
-        <h1><span class="text-light">1.</span><br />Mô hình tạo sinh<br />vs phán đoán</h1>
+        <h1><span class="text-light">1.</span><br />Mô hình sinh<br />vs phán đoán</h1>
     </section>
 
     <section style="font-size:0.84em">
@@ -79,12 +79,12 @@
             </div>
         </div>
         <div class="highlight" style="margin-top:14px">
-            <strong>Mô hình tạo sinh</strong> thuộc nhánh không giám sát — học từ dữ liệu không có nhãn.
+            <strong>Mô hình sinh</strong> thuộc nhánh không giám sát — học từ dữ liệu không có nhãn.
         </div>
     </section>
 
     <section style="font-size:0.82em">
-        <h2>Phán đoán vs tạo sinh</h2>
+        <h2>Phán đoán vs sinh mẫu</h2>
         <div class="two-col" style="margin-top:14px">
             <div class="model-box blue">
                 <strong>Phán đoán (discriminative)</strong><br />
@@ -93,7 +93,7 @@
                 Ví dụ: hồi quy logistic, SVM, CNN phân loại, BERT.
             </div>
             <div class="model-box green">
-                <strong>Tạo sinh (generative)</strong><br />
+                <strong>Sinh mẫu (generative)</strong><br />
                 Học \(p(x)\) — phân phối của dữ liệu.
                 <p style="margin-top:6px"><em>"Mẫu \(x\) này có giống thật không? Sinh thêm ảnh mới được không?"</em>
                 </p>
@@ -101,49 +101,30 @@
             </div>
         </div>
         <div class="demo-box" style="margin-top:12px">
-            <strong>Với MNIST:</strong> phán đoán = "ảnh này là số 3"; tạo sinh = không cần input, tự sinh ra
+            <strong>Với MNIST:</strong> phán đoán = "ảnh này là số 3"; sinh ảnh = không cần input, tự sinh ra
             ảnh chữ số mới trông giống thật.
         </div>
     </section>
 
-    <section style="font-size:0.8em">
-        <h2>Vì sao cần mô hình tạo sinh?</h2>
-        <div class="two-col" style="margin-top:14px">
-            <div>
-                <ul style="line-height:1.7em">
-                    <li><strong>Sinh mẫu thực tế</strong> — artwork, siêu phân giải, tô màu, image-to-image.
-                    </li>
-                    <li><strong>Mô phỏng &amp; lập kế hoạch</strong> — sinh chuỗi thời gian cho RL.</li>
-                    <li><strong>Biểu diễn ẩn</strong> — đặc trưng học được dùng cho task khác.</li>
-                    <li><strong>Tăng cường dữ liệu</strong> — sinh thêm khi tập huấn luyện nhỏ.</li>
-                </ul>
-            </div>
-            <div class="model-box orange">
-                <strong>Hai cách tiếp cận chính:</strong>
-                <p style="margin-top:6px"><strong>Mật độ tường minh</strong> — định nghĩa và tính \(p_\theta(x)\)
-                    trực tiếp. <em>Ví dụ: PixelRNN, VAE, Normalizing Flow, Diffusion.</em></p>
-                <p style="margin-top:6px"><strong>Mật độ ẩn</strong> — chỉ học cách lấy mẫu từ \(p_\theta(x)\)
-                    mà không tính tường minh. <em>Ví dụ: GAN.</em></p>
-            </div>
-        </div>
+    <section style="font-size:0.84em">
+        <h2>Vì sao cần mô hình sinh?</h2>
+        <p>Học được \(p(x)\) mở ra nhiều ứng dụng (theo giáo trình SML):</p>
+        <ul style="line-height:1.95em; margin-top:12px">
+            <li><strong>Sinh dữ liệu mới</strong> — ảnh, văn bản, âm thanh giống thật.</li>
+            <li><strong>Tăng cường dữ liệu</strong> — sinh thêm khi tập huấn luyện nhỏ.</li>
+            <li><strong>Phát hiện ngoại lệ</strong> — mẫu có \(p(x)\) thấp là bất thường.</li>
+            <li><strong>Bổ sung dữ liệu thiếu</strong> — điền các giá trị còn khuyết.</li>
+        </ul>
     </section>
 
-    <section style="font-size:0.78em">
+    <section style="font-size:0.84em">
         <h2>Làm sao xấp xỉ \(p(x)\)?</h2>
-        <p>Đặt mô hình \(q_\theta(x)\) rồi tối thiểu hoá "khoảng cách" giữa hai phân phối:</p>
+        <p>Đặt mô hình \(q_\theta(x)\) rồi tối thiểu hoá "khoảng cách" \(D\) tới phân phối thực:</p>
         \[ \min_\theta\; D\!\left(p_{\text{thực}}(x) \,\Vert\, q_\theta(x)\right) \]
-        <div class="two-col" style="margin-top:10px">
-            <div>
-                <p><strong>Các loại \(D\) thường gặp:</strong></p>
-                <ul style="line-height:1.65em">
-                    <li><strong>KL</strong> — dùng trong VAE</li>
-                    <li><strong>Jensen-Shannon</strong> — GAN gốc</li>
-                    <li><strong>Wasserstein</strong> — WGAN, ổn định hơn</li>
-                </ul>
-            </div>
-            <div class="demo-box">
-                Mỗi họ mô hình chọn một \(D\) khác — đây là nguồn gốc sự đa dạng của các thuật toán.
-            </div>
+        <p style="margin-top:10px">Chọn \(D\) khác nhau cho ra thuật toán khác nhau: <strong>KL</strong> (VAE),
+            <strong>Jensen–Shannon</strong> (GAN gốc), <strong>Wasserstein</strong> (WGAN).</p>
+        <div class="highlight" style="margin-top:12px">
+            Đây chính là nguồn gốc sự đa dạng của các họ mô hình sinh.
         </div>
     </section>
 </section>
@@ -151,14 +132,14 @@
 <!-- ==================== 2. MÔ HÌNH TẠO SINH vs GENERATIVE AI ==================== -->
 <section>
     <section>
-        <h1><span class="text-light">2.</span><br />Mô hình tạo sinh<br />vs Generative AI</h1>
+        <h1><span class="text-light">2.</span><br />Mô hình sinh<br />vs Generative AI</h1>
     </section>
 
     <section style="font-size:0.82em">
         <h2>Hai khái niệm khác nhau</h2>
         <div class="two-col" style="margin-top:14px">
             <div class="model-box blue">
-                <strong>Mô hình tạo sinh</strong> (generative model)<br />
+                <strong>Mô hình sinh</strong> (generative model)<br />
                 <em>Khái niệm toán học / ML.</em>
                 <p style="margin-top:6px">Bất kỳ mô hình nào học \(p(x)\) và sinh được mẫu mới.</p>
                 Xuất hiện từ <strong>1894</strong> (Karl Pearson — GMM).
@@ -167,18 +148,18 @@
             <div class="model-box green">
                 <strong>Generative AI</strong><br />
                 <em>Khái niệm thị trường / ứng dụng.</em>
-                <p style="margin-top:6px">Tập con của mô hình tạo sinh — quy mô lớn, chất lượng cao, hướng tới người dùng cuối.</p>
+                <p style="margin-top:6px">Tập con của mô hình sinh — quy mô lớn, chất lượng cao, hướng tới người dùng cuối.</p>
                 Phổ biến từ <strong>2022</strong> (ChatGPT).
                 <p style="margin-top:6px">Ví dụ: ChatGPT, Claude, Stable Diffusion, Sora.</p>
             </div>
         </div>
         <div class="highlight" style="margin-top:12px">
-            GMM (1894) là mô hình tạo sinh — nhưng không ai gọi nó là "Generative AI".
+            GMM (1894) là mô hình sinh — nhưng không ai gọi nó là "Generative AI".
         </div>
     </section>
 
     <section style="font-size:0.74em">
-        <h2>Taxonomy — bốn họ mô hình tạo sinh chính</h2>
+        <h2>Taxonomy — bốn họ mô hình sinh chính</h2>
         <table class="compare-table">
             <thead>
                 <tr>
@@ -234,26 +215,15 @@
                 ôn nhanh từ Bài 11.</em></p>
     </section>
 
-    <section style="font-size:0.64em">
+    <section style="font-size:0.82em">
         <h2>RNN — Recurrent Neural Network</h2>
-        <p>Để sinh dữ liệu tuần tự, mô hình cần nhớ những gì đã sinh trước đó:</p>
+        <p>Để sinh dữ liệu tuần tự, mô hình đoán phần tử kế tiếp dựa trên những gì đã sinh trước đó:</p>
         \[ p(x) = \prod_{i=1}^{n} p(x_i \mid x_1, \ldots, x_{i-1}) \]
-        <div class="two-col" style="margin-top:8px">
-            <div>
-                <p><strong>Công thức RNN:</strong></p>
-                \[ h_t = \tanh(W_{hh}\, h_{t-1} + W_{xh}\, x_t + b_h) \]
-                \[ \hat{y}_t = \text{softmax}(W_{hy}\, h_t + b_y) \]
-                <ul style="margin-top:4px; line-height:1.5em">
-                    <li>\(h_t\) — trạng thái ẩn, "bộ nhớ" của quá khứ.</li>
-                    <li>Cùng \(W\) dùng lại ở mọi bước.</li>
-                </ul>
-            </div>
-            <div class="demo-box">
-                <strong>Char-rnn (Karpathy, 2015):</strong>
-                <p style="margin-top:4px">Huấn luyện: "The cat sat" → đoán ký tự kế.</p>
-                <p>Lấy mẫu: "T" → "h" → "e" → " " → "c" → ...</p>
-                <p style="margin-top:4px">Đoán liên tục → sinh văn bản mới.</p>
-            </div>
+        <p style="margin-top:8px">Trạng thái ẩn \(h_t = \tanh(W_{hh} h_{t-1} + W_{xh} x_t)\) là "bộ nhớ" của
+            quá khứ; cùng một \(W\) được dùng lại ở mọi bước.</p>
+        <div class="demo-box" style="margin-top:10px">
+            <strong>char-rnn (Karpathy, 2015):</strong> huấn luyện trên "The cat sat" để đoán ký tự kế;
+            lấy mẫu "T"→"h"→"e"→… liên tục thì sinh ra văn bản mới.
         </div>
     </section>
 
@@ -296,31 +266,18 @@ Bước 2→1:  × 2.0 = 16 → ∞</code></pre>
         </div>
     </section>
 
-    <section style="font-size:0.6em">
+    <section style="font-size:0.82em">
         <h2>LSTM — Long Short-Term Memory</h2>
-        <p><em>Hochreiter &amp; Schmidhuber, 1997.</em> Thêm <strong>trạng thái ô</strong> \(c_t\) như
-            "băng chuyền" cho gradient chảy qua.</p>
-        <div class="two-col" style="margin-top:6px">
-            <div>
-                <p><strong>Bốn công thức cốt lõi:</strong></p>
-                \[ f_t = \sigma(W_f [h_{t-1}, x_t] + b_f) \quad \text{(quên)} \]
-                \[ i_t = \sigma(W_i [h_{t-1}, x_t] + b_i) \quad \text{(thu)} \]
-                \[ \tilde{c}_t = \tanh(W_c [h_{t-1}, x_t] + b_c) \quad \text{(đề xuất)} \]
-                \[ o_t = \sigma(W_o [h_{t-1}, x_t] + b_o) \quad \text{(xuất)} \]
-                <p style="margin-top:4px"><strong>Cập nhật:</strong></p>
-                \[ c_t = f_t \odot c_{t-1} + i_t \odot \tilde{c}_t \]
-                \[ h_t = o_t \odot \tanh(c_t) \]
-            </div>
-            <div>
-                <ul style="line-height:1.55em">
-                    <li>\(f_t\) — <strong>cổng quên</strong>: giữ bao nhiêu \(c_{t-1}\)?</li>
-                    <li>\(i_t\) — <strong>cổng thu</strong>: thêm bao nhiêu thông tin mới?</li>
-                    <li>\(\tilde{c}_t\) — <strong>thông tin đề xuất</strong> từ \(x_t, h_{t-1}\).</li>
-                    <li>\(o_t\) — <strong>cổng xuất</strong>: \(c_t\) lộ ra \(h_t\) bao nhiêu?</li>
-                    <li>\(\odot\) — nhân từng phần tử (Hadamard).</li>
-                </ul>
-            </div>
-        </div>
+        <p><em>Hochreiter &amp; Schmidhuber, 1997.</em> Thêm <strong>trạng thái ô</strong> \(c_t\) làm
+            "băng chuyền" để gradient chảy qua nhiều bước mà không tiêu biến.</p>
+        <p style="margin-top:10px">Ba <strong>cổng</strong> (sigmoid → giá trị trong \([0,1]\)) kiểm soát luồng
+            thông tin:</p>
+        <ul style="line-height:1.85em; margin-top:8px">
+            <li><strong>Cổng quên</strong> — giữ lại bao nhiêu của \(c_{t-1}\)?</li>
+            <li><strong>Cổng thu</strong> — thêm bao nhiêu thông tin mới vào \(c_t\)?</li>
+            <li><strong>Cổng xuất</strong> — để \(c_t\) lộ ra \(h_t\) bao nhiêu?</li>
+        </ul>
+        <p style="margin-top:8px; font-size:0.92em; color:#666">📖 Tự học: bốn công thức cổng đầy đủ — Bài 11.</p>
     </section>
 
     <section style="font-size:0.84em;">
@@ -365,71 +322,40 @@ Bước 2→1:  × 2.0 = 16 → ∞</code></pre>
                 đến văn bản token-by-token.</em></p>
     </section>
 
-    <section style="font-size:0.76em">
+    <section style="font-size:0.82em">
         <h2>Ý tưởng — sinh ảnh tự hồi quy</h2>
-        <p>Áp dụng quy tắc chuỗi (chain rule) lên <strong>từng pixel</strong> của ảnh:</p>
+        <p>Áp dụng quy tắc chuỗi lên <strong>từng pixel</strong> của ảnh:</p>
         \[ p(x) = \prod_{i=1}^{n} p(x_i \mid x_1, x_2, \ldots, x_{i-1}) \]
-        <div class="two-col" style="margin-top:10px">
-            <div>
-                <ul style="line-height:1.6em">
-                    <li>Sinh từng pixel từ <strong>góc trên trái</strong>.</li>
-                    <li>Pixel sau phụ thuộc tất cả pixel trước.</li>
-                    <li>Mật độ tường minh — tính được \(p(x)\).</li>
-                    <li>Tối đa hoá likelihood ảnh huấn luyện.</li>
-                </ul>
-            </div>
-            <div class="demo-box">
-                <strong>MNIST (28×28):</strong> 784 pixel sinh lần lượt.
-                <p style="margin-top:4px">Mỗi pixel: Softmax trên 256 mức xám.</p>
-            </div>
+        <ul style="line-height:1.85em; margin-top:10px">
+            <li>Sinh từng pixel từ góc trên trái; mỗi pixel phụ thuộc tất cả pixel trước.</li>
+            <li>Mật độ tường minh — tính được \(p(x)\) và tối đa hoá likelihood.</li>
+        </ul>
+        <div class="demo-box" style="margin-top:10px">
+            <strong>MNIST (28×28):</strong> 784 pixel sinh lần lượt, mỗi pixel là Softmax trên 256 mức xám.
         </div>
     </section>
 
-    <section style="font-size:0.78em">
+    <section style="font-size:0.82em">
         <h2>PixelRNN — dùng LSTM</h2>
-        <div class="two-col" style="margin-top:10px">
-            <div>
-                <ul style="line-height:1.7em">
-                    <li>LSTM mô hình hoá phụ thuộc giữa các pixel.</li>
-                    <li>Sinh từ góc trên trái, quét từng hàng.</li>
-                    <li>Mỗi bước: LSTM nhận pixel trước → đoán pixel kế.</li>
-                    <li>Chất lượng tốt vì LSTM nhớ được phụ thuộc xa.</li>
-                </ul>
-                <div class="highlight" style="margin-top:10px">
-                    <strong>Nhược điểm lớn:</strong> sinh tuần tự — rất chậm! 784 pixel = 784 bước,
-                    không song song hoá được.
-                </div>
-            </div>
-            <div class="demo-box">
-                <strong>Huấn luyện:</strong> input ảnh thật → Softmax loss tại mỗi pixel.
-                Tối đa hoá \(\sum_i \log p(x_i \mid x_{<i})\).
-                <p style="margin-top:6px"><strong>Sinh ảnh:</strong> lấy mẫu pixel 1 → đưa vào LSTM → lấy mẫu
-                    pixel 2 → ...</p>
-            </div>
+        <ul style="line-height:1.85em; margin-top:10px">
+            <li>LSTM quét ảnh từ góc trên trái, từng hàng; mỗi bước đoán pixel kế từ các pixel trước.</li>
+            <li>Nhớ được phụ thuộc xa → chất lượng tốt.</li>
+        </ul>
+        <div class="highlight" style="margin-top:12px">
+            <strong>Nhược điểm lớn:</strong> sinh tuần tự rất chậm — ảnh 28×28 cần 784 bước, không
+            song song hoá được.
         </div>
     </section>
 
-    <section style="font-size:0.78em">
+    <section style="font-size:0.82em">
         <h2>PixelCNN — dùng CNN thay LSTM</h2>
-        <div class="two-col" style="margin-top:10px">
-            <div>
-                <ul style="line-height:1.7em">
-                    <li>Thay LSTM bằng <strong>CNN với mặt nạ tích chập</strong>.</li>
-                    <li>Mặt nạ đảm bảo chỉ nhìn vào pixel đã sinh trước.</li>
-                    <li>CNN <strong>song song hoá</strong> khi huấn luyện → nhanh hơn nhiều.</li>
-                    <li>Softmax loss tại mỗi pixel — giống PixelRNN.</li>
-                </ul>
-                <div class="highlight" style="margin-top:10px">
-                    Huấn luyện nhanh hơn, nhưng <strong>sinh ảnh vẫn chậm</strong> — vẫn tuần tự.
-                </div>
-            </div>
-            <div class="model-box green">
-                <strong>PixelRNN vs PixelCNN:</strong>
-                <p style="margin-top:6px"><strong>PixelRNN</strong> — LSTM, huấn luyện chậm, nhớ context tốt hơn.</p>
-                <p><strong>PixelCNN</strong> — CNN có mặt nạ, huấn luyện nhanh hơn, context giới hạn trong
-                    vùng tiếp nhận.</p>
-                <p style="margin-top:6px">Cả hai đều sinh ảnh chậm do tuần tự.</p>
-            </div>
+        <ul style="line-height:1.85em; margin-top:10px">
+            <li>Thay LSTM bằng <strong>CNN với mặt nạ tích chập</strong> — chỉ nhìn pixel đã sinh trước.</li>
+            <li>CNN <strong>song song hoá</strong> khi huấn luyện → nhanh hơn PixelRNN nhiều.</li>
+            <li>Đánh đổi: vùng tiếp nhận giới hạn → nhớ context kém hơn LSTM.</li>
+        </ul>
+        <div class="highlight" style="margin-top:12px">
+            Huấn luyện nhanh hơn, nhưng <strong>sinh ảnh vẫn chậm</strong> vì vẫn tuần tự từng pixel.
         </div>
     </section>
 
@@ -459,25 +385,16 @@ Bước 2→1:  × 2.0 = 16 → ∞</code></pre>
         </div>
     </section>
 
-    <section style="font-size:0.7em">
+    <section style="font-size:0.8em">
         <h2>GPT — tự hồi quy cho ngôn ngữ</h2>
-        <p>Cùng chain rule, đổi pixel thành <strong>token</strong> (từ con / sub-word):</p>
+        <p>Cùng quy tắc chuỗi, chỉ đổi pixel thành <strong>token</strong> (từ con):</p>
         \[ p(\text{văn bản}) = \prod_{i=1}^{n} p(\text{tok}_i \mid \text{tok}_1, \ldots, \text{tok}_{i-1}) \]
-        <div class="two-col" style="margin-top:8px">
-            <div>
-                <ul style="line-height:1.55em">
-                    <li><strong>Transformer decoder</strong> + tự chú ý có mặt nạ (causal).</li>
-                    <li>Đoán token kế dựa vào toàn bộ token đã sinh.</li>
-                    <li>Huấn luyện song song hoá (so với PixelRNN dùng LSTM).</li>
-                    <li>Sinh văn bản: prompt → lấy mẫu lần lượt.</li>
-                </ul>
-            </div>
-            <div class="demo-box">
-                <strong>GPT-1 (2018) → GPT-4 (2023):</strong>
-                <p style="margin-top:4px">Cùng công thức tự hồi quy — chỉ <em>tăng tham số</em> (117M → 1.7T),
-                    <em>tăng dữ liệu</em>, <em>thêm RLHF</em> (Bài 12).</p>
-                <p style="margin-top:4px"><em>"Just predict the next token"</em> — Karpathy.</p>
-            </div>
+        <ul style="line-height:1.8em; margin-top:8px">
+            <li>Dùng <strong>Transformer decoder</strong> với tự chú ý có mặt nạ (causal).</li>
+            <li>Từ GPT-1 (2018) đến GPT-4: cùng công thức, chỉ tăng tham số, dữ liệu và thêm RLHF (Bài 12).</li>
+        </ul>
+        <div class="highlight" style="margin-top:10px">
+            <em>"Chỉ cần đoán token kế tiếp"</em> — nền tảng của mọi LLM hiện đại.
         </div>
     </section>
 
@@ -516,83 +433,43 @@ Bước 2→1:  × 2.0 = 16 → ∞</code></pre>
         <h1><span class="text-light">5.</span><br />Autoencoder &amp; VAE</h1>
     </section>
 
-    <section style="font-size:0.66em">
+    <section style="font-size:0.8em">
         <h2>Autoencoder — học biểu diễn nén</h2>
-        <p>Phương pháp không giám sát học đặc trưng từ dữ liệu không nhãn:</p>
-        <div class="two-col" style="margin-top:8px">
-            <div>
-                <pre style="font-size:0.9em"><code>Đầu vào x
-    ↓  Encoder (4 lớp conv)
-    z  ← biểu diễn ẩn (nhỏ hơn x)
-    ↓  Decoder (4 lớp upconv)
-   x̂  ← bản tái tạo</code></pre>
-                <p style="margin-top:6px"><strong>Hàm mất mát:</strong> L2 tái tạo</p>
-                \[ \mathcal{L} = \|x - \hat{x}\|^2 \]
-                <p><em>Không cần nhãn.</em></p>
-            </div>
-            <div class="demo-box">
-                <strong>Vì sao bóp \(z\) nhỏ hơn \(x\)?</strong>
-                <p style="margin-top:4px">Để mô hình học đặc trưng có ý nghĩa, không copy nguyên xi.</p>
-                <p style="margin-top:4px"><strong>Sau train:</strong> bỏ decoder, dùng encoder làm trích đặc trưng
-                    cho task khác.</p>
-                <p style="margin-top:4px"><strong>Vấn đề:</strong> AE chỉ <em>ghi nhớ</em> mẫu, không học \(p(x)\)
-                    → <strong>không sinh được</strong>.</p>
-            </div>
+        <p>Nén \(x\) qua nút thắt cổ chai rồi tái tạo lại, không cần nhãn:</p>
+        <p style="text-align:center; margin-top:8px; font-size:1.05em">
+            \(x \;\xrightarrow{\text{Encoder}}\; z \;\xrightarrow{\text{Decoder}}\; \hat{x}\),
+            &nbsp; mất mát \(\mathcal{L} = \|x - \hat{x}\|^2\)
+        </p>
+        <p style="margin-top:8px">Bóp \(z\) nhỏ hơn \(x\) buộc mô hình học đặc trưng có ý nghĩa thay vì
+            chép nguyên xi. Sau khi huấn luyện, dùng encoder để trích đặc trưng.</p>
+        <div class="highlight" style="margin-top:10px">
+            Nhưng AE chỉ <em>ghi nhớ</em> mẫu, không học \(p(x)\) → <strong>không sinh được dữ liệu mới</strong>.
         </div>
     </section>
 
-    <section style="font-size:0.78em">
+    <section style="font-size:0.82em">
         <h2>VAE — Variational Autoencoder</h2>
-        <p><em>Kingma &amp; Welling, 2013.</em> Thêm <strong>không gian ẩn có tính xác suất</strong>:</p>
-        <div class="two-col" style="margin-top:10px">
-            <div>
-                <pre style="font-size:0.95em"><code>AE cổ điển:
-x → Encoder → z (điểm cố định)
-
-VAE:
-x → Encoder → μ, σ
-              ↓ lấy mẫu
-          z ~ N(μ, σ²)
-              ↓
-         Decoder → x̂</code></pre>
-            </div>
-            <div>
-                <p><strong>Hàm mất mát (ELBO):</strong></p>
-                \[ \mathcal{L} = \underbrace{\mathbb{E}[\log p(x|z)]}_{\text{tái tạo}} -
-                \underbrace{D_{\text{KL}}(q(z|x) \,\|\, p(z))}_{\text{chính quy hoá}} \]
-                <ul style="margin-top:8px; line-height:1.55em">
-                    <li>Tái tạo: \(\hat{x}\) phải giống \(x\).</li>
-                    <li>KL: ẩn \(z\) gần \(\mathcal{N}(0, I)\) → không gian ẩn có cấu trúc → <strong>lấy mẫu
-                            được</strong>.</li>
-                </ul>
-            </div>
-        </div>
+        <p><em>Kingma &amp; Welling, 2013.</em> Encoder không xuất một điểm \(z\) cố định, mà xuất
+            \((\mu, \sigma)\) rồi lấy mẫu \(z \sim \mathcal{N}(\mu, \sigma^2)\). Mất mát có 2 phần:</p>
+        \[ \mathcal{L} = \underbrace{\mathbb{E}[\log p(x|z)]}_{\text{tái tạo}} -
+        \underbrace{D_{\text{KL}}(q(z|x) \,\|\, p(z))}_{\text{chính quy hoá}} \]
+        <ul style="line-height:1.8em; margin-top:8px">
+            <li><strong>Tái tạo:</strong> \(\hat{x}\) phải giống \(x\).</li>
+            <li><strong>KL:</strong> kéo \(z\) về gần \(\mathcal{N}(0, I)\) → không gian ẩn có cấu trúc →
+                lấy mẫu được.</li>
+        </ul>
     </section>
 
-    <section style="font-size:0.64em">
+    <section style="font-size:0.8em">
         <h2>VAE — vì sao sinh được mà AE thì không?</h2>
-        <div class="two-col" style="margin-top:8px">
-            <div>
-                <p><strong>AE cổ điển:</strong></p>
-                <ul style="line-height:1.5em">
-                    <li>\(z\) là điểm cụ thể trong không gian ẩn.</li>
-                    <li>Nội suy 2 điểm → có thể vào "vùng chưa biết" → vô nghĩa.</li>
-                    <li>Không sinh được dữ liệu mới.</li>
-                </ul>
-                <p style="margin-top:8px"><strong>VAE:</strong></p>
-                <ul style="line-height:1.5em">
-                    <li>KL ép không gian ẩn gần Gaussian → không còn "vùng chết".</li>
-                    <li>Lấy mẫu \(z \sim \mathcal{N}(0, I)\) → decode → ảnh mới hợp lệ.</li>
-                    <li>Nội suy trong không gian ẩn → chuyển tiếp mượt.</li>
-                </ul>
-            </div>
-            <div class="model-box orange">
-                <strong>Vấn đề của VAE:</strong>
-                <p style="margin-top:4px"><strong>Ảnh mờ</strong> — L2 → đoán trung bình.</p>
-                <p><strong>Sụp đổ hậu nghiệm</strong> — decoder mạnh quá → bỏ qua \(z\).</p>
-                <p><strong>Likelihood không tính trực tiếp</strong> — chỉ có ELBO.</p>
-                <p style="margin-top:4px"><em>→ Dẫn đến GAN và Diffusion.</em></p>
-            </div>
+        <ul style="line-height:1.8em; margin-top:8px">
+            <li><strong>AE:</strong> \(z\) là điểm rời rạc → nội suy dễ rơi vào "vùng chết" vô nghĩa.</li>
+            <li><strong>VAE:</strong> KL ép không gian ẩn gần \(\mathcal{N}(0, I)\) → liên tục, không còn
+                vùng chết.</li>
+            <li>Lấy mẫu \(z \sim \mathcal{N}(0, I)\) → decode → ảnh mới hợp lệ; nội suy thì mượt.</li>
+        </ul>
+        <div class="highlight" style="margin-top:12px">
+            Hạn chế: ảnh thường <strong>mờ</strong> (do mất mát L2) → động lực cho GAN và Diffusion.
         </div>
     </section>
 
@@ -736,60 +613,27 @@ x → Encoder → μ, σ
                 DALL-E, Stable Diffusion.</em></p>
     </section>
 
-    <section style="font-size:0.68em">
+    <section style="font-size:0.82em">
         <h2>Trực giác — từ VAE đến Diffusion</h2>
-        <p>VAE đi từ \(z\) thẳng sang \(x\) trong 1 bước thì khó. <strong>Chia thành nhiều bước nhỏ</strong>:</p>
-        <div class="two-col" style="margin-top:8px">
-            <div>
-                <pre style="font-size:0.9em"><code>VAE:
-z ──────────────→ x
-
-VAE sâu hơn:
-z → z₁ → z₂ → x
-
-Diffusion:
-z → z₁ → z₂ → ... → zₙ → x
-(quá trình cố định, không học)</code></pre>
-            </div>
-            <div class="demo-box">
-                <strong>Quan sát:</strong> VAE càng nhiều lớp → tốt hơn, nhưng càng khó train.
-                <p style="margin-top:4px"><strong>Giải pháp Diffusion:</strong> cố định bước <em>xuôi</em> (thêm
-                    nhiễu Gaussian, không cần học). Chỉ học bước <em>ngược</em> (khử nhiễu).</p>
-            </div>
+        <p>VAE nhảy thẳng \(z \to x\) trong một bước nên khó. Diffusion <strong>chia thành nhiều bước
+            nhỏ</strong>: \(z \to z_1 \to \cdots \to z_n \to x\).</p>
+        <div class="highlight" style="margin-top:12px">
+            <strong>Mẹo then chốt:</strong> bước <em>xuôi</em> (thêm nhiễu Gauss) <strong>cố định, không
+            cần học</strong> — chỉ phải học bước <em>ngược</em> (khử nhiễu).
         </div>
     </section>
 
     <section style="font-size:0.74em">
         <h2>Diffusion — quá trình xuôi và ngược</h2>
-        <div class="two-col" style="margin-top:10px">
-            <div>
-                <p><strong>Xuôi (thêm nhiễu):</strong></p>
-                \[ x_t = \sqrt{\alpha_t}\, x_{t-1} + \sqrt{1-\alpha_t}\, \epsilon,\quad
-                \epsilon \sim \mathcal{N}(0, I) \]
-                <pre style="font-size:0.9em"><code>x₀ (ảnh thật)
-  ↓ thêm nhiễu nhỏ
-x₁ (hơi mờ)
-  ↓ thêm nhiễu
-x₂ (mờ hơn)
-  ↓ ...
-xₜ (nhiễu Gaussian thuần)</code></pre>
-                <p style="margin-top:4px"><em>Cố định — không cần học.</em></p>
-            </div>
-            <div>
-                <p><strong>Ngược (khử nhiễu):</strong></p>
-                <pre style="font-size:0.9em"><code>xₜ (nhiễu)
-  ↑ mô hình đoán & gỡ nhiễu
-xₜ₋₁ (ít nhiễu hơn)
-  ↑ ...
-x₁
-  ↑
-x₀ (ảnh sinh ra)</code></pre>
-                <p style="margin-top:4px">Mô hình học: <em>"nhiễu nào đã được thêm vào?"</em></p>
-                <div class="highlight" style="margin-top:6px">
-                    <strong>Mục tiêu rút gọn</strong> (Ho 2020): đoán nhiễu \(\epsilon\) thay vì đoán \(x_0\) trực
-                    tiếp.
-                </div>
-            </div>
+        <p style="margin-top:8px"><strong>Xuôi</strong> (cố định): mỗi bước thêm một chút nhiễu Gauss vào ảnh,
+            đến khi thành nhiễu thuần.</p>
+        \[ x_t = \sqrt{\alpha_t}\, x_{t-1} + \sqrt{1-\alpha_t}\, \epsilon,\quad
+        \epsilon \sim \mathcal{N}(0, I) \]
+        <p style="margin-top:10px"><strong>Ngược</strong> (phải học): mạng đoán nhiễu đã thêm rồi gỡ dần, từ
+            nhiễu thuần khôi phục lại ảnh.</p>
+        <div class="highlight" style="margin-top:10px">
+            <strong>Mục tiêu rút gọn</strong> (Ho 2020): mạng chỉ cần đoán nhiễu \(\epsilon\) ở mỗi bước —
+            đơn giản và ổn định.
         </div>
     </section>
 
@@ -826,7 +670,7 @@ x₀ (ảnh sinh ra)</code></pre>
         </table>
     </section>
 
-    <section style="font-size:0.74em">
+    <section style="font-size:0.76em">
         <h2>Diffusion — đánh giá &amp; "tam đề"</h2>
         <div class="two-col" style="margin-top:8px">
             <div>
@@ -848,7 +692,7 @@ x₀ (ảnh sinh ra)</code></pre>
                 </div>
             </div>
             <div class="model-box purple">
-                <strong>Tam đề mô hình tạo sinh:</strong>
+                <strong>Tam đề mô hình sinh:</strong>
                 <p style="margin-top:4px">Không mô hình nào có đủ <em>cả 3</em>:</p>
                 <ul style="margin-top:4px; line-height:1.6em">
                     <li><strong>GAN</strong>: nhanh ✓, chất lượng ✓ — đa dạng ✗</li>
@@ -878,8 +722,8 @@ x₀ (ảnh sinh ra)</code></pre>
     <section style="font-size:0.7em">
         <h2>Tóm tắt</h2>
         <ol style="line-height:1.5em">
-            <li><strong>Tạo sinh</strong> học \(p(x)\); <strong>phán đoán</strong> học \(p(y \mid x)\).</li>
-            <li><strong>Generative AI</strong> ≠ mô hình tạo sinh — là tập con quy mô lớn (ChatGPT, Stable
+            <li><strong>Sinh</strong> học \(p(x)\); <strong>phán đoán</strong> học \(p(y \mid x)\).</li>
+            <li><strong>Generative AI</strong> ≠ mô hình sinh — là tập con quy mô lớn (ChatGPT, Stable
                 Diffusion).</li>
             <li><strong>Tự hồi quy</strong>: PixelRNN/CNN (ảnh) và GPT (văn bản) — cùng nguyên lý "đoán đơn vị
                 kế".</li>
@@ -893,32 +737,27 @@ x₀ (ảnh sinh ra)</code></pre>
         </div>
     </section>
 
-    <section style="font-size:0.58em">
+    <section style="font-size:0.64em">
         <h2>Tài liệu tham khảo</h2>
-        <ul style="line-height:1.55em;">
-            <li>Fei-Fei Li, Justin Johnson, Serena Yeung. <em>CS231n Lecture 13: Generative Models</em>.
-                Stanford, 2017.</li>
-            <li>van der Oord, A. et al. (2016). Pixel Recurrent Neural Networks. <em>ICML 2016</em>.</li>
-            <li>Kingma, D. P., &amp; Welling, M. (2013). Auto-encoding variational bayes. <em>ICLR 2014</em>.
-            </li>
-            <li>Goodfellow, I. et al. (2014). Generative adversarial nets. <em>NeurIPS 2014</em>.</li>
-            <li>Radford, A. et al. (2018). Improving language understanding by generative pre-training (GPT-1).
-                OpenAI.</li>
-            <li>Ho, J. et al. (2020). Denoising diffusion probabilistic models (DDPM). <em>NeurIPS 2020</em>.</li>
-            <li>Rombach, R. et al. (2021). High-resolution image synthesis with latent diffusion models (Stable
-                Diffusion). <em>CVPR 2022</em>.</li>
-            <li>Karpathy, A. (2015). The unreasonable effectiveness of recurrent neural networks.
-                <a href="https://karpathy.github.io/2015/05/21/rnn-effectiveness/"
-                    target="_blank">karpathy.github.io</a></li>
-            <li>Weng, L. (2021). What are diffusion models?
-                <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/"
-                    target="_blank">lilianweng.github.io</a></li>
+        <ul style="line-height:1.6em;">
+            <li>Trần Quốc Long &amp; Tạ Việt Cường. <em>Giáo trình Học máy thống kê</em>, chương 11
+                (Mô hình sinh).</li>
+            <li>Fei-Fei Li, Johnson, J., Yeung, S. <em>CS231n: Generative Models</em>. Stanford, 2017.</li>
+            <li>van der Oord, A. et al. (2016). Pixel Recurrent Neural Networks. <em>ICML</em>.</li>
+            <li>Kingma, D. P., &amp; Welling, M. (2013). Auto-Encoding Variational Bayes. <em>ICLR 2014</em>.</li>
+            <li>Goodfellow, I. et al. (2014). Generative Adversarial Nets. <em>NeurIPS</em>.</li>
+            <li>Radford, A. et al. (2018). Improving Language Understanding by Generative Pre-Training (GPT-1).</li>
+            <li>Ho, J. et al. (2020). Denoising Diffusion Probabilistic Models (DDPM). <em>NeurIPS</em>.</li>
+            <li>Rombach, R. et al. (2022). High-Resolution Image Synthesis with Latent Diffusion Models
+                (Stable Diffusion). <em>CVPR</em>.</li>
+            <li>Karpathy, A. (2015). The Unreasonable Effectiveness of Recurrent Neural Networks.</li>
+            <li>Weng, L. (2021). What are Diffusion Models?</li>
         </ul>
     </section>
 </section>
 
 <div class="footer">
-    Học máy (Học kỳ 2 2025-2026) §13: Mô hình tạo sinh
+    Học máy (Học kỳ 2 2025-2026) §13: Mô hình sinh
 </div>
 
 </div>
