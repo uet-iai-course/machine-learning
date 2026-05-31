@@ -692,19 +692,22 @@
     </section>
 
     <section style="font-size:0.8em">
-        <h2>Diffusion — đánh giá &amp; "tam đề"</h2>
-        <p style="margin-top:8px"><strong>✓</strong> Chất lượng cao nhất, đa dạng (không mode collapse),
-            train ổn định, sinh có điều kiện linh hoạt. &nbsp;<strong>✗</strong> Lấy mẫu chậm vì nhiều bước.</p>
-        <div class="model-box purple" style="margin-top:10px">
-            <strong>Tam đề mô hình sinh</strong> — không mô hình nào đủ <em>cả 3</em> (nhanh · chất lượng ·
-            đa dạng):
-            <ul style="margin-top:6px; line-height:1.75em">
-                <li><strong>GAN</strong>: nhanh ✓, chất lượng ✓ — đa dạng ✗</li>
-                <li><strong>VAE</strong>: nhanh ✓, đa dạng ✓ — chất lượng ✗</li>
-                <li><strong>Diffusion</strong>: chất lượng ✓, đa dạng ✓ — chậm ✗</li>
+        <h2>Diffusion — đánh giá &amp; "tam giác đánh đổi"</h2>
+        <p style="margin-top:10px"><strong>Ưu điểm:</strong> chất lượng cao nhất hiện nay, mẫu đa dạng
+            (không bị mode collapse), huấn luyện ổn định.</p>
+        <p style="margin-top:4px"><strong>Nhược điểm:</strong> sinh ảnh chậm vì phải qua nhiều bước khử nhiễu.</p>
+        <div class="model-box purple" style="margin-top:12px">
+            <p style="margin:0">Một mô hình sinh ai cũng mong có <strong>ba thứ</strong>: sinh
+                <em>nhanh</em>, ảnh <em>đẹp</em>, mẫu <em>đa dạng</em> — nhưng mỗi họ chỉ đạt được
+                <strong>2 trong 3</strong>:</p>
+            <ul style="margin:8px 0 0; line-height:1.8em">
+                <li><strong>GAN</strong>: nhanh + đẹp, nhưng kém đa dạng.</li>
+                <li><strong>VAE</strong>: nhanh + đa dạng, nhưng ảnh mờ.</li>
+                <li><strong>Diffusion</strong>: đẹp + đa dạng, nhưng chậm.</li>
             </ul>
-            <p style="margin-top:6px"><em>Consistency Models (2023) đang cố phá tam đề.</em></p>
         </div>
+        <p style="margin-top:10px; font-size:0.9em; color:#555"><em>Các hướng mới như Consistency Models
+            (2023) đang cố đạt cả ba cùng lúc.</em></p>
     </section>
 
     <section style="font-size:0.84em;">
