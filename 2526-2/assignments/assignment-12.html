@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="../../favicon.png">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <title>Học máy | Bài tập về nhà #12</title>
+  <link rel="stylesheet" href="../../index-pages.css">
+  <link rel="stylesheet" href="assignment-pages.css?v=1">
+  <script src="mathjax-config.js"></script>
+  <script id="MathJax-script" async src="mathjax4.js"></script>
+</head>
+
+<body>
+  <main class="page-shell assignment-shell">
+    <header class="assignment-header">
+      <a class="secondary-link assignment-backlink" href="../index.html"><span aria-hidden="true">←</span><span>Quay lại học kỳ</span></a>
+      <p class="eyebrow assignment-eyebrow">IAI · UET · VNU</p>
+      <p class="assignment-course">Học máy</p>
+      <h1 class="assignment-topic">Giới thiệu về học tăng cường</h1>
+      <p class="assignment-meta">Bài tập về nhà #12 · Học kì 2 · Năm học 2025-2026</p>
+    </header>
+
+    <hr>
+
+    <!-- ── BÀI 1 ── -->
+    <h2>Bài 1 — MDP &amp; phương trình Bellman</h2>
+    <div class="q">
+      <p>
+        Xét một hành lang gồm các ô <strong>A — B — C — Đích</strong>. Tại mỗi ô, tác tử có hai hành động:
+        <strong>sang phải</strong> (→) hoặc <strong>sang trái</strong> (←), di chuyển đúng một ô theo hướng
+        đã chọn (đụng tường thì đứng yên). Mỗi bước đi tốn phần thưởng \(-1\); riêng bước đi <em>vào</em> ô
+        <strong>Đích</strong> được \(+10\) và kết thúc tập. Hệ số chiết khấu \(\gamma = 0.9\).
+      </p>
+      <ol>
+        <li>
+          Viết <strong>phương trình Bellman</strong> cho hàm giá trị \(V^\pi(s)\) của một chính sách
+          \(\pi\) trong MDP tất định này.
+        </li>
+        <li>
+          Xét chính sách \(\pi_\rightarrow\): "luôn đi sang phải". Tính
+          \(V^{\pi_\rightarrow}(C)\), \(V^{\pi_\rightarrow}(B)\), \(V^{\pi_\rightarrow}(A)\)
+          (gợi ý: tính ngược từ ô gần Đích nhất).
+        </li>
+        <li>
+          Chính sách "luôn sang phải" có phải là <strong>tối ưu</strong> không? Giải thích ngắn gọn
+          dựa trên cấu trúc phần thưởng.
+        </li>
+      </ol>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- ── BÀI 2 ── -->
+    <h2>Bài 2 — Q-learning</h2>
+    <div class="q">
+      <p>
+        Một MDP có hai trạng thái \(S_1, S_2\) và hai hành động \(a_1, a_2\). Bảng \(Q\) được khởi tạo bằng
+        \(0\) cho mọi cặp \((s, a)\). Dùng tốc độ học \(\alpha = 0.5\) và \(\gamma = 0.9\), với công thức
+        cập nhật:
+      </p>
+      <p>
+        \[ Q(s, a) \leftarrow Q(s, a) + \alpha\Big[\, r + \gamma \max_{a'} Q(s', a') - Q(s, a) \,\Big] \]
+      </p>
+      <p>
+        Tác tử trải nghiệm <strong>lần lượt</strong> ba chuyển tiếp sau (ô "Kết thúc" là trạng thái cuối,
+        khi đó \(\max_{a'} Q(s', a') = 0\)):
+      </p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Bước</th><th>\(s\)</th><th>\(a\)</th><th>\(r\)</th><th>\(s'\)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>\(S_2\)</td><td>\(a_2\)</td><td>\(+10\)</td><td>Kết thúc</td></tr>
+          <tr><td>2</td><td>\(S_1\)</td><td>\(a_1\)</td><td>\(0\)</td><td>\(S_2\)</td></tr>
+          <tr><td>3</td><td>\(S_2\)</td><td>\(a_2\)</td><td>\(+10\)</td><td>Kết thúc</td></tr>
+        </tbody>
+      </table>
+      <ol>
+        <li>Tính giá trị \(Q\) được cập nhật sau <strong>mỗi</strong> chuyển tiếp (ba lần cập nhật).</li>
+        <li>Sau ba bước, tại \(S_1\) chính sách <strong>tham lam</strong> sẽ chọn hành động nào? Vì sao?</li>
+        <li>
+          Phần thưởng \(+10\) chỉ xuất hiện tại \(S_2\). Giải thích vì sao sau vài lần lặp, giá trị này
+          vẫn "lan" được về \(S_1\).
+        </li>
+      </ol>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- ── BÀI 3 ── -->
+    <h2>Bài 3 — Khám phá vs Khai thác &amp; RLHF</h2>
+    <div class="q">
+      <p>
+        Tác tử dùng chiến lược <strong>\(\varepsilon\)-greedy</strong> với \(\varepsilon = 0.1\): với xác
+        suất \(\varepsilon\) chọn <em>ngẫu nhiên đều</em> trong cả 4 hành động, với xác suất \(1 - \varepsilon\)
+        chọn hành động có giá trị \(Q\) lớn nhất.
+      </p>
+      <ol>
+        <li>
+          Tính xác suất tác tử chọn (a) hành động <strong>tham lam</strong>; (b) một hành động
+          <strong>không</strong> tham lam cụ thể.
+        </li>
+        <li>
+          Vì sao cần <strong>khám phá</strong>? Điều gì có thể xảy ra nếu đặt \(\varepsilon = 0\) ngay từ
+          đầu quá trình học?
+        </li>
+        <li>
+          Trong <strong>RLHF</strong>, "mô hình phần thưởng" (reward model) đóng vai trò gì? Nêu
+          <strong>một</strong> ưu điểm của <strong>DPO</strong> so với RLHF kinh điển.
+        </li>
+      </ol>
+    </div>
+
+    <p class="footer">
+      Viện Trí tuệ nhân tạo · Trường Đại học Công nghệ · Đại học Quốc gia Hà Nội
+    </p>
+  </main>
+</body>
+
+</html>

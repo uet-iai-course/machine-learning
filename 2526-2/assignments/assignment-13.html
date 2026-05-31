@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="../../favicon.png">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <title>Học máy | Bài tập về nhà #13</title>
+  <link rel="stylesheet" href="../../index-pages.css">
+  <link rel="stylesheet" href="assignment-pages.css?v=1">
+  <script src="mathjax-config.js"></script>
+  <script id="MathJax-script" async src="mathjax4.js"></script>
+</head>
+
+<body>
+  <main class="page-shell assignment-shell">
+    <header class="assignment-header">
+      <a class="secondary-link assignment-backlink" href="../index.html"><span aria-hidden="true">←</span><span>Quay lại học kỳ</span></a>
+      <p class="eyebrow assignment-eyebrow">IAI · UET · VNU</p>
+      <p class="assignment-course">Học máy</p>
+      <h1 class="assignment-topic">Giới thiệu về mô hình sinh</h1>
+      <p class="assignment-meta">Bài tập về nhà #13 · Học kì 2 · Năm học 2025-2026</p>
+    </header>
+
+    <hr>
+
+    <!-- ── BÀI 1 ── -->
+    <h2>Bài 1 — Phán đoán vs Sinh</h2>
+    <div class="q">
+      <ol>
+        <li>
+          <p>Với mỗi trường hợp, cho biết mô hình học \(p(y \mid x)\) (<strong>phán đoán</strong>) hay
+            \(p(x)\) (<strong>sinh</strong>):</p>
+          <ol type="a">
+            <li>CNN phân loại ảnh là chó hay mèo.</li>
+            <li>Mô hình tạo khuôn mặt người mới từ một vector nhiễu.</li>
+            <li>BERT phân loại cảm xúc (tích cực / tiêu cực) của một câu.</li>
+            <li>GPT dự đoán từ tiếp theo trong câu.</li>
+            <li>Hệ thống phát hiện giao dịch gian lận bằng cách đánh dấu các mẫu có mật độ thấp.</li>
+          </ol>
+        </li>
+        <li>
+          Xếp mỗi mô hình sau vào <strong>một trong bốn họ</strong> mô hình sinh
+          (Tự hồi quy / VAE / GAN / Diffusion): <em>PixelCNN, StyleGAN, Stable Diffusion, GPT, DDPM</em>.
+        </li>
+        <li>
+          Nêu <strong>một</strong> ứng dụng của mô hình sinh <em>không</em> phải là "tạo ảnh/văn bản đẹp"
+          (gợi ý: xem lại phần "vì sao cần mô hình sinh").
+        </li>
+      </ol>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- ── BÀI 2 ── -->
+    <h2>Bài 2 — Mô hình Gauss hỗn hợp &amp; thuật toán EM</h2>
+    <div class="q">
+      <p>Một mô hình Gauss hỗn hợp (GMM) một chiều có \(K = 2\) thành phần:</p>
+      <p>
+        Thành phần 1: \(\mu_1 = 0,\ \sigma_1 = 1,\ \pi_1 = 0.5\) &nbsp;·&nbsp;
+        Thành phần 2: \(\mu_2 = 4,\ \sigma_2 = 1,\ \pi_2 = 0.5\).
+      </p>
+      <p>Xét một điểm dữ liệu \(x = 1\).</p>
+      <ol>
+        <li>
+          Viết công thức "trách nhiệm" (responsibility) \(\gamma_k = p(z = k \mid x)\) của bước
+          <strong>E</strong> trong thuật toán EM.
+        </li>
+        <li>
+          Tính mật độ \(\mathcal{N}(x = 1 \mid \mu_k, \sigma_k)\) cho từng thành phần (được phép để dưới
+          dạng \(e^{\cdots}\)).
+        </li>
+        <li>
+          Tính trách nhiệm \(\gamma_1\) và \(\gamma_2\) của điểm \(x = 1\). (Gợi ý: hằng số
+          \(\tfrac{1}{\sqrt{2\pi}}\) và trọng số \(\pi_k = 0.5\) sẽ triệt tiêu.)
+        </li>
+        <li>
+          Theo kết quả, điểm \(x = 1\) "thuộc về" cụm nào nhiều hơn? Kết quả có khớp trực giác không?
+        </li>
+      </ol>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- ── BÀI 3 ── -->
+    <h2>Bài 3 — VAE vs GAN vs Diffusion</h2>
+    <div class="q">
+      <p>
+        Ba họ mô hình sinh sâu thường được so sánh qua "tam giác đánh đổi" giữa ba tiêu chí:
+        <strong>sinh nhanh</strong>, <strong>chất lượng (ảnh đẹp)</strong>, <strong>đa dạng</strong>.
+      </p>
+      <ol>
+        <li>
+          <p>Điền bảng dưới đây: với mỗi mô hình, đánh dấu ✓ (đạt) hoặc ✗ (không đạt) cho từng tiêu chí.</p>
+          <table class="data-table">
+            <thead>
+              <tr><th>Mô hình</th><th>Sinh nhanh</th><th>Chất lượng</th><th>Đa dạng</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>VAE</td><td></td><td></td><td></td></tr>
+              <tr><td>GAN</td><td></td><td></td><td></td></tr>
+              <tr><td>Diffusion</td><td></td><td></td><td></td></tr>
+            </tbody>
+          </table>
+        </li>
+        <li>
+          Giải thích ngắn gọn: (a) vì sao ảnh sinh từ <strong>VAE</strong> thường bị mờ?
+          (b) "<strong>mode collapse</strong>" của GAN là gì? (c) vì sao <strong>Diffusion</strong>
+          sinh ảnh chậm?
+        </li>
+        <li>
+          Một nhóm cần sinh ảnh <strong>đa dạng</strong> và <strong>chất lượng cao</strong> để mở rộng tập
+          dữ liệu huấn luyện, <em>không</em> yêu cầu tốc độ thời gian thực. Nên chọn họ mô hình nào? Vì sao?
+        </li>
+      </ol>
+    </div>
+
+    <p class="footer">
+      Viện Trí tuệ nhân tạo · Trường Đại học Công nghệ · Đại học Quốc gia Hà Nội
+    </p>
+  </main>
+</body>
+
+</html>
