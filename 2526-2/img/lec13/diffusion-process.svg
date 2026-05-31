@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+<defs><marker id="arr" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="0" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,1 L10,5 L0,9 Z" fill="#1a2332"/></marker><marker id="arr-o" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="0" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,1 L10,5 L0,9 Z" fill="#e8732a"/></marker><marker id="arr-b" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="0" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,1 L10,5 L0,9 Z" fill="#1E93AB"/></marker></defs>
+<rect x="20.0" y="95" width="92" height="92" rx="4" fill="rgb(244,250,252)" stroke="#cfd6dc" stroke-width="1.5"/>
+<circle cx="66.0" cy="141.0" r="23.92" fill="#1E93AB" opacity="1.00"/>
+<text x="66.0" y="207" text-anchor="middle" font-size="14" font-weight="600" fill="#1a2332">x₀</text>
+<rect x="177.0" y="95" width="92" height="92" rx="4" fill="rgb(233,239,243)" stroke="#cfd6dc" stroke-width="1.5"/>
+<circle cx="223.0" cy="141.0" r="23.92" fill="#1E93AB" opacity="0.68"/>
+<circle cx="213.0" cy="110.6" r="1.7" fill="rgb(80,80,80)" opacity="0.8"/>
+<circle cx="240.8" cy="115.0" r="1.7" fill="rgb(111,111,111)" opacity="0.8"/>
+<circle cx="228.7" cy="147.1" r="1.7" fill="rgb(120,120,120)" opacity="0.8"/>
+<circle cx="211.8" cy="158.1" r="1.7" fill="rgb(154,154,154)" opacity="0.8"/>
+<text x="223.0" y="207" text-anchor="middle" font-size="14" font-weight="600" fill="#1a2332">x₁</text>
+<rect x="334.0" y="95" width="92" height="92" rx="4" fill="rgb(223,230,234)" stroke="#cfd6dc" stroke-width="1.5"/>
+<circle cx="380.0" cy="141.0" r="23.92" fill="#1E93AB" opacity="0.37"/>
+<circle cx="356.2" cy="177.4" r="1.7" fill="rgb(106,106,106)" opacity="0.8"/>
+<circle cx="393.3" cy="120.3" r="1.7" fill="rgb(175,175,175)" opacity="0.8"/>
+<circle cx="374.1" cy="130.6" r="1.7" fill="rgb(117,117,117)" opacity="0.8"/>
+<circle cx="417.8" cy="159.4" r="1.7" fill="rgb(103,103,103)" opacity="0.8"/>
+<circle cx="391.3" cy="157.7" r="1.7" fill="rgb(62,62,62)" opacity="0.8"/>
+<circle cx="413.5" cy="160.5" r="1.7" fill="rgb(163,163,163)" opacity="0.8"/>
+<circle cx="351.6" cy="118.7" r="1.7" fill="rgb(98,98,98)" opacity="0.8"/>
+<circle cx="408.5" cy="151.4" r="1.7" fill="rgb(156,156,156)" opacity="0.8"/>
+<text x="380.0" y="207" text-anchor="middle" font-size="14" font-weight="600" fill="#1a2332">x₂</text>
+<rect x="491.0" y="95" width="92" height="92" rx="4" fill="rgb(214,221,226)" stroke="#cfd6dc" stroke-width="1.5"/>
+<circle cx="537.0" cy="141.0" r="23.92" fill="#1E93AB" opacity="0.08"/>
+<circle cx="499.5" cy="160.2" r="1.7" fill="rgb(131,131,131)" opacity="0.8"/>
+<circle cx="545.8" cy="125.6" r="1.7" fill="rgb(118,118,118)" opacity="0.8"/>
+<circle cx="519.6" cy="114.1" r="1.7" fill="rgb(115,115,115)" opacity="0.8"/>
+<circle cx="539.8" cy="160.7" r="1.7" fill="rgb(172,172,172)" opacity="0.8"/>
+<circle cx="557.6" cy="132.5" r="1.7" fill="rgb(98,98,98)" opacity="0.8"/>
+<circle cx="523.8" cy="148.4" r="1.7" fill="rgb(64,64,64)" opacity="0.8"/>
+<circle cx="557.4" cy="159.5" r="1.7" fill="rgb(120,120,120)" opacity="0.8"/>
+<circle cx="525.6" cy="116.7" r="1.7" fill="rgb(75,75,75)" opacity="0.8"/>
+<circle cx="547.2" cy="139.0" r="1.7" fill="rgb(100,100,100)" opacity="0.8"/>
+<circle cx="573.3" cy="177.5" r="1.7" fill="rgb(125,125,125)" opacity="0.8"/>
+<circle cx="554.9" cy="99.1" r="1.7" fill="rgb(80,80,80)" opacity="0.8"/>
+<circle cx="526.9" cy="106.9" r="1.7" fill="rgb(134,134,134)" opacity="0.8"/>
+<text x="537.0" y="207" text-anchor="middle" font-size="14" font-weight="600" fill="#1a2332">x₃</text>
+<rect x="648.0" y="95" width="92" height="92" rx="4" fill="rgb(207,214,220)" stroke="#cfd6dc" stroke-width="1.5"/>
+<circle cx="726.7" cy="143.1" r="1.7" fill="rgb(157,157,157)" opacity="0.8"/>
+<circle cx="698.3" cy="130.9" r="1.7" fill="rgb(62,62,62)" opacity="0.8"/>
+<circle cx="665.0" cy="181.6" r="1.7" fill="rgb(113,113,113)" opacity="0.8"/>
+<circle cx="661.8" cy="162.0" r="1.7" fill="rgb(121,121,121)" opacity="0.8"/>
+<circle cx="723.9" cy="107.3" r="1.7" fill="rgb(135,135,135)" opacity="0.8"/>
+<circle cx="718.0" cy="136.4" r="1.7" fill="rgb(85,85,85)" opacity="0.8"/>
+<circle cx="679.3" cy="116.3" r="1.7" fill="rgb(142,142,142)" opacity="0.8"/>
+<circle cx="726.7" cy="166.0" r="1.7" fill="rgb(115,115,115)" opacity="0.8"/>
+<circle cx="727.3" cy="152.4" r="1.7" fill="rgb(174,174,174)" opacity="0.8"/>
+<circle cx="715.9" cy="110.7" r="1.7" fill="rgb(130,130,130)" opacity="0.8"/>
+<circle cx="727.8" cy="159.8" r="1.7" fill="rgb(152,152,152)" opacity="0.8"/>
+<circle cx="713.8" cy="166.8" r="1.7" fill="rgb(171,171,171)" opacity="0.8"/>
+<circle cx="708.9" cy="166.5" r="1.7" fill="rgb(116,116,116)" opacity="0.8"/>
+<circle cx="664.1" cy="110.0" r="1.7" fill="rgb(158,158,158)" opacity="0.8"/>
+<circle cx="698.5" cy="116.3" r="1.7" fill="rgb(105,105,105)" opacity="0.8"/>
+<circle cx="679.1" cy="136.5" r="1.7" fill="rgb(130,130,130)" opacity="0.8"/>
+<text x="694.0" y="207" text-anchor="middle" font-size="14" font-weight="600" fill="#1a2332">xₜ</text>
+<line x1="112.0" y1="73" x2="636.0" y2="73" stroke="#e8732a" stroke-width="2.4" marker-end="url(#arr-o)"/>
+<line x1="648.0" y1="231" x2="124.0" y2="231" stroke="#1E93AB" stroke-width="2.4" marker-end="url(#arr-b)"/>
+<text x="380.0" y="63" text-anchor="middle" font-size="14.5" font-weight="600" fill="#e8732a">Quá trình xuôi: thêm nhiễu Gauss (cố định)</text>
+<text x="380.0" y="259" text-anchor="middle" font-size="14.5" font-weight="600" fill="#1E93AB">Quá trình ngược: mạng học khử nhiễu từng bước</text>
+</svg>
