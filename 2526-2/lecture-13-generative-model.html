@@ -391,32 +391,33 @@
         </div>
     </section>
 
-    <section style="font-size:0.82em">
-        <h2>PixelRNN — dùng LSTM</h2>
-        <ul style="line-height:1.85em; margin-top:10px">
-            <li>LSTM quét ảnh từ góc trên trái, từng hàng; mỗi bước đoán pixel kế từ các pixel trước.</li>
-            <li>Nhớ được phụ thuộc xa → chất lượng tốt.</li>
-        </ul>
-        <div class="highlight" style="margin-top:12px">
-            <strong>Nhược điểm lớn:</strong> sinh tuần tự rất chậm — ảnh 28×28 cần 784 bước, không
-            song song hoá được.
+    <section style="font-size:0.8em">
+        <h2>PixelRNN vs PixelCNN — hai cách hiện thực</h2>
+        <p style="margin-top:6px">Cùng sinh ảnh pixel-by-pixel, khác ở khối mạng đoán pixel kế:</p>
+        <div class="two-col" style="margin-top:12px">
+            <div class="model-box blue">
+                <strong>PixelRNN</strong> — dùng LSTM
+                <ul style="margin-top:6px; line-height:1.6em">
+                    <li>LSTM quét ảnh từng hàng, từ góc trên trái.</li>
+                    <li>Nhớ phụ thuộc xa → chất lượng tốt.</li>
+                </ul>
+            </div>
+            <div class="model-box green">
+                <strong>PixelCNN</strong> — CNN có mặt nạ
+                <ul style="margin-top:6px; line-height:1.6em">
+                    <li>Tích chập có mặt nạ, chỉ nhìn pixel đã sinh.</li>
+                    <li>Song song hoá khi huấn luyện → train nhanh hơn, nhưng nhớ context kém hơn.</li>
+                </ul>
+            </div>
         </div>
-    </section>
-
-    <section style="font-size:0.82em">
-        <h2>PixelCNN — dùng CNN thay LSTM</h2>
-        <ul style="line-height:1.85em; margin-top:10px">
-            <li>Thay LSTM bằng <strong>CNN với mặt nạ tích chập</strong> — chỉ nhìn pixel đã sinh trước.</li>
-            <li>CNN <strong>song song hoá</strong> khi huấn luyện → nhanh hơn PixelRNN nhiều.</li>
-            <li>Đánh đổi: vùng tiếp nhận giới hạn → nhớ context kém hơn LSTM.</li>
-        </ul>
         <div class="highlight" style="margin-top:12px">
-            Huấn luyện nhanh hơn, nhưng <strong>sinh ảnh vẫn chậm</strong> vì vẫn tuần tự từng pixel.
+            Cả hai <strong>sinh ảnh vẫn chậm</strong> — phải tạo lần lượt 784 pixel cho ảnh 28×28.
         </div>
     </section>
 
     <section style="font-size:0.78em">
         <h2>PixelRNN/CNN — đánh giá</h2>
+        <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
         <div class="two-col" style="margin-top:10px">
             <div class="model-box green">
                 <strong>✓ Ưu điểm</strong>
@@ -489,22 +490,11 @@
         </ul>
     </section>
 
-    <section style="font-size:0.8em">
-        <h2>VAE — vì sao sinh được mà AE thì không?</h2>
-        <ul style="line-height:1.8em; margin-top:8px">
-            <li><strong>AE:</strong> \(z\) là điểm rời rạc → nội suy dễ rơi vào "vùng chết" vô nghĩa.</li>
-            <li><strong>VAE:</strong> KL ép không gian ẩn gần \(\mathcal{N}(0, I)\) → liên tục, không còn
-                vùng chết.</li>
-            <li>Lấy mẫu \(z \sim \mathcal{N}(0, I)\) → decode → ảnh mới hợp lệ; nội suy thì mượt.</li>
-        </ul>
-        <div class="highlight" style="margin-top:12px">
-            Hạn chế: ảnh thường <strong>mờ</strong> (do mất mát L2) → động lực cho GAN và Diffusion.
-        </div>
-    </section>
-
-    <section style="font-size:0.82em">
-        <h2>AE vs VAE — so sánh</h2>
-        <table class="compare-table" style="margin-top:10px">
+    <section style="font-size:0.78em">
+        <h2>AE vs VAE — vì sao VAE sinh được?</h2>
+        <p style="margin-top:6px">AE đặt \(z\) ở điểm rời rạc → nội suy rơi vào "vùng chết". VAE dùng KL ép
+            không gian ẩn về \(\mathcal{N}(0, I)\) → liên tục: lấy mẫu \(z\) rồi decode ra ảnh mới hợp lệ.</p>
+        <table class="compare-table" style="margin-top:8px">
             <thead>
                 <tr>
                     <th></th>
@@ -515,12 +505,14 @@
             <tbody>
                 <tr><td>Biểu diễn ẩn \(z\)</td><td>Điểm cố định</td><td>Phân phối \(\mathcal{N}(\mu, \sigma^2)\)</td></tr>
                 <tr><td>Hàm mất mát</td><td>Tái tạo</td><td>Tái tạo + KL</td></tr>
-                <tr><td>Sinh được dữ liệu mới?</td><td>Không</td><td>Có — lấy mẫu \(z\) từ Gaussian</td></tr>
-                <tr><td>Không gian ẩn</td><td>Không có cấu trúc</td><td>Liên tục, nội suy được</td></tr>
-                <tr><td>Chất lượng output</td><td>Sắc nét (chỉ tái tạo)</td><td>Mờ (do L2)</td></tr>
-                <tr><td>Ứng dụng</td><td>Trích đặc trưng</td><td>Sinh ảnh, nội suy</td></tr>
+                <tr><td>Sinh dữ liệu mới?</td><td>Không</td><td>Có — lấy mẫu \(z\) từ Gaussian</td></tr>
+                <tr><td>Không gian ẩn</td><td>Không cấu trúc</td><td>Liên tục, nội suy được</td></tr>
+                <tr><td>Chất lượng</td><td>Sắc nét (chỉ tái tạo)</td><td>Mờ (do L2)</td></tr>
             </tbody>
         </table>
+        <div class="highlight" style="margin-top:8px">
+            VAE sinh được nhưng ảnh <strong>mờ</strong> (mất mát L2) → động lực cho GAN và Diffusion.
+        </div>
     </section>
 
     <section style="font-size:0.84em;">
@@ -700,37 +692,19 @@
         </table>
     </section>
 
-    <section style="font-size:0.76em">
+    <section style="font-size:0.8em">
         <h2>Diffusion — đánh giá &amp; "tam đề"</h2>
-        <div class="two-col" style="margin-top:8px">
-            <div>
-                <div class="model-box green">
-                    <strong>✓ Ưu điểm</strong>
-                    <ul style="margin-top:4px; line-height:1.5em">
-                        <li>Chất lượng cao nhất hiện nay.</li>
-                        <li>Đa dạng — không mode collapse.</li>
-                        <li>Huấn luyện ổn định.</li>
-                        <li>Sinh có điều kiện linh hoạt.</li>
-                    </ul>
-                </div>
-                <div class="model-box orange" style="margin-top:6px">
-                    <strong>✗ Nhược điểm</strong>
-                    <ul style="margin-top:4px; line-height:1.5em">
-                        <li>Lấy mẫu chậm — nhiều bước.</li>
-                        <li>Không gian ẩn không rõ như VAE.</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="model-box purple">
-                <strong>Tam đề mô hình sinh:</strong>
-                <p style="margin-top:4px">Không mô hình nào có đủ <em>cả 3</em>:</p>
-                <ul style="margin-top:4px; line-height:1.6em">
-                    <li><strong>GAN</strong>: nhanh ✓, chất lượng ✓ — đa dạng ✗</li>
-                    <li><strong>VAE</strong>: nhanh ✓, đa dạng ✓ — chất lượng ✗</li>
-                    <li><strong>Diffusion</strong>: chất lượng ✓, đa dạng ✓ — chậm ✗</li>
-                </ul>
-                <p style="margin-top:4px"><em>Consistency Models (2023) đang cố phá tam đề.</em></p>
-            </div>
+        <p style="margin-top:8px"><strong>✓</strong> Chất lượng cao nhất, đa dạng (không mode collapse),
+            train ổn định, sinh có điều kiện linh hoạt. &nbsp;<strong>✗</strong> Lấy mẫu chậm vì nhiều bước.</p>
+        <div class="model-box purple" style="margin-top:10px">
+            <strong>Tam đề mô hình sinh</strong> — không mô hình nào đủ <em>cả 3</em> (nhanh · chất lượng ·
+            đa dạng):
+            <ul style="margin-top:6px; line-height:1.75em">
+                <li><strong>GAN</strong>: nhanh ✓, chất lượng ✓ — đa dạng ✗</li>
+                <li><strong>VAE</strong>: nhanh ✓, đa dạng ✓ — chất lượng ✗</li>
+                <li><strong>Diffusion</strong>: chất lượng ✓, đa dạng ✓ — chậm ✗</li>
+            </ul>
+            <p style="margin-top:6px"><em>Consistency Models (2023) đang cố phá tam đề.</em></p>
         </div>
     </section>
 
