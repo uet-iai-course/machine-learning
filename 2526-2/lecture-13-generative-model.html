@@ -196,7 +196,7 @@
                 <tr>
                     <td><strong>Diffusion</strong></td>
                     <td>Thêm nhiễu → khử nhiễu</td>
-                    <td>DALL-E, Stable Diffusion</td>
+                    <td>DALL-E 2, Stable Diffusion</td>
                     <td>Chất lượng cao, đa dạng</td>
                     <td>Sinh chậm (nhiều bước)</td>
                 </tr>
@@ -629,8 +629,8 @@
 <section>
     <section>
         <h1><span class="text-light">8.</span><br />Diffusion Model</h1>
-        <p style="margin-top:0.5em; font-size:0.85em; color:#555;"><em>Ho et al., 2020 — nền tảng cho
-                DALL-E, Stable Diffusion.</em></p>
+        <p style="margin-top:0.5em; font-size:0.85em; color:#555;"><em>DDPM (Ho et al., 2020) — nền tảng cho
+                Stable Diffusion, DALL-E 2.</em></p>
     </section>
 
     <section style="font-size:0.82em">
@@ -685,7 +685,7 @@
                 <tr><td>2020</td><td>Ho et al. (DDPM)</td><td>Rút gọn: đoán nhiễu \(\epsilon\) thay vì \(x_0\) → chất lượng cao.</td></tr>
                 <tr><td>2021</td><td>Dhariwal &amp; Nichol</td><td>Diffusion vượt GAN về chất lượng ảnh lần đầu.</td></tr>
                 <tr><td>2021</td><td>Ho et al.</td><td>Classifier-free guidance — sinh có điều kiện không cần classifier riêng.</td></tr>
-                <tr><td>2021</td><td>Rombach et al.</td><td><strong>Stable Diffusion</strong> — diffuse trong không gian ẩn của VAE, mã nguồn mở.</td></tr>
+                <tr><td>2022</td><td>Rombach et al.</td><td><strong>Stable Diffusion</strong> — diffuse trong không gian ẩn của VAE, mã nguồn mở.</td></tr>
                 <tr><td>2023</td><td>Song et al.</td><td>Consistency Models — chỉ 1 bước lấy mẫu.</td></tr>
             </tbody>
         </table>
@@ -713,7 +713,7 @@
             <img src="img/lec13/stable-diffusion-pipeline.svg?v=3"
                 style="max-width:94%; max-height:300px;" />
             <p style="font-size:0.78em; color:#666; margin-top:8px;">
-                <em>Stable Diffusion (Rombach et al., 2021) — diffuse trong <strong>không gian ẩn</strong> của
+                <em>Stable Diffusion (Rombach et al., 2022) — diffuse trong <strong>không gian ẩn</strong> của
                     VAE thay vì pixel, nên nhanh hơn nhiều. CLIP mã hoá câu lệnh để điều khiển nội dung.</em>
             </p>
         </div>
