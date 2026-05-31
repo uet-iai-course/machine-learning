@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 230" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
-<defs><marker id="arr" viewBox="0 0 10 10" markerWidth="6.5" markerHeight="6.5" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,1.5 L10,5 L0,8.5 Z" fill="#1a2332"/></marker></defs>
+<defs><marker id="arr" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="0" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,1 L10,5 L0,9 Z" fill="#1a2332"/></marker></defs>
 <rect x="16" y="80" width="124" height="78" rx="8" fill="#f7f0fb" stroke="#8e4ec6" stroke-width="2.2"/>
 <text x="78.0" y="115.0" text-anchor="middle" font-size="15" font-weight="600" fill="#1a2332">Câu lệnh</text>
 <text x="78.0" y="134.0" text-anchor="middle" font-size="12" fill="#6b7280">(prompt)</text>
-<line x1="144" y1="119.0" x2="178" y2="119.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
+<line x1="144" y1="119.0" x2="166.0" y2="119.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
 <rect x="178" y="80" width="120" height="78" rx="8" fill="#f4fafc" stroke="#1E93AB" stroke-width="2.2"/>
 <text x="238.0" y="115.0" text-anchor="middle" font-size="15" font-weight="600" fill="#1a2332">CLIP</text>
 <text x="238.0" y="134.0" text-anchor="middle" font-size="12" fill="#6b7280">mã hoá text</text>
-<line x1="302" y1="119.0" x2="338" y2="119.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
+<line x1="302" y1="119.0" x2="326.0" y2="119.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
 <rect x="340" y="80" width="150" height="78" rx="8" fill="#fef5ee" stroke="#e8732a" stroke-width="2.2"/>
 <text x="415.0" y="115.0" text-anchor="middle" font-size="14" font-weight="600" fill="#1a2332">U-Net khử nhiễu</text>
 <text x="415.0" y="134.0" text-anchor="middle" font-size="12" fill="#6b7280">trong không gian ẩn ×T</text>
 <path d="M 360 80 q -18 -26 18 -26 q 90 0 90 13" fill="none" stroke="#e8732a" stroke-width="2" marker-end="url(#arr)"/>
-<line x1="494" y1="119.0" x2="530" y2="119.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
+<line x1="494" y1="119.0" x2="518.0" y2="119.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
 <rect x="532" y="80" width="130" height="78" rx="8" fill="#f1f8ef" stroke="#4a9d3f" stroke-width="2.2"/>
 <text x="597.0" y="115.0" text-anchor="middle" font-size="14" font-weight="600" fill="#1a2332">VAE decoder</text>
 <text x="597.0" y="134.0" text-anchor="middle" font-size="12" fill="#6b7280">ẩn → pixel</text>
-<line x1="666" y1="119.0" x2="702" y2="119.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
+<line x1="666" y1="119.0" x2="690.0" y2="119.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
 <rect x="704" y="80" width="78" height="78" rx="4" fill="rgb(244,250,252)" stroke="#cfd6dc" stroke-width="1.5"/>
 <circle cx="743.0" cy="119.0" r="20.28" fill="#1E93AB" opacity="1.00"/>
 <text x="743.0" y="176" text-anchor="middle" font-size="13" font-weight="600" fill="#1a2332">ảnh</text>

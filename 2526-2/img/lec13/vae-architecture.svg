@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 250" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
-<defs><marker id="arr" viewBox="0 0 10 10" markerWidth="6.5" markerHeight="6.5" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,1.5 L10,5 L0,8.5 Z" fill="#1a2332"/></marker></defs>
+<defs><marker id="arr" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="0" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,1 L10,5 L0,9 Z" fill="#1a2332"/></marker></defs>
 <rect x="20" y="90" width="70" height="80" rx="8" fill="#f4fafc" stroke="#1E93AB" stroke-width="2.2"/>
 <text x="55.0" y="126.0" text-anchor="middle" font-size="17" font-weight="600" fill="#1a2332">x</text>
 <text x="55.0" y="145.0" text-anchor="middle" font-size="12" fill="#6b7280">ảnh vào</text>
-<line x1="95" y1="130.0" x2="135" y2="130.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
+<line x1="95" y1="130.0" x2="123.0" y2="130.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
 <polygon points="138,82 248,108.88 248,151.12 138,178" fill="#f4fafc" stroke="#1E93AB" stroke-width="2.2"/>
 <text x="193.0" y="135.0" text-anchor="middle" font-size="15" font-weight="600" fill="#1a2332">Encoder</text>
-<line x1="253" y1="130.0" x2="290" y2="130.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
+<line x1="253" y1="130.0" x2="278.0" y2="130.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
 <rect x="293" y="92" width="64" height="34" rx="6" fill="#fff" stroke="#1E93AB" stroke-width="2.2"/>
 <text x="325.0" y="115.0" text-anchor="middle" font-size="16" font-weight="600" fill="#1a2332">μ</text>
 <rect x="293" y="134" width="64" height="34" rx="6" fill="#fff" stroke="#1E93AB" stroke-width="2.2"/>
 <text x="325.0" y="157.0" text-anchor="middle" font-size="16" font-weight="600" fill="#1a2332">σ</text>
-<line x1="360" y1="130.0" x2="398" y2="130.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
+<line x1="360" y1="130.0" x2="386.0" y2="130.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
 <circle cx="440" cy="130.0" r="34" fill="#f1f8ef" stroke="#4a9d3f" stroke-width="2.2"/>
 <text x="440" y="128.0" text-anchor="middle" font-size="18" font-weight="600" fill="#1a2332">z</text>
 <text x="440" y="146.0" text-anchor="middle" font-size="11" fill="#6b7280">~ N(μ,σ²)</text>
-<line x1="476" y1="130.0" x2="514" y2="130.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
+<line x1="476" y1="130.0" x2="502.0" y2="130.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
 <polygon points="517,108.88 627,82 627,178 517,151.12" fill="#f1f8ef" stroke="#4a9d3f" stroke-width="2.2"/>
 <text x="572.0" y="135.0" text-anchor="middle" font-size="15" font-weight="600" fill="#1a2332">Decoder</text>
-<line x1="632" y1="130.0" x2="668" y2="130.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
+<line x1="632" y1="130.0" x2="656.0" y2="130.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
 <rect x="670" y="90" width="44" height="80" rx="8" fill="#f1f8ef" stroke="#4a9d3f" stroke-width="2.2"/>
-<text x="692.0" y="136.0" text-anchor="middle" font-size="17" font-weight="600" fill="#1a2332">x̂</text>
+<text x="692" y="138.0" text-anchor="middle" font-size="19" font-weight="600" fill="#1a2332">x</text>
+<path d="M684,123.0 L692,117.0 L700,123.0" fill="none" stroke="#1a2332" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <text x="195" y="40" text-anchor="middle" font-size="13" fill="#1E93AB" font-weight="600">Nén về không gian ẩn</text>
 <text x="572" y="40" text-anchor="middle" font-size="13" fill="#4a9d3f" font-weight="600">Sinh lại từ z</text>
 <text x="440" y="225" text-anchor="middle" font-size="12.5" fill="#6b7280">Lấy mẫu z ngẫu nhiên → decode → ảnh mới</text>

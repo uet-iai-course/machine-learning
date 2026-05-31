@@ -9,6 +9,7 @@ Dùng .conda/bin/python img/lec13/scripts/arch_diagrams.py
 """
 from __future__ import annotations
 
+import math
 from pathlib import Path
 
 OUT = Path(__file__).resolve().parent.parent
@@ -29,15 +30,17 @@ FONT = ("-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-s
 
 
 def marker_def(mid, color):
-    """Đầu mũi tên chuẩn — có viewBox nên mapping nhất quán mọi trình duyệt.
+    """Đầu mũi tên — neo ở ĐÁY (refX=0): đáy tam giác đặt đúng điểm cuối
+    line, đỉnh nhô về phía trước (theo orient=auto).
 
-    refX=9 đặt điểm tham chiếu (nơi gắn vào cuối line) hơi lùi so với đỉnh
-    (x=10) → thân line luôn nằm khuất dưới đầu mũi tên, không bao giờ thò ra.
+    Kết hợp với việc rút ngắn line đi ~chiều dài mũi tên (xem ARROW_LEN /
+    arrow()), thân line dừng đúng tại đáy — phần RỘNG nhất của mũi tên —
+    nên không bao giờ lộ "mấu" ở đỉnh. viewBox cho mapping nhất quán.
     """
-    return (f'<marker id="{mid}" viewBox="0 0 10 10" markerWidth="6.5" '
-            f'markerHeight="6.5" refX="9" refY="5" orient="auto" '
+    return (f'<marker id="{mid}" viewBox="0 0 10 10" markerWidth="6" '
+            f'markerHeight="6" refX="0" refY="5" orient="auto" '
             f'markerUnits="strokeWidth">'
-            f'<path d="M0,1.5 L10,5 L0,8.5 Z" fill="{color}"/></marker>')
+            f'<path d="M0,1 L10,5 L0,9 Z" fill="{color}"/></marker>')
 
 
 def header(w, h):
@@ -75,9 +78,22 @@ def trapezoid(x, y, w, h, narrow_right, fill, stroke, label):
     return s
 
 
+# Rút ngắn line đi đoạn này (≈ chiều dài mũi tên trên canvas: markerWidth 6
+# × stroke 2.2 ≈ 13) để thân line dừng ở đáy mũi tên, đỉnh nhô tới đích.
+ARROW_LEN = 12.0
+
+
+def _retract(x1, y1, x2, y2, r=ARROW_LEN):
+    """Kéo (x2,y2) về phía (x1,y1) một đoạn r px."""
+    dx, dy = x2 - x1, y2 - y1
+    L = math.hypot(dx, dy) or 1.0
+    return x2 - dx / L * r, y2 - dy / L * r
+
+
 def arrow(x1, y1, x2, y2, label="", color=INK, dash=False):
+    ex, ey = _retract(x1, y1, x2, y2)
     d = 'stroke-dasharray="5,4" ' if dash else ""
-    s = (f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{color}" '
+    s = (f'<line x1="{x1}" y1="{y1}" x2="{ex:.1f}" y2="{ey:.1f}" stroke="{color}" '
          f'stroke-width="2.2" {d}marker-end="url(#arr)"/>\n')
     if label:
         s += (f'<text x="{(x1+x2)/2}" y="{y1-9}" text-anchor="middle" '
@@ -144,8 +160,14 @@ def make_vae():
     # decoder
     s += trapezoid(517, cy - 8, 110, bh + 16, False, BG_GREEN, GREEN, "Decoder")
     s += arrow(632, cy + bh / 2, 668, cy + bh / 2)
-    # x_hat
-    s += box(670, cy, 44, bh, BG_GREEN, GREEN, "x̂", fs=17)
+    # x_hat — vẽ "x" + nét mũ ^ riêng (ký tự tổ hợp x̂ render lệch tuỳ font)
+    s += (f'<rect x="670" y="{cy}" width="44" height="{bh}" rx="8" '
+          f'fill="{BG_GREEN}" stroke="{GREEN}" stroke-width="2.2"/>\n')
+    s += (f'<text x="692" y="{cy+bh/2+8}" text-anchor="middle" font-size="19" '
+          f'font-weight="600" fill="{INK}">x</text>\n')
+    s += (f'<path d="M684,{cy+bh/2-7} L692,{cy+bh/2-13} L700,{cy+bh/2-7}" '
+          f'fill="none" stroke="{INK}" stroke-width="2" stroke-linecap="round" '
+          f'stroke-linejoin="round"/>\n')
     # labels
     s += (f'<text x="195" y="40" text-anchor="middle" font-size="13" '
           f'fill="{BLUE}" font-weight="600">Nén về không gian ẩn</text>\n')
@@ -176,11 +198,11 @@ def make_diffusion():
         lbl = "x₀" if i == 0 else ("xₜ" if i == n - 1 else f"x{['₁','₂','₃'][i-1]}")
         s += (f'<text x="{x+sz/2}" y="{y+sz+20}" text-anchor="middle" '
               f'font-size="14" font-weight="600" fill="{INK}">{lbl}</text>\n')
-    # forward arrow (top)
-    s += (f'<line x1="{xs[0]+sz}" y1="{y-22}" x2="{xs[-1]}" y2="{y-22}" '
+    # forward arrow (top) — rút đầu phải để thân dừng ở đáy mũi tên
+    s += (f'<line x1="{xs[0]+sz}" y1="{y-22}" x2="{xs[-1]-ARROW_LEN}" y2="{y-22}" '
           f'stroke="{ORANGE}" stroke-width="2.4" marker-end="url(#arr-o)"/>\n')
-    # backward arrow (bottom)
-    s += (f'<line x1="{xs[-1]}" y1="{y+sz+44}" x2="{xs[0]+sz}" y2="{y+sz+44}" '
+    # backward arrow (bottom) — rút đầu trái
+    s += (f'<line x1="{xs[-1]}" y1="{y+sz+44}" x2="{xs[0]+sz+ARROW_LEN}" y2="{y+sz+44}" '
           f'stroke="{BLUE}" stroke-width="2.4" marker-end="url(#arr-b)"/>\n')
     s += (f'<text x="{W/2}" y="{y-32}" text-anchor="middle" font-size="14.5" '
           f'font-weight="600" fill="{ORANGE}">Quá trình xuôi: thêm nhiễu Gauss '

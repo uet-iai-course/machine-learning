@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
-<defs><marker id="arr" viewBox="0 0 10 10" markerWidth="6.5" markerHeight="6.5" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,1.5 L10,5 L0,8.5 Z" fill="#1a2332"/></marker><marker id="arr-o" viewBox="0 0 10 10" markerWidth="6.5" markerHeight="6.5" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,1.5 L10,5 L0,8.5 Z" fill="#e8732a"/></marker><marker id="arr-b" viewBox="0 0 10 10" markerWidth="6.5" markerHeight="6.5" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,1.5 L10,5 L0,8.5 Z" fill="#1E93AB"/></marker></defs>
+<defs><marker id="arr" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="0" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,1 L10,5 L0,9 Z" fill="#1a2332"/></marker><marker id="arr-o" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="0" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,1 L10,5 L0,9 Z" fill="#e8732a"/></marker><marker id="arr-b" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="0" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,1 L10,5 L0,9 Z" fill="#1E93AB"/></marker></defs>
 <rect x="20.0" y="95" width="92" height="92" rx="4" fill="rgb(244,250,252)" stroke="#cfd6dc" stroke-width="1.5"/>
 <circle cx="66.0" cy="141.0" r="23.92" fill="#1E93AB" opacity="1.00"/>
 <text x="66.0" y="207" text-anchor="middle" font-size="14" font-weight="600" fill="#1a2332">x₀</text>
@@ -55,8 +55,8 @@
 <circle cx="698.5" cy="116.3" r="1.7" fill="rgb(105,105,105)" opacity="0.8"/>
 <circle cx="679.1" cy="136.5" r="1.7" fill="rgb(130,130,130)" opacity="0.8"/>
 <text x="694.0" y="207" text-anchor="middle" font-size="14" font-weight="600" fill="#1a2332">xₜ</text>
-<line x1="112.0" y1="73" x2="648.0" y2="73" stroke="#e8732a" stroke-width="2.4" marker-end="url(#arr-o)"/>
-<line x1="648.0" y1="231" x2="112.0" y2="231" stroke="#1E93AB" stroke-width="2.4" marker-end="url(#arr-b)"/>
+<line x1="112.0" y1="73" x2="636.0" y2="73" stroke="#e8732a" stroke-width="2.4" marker-end="url(#arr-o)"/>
+<line x1="648.0" y1="231" x2="124.0" y2="231" stroke="#1E93AB" stroke-width="2.4" marker-end="url(#arr-b)"/>
 <text x="380.0" y="63" text-anchor="middle" font-size="14.5" font-weight="600" fill="#e8732a">Quá trình xuôi: thêm nhiễu Gauss (cố định)</text>
 <text x="380.0" y="259" text-anchor="middle" font-size="14.5" font-weight="600" fill="#1E93AB">Quá trình ngược: mạng học khử nhiễu từng bước</text>
 </svg>
