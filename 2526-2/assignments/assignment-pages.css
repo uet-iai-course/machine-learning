@@ -348,6 +348,13 @@ figcaption {
     font-weight: 600;
 }
 
+/* Biến thể gọn cho bảng nhiều cột (vd dữ liệu X/Y nằm ngang). */
+.data-table.compact th,
+.data-table.compact td {
+    min-width: 0;
+    padding: 7px 13px;
+}
+
 @media (max-width: 820px) {
     .assignment-shell {
         --assignment-content-width: 100%;
