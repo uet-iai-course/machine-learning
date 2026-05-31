@@ -316,6 +316,38 @@ figcaption {
     color: var(--muted);
 }
 
+/* Bảng dữ liệu trong bài tập (Q-table, GMM, so sánh mô hình…).
+   Viền đủ ô + min-width để ô trống vẫn là "ô điền" rõ ràng. */
+.data-table {
+    border-collapse: collapse;
+    margin: 18px auto;
+    font-size: 0.97rem;
+}
+
+.data-table th,
+.data-table td {
+    border: 1px solid rgba(24, 34, 45, 0.18);
+    padding: 9px 18px;
+    text-align: center;
+    min-width: 5rem;
+}
+
+.data-table thead th {
+    background: var(--accent-dark);
+    color: #fff;
+    font-weight: 700;
+    border-color: var(--accent-dark);
+}
+
+.data-table tbody tr:nth-child(even) {
+    background: rgba(31, 111, 120, 0.04);
+}
+
+.data-table tbody td:first-child {
+    text-align: left;
+    font-weight: 600;
+}
+
 @media (max-width: 820px) {
     .assignment-shell {
         --assignment-content-width: 100%;
