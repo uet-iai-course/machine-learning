@@ -37,17 +37,18 @@
     </section>
     <section style="font-size:0.86em">
         <h2>Nội dung</h2>
-        <ol style="line-height:1.55em">
+        <ol style="line-height:1.5em">
             <li>Mô hình sinh vs mô hình phán đoán</li>
             <li>Mô hình sinh vs Generative AI</li>
+            <li>Mô hình sinh cổ điển: GMM, EM, KDE</li>
             <li>RNN, LSTM — nền tảng cho sinh chuỗi</li>
             <li>Tự hồi quy: PixelRNN/CNN và GPT</li>
             <li>Autoencoder &amp; VAE</li>
             <li>GAN — mạng đối nghịch sinh</li>
             <li>Diffusion: từ DDPM đến Stable Diffusion</li>
         </ol>
-        <div class="demo-box" style="margin-top:12px">
-            <strong>Nguồn:</strong> CS231n Stanford 2017, blog Lilian Weng + Karpathy.
+        <div class="demo-box" style="margin-top:10px">
+            <strong>Nguồn:</strong> giáo trình SML chương 11, CS231n Stanford, blog Lilian Weng &amp; Karpathy.
         </div>
     </section>
 </section>
@@ -207,10 +208,65 @@
     </section>
 </section>
 
-<!-- ==================== 3. RNN & LSTM ==================== -->
+<!-- ==================== 3. MÔ HÌNH SINH CỔ ĐIỂN ==================== -->
 <section>
     <section>
-        <h1><span class="text-light">3.</span><br />RNN &amp; LSTM</h1>
+        <h1><span class="text-light">3.</span><br />Mô hình sinh cổ điển</h1>
+        <p style="margin-top:0.5em; font-size:0.85em; color:#555;"><em>Ước lượng mật độ trước kỷ nguyên
+                học sâu — giáo trình SML chương 11.</em></p>
+    </section>
+
+    <section style="font-size:0.84em">
+        <h2>Ước lượng mật độ tham số</h2>
+        <p>Giả sử dữ liệu sinh từ một phân phối có dạng biết trước (vd Gauss), chỉ cần ước lượng
+            tham số \(\theta\) bằng <strong>hợp lý cực đại</strong>:</p>
+        \[ \hat{\theta} = \arg\max_\theta \sum_{i=1}^{n} \log p(x_i \mid \theta) \]
+        <div class="highlight" style="margin-top:12px">
+            Một Gauss đơn quá cứng cho dữ liệu thực — cần phân phối linh hoạt hơn.
+        </div>
+    </section>
+
+    <section style="font-size:0.82em">
+        <h2>Mô hình Gauss hỗn hợp (GMM)</h2>
+        <p>Trộn \(K\) thành phần Gauss để mô tả dữ liệu nhiều cụm:</p>
+        <div style="text-align:center; margin-top:8px;">
+            <img src="img/lec13/gmm-clusters.svg?v=1" style="max-width:62%; max-height:300px;" />
+            <p style="font-size:0.78em; color:#666; margin-top:8px;">
+                <em>Mỗi cụm là một thành phần Gauss \(\mathcal{N}(\mu_k, \Sigma_k)\) với trọng số \(\pi_k\);
+                    trộn lại thành \(p(x)\). Sinh mẫu: chọn cụm theo \(\pi_k\) rồi lấy mẫu từ Gauss đó.</em>
+            </p>
+        </div>
+    </section>
+
+    <section style="font-size:0.82em">
+        <h2>Thuật toán EM — học tham số GMM</h2>
+        <p>Không biết mẫu nào thuộc cụm nào → lặp hai bước cho đến khi hội tụ:</p>
+        <ul style="line-height:1.8em; margin-top:8px">
+            <li><strong>E-step:</strong> gán "trách nhiệm" — mỗi điểm thuộc mỗi cụm với xác suất bao nhiêu?</li>
+            <li><strong>M-step:</strong> cập nhật \(\mu_k, \Sigma_k, \pi_k\) theo các trách nhiệm vừa gán.</li>
+        </ul>
+        <div style="text-align:center; margin-top:8px;">
+            <img src="img/lec13/em-iterations.svg?v=1" style="max-width:96%; max-height:230px;" />
+        </div>
+    </section>
+
+    <section style="font-size:0.82em">
+        <h2>Ước lượng mật độ phi tham số — KDE</h2>
+        <p>Không giả định dạng phân phối: đặt một "hàm nhân" nhỏ lên mỗi điểm dữ liệu rồi cộng lại.</p>
+        <div style="text-align:center; margin-top:8px;">
+            <img src="img/lec13/kde-bandwidth.svg?v=1" style="max-width:96%; max-height:250px;" />
+            <p style="font-size:0.78em; color:#666; margin-top:8px;">
+                <em>Độ rộng dải \(h\) quyết định độ mượt: \(h\) nhỏ → gồ ghề (quá khớp); \(h\) lớn → quá mượt
+                    (thiếu khớp).</em>
+            </p>
+        </div>
+    </section>
+</section>
+
+<!-- ==================== 4. RNN & LSTM ==================== -->
+<section>
+    <section>
+        <h1><span class="text-light">4.</span><br />RNN &amp; LSTM</h1>
         <p style="margin-top:0.5em; font-size:0.85em; color:#555;"><em>Nền tảng cho sinh chuỗi —
                 ôn nhanh từ Bài 11.</em></p>
     </section>
@@ -317,7 +373,7 @@ Bước 2→1:  × 2.0 = 16 → ∞</code></pre>
 <!-- ==================== 4. TỰ HỒI QUY: PIXELRNN/CNN + GPT ==================== -->
 <section>
     <section>
-        <h1><span class="text-light">4.</span><br />Tự hồi quy:<br />PixelRNN/CNN và GPT</h1>
+        <h1><span class="text-light">5.</span><br />Tự hồi quy:<br />PixelRNN/CNN và GPT</h1>
         <p style="margin-top:0.5em; font-size:0.85em; color:#555;"><em>Từ ảnh pixel-by-pixel
                 đến văn bản token-by-token.</em></p>
     </section>
@@ -430,7 +486,7 @@ Bước 2→1:  × 2.0 = 16 → ∞</code></pre>
 <!-- ==================== 5. AE & VAE ==================== -->
 <section>
     <section>
-        <h1><span class="text-light">5.</span><br />Autoencoder &amp; VAE</h1>
+        <h1><span class="text-light">6.</span><br />Autoencoder &amp; VAE</h1>
     </section>
 
     <section style="font-size:0.8em">
@@ -511,7 +567,7 @@ Bước 2→1:  × 2.0 = 16 → ∞</code></pre>
 <!-- ==================== 6. GAN ==================== -->
 <section>
     <section>
-        <h1><span class="text-light">6.</span><br />GAN — Mạng đối nghịch sinh</h1>
+        <h1><span class="text-light">7.</span><br />GAN — Mạng đối nghịch sinh</h1>
         <p style="margin-top:0.5em; font-size:0.85em; color:#555;"><em>Goodfellow et al., 2014.</em></p>
     </section>
 
@@ -608,7 +664,7 @@ Bước 2→1:  × 2.0 = 16 → ∞</code></pre>
 <!-- ==================== 7. DIFFUSION MODEL ==================== -->
 <section>
     <section>
-        <h1><span class="text-light">7.</span><br />Diffusion Model</h1>
+        <h1><span class="text-light">8.</span><br />Diffusion Model</h1>
         <p style="margin-top:0.5em; font-size:0.85em; color:#555;"><em>Ho et al., 2020 — nền tảng cho
                 DALL-E, Stable Diffusion.</em></p>
     </section>
