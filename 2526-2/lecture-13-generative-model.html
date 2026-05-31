@@ -300,25 +300,22 @@
         <p>Lan truyền ngược qua \(T\) bước nhân gradient liên tiếp:</p>
         \[ \frac{\partial L}{\partial h_1} = \frac{\partial L}{\partial h_T} \cdot
         \prod_{t=2}^{T} \underbrace{W_{hh} \cdot \tanh'(h_t)}_{\lambda} \]
-        <div class="two-col" style="margin-top:8px">
-            <div>
-                <p><strong>Tiêu biến — \(\lambda = 0.5\)</strong></p>
-                <pre style="font-size:0.95em"><code>Bước 5→4:  × 0.5 = 0.500
-Bước 4→3:  × 0.5 = 0.250
-Bước 3→2:  × 0.5 = 0.125
-Bước 2→1:  × 0.5 ≈ 0.063</code></pre>
-                <p style="margin-top:4px"><em>→ Quên context xa → sinh text không mạch lạc.</em></p>
+        <div class="two-col" style="margin-top:10px">
+            <div
+                style="border-left:4px solid #1E93AB; padding:8px 16px; background:#f4fafc; border-radius:4px;">
+                <strong>Tiêu biến</strong> — \(\lambda = 0.5\)
+                \[ 0.5^4 \approx 0.06 \to 0 \]
+                <p style="margin-top:4px"><em>Gradient tan → quên ngữ cảnh xa → sinh văn bản rời rạc.</em></p>
             </div>
-            <div>
-                <p><strong>Bùng nổ — \(\lambda = 2.0\)</strong></p>
-                <pre style="font-size:0.95em"><code>Bước 5→4:  × 2.0 = 2
-Bước 4→3:  × 2.0 = 4
-Bước 3→2:  × 2.0 = 8
-Bước 2→1:  × 2.0 = 16 → ∞</code></pre>
-                <div class="highlight" style="margin-top:6px">
-                    Bùng nổ: <em>gradient clipping</em>. Tiêu biến: <strong>LSTM</strong>.
-                </div>
+            <div
+                style="border-left:4px solid #e8732a; padding:8px 16px; background:#fef5ee; border-radius:4px;">
+                <strong>Bùng nổ</strong> — \(\lambda = 2.0\)
+                \[ 2^4 = 16 \to \infty \]
+                <p style="margin-top:4px"><em>Gradient phình → huấn luyện mất ổn định.</em></p>
             </div>
+        </div>
+        <div class="highlight" style="margin-top:12px">
+            Khắc phục: bùng nổ → <em>gradient clipping</em>; tiêu biến → <strong>LSTM</strong>.
         </div>
     </section>
 
