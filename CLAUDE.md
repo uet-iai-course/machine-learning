@@ -13,19 +13,17 @@ Repo này chứa slide bài giảng môn **Học máy** tại Viện Trí tuệ 
 ├── README.md
 ├── CLAUDE.md               # File này
 ├── SLIDE_STYLE_GUIDE.md    # Tiêu chuẩn thiết kế slide (đọc nếu sửa nội dung)
-├── XXXX-X/                 # Mỗi học kì 1 thư mục, ví dụ 2526-2 = HK2 2025-2026
-│   ├── README.md
-│   ├── index.html
-│   ├── lecture-*.html      # Slide từng bài
-│   ├── lecture-style.css
-│   ├── assignments/        # Bài tập về nhà
-│   ├── img/lecXX/          # Hình ảnh
-│   │   └── scripts/        # Script Python sinh hình (matplotlib SVG)
-│   ├── qti_exports/        # Quiz QTI cho Canvas (gitignored)
-│   ├── plugin/, revealjs/
-│   └── package.json
-└── prompts/                # Prompt templates hỗ trợ biên soạn slide
-    └── *.md
+└── XXXX-X/                 # Mỗi học kì 1 thư mục, ví dụ 2526-2 = HK2 2025-2026
+    ├── README.md
+    ├── index.html
+    ├── lecture-*.html      # Slide từng bài
+    ├── lecture-style.css
+    ├── assignments/        # Bài tập về nhà
+    ├── img/lecXX/          # Hình ảnh
+    │   └── scripts/        # Script Python sinh hình (matplotlib SVG)
+    ├── qti_exports/        # Quiz QTI cho Canvas (gitignored)
+    ├── plugin/, revealjs/
+    └── package.json
 ```
 
 PDF gốc các bài giảng ở `../../materials/Lectures/` (ví dụ `08_slides.pdf`).
@@ -185,5 +183,4 @@ Trình duyệt cache theo URL. Không bump → preview vẫn hiện ảnh cũ.
 
 - [`SLIDE_STYLE_GUIDE.md`](./SLIDE_STYLE_GUIDE.md) — tiêu chuẩn thiết kế slide (color, pattern, wording, badge `📖 Tự học`…).
 - [`glossaries.yaml`](./glossaries.yaml) — glossary thuật ngữ ML chuẩn (copy từ `iai-question-bank/docs/dev/glossaries/hoc-may.yml`).
-- [`prompts/`](./prompts/) — prompt templates cho biên soạn slide.
 - `2526-2/README.md` — đặc thù của học kì cụ thể.
