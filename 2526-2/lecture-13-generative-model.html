@@ -109,7 +109,7 @@
 
     <section style="font-size:0.84em">
         <h2>Vì sao cần mô hình sinh?</h2>
-        <p>Học được \(p(x)\) mở ra nhiều ứng dụng (theo giáo trình SML):</p>
+        <p>Học được \(p(x)\) mở ra nhiều ứng dụng:</p>
         <ul style="line-height:1.95em; margin-top:12px">
             <li><strong>Sinh dữ liệu mới</strong> — ảnh, văn bản, âm thanh giống thật.</li>
             <li><strong>Tăng cường dữ liệu</strong> — sinh thêm khi tập huấn luyện nhỏ.</li>
@@ -211,7 +211,7 @@
 <!-- ==================== 3. MÔ HÌNH SINH CỔ ĐIỂN ==================== -->
 <section>
     <section>
-        <h1><span class="text-light">3.</span><br />Mô hình sinh cổ điển</h1>
+        <h1><span class="text-light">3.</span><br />Mô hình sinh <br /> cổ điển</h1>
         <p style="margin-top:0.5em; font-size:0.85em; color:#555;"><em>Ước lượng mật độ trước kỷ nguyên
                 học sâu — giáo trình SML chương 11.</em></p>
     </section>
@@ -238,7 +238,7 @@
         </div>
     </section>
 
-    <section style="font-size:0.82em">
+    <section style="font-size:0.78em">
         <h2>Thuật toán EM — học tham số GMM</h2>
         <p>Không biết mẫu nào thuộc cụm nào → lặp hai bước cho đến khi hội tụ:</p>
         <ul style="line-height:1.8em; margin-top:8px">
@@ -250,7 +250,7 @@
         </div>
     </section>
 
-    <section style="font-size:0.82em">
+    <section style="font-size:0.78em">
         <h2>Ước lượng mật độ phi tham số — KDE</h2>
         <p>Không giả định dạng phân phối: đặt một "hàm nhân" nhỏ lên mỗi điểm dữ liệu rồi cộng lại.</p>
         <div style="text-align:center; margin-top:8px;">
@@ -290,7 +290,7 @@
             <img src="img/lec11/rnn-unrolled.svg?v=1"
                 style="max-width:92%; max-height:330px;" />
             <p style="font-size:0.78em; color:#666; margin-top:8px;">
-                <em>RNN trải qua thời gian — cùng \(W\) dùng lại mỗi bước. Trạng thái ẩn \(h_t\) chứa
+                <em>RNN qua thời gian — với \(W\) được dùng lại mỗi bước. Trạng thái ẩn \(h_t\) chứa
                     "bộ nhớ" của toàn bộ chuỗi đến thời điểm \(t\).</em>
             </p>
         </div>
@@ -306,13 +306,13 @@
                 style="border-left:4px solid #1E93AB; padding:8px 16px; background:#f4fafc; border-radius:4px;">
                 <strong>Tiêu biến</strong> — \(\lambda = 0.5\)
                 \[ 0.5^4 \approx 0.06 \to 0 \]
-                <p style="margin-top:4px"><em>Gradient tan → quên ngữ cảnh xa → sinh văn bản rời rạc.</em></p>
+                <p style="margin-top:4px"><em>Gradient nhỏ dần → quên ngữ cảnh xa → sinh văn bản rời rạc.</em></p>
             </div>
             <div
                 style="border-left:4px solid #e8732a; padding:8px 16px; background:#fef5ee; border-radius:4px;">
                 <strong>Bùng nổ</strong> — \(\lambda = 2.0\)
                 \[ 2^4 = 16 \to \infty \]
-                <p style="margin-top:4px"><em>Gradient phình → huấn luyện mất ổn định.</em></p>
+                <p style="margin-top:4px"><em>Gradient phình to → huấn luyện mất ổn định.</em></p>
             </div>
         </div>
         <div class="highlight" style="margin-top:12px">
@@ -331,7 +331,6 @@
             <li><strong>Cổng thu</strong> — thêm bao nhiêu thông tin mới vào \(c_t\)?</li>
             <li><strong>Cổng xuất</strong> — để \(c_t\) lộ ra \(h_t\) bao nhiêu?</li>
         </ul>
-        <p style="margin-top:8px; font-size:0.92em; color:#666">📖 Tự học: bốn công thức cổng đầy đủ — Bài 11.</p>
     </section>
 
     <section style="font-size:0.84em;">
@@ -392,7 +391,7 @@
     </section>
 
     <section style="font-size:0.8em">
-        <h2>PixelRNN vs PixelCNN — hai cách hiện thực</h2>
+        <h2>PixelRNN vs PixelCNN</h2>
         <p style="margin-top:6px">Cùng sinh ảnh pixel-by-pixel, khác ở khối mạng đoán pixel kế:</p>
         <div class="two-col" style="margin-top:12px">
             <div class="model-box blue">
@@ -405,7 +404,7 @@
             <div class="model-box green">
                 <strong>PixelCNN</strong> — CNN có mặt nạ
                 <ul style="margin-top:6px; line-height:1.6em">
-                    <li>Tích chập có mặt nạ, chỉ nhìn pixel đã sinh.</li>
+                    <li>Tích chập có mặt nạ (mask), chỉ nhìn pixel đã sinh.</li>
                     <li>Song song hoá khi huấn luyện → train nhanh hơn, nhưng nhớ context kém hơn.</li>
                 </ul>
             </div>
@@ -423,7 +422,7 @@
                 <strong>✓ Ưu điểm</strong>
                 <ul style="margin-top:4px; line-height:1.55em">
                     <li>Likelihood tường minh, đánh giá chính xác.</li>
-                    <li>Huấn luyện ổn định, không cần "mánh".</li>
+                    <li>Huấn luyện ổn định, không cần "mẹo".</li>
                     <li>Chất lượng mẫu tốt.</li>
                 </ul>
             </div>
@@ -437,7 +436,7 @@
             </div>
         </div>
         <div class="demo-box" style="margin-top:8px">
-            <strong>Ý nghĩa lịch sử:</strong> bước đầu tiên chứng minh mạng nơ-ron mô hình được phân phối ảnh
+            <strong>Ý nghĩa lịch sử:</strong> bước đầu tiên chứng minh mạng nơ-ron mô hình hoá được phân phối ảnh
             tường minh. Ý tưởng tự hồi quy này sau áp dụng cho văn bản → <strong>GPT</strong>.
         </div>
     </section>
@@ -482,7 +481,7 @@
         <p><em>Kingma &amp; Welling, 2013.</em> Encoder không xuất một điểm \(z\) cố định, mà xuất
             \((\mu, \sigma)\) rồi lấy mẫu \(z \sim \mathcal{N}(\mu, \sigma^2)\). Mất mát có 2 phần:</p>
         \[ \mathcal{L} = \underbrace{\mathbb{E}[\log p(x|z)]}_{\text{tái tạo}} -
-        \underbrace{D_{\text{KL}}(q(z|x) \,\|\, p(z))}_{\text{chính quy hoá}} \]
+        \underbrace{D_{\text{KL}}(q(z|x) \,\|\, p(z))}_{\text{điều chuẩn}} \]
         <ul style="line-height:1.8em; margin-top:8px">
             <li><strong>Tái tạo:</strong> \(\hat{x}\) phải giống \(x\).</li>
             <li><strong>KL:</strong> kéo \(z\) về gần \(\mathcal{N}(0, I)\) → không gian ẩn có cấu trúc →
@@ -518,7 +517,7 @@
     <section style="font-size:0.84em;">
         <h2>VAE — kiến trúc encoder–decoder</h2>
         <div style="text-align:center; margin-top:10px;">
-            <img src="img/lec13/vae-architecture.svg?v=1"
+            <img src="img/lec13/vae-architecture.svg?v=2"
                 style="max-width:88%; max-height:300px;" />
             <p style="font-size:0.78em; color:#666; margin-top:10px;">
                 <em>Encoder nén \(x\) thành \((\mu, \sigma)\); lấy mẫu \(z \sim \mathcal{N}(\mu, \sigma^2)\);
@@ -543,12 +542,12 @@
             <div class="model-box blue">
                 <strong>Generator \(G\)</strong>
                 <p style="margin-top:6px">Nhận nhiễu \(z \sim \mathcal{N}(0, I)\) → sinh ảnh giả \(G(z)\).</p>
-                <p style="margin-top:4px"><em>"Lính làm giả tiền": cố lừa Discriminator."</em></p>
+                <p style="margin-top:4px"><em>Cố lừa Discriminator.</em></p>
             </div>
             <div class="model-box orange">
                 <strong>Discriminator \(D\)</strong>
                 <p style="margin-top:6px">Nhận ảnh, đoán xác suất là <strong>thật</strong> hay <strong>giả</strong>.</p>
-                <p style="margin-top:4px"><em>"Cảnh sát": cố phát hiện ảnh giả.</em></p>
+                <p style="margin-top:4px"><em>Cố phát hiện ảnh giả.</em></p>
             </div>
         </div>
         <div class="highlight" style="margin-top:12px">
@@ -661,7 +660,7 @@
     <section style="font-size:0.84em;">
         <h2>Diffusion — minh hoạ quá trình</h2>
         <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec13/diffusion-process.svg?v=1"
+            <img src="img/lec13/diffusion-process.svg?v=2"
                 style="max-width:92%; max-height:340px;" />
             <p style="font-size:0.78em; color:#666; margin-top:8px;">
                 <em>Xuôi (cam): thêm nhiễu Gauss từng bước đến khi thành nhiễu thuần — cố định. Ngược (xanh):
@@ -711,7 +710,7 @@
     <section style="font-size:0.84em;">
         <h2>Stable Diffusion — text-to-image trong thực tế</h2>
         <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec13/stable-diffusion-pipeline.svg?v=1"
+            <img src="img/lec13/stable-diffusion-pipeline.svg?v=2"
                 style="max-width:94%; max-height:300px;" />
             <p style="font-size:0.78em; color:#666; margin-top:8px;">
                 <em>Stable Diffusion (Rombach et al., 2021) — diffuse trong <strong>không gian ẩn</strong> của

@@ -28,13 +28,23 @@ BG_PURPLE = "#f7f0fb"
 FONT = ("-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif")
 
 
+def marker_def(mid, color):
+    """Đầu mũi tên chuẩn — có viewBox nên mapping nhất quán mọi trình duyệt.
+
+    refX=9 đặt điểm tham chiếu (nơi gắn vào cuối line) hơi lùi so với đỉnh
+    (x=10) → thân line luôn nằm khuất dưới đầu mũi tên, không bao giờ thò ra.
+    """
+    return (f'<marker id="{mid}" viewBox="0 0 10 10" markerWidth="6.5" '
+            f'markerHeight="6.5" refX="9" refY="5" orient="auto" '
+            f'markerUnits="strokeWidth">'
+            f'<path d="M0,1.5 L10,5 L0,8.5 Z" fill="{color}"/></marker>')
+
+
 def header(w, h):
     return (f'<?xml version="1.0" encoding="UTF-8"?>\n'
             f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" '
             f'font-family="{FONT}">\n'
-            f'<defs><marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="3" '
-            f'orient="auto" markerUnits="strokeWidth">'
-            f'<path d="M0,0 L7,3 L0,6 Z" fill="{INK}"/></marker></defs>\n')
+            f'<defs>{marker_def("arr", INK)}</defs>\n')
 
 
 def box(x, y, w, h, fill, stroke, label, sub="", fs=17, rx=8):
@@ -179,13 +189,9 @@ def make_diffusion():
           f'font-weight="600" fill="{BLUE}">Quá trình ngược: mạng học khử nhiễu '
           f'từng bước</text>\n')
     # custom colored markers
-    s = s.replace("</defs>",
-                  f'<marker id="arr-o" markerWidth="9" markerHeight="9" refX="7" '
-                  f'refY="3" orient="auto" markerUnits="strokeWidth">'
-                  f'<path d="M0,0 L7,3 L0,6 Z" fill="{ORANGE}"/></marker>'
-                  f'<marker id="arr-b" markerWidth="9" markerHeight="9" refX="7" '
-                  f'refY="3" orient="auto" markerUnits="strokeWidth">'
-                  f'<path d="M0,0 L7,3 L0,6 Z" fill="{BLUE}"/></marker></defs>')
+    s = s.replace(
+        "</defs>",
+        f'{marker_def("arr-o", ORANGE)}{marker_def("arr-b", BLUE)}</defs>')
     s += "</svg>\n"
     (OUT / "diffusion-process.svg").write_text(s, encoding="utf-8")
     print("Saved diffusion-process.svg")
