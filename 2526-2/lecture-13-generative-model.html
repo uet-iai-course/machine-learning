@@ -39,7 +39,7 @@
         <h2>Nội dung</h2>
         <ol style="line-height:1.5em">
             <li>Mô hình sinh vs mô hình phán đoán</li>
-            <li>Mô hình sinh vs Generative AI</li>
+            <li>Mô hình sinh vs AI tạo sinh</li>
             <li>Mô hình sinh cổ điển: GMM, EM, KDE</li>
             <li>RNN, LSTM — nền tảng cho sinh chuỗi</li>
             <li>Tự hồi quy: PixelRNN/CNN và GPT</li>
@@ -133,7 +133,7 @@
 <!-- ==================== 2. MÔ HÌNH TẠO SINH vs GENERATIVE AI ==================== -->
 <section>
     <section>
-        <h1><span class="text-light">2.</span><br />Mô hình sinh<br />vs Generative AI</h1>
+        <h1><span class="text-light">2.</span><br />Mô hình sinh<br />vs AI tạo sinh</h1>
     </section>
 
     <section style="font-size:0.82em">
@@ -147,7 +147,7 @@
                 <p style="margin-top:6px">Ví dụ: GMM, HMM, VAE, GAN, Diffusion, GPT.</p>
             </div>
             <div class="model-box green">
-                <strong>Generative AI</strong><br />
+                <strong>AI tạo sinh</strong> (Generative AI)<br />
                 <em>Khái niệm thị trường / ứng dụng.</em>
                 <p style="margin-top:6px">Tập con của mô hình sinh — quy mô lớn, chất lượng cao, hướng tới người dùng cuối.</p>
                 Phổ biến từ <strong>2022</strong> (ChatGPT).
@@ -155,7 +155,7 @@
             </div>
         </div>
         <div class="highlight" style="margin-top:12px">
-            GMM (1894) là mô hình sinh — nhưng không ai gọi nó là "Generative AI".
+            GMM (1894) là mô hình sinh — nhưng không ai gọi nó là "AI tạo sinh".
         </div>
     </section>
 
@@ -285,6 +285,7 @@
 
     <section style="font-size:0.84em;">
         <h2>RNN — kiến trúc trải qua thời gian</h2>
+        <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
         <div style="text-align:center; margin-top:8px;">
             <img src="img/lec11/rnn-unrolled.svg?v=1"
                 style="max-width:92%; max-height:330px;" />
@@ -335,6 +336,7 @@
 
     <section style="font-size:0.84em;">
         <h2>LSTM — kiến trúc chi tiết</h2>
+        <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
         <div style="text-align:center; margin-top:8px;">
             <img src="img/lec11/lstm-cell.svg?v=1"
                 style="max-width:90%; max-height:340px;" />
@@ -348,6 +350,7 @@
 
     <section style="font-size:0.7em">
         <h2>Vì sao LSTM giải được gradient tiêu biến?</h2>
+        <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
         <div class="two-col" style="margin-top:8px">
             <div>
                 <p><strong>RNN — gradient qua tanh:</strong></p>
@@ -451,33 +454,6 @@
         </div>
     </section>
 
-    <section style="font-size:0.84em">
-        <h2>Tự hồi quy — hai họ song song</h2>
-        <div class="two-col" style="margin-top:14px">
-            <div class="model-box blue">
-                <strong>Ảnh — PixelRNN/CNN</strong> (2016)
-                <ul style="margin-top:6px; line-height:1.55em">
-                    <li>Pixel-by-pixel</li>
-                    <li>LSTM hoặc masked CNN</li>
-                    <li>Sinh rất chậm</li>
-                    <li>Bị Diffusion thay thế</li>
-                </ul>
-            </div>
-            <div class="model-box green">
-                <strong>Văn bản — GPT</strong> (2018+)
-                <ul style="margin-top:6px; line-height:1.55em">
-                    <li>Token-by-token</li>
-                    <li>Transformer decoder</li>
-                    <li>Sinh chậm nhưng chấp nhận được</li>
-                    <li>Đang thống trị LLM</li>
-                </ul>
-            </div>
-        </div>
-        <div class="highlight" style="margin-top:14px">
-            Cùng một ý tưởng <strong>"đoán đơn vị kế tiếp"</strong> — chỉ khác kiến trúc và đơn vị
-            (pixel vs token).
-        </div>
-    </section>
 </section>
 
 <!-- ==================== 5. AE & VAE ==================== -->
@@ -704,7 +680,8 @@
 
     <section style="font-size:0.74em">
         <h2>Diffusion — các cột mốc</h2>
-        <table class="compare-table" style="margin-top:8px">
+        <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
+        <table class="compare-table" style="margin-top:6px">
             <thead>
                 <tr>
                     <th>Năm</th>
@@ -776,7 +753,7 @@
         <h2>Tóm tắt</h2>
         <ol style="line-height:1.5em">
             <li><strong>Sinh</strong> học \(p(x)\); <strong>phán đoán</strong> học \(p(y \mid x)\).</li>
-            <li><strong>Generative AI</strong> ≠ mô hình sinh — là tập con quy mô lớn (ChatGPT, Stable
+            <li><strong>AI tạo sinh</strong> ≠ mô hình sinh — là tập con quy mô lớn (ChatGPT, Stable
                 Diffusion).</li>
             <li><strong>Tự hồi quy</strong>: PixelRNN/CNN (ảnh) và GPT (văn bản) — cùng nguyên lý "đoán đơn vị
                 kế".</li>
