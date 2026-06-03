@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="revealjs/dist/reveal.css" />
 <link rel="stylesheet" href="revealjs/dist/theme/white.css" />
 <link rel="stylesheet" href="plugin/highlight/monokai.css" />
-<link rel="stylesheet" href="lecture-style.css?v=5" />
+<link rel="stylesheet" href="lecture-style.css?v=6" />
 <style>
     /* Lec13-specific: 4 model categories with distinct colors. */
     .model-box {
@@ -273,14 +273,11 @@
 
     <section style="font-size:0.82em">
         <h2>RNN — Recurrent Neural Network</h2>
-        <p>Để sinh dữ liệu tuần tự, mô hình đoán phần tử kế tiếp dựa trên những gì đã sinh trước đó:</p>
+        <p>Sinh chuỗi = đoán phần tử kế từ quá khứ:</p>
         \[ p(x) = \prod_{i=1}^{n} p(x_i \mid x_1, \ldots, x_{i-1}) \]
-        <p style="margin-top:8px">Trạng thái ẩn \(h_t = \tanh(W_{hh} h_{t-1} + W_{xh} x_t)\) là "bộ nhớ" của
-            quá khứ; cùng một \(W\) được dùng lại ở mọi bước.</p>
-        <div class="demo-box" style="margin-top:10px">
-            <strong>char-rnn (Karpathy, 2015):</strong> huấn luyện trên "The cat sat" để đoán ký tự kế;
-            lấy mẫu "T"→"h"→"e"→… liên tục thì sinh ra văn bản mới.
-        </div>
+        <p style="margin-top:12px">RNN nén quá khứ \(x_1,\ldots,x_{i-1}\) vào <strong>trạng thái ẩn</strong>
+            \(h_{t-1}\) rồi đoán \(x_i\) từ đó — \(h\) cập nhật hồi quy, dùng lại cùng \(W\):</p>
+        \[ h_t = \tanh(W_{hh}\, h_{t-1} + W_{xh}\, x_t) \]
     </section>
 
     <section style="font-size:0.84em;">
@@ -316,7 +313,7 @@
             </div>
         </div>
         <div class="highlight" style="margin-top:12px">
-            Khắc phục: bùng nổ → <em>gradient clipping</em>; tiêu biến → <strong>LSTM</strong>.
+            Khắc phục: bùng nổ → <strong>cắt gradient</strong> (gradient clipping); tiêu biến → <strong>LSTM</strong>.
         </div>
     </section>
 
@@ -337,7 +334,7 @@
         <h2>LSTM — kiến trúc chi tiết</h2>
         <div class="slide-badge-row"><span class="self-study-badge">📖 Tự học</span></div>
         <div style="text-align:center; margin-top:8px;">
-            <img src="img/lec11/lstm-cell.svg?v=1"
+            <img src="img/lec11/lstm-cell.svg?v=2"
                 style="max-width:90%; max-height:340px;" />
             <p style="font-size:0.78em; color:#666; margin-top:8px;">
                 <em>Trạng thái ô \(c_t\) (đường thẳng trên cùng) là "đường cao tốc" cho gradient — chỉ có
@@ -462,38 +459,54 @@
         <h1><span class="text-light">6.</span><br />Autoencoder &amp; VAE</h1>
     </section>
 
+    <!-- 6.1 Autoencoder -->
     <section style="font-size:0.8em">
-        <h2>Autoencoder — học biểu diễn nén</h2>
-        <p>Nén \(x\) qua nút thắt cổ chai rồi tái tạo lại, không cần nhãn:</p>
-        <p style="text-align:center; margin-top:8px; font-size:1.05em">
+        <h2>Autoencoder — nén rồi tái tạo</h2>
+        <p style="text-align:center; margin-top:14px; font-size:1.12em">
             \(x \;\xrightarrow{\text{Encoder}}\; z \;\xrightarrow{\text{Decoder}}\; \hat{x}\),
             &nbsp; mất mát \(\mathcal{L} = \|x - \hat{x}\|^2\)
         </p>
-        <p style="margin-top:8px">Bóp \(z\) nhỏ hơn \(x\) buộc mô hình học đặc trưng có ý nghĩa thay vì
-            chép nguyên xi. Sau khi huấn luyện, dùng encoder để trích đặc trưng.</p>
-        <div class="highlight" style="margin-top:10px">
-            Nhưng AE chỉ <em>ghi nhớ</em> mẫu, không học \(p(x)\) → <strong>không sinh được dữ liệu mới</strong>.
+        <p style="margin-top:16px"><strong>Nút thắt cổ chai:</strong> ép \(z\) nhỏ hơn \(x\) → mô hình phải học
+            đặc trưng cô đọng thay vì chép nguyên xi. Hữu ích để nén, khử nhiễu, trích đặc trưng.</p>
+        <div class="highlight" style="margin-top:16px">
+            Nhưng AE chỉ học ánh xạ <em>điểm → điểm</em>, không học \(p(x)\): các mã \(z\) nằm
+            <strong>rải rác, có lỗ hổng</strong> → lấy \(z\) ngẫu nhiên thường ra ảnh rác →
+            <strong>không sinh được</strong>.
         </div>
     </section>
 
-    <section style="font-size:0.82em">
-        <h2>VAE — Variational Autoencoder</h2>
-        <p><em>Kingma &amp; Welling, 2013.</em> Encoder không xuất một điểm \(z\) cố định, mà xuất
-            \((\mu, \sigma)\) rồi lấy mẫu \(z \sim \mathcal{N}(\mu, \sigma^2)\). Mất mát có 2 phần:</p>
-        \[ \mathcal{L} = \underbrace{\mathbb{E}[\log p(x|z)]}_{\text{tái tạo}} -
-        \underbrace{D_{\text{KL}}(q(z|x) \,\|\, p(z))}_{\text{điều chuẩn}} \]
-        <ul style="line-height:1.8em; margin-top:8px">
+    <!-- 6.2 VAE: ý tưởng + hàm mất mát -->
+    <section style="font-size:0.8em">
+        <h2>VAE — mã hoá thành phân phối, không phải điểm</h2>
+        <p><em>Kingma &amp; Welling, 2013.</em> Encoder xuất \((\mu, \sigma)\) rồi lấy mẫu
+            \(z \sim \mathcal{N}(\mu, \sigma^2)\) — mỗi \(x\) thành một "đám mây" thay vì một điểm.
+            Hàm mất mát (tối thiểu hoá):</p>
+        \[ \mathcal{L} = \underbrace{-\,\mathbb{E}[\log p(x|z)]}_{\text{tái tạo}} +
+        \underbrace{D_{\text{KL}}\!\left(q(z|x) \,\|\, \mathcal{N}(0, I)\right)}_{\text{điều chuẩn}} \]
+        <ul style="line-height:1.7em; margin-top:6px">
             <li><strong>Tái tạo:</strong> \(\hat{x}\) phải giống \(x\).</li>
-            <li><strong>KL:</strong> kéo \(z\) về gần \(\mathcal{N}(0, I)\) → không gian ẩn có cấu trúc →
-                lấy mẫu được.</li>
+            <li><strong>Điều chuẩn (KL):</strong> kéo mỗi "đám mây" về \(\mathcal{N}(0, I)\):
+                \(\mu \to 0\) (về tâm), \(\sigma \to 1\) (nở ra, chồng lấn) → không gian ẩn liên tục.</li>
         </ul>
     </section>
 
+    <!-- 6.3 Hình: không gian ẩn AE vs VAE -->
+    <section style="font-size:0.82em">
+        <h2>Không gian ẩn — vì sao VAE sinh được?</h2>
+        <div style="text-align:center; margin-top:6px;">
+            <img src="img/lec13/latent-space.svg?v=2" style="max-width:90%; max-height:320px;" />
+            <p style="font-size:0.82em; color:#666; margin-top:6px; max-width:92%; margin-left:auto; margin-right:auto;">
+                <em>AE đặt mã ở các "đảo" rời rạc → khoảng trống là <strong>vùng chết</strong> (decode ra rác).
+                VAE dùng KL kéo mã về \(\mathcal{N}(0,I)\) (\(\mu\to0\) về tâm, \(\sigma\to1\) nở ra chồng lấn)
+                → lấp đầy liên tục → lấy mẫu \(z\) bất kỳ đều ra ảnh hợp lệ.</em>
+            </p>
+        </div>
+    </section>
+
+    <!-- 6.4 Bảng so sánh AE vs VAE + vì sao mờ -->
     <section style="font-size:0.78em">
-        <h2>AE vs VAE — vì sao VAE sinh được?</h2>
-        <p style="margin-top:6px">AE đặt \(z\) ở điểm rời rạc → nội suy rơi vào "vùng chết". VAE dùng KL ép
-            không gian ẩn về \(\mathcal{N}(0, I)\) → liên tục: lấy mẫu \(z\) rồi decode ra ảnh mới hợp lệ.</p>
-        <table class="compare-table" style="margin-top:8px">
+        <h2>AE vs VAE — tóm tắt</h2>
+        <table class="compare-table" style="margin-top:12px">
             <thead>
                 <tr>
                     <th></th>
@@ -502,15 +515,17 @@
                 </tr>
             </thead>
             <tbody>
-                <tr><td>Biểu diễn ẩn \(z\)</td><td>Điểm cố định</td><td>Phân phối \(\mathcal{N}(\mu, \sigma^2)\)</td></tr>
+                <tr><td>Biểu diễn ẩn \(z\)</td><td>Một điểm cố định</td><td>Phân phối \(\mathcal{N}(\mu, \sigma^2)\)</td></tr>
                 <tr><td>Hàm mất mát</td><td>Tái tạo</td><td>Tái tạo + KL</td></tr>
-                <tr><td>Sinh dữ liệu mới?</td><td>Không</td><td>Có — lấy mẫu \(z\) từ Gaussian</td></tr>
-                <tr><td>Không gian ẩn</td><td>Không cấu trúc</td><td>Liên tục, nội suy được</td></tr>
-                <tr><td>Chất lượng</td><td>Sắc nét (chỉ tái tạo)</td><td>Mờ (do L2)</td></tr>
+                <tr><td>Không gian ẩn</td><td>Rời rạc, có lỗ hổng</td><td>Liên tục, nội suy được</td></tr>
+                <tr><td>Sinh dữ liệu mới?</td><td>Không</td><td>Có — lấy mẫu \(z \sim \mathcal{N}(0,I)\)</td></tr>
+                <tr><td>Chất lượng ảnh</td><td>Sắc nét (chỉ tái tạo)</td><td>Mờ (do L2)</td></tr>
             </tbody>
         </table>
-        <div class="highlight" style="margin-top:8px">
-            VAE sinh được nhưng ảnh <strong>mờ</strong> (mất mát L2) → động lực cho GAN và Diffusion.
+        <div class="highlight" style="margin-top:10px">
+            Vì sao <strong>mờ</strong>? Một \(z\) ứng với nhiều ảnh hợp lý; mất mát <strong>L2</strong> tối ưu bằng cách
+            vẽ <strong>trung bình</strong> các ảnh đó → trung bình ảnh sắc nét = nhoè → động lực cho
+            <strong>GAN</strong> và <strong>Diffusion</strong>.
         </div>
     </section>
 
@@ -535,87 +550,103 @@
         <p style="margin-top:0.5em; font-size:0.85em; color:#555;"><em>Goodfellow et al., 2014.</em></p>
     </section>
 
+    <!-- 7.1 Ý tưởng -->
     <section style="font-size:0.78em">
-        <h2>Ý tưởng — hai mạng "đấu nhau"</h2>
-        <p>Thay vì học \(p(x)\) tường minh như VAE, GAN học bằng <strong>trò chơi đối nghịch</strong>:</p>
+        <h2>Ý tưởng — hai mạng đấu nhau</h2>
+        <p>Không học \(p(x)\) tường minh như VAE. GAN huấn luyện hai mạng <strong>đối nghịch</strong>,
+            như <em>thợ làm tiền giả</em> đấu với <em>cảnh sát</em>:</p>
         <div class="two-col" style="margin-top:12px">
             <div class="model-box blue">
-                <strong>Generator \(G\)</strong>
+                <strong>Generator \(G\) — kẻ làm giả</strong>
                 <p style="margin-top:6px">Nhận nhiễu \(z \sim \mathcal{N}(0, I)\) → sinh ảnh giả \(G(z)\).</p>
-                <p style="margin-top:4px"><em>Cố lừa Discriminator.</em></p>
+                <p style="margin-top:4px"><em>Mục tiêu: lừa được \(D\).</em></p>
             </div>
             <div class="model-box orange">
-                <strong>Discriminator \(D\)</strong>
-                <p style="margin-top:6px">Nhận ảnh, đoán xác suất là <strong>thật</strong> hay <strong>giả</strong>.</p>
-                <p style="margin-top:4px"><em>Cố phát hiện ảnh giả.</em></p>
+                <strong>Discriminator \(D\) — cảnh sát</strong>
+                <p style="margin-top:6px">Nhận một ảnh → đoán xác suất nó <strong>thật</strong> hay <strong>giả</strong>.</p>
+                <p style="margin-top:4px"><em>Mục tiêu: bắt được ảnh giả.</em></p>
             </div>
         </div>
         <div class="highlight" style="margin-top:12px">
-            Khi cân bằng đạt được, \(G\) sinh ảnh thật đến mức \(D\) đoán đúng/sai 50/50 → \(G\) đã học được
-            \(p(x)\).
+            Cả hai cùng giỏi lên. Khi cân bằng, \(G\) sinh ảnh thật đến mức \(D\) chỉ đoán đúng
+            <strong>50/50</strong> → \(G\) đã nắm được \(p(x)\).
         </div>
     </section>
 
+    <!-- 7.2 Kiến trúc — luồng dữ liệu -->
+    <section style="font-size:0.82em">
+        <h2>Kiến trúc — luồng dữ liệu</h2>
+        <div style="text-align:center; margin-top:8px;">
+            <img src="img/lec13/gan-architecture.svg?v=2" style="max-width:90%; max-height:330px;" />
+            <p style="font-size:0.82em; color:#666; margin-top:8px; max-width:92%; margin-left:auto; margin-right:auto;">
+                <em>\(z \to G \to G(z)\) (giả) và ảnh thật \(x\) cùng đưa vào \(D\); \(D\) xuất xác suất thật/giả.
+                Mấu chốt: \(G\) <strong>không thấy ảnh thật</strong> — chỉ học qua <strong>gradient lan ngược từ \(D\)</strong>.
+                Sinh ảnh xong thì bỏ \(D\), chỉ giữ \(G\).</em>
+            </p>
+        </div>
+    </section>
+
+    <!-- 7.3 Mục tiêu minimax -->
     <section style="font-size:0.74em">
         <h2>Mục tiêu — bài toán minimax</h2>
-        <p>Hai mạng đối nghịch nhau qua hàm giá:</p>
+        <p>Hai mạng cùng tối ưu một hàm giá, nhưng ngược chiều nhau:</p>
         \[ \min_G \max_D \;
         \mathbb{E}_{x \sim p_{\text{thực}}}[\log D(x)]
-        + \mathbb{E}_{z \sim p_z}[\log(1 - D(G(z)))] \]
+        + \mathbb{E}_{z}[\log(1 - D(G(z)))] \]
         <div class="two-col" style="margin-top:10px">
             <div>
                 <ul style="line-height:1.65em">
-                    <li>\(D\) muốn <strong>tối đa hoá</strong>: đoán đúng ảnh thật → \(D(x) \to 1\); đoán đúng ảnh giả
-                        → \(D(G(z)) \to 0\).</li>
-                    <li>\(G\) muốn <strong>tối thiểu hoá</strong>: làm \(D(G(z)) \to 1\) (lừa được \(D\)).</li>
-                    <li>Lý thuyết: cân bằng ↔ \(p_G(x) = p_{\text{thực}}(x)\).</li>
+                    <li>\(D\) <strong>tối đa hoá</strong>: ép \(D(x) \to 1\) (thật) và \(D(G(z)) \to 0\) (giả).</li>
+                    <li>\(G\) <strong>tối thiểu hoá</strong>: ép \(D(G(z)) \to 1\) (lừa được \(D\)).</li>
+                    <li>Cân bằng ↔ \(p_G(x) = p_{\text{thực}}(x)\), khi đó \(D \equiv \tfrac12\).</li>
                 </ul>
             </div>
             <div class="demo-box">
-                <strong>Mật độ ẩn:</strong> GAN <em>không</em> tính \(p_G(x)\) tường minh — chỉ học cách <em>lấy
-                    mẫu</em> từ phân phối đó. Đối lập với VAE/Diffusion (mật độ tường minh).
+                <strong>Mật độ ẩn:</strong> GAN <em>không</em> tính \(p_G(x)\) — chỉ học cách <em>lấy mẫu</em>.
+                <p style="margin-top:6px"><strong>Mẹo:</strong> thực tế cho \(G\) tối đa \(\log D(G(z))\) thay vì
+                    công thức gốc — gradient mạnh hơn lúc đầu.</p>
             </div>
         </div>
     </section>
 
+    <!-- 7.4 Vấn đề huấn luyện -->
     <section style="font-size:0.78em">
-        <h2>Vấn đề khi huấn luyện GAN</h2>
+        <h2>Vấn đề khi huấn luyện</h2>
         <div class="two-col" style="margin-top:10px">
             <div class="model-box orange">
                 <strong>Mode collapse</strong>
-                <p style="margin-top:6px">\(G\) chỉ sinh một loại ảnh duy nhất (vd: 1 kiểu mặt) → bỏ qua các mode khác
-                    của \(p(x)\).</p>
-                <p style="margin-top:4px"><em>"Lừa được \(D\) bằng 1 mẫu giả tốt là đủ rồi."</em></p>
+                <p style="margin-top:6px">\(G\) chỉ sinh một kiểu ảnh duy nhất để lừa \(D\) → bỏ qua các mode
+                    khác của \(p(x)\).</p>
             </div>
             <div class="model-box orange">
-                <strong>Train bất ổn định</strong>
-                <p style="margin-top:6px">Hai mạng kéo qua kéo lại — gradient dao động mạnh.</p>
-                <p style="margin-top:4px">Cần nhiều "mánh": chuẩn hoá batch, tỷ lệ học khác nhau cho \(G/D\),
-                    WGAN-GP, spectral norm…</p>
+                <strong>Huấn luyện bất ổn</strong>
+                <p style="margin-top:6px">Hai mạng kéo qua kéo lại, gradient dao động. Cần "mánh": tỷ lệ học
+                    riêng cho \(G/D\), WGAN-GP, spectral norm…</p>
             </div>
         </div>
         <div class="demo-box" style="margin-top:10px">
-            <strong>Cải tiến qua các năm:</strong> DCGAN (2015), WGAN (2017) — đổi Wasserstein cho ổn định,
-            <strong>StyleGAN</strong> (2018-2021) — kiểm soát thuộc tính khuôn mặt, <strong>CycleGAN</strong>
-            (2017) — biến ngựa thành ngựa vằn không cần cặp ảnh.
+            <strong>Cải tiến theo thời gian:</strong> DCGAN (2015) → WGAN (2017, đổi Wasserstein cho ổn định) →
+            <strong>StyleGAN</strong> (2018–21, kiểm soát thuộc tính) · <strong>CycleGAN</strong> (2017,
+            ngựa ↔ ngựa vằn không cần cặp ảnh).
         </div>
     </section>
 
+    <!-- 7.5 Đánh giá -->
     <section style="font-size:0.82em">
         <h2>GAN — đánh giá</h2>
         <div class="two-col" style="margin-top:12px">
             <div class="model-box green">
                 <strong>✓ Ưu điểm</strong>
                 <ul style="margin-top:6px; line-height:1.6em">
-                    <li>Ảnh <strong>sắc nét</strong> hơn VAE (không có L2 loss).</li>
+                    <li>Ảnh <strong>sắc nét</strong> hơn VAE (không có L2).</li>
                     <li>Sinh nhanh — chỉ 1 lần qua \(G\).</li>
-                    <li>StyleGAN từng là SOTA về chất lượng khuôn mặt.</li>
+                    <li>StyleGAN từng là SOTA chất lượng khuôn mặt.</li>
                 </ul>
             </div>
             <div class="model-box orange">
                 <strong>✗ Nhược điểm</strong>
                 <ul style="margin-top:6px; line-height:1.6em">
-                    <li>Huấn luyện khó, dễ collapse.</li>
+                    <li>Huấn luyện khó, dễ mode collapse.</li>
                     <li>Không tính được \(p(x)\) → khó đánh giá định lượng.</li>
                     <li>Không có không gian ẩn cấu trúc như VAE.</li>
                     <li>Diffusion dần thay thế từ 2021.</li>
@@ -718,6 +749,20 @@
             <p style="font-size:0.78em; color:#666; margin-top:8px;">
                 <em>Stable Diffusion (Rombach et al., 2022) — diffuse trong <strong>không gian ẩn</strong> của
                     VAE thay vì pixel, nên nhanh hơn nhiều. CLIP mã hoá câu lệnh để điều khiển nội dung.</em>
+            </p>
+        </div>
+    </section>
+
+    <!-- Toàn cảnh chất lượng sinh ảnh — ảnh thật, CC BY 4.0
+         Nguồn: https://commons.wikimedia.org/wiki/File:Timeline-of-AI-generated-faces.png
+         Charlie Giattino & Max Roser, Our World in Data, CC BY 4.0 -->
+    <section style="font-size:0.78em">
+        <h2>Sinh ảnh — 9 năm bùng nổ</h2>
+        <div style="text-align:center; margin-top:2px;">
+            <img src="img/lec13/ai-faces-timeline.png" style="max-width:100%; max-height:446px;" />
+            <p style="font-size:0.72em; color:#666; margin-top:6px; max-width:94%; margin-left:auto; margin-right:auto;">
+                <em>2014 GAN (vỡ hạt) → 2018 StyleGAN (sắc nét) → 2020 Diffusion (Ho et al.) → 2022 text-to-image.
+                    Mặt người <strong>không có thật</strong>. Nguồn: C. Giattino &amp; M. Roser, Our World in Data — CC&nbsp;BY&nbsp;4.0.</em>
             </p>
         </div>
     </section>

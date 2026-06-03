@@ -235,6 +235,14 @@
     align-items: start;
 }
 
+/* Hai cột chứa thẻ so sánh (.model-box) → kéo cao bằng nhau cho cân đối,
+   tránh hai hộp lệch đáy khi số gạch đầu dòng khác nhau. */
+.reveal .two-col:has(.model-box),
+.reveal .two-col-narrow:has(.model-box),
+.reveal .two-col-tight:has(.model-box) {
+    align-items: stretch;
+}
+
 .reveal .two-col-narrow {
     display: grid;
     grid-template-columns: 1fr 0.7fr;

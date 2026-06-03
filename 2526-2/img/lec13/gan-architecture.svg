@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 338" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+<defs><marker id="arr" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="0" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,1 L10,5 L0,9 Z" fill="#1a2332"/></marker><marker id="arr-p" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="0" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,1 L10,5 L0,9 Z" fill="#8e4ec6"/></marker></defs>
+<rect x="22" y="64" width="74" height="62" rx="8" fill="#f4fafc" stroke="#1E93AB" stroke-width="2.2"/>
+<text x="59.0" y="91.0" text-anchor="middle" font-size="17" font-weight="600" fill="#1a2332">z</text>
+<text x="59.0" y="110.0" text-anchor="middle" font-size="12" fill="#6b7280">nhiễu</text>
+<line x1="96" y1="95.0" x2="120.0" y2="95.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
+<polygon points="134,77.4 242,55 242,135 134,112.6" fill="#f4fafc" stroke="#1E93AB" stroke-width="2.2"/>
+<text x="188.0" y="100.0" text-anchor="middle" font-size="15" font-weight="600" fill="#1a2332">G</text>
+<line x1="244" y1="95.0" x2="270.0" y2="95.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="286" y="64" width="62" height="62" rx="4" fill="rgb(244,250,252)" stroke="#cfd6dc" stroke-width="1.5"/>
+<circle cx="317.0" cy="95.0" r="16.12" fill="#1E93AB" opacity="1.00"/>
+<text x="317.0" y="144" text-anchor="middle" font-size="13" font-weight="600" fill="#1E93AB">G(z): ảnh giả</text>
+<rect x="22" y="196" width="96" height="62" rx="8" fill="#f1f8ef" stroke="#4a9d3f" stroke-width="2.2"/>
+<text x="70.0" y="223.0" text-anchor="middle" font-size="15" font-weight="600" fill="#1a2332">Dữ liệu</text>
+<text x="70.0" y="242.0" text-anchor="middle" font-size="12" fill="#6b7280">thật</text>
+<line x1="118" y1="227.0" x2="270.0" y2="227.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="286" y="196" width="62" height="62" rx="4" fill="rgb(244,250,252)" stroke="#cfd6dc" stroke-width="1.5"/>
+<circle cx="317.0" cy="227.0" r="16.12" fill="#1E93AB" opacity="1.00"/>
+<text x="317.0" y="276" text-anchor="middle" font-size="13" font-weight="600" fill="#4a9d3f">x: ảnh thật</text>
+<polygon points="430,60 550,115.44 550,202.56 430,258" fill="#fef5ee" stroke="#e8732a" stroke-width="2.2"/>
+<text x="490.0" y="164.0" text-anchor="middle" font-size="15" font-weight="600" fill="#1a2332">D</text>
+<line x1="348" y1="95.0" x2="420.0" y2="90.7" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
+<line x1="348" y1="227.0" x2="420.0" y2="231.3" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
+<line x1="550" y1="159.0" x2="574.0" y2="159.0" stroke="#1a2332" stroke-width="2.2" marker-end="url(#arr)"/>
+<rect x="588" y="127.0" width="112" height="64" rx="8" fill="#fff" stroke="#e8732a" stroke-width="2.2"/>
+<text x="644.0" y="155.0" text-anchor="middle" font-size="16" font-weight="600" fill="#1a2332">D(·)</text>
+<text x="644.0" y="174.0" text-anchor="middle" font-size="12" fill="#6b7280">thật / giả?</text>
+<text x="188" y="40" text-anchor="middle" font-size="13.5" fill="#1E93AB" font-weight="600">Generator: nhiễu → ảnh</text>
+<text x="490" y="40" text-anchor="middle" font-size="13.5" fill="#e8732a" font-weight="600">Discriminator: ảnh → thật/giả</text>
+<path d="M 644 191.0 L 644 312 L 188 312 L 188 135" fill="none" stroke="#8e4ec6" stroke-width="2.2" stroke-dasharray="6,5" marker-end="url(#arr-p)"/>
+<text x="402" y="307" text-anchor="middle" font-size="13" fill="#8e4ec6" font-weight="600">gradient lan ngược — G chỉ học qua D</text>
+</svg>

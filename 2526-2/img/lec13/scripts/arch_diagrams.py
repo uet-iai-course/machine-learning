@@ -254,10 +254,69 @@ def make_sd():
     print("Saved stable-diffusion-pipeline.svg")
 
 
+# ---------- 4. GAN ----------
+
+def make_gan():
+    """G (nở: nhiễu→ảnh) và D (hẹp: ảnh→1 số) đấu nhau; G chỉ học qua
+    gradient lan ngược từ D (mũi tên tím đứt nét)."""
+    W, H = 720, 338
+    s = header(W, H)
+    s = s.replace("</defs>", f'{marker_def("arr-p", PURPLE)}</defs>')
+
+    y_top = 64      # đường sinh (trên)
+    y_bot = 196     # đường dữ liệu thật (dưới)
+    bh = 62
+
+    # --- z (nhiễu) → G → G(z) ---
+    s += box(22, y_top, 74, bh, BG_BLUE, BLUE, "z", "nhiễu", fs=17)
+    s += arrow(96, y_top + bh / 2, 132, y_top + bh / 2)
+    s += trapezoid(134, y_top - 9, 108, bh + 18, False, BG_BLUE, BLUE, "G")
+    s += arrow(244, y_top + bh / 2, 282, y_top + bh / 2)
+    s += noisy_square(286, y_top, bh, 0.0, seed=3)
+    s += (f'<text x="{286 + bh / 2}" y="{y_top + bh + 18}" text-anchor="middle" '
+          f'font-size="13" font-weight="600" fill="{BLUE}">G(z): ảnh giả</text>\n')
+
+    # --- Tập dữ liệu → x thật ---
+    s += box(22, y_bot, 96, bh, BG_GREEN, GREEN, "Dữ liệu", "thật", fs=15)
+    s += arrow(118, y_bot + bh / 2, 282, y_bot + bh / 2)
+    s += noisy_square(286, y_bot, bh, 0.0, seed=7)
+    s += (f'<text x="{286 + bh / 2}" y="{y_bot + bh + 18}" text-anchor="middle" '
+          f'font-size="13" font-weight="600" fill="{GREEN}">x: ảnh thật</text>\n')
+
+    # --- D nhận cả hai ảnh → 1 số ---
+    Dx, Dy = 430, y_top - 4
+    Dw, Dh = 120, (y_bot + bh) - (y_top - 4)
+    s += trapezoid(Dx, Dy, Dw, Dh, True, BG_ORANGE, ORANGE, "D")
+    s += arrow(286 + bh, y_top + bh / 2, Dx + 2, y_top + 26)
+    s += arrow(286 + bh, y_bot + bh / 2, Dx + 2, y_bot + bh - 26)
+    Dmid = Dy + Dh / 2
+    s += arrow(Dx + Dw, Dmid, Dx + Dw + 36, Dmid)
+    s += box(Dx + Dw + 38, Dmid - 32, 112, 64, "#fff", ORANGE, "D(·)", "thật / giả?", fs=16)
+
+    # --- nhãn mục ---
+    s += (f'<text x="188" y="40" text-anchor="middle" font-size="13.5" '
+          f'fill="{BLUE}" font-weight="600">Generator: nhiễu → ảnh</text>\n')
+    s += (f'<text x="490" y="40" text-anchor="middle" font-size="13.5" '
+          f'fill="{ORANGE}" font-weight="600">Discriminator: ảnh → thật/giả</text>\n')
+
+    # --- gradient lan ngược (tím, đứt nét) từ D về G ---
+    gx = Dx + Dw + 38 + 56
+    s += (f'<path d="M {gx} {Dmid + 32} L {gx} 312 L 188 312 L 188 {y_top + bh + 9}" '
+          f'fill="none" stroke="{PURPLE}" stroke-width="2.2" stroke-dasharray="6,5" '
+          f'marker-end="url(#arr-p)"/>\n')
+    s += (f'<text x="402" y="307" text-anchor="middle" font-size="13" '
+          f'fill="{PURPLE}" font-weight="600">gradient lan ngược — G chỉ học qua D</text>\n')
+
+    s += "</svg>\n"
+    (OUT / "gan-architecture.svg").write_text(s, encoding="utf-8")
+    print("Saved gan-architecture.svg")
+
+
 def main():
     make_vae()
     make_diffusion()
     make_sd()
+    make_gan()
 
 
 if __name__ == "__main__":
