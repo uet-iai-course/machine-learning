@@ -273,14 +273,11 @@
 
     <section style="font-size:0.82em">
         <h2>RNN — Recurrent Neural Network</h2>
-        <p>Để sinh dữ liệu tuần tự, mô hình đoán phần tử kế tiếp dựa trên những gì đã sinh trước đó:</p>
+        <p>Sinh chuỗi = đoán phần tử kế từ quá khứ:</p>
         \[ p(x) = \prod_{i=1}^{n} p(x_i \mid x_1, \ldots, x_{i-1}) \]
-        <p style="margin-top:8px">Trạng thái ẩn \(h_t = \tanh(W_{hh} h_{t-1} + W_{xh} x_t)\) là "bộ nhớ" của
-            quá khứ; cùng một \(W\) được dùng lại ở mọi bước.</p>
-        <div class="demo-box" style="margin-top:10px">
-            <strong>char-rnn (Karpathy, 2015):</strong> huấn luyện trên "The cat sat" để đoán ký tự kế;
-            lấy mẫu "T"→"h"→"e"→… liên tục thì sinh ra văn bản mới.
-        </div>
+        <p style="margin-top:12px">RNN nén quá khứ \(x_1,\ldots,x_{i-1}\) vào <strong>trạng thái ẩn</strong>
+            \(h_{t-1}\) rồi đoán \(x_i\) từ đó — \(h\) cập nhật hồi quy, dùng lại cùng \(W\):</p>
+        \[ h_t = \tanh(W_{hh}\, h_{t-1} + W_{xh}\, x_t) \]
     </section>
 
     <section style="font-size:0.84em;">
@@ -316,7 +313,7 @@
             </div>
         </div>
         <div class="highlight" style="margin-top:12px">
-            Khắc phục: bùng nổ → <em>gradient clipping</em>; tiêu biến → <strong>LSTM</strong>.
+            Khắc phục: bùng nổ → <strong>cắt gradient</strong> (gradient clipping); tiêu biến → <strong>LSTM</strong>.
         </div>
     </section>
 
