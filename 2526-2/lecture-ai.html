@@ -1,0 +1,972 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AI in Plain Terms</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.css" />
+  <style>
+    /* Companion styles for ai_slides.html (inlined so nothing depends on a separate CSS file loading) */
+
+    .reveal {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .reveal h1,
+    .reveal h2,
+    .reveal h3 {
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .text-light {
+      color: #b0b0b0;
+      font-weight: 300;
+    }
+
+    .reveal .footer {
+      position: fixed;
+      bottom: 8px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 0.35em;
+      color: #999;
+      z-index: 30;
+      pointer-events: none;
+    }
+
+    .reveal .callout {
+      background: #fff8e1;
+      border-left: 4px solid #f4b400;
+      padding: 0.5em 0.9em;
+      margin-top: 0.6em;
+      font-size: 0.75em;
+      text-align: left;
+    }
+
+    .reveal .discuss {
+      text-align: center;
+    }
+
+    .reveal .discuss .big-question {
+      font-size: 1.6em;
+      font-weight: 600;
+      margin: 0.6em 0;
+    }
+
+    .reveal .portrait-row {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 2em;
+      margin-top: 0.6em;
+    }
+
+    .reveal .portrait-row figure {
+      margin: 0;
+      width: 240px;
+    }
+
+    .reveal .portrait-row img {
+      width: 220px;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      display: block;
+      margin: 0 auto;
+    }
+
+    .reveal .portrait-row figcaption {
+      font-size: 0.55em;
+      margin-top: 0.4em;
+      color: #555;
+      text-align: center;
+    }
+
+    /* Generic safeguard so nothing sourced from an image/svg ever blows out a slide */
+    .reveal section img,
+    .reveal section svg {
+      max-width: 100%;
+      max-height: 420px;
+      width: auto;
+      height: auto;
+    }
+
+    .reveal .icon-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.2em 2em;
+      margin: 0.6em 0;
+    }
+
+    .reveal .icon-row figure {
+      margin: 0;
+      text-align: center;
+      width: 150px;
+    }
+
+    .reveal .icon-row svg {
+      max-height: 140px;
+    }
+
+    .reveal .icon-row .real-logo {
+      width: 130px;
+      height: 130px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .reveal .icon-row .badge-fallback {
+      display: none;
+    }
+
+    /* Showcase-sized variant for full generated example images (Midjourney/DALL-E),
+       as opposed to small square logo badges. */
+    .reveal .icon-row figure.showcase {
+      width: 300px;
+    }
+
+    .reveal .icon-row figure.showcase .real-logo {
+      width: auto;
+      height: auto;
+      max-width: 300px;
+      max-height: 280px;
+      object-fit: contain;
+    }
+
+    /* Hard pixel-based sizing for slides that were overflowing — bypasses relative
+       em cascading entirely so there's no ambiguity about compounding font sizes. */
+    .reveal section.mini h2 {
+      font-size: 30px !important;
+      margin: 0 0 10px !important;
+    }
+
+    .reveal section.mini p,
+    .reveal section.mini li {
+      font-size: 16px !important;
+      line-height: 1.28 !important;
+      margin: 4px 0 !important;
+    }
+
+    .reveal section.mini ul {
+      margin: 6px 0 !important;
+    }
+
+    .reveal section.mini .portrait-row {
+      margin-top: 6px !important;
+    }
+
+    .reveal section.mini .portrait-row img {
+      width: 220px !important;
+      height: 220px !important;
+    }
+
+    .reveal section.mini .portrait-row figcaption {
+      font-size: 14px !important;
+      margin-top: 4px !important;
+    }
+
+    .reveal section.mini .diagram-wrap {
+      margin-top: 6px !important;
+      max-width: 800px !important;
+    }
+
+    .reveal section.mini .diagram-wrap svg,
+    .reveal section.mini .diagram-wrap img {
+      max-height: 380px !important;
+    }
+
+    .reveal section.mini .callout {
+      font-size: 13px !important;
+      padding: 6px 10px !important;
+      margin-top: 6px !important;
+    }
+
+    .reveal .icon-row figcaption {
+      font-size: 0.8em;
+      color: #555;
+      margin-top: 0.4em;
+    }
+
+    .reveal blockquote.citation {
+      font-size: 0.7em;
+      font-style: italic;
+      border-left: 4px solid #ccc;
+      padding-left: 0.8em;
+      box-shadow: none;
+    }
+
+    .reveal .diagram-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 0.4em auto 0;
+      max-width: 820px;
+    }
+
+    .reveal .diagram-wrap svg,
+    .reveal .diagram-wrap img {
+      max-width: 100%;
+      max-height: 420px;
+      height: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- Cover -->
+      <section>
+        <section>
+          <h1>AI in Plain Terms</h1>
+          <h3>What "AI" Actually Means, and Why It Matters</h3>
+          <p>The Melon Benchmark</p>
+        </section>
+
+        <section>
+          <h2>Agenda</h2>
+          <ol>
+            <li>What Is AI, Really?</li>
+            <li>Where This All Came From</li>
+            <li>How Today's AI Actually Works</li>
+            <li>AI Accomplishments</li>
+            <li>Can AI Keep Getting Better?</li>
+            <li>The Real Dangers of AI</li>
+          </ol>
+        </section>
+      </section>
+
+      <!-- 1. Intro -->
+
+      <!-- 2. What is AI -->
+      <section>
+        <section>
+          <h1>
+            <span class="text-light">2.</span><br />
+            What Is AI, Really?
+          </h1>
+        </section>
+
+        <section class="discuss">
+          <h2>Before We Start...</h2>
+          <p class="big-question">What is AI?</p>
+          <p><em>(Just answer off the top of your head — there's no wrong answer yet.)</em></p>
+          <aside class="notes">
+            Icebreaker only. Let 2-3 people answer, don't correct or steer yet. ~1 min.
+          </aside>
+        </section>
+
+        <section style="font-size: .8em;">
+          <h2>Three Terms, Three Scopes</h2>
+          <ul>
+            <li><strong>Artificial Intelligence (AI):</strong> the broad goal — getting a machine to perform tasks
+              that normally require human intelligence.</li>
+            <li><strong>Machine Learning (ML):</strong> one way to get there — instead of hand-coding every rule,
+              the system learns patterns from data.</li>
+            <li><strong>Deep Learning (DL):</strong> one way to do ML, using neural networks with many layers.
+              Today's most powerful, most popular approach.</li>
+          </ul>
+          <div class="callout">
+            What most people mean when they say <strong>"AI"</strong> today is really just Deep Learning
+            specifically.
+          </div>
+          <aside class="notes">
+            Go slow here — this is the conceptual anchor for the rest of the talk. Make sure "AI is the umbrella,
+            ML is a strategy, DL is a specific technique" lands before moving to the diagram.
+          </aside>
+        </section>
+
+        <section>
+          <h2>Putting It Together</h2>
+          <div class="diagram-wrap">
+            <svg viewBox="0 0 520 340" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="260" cy="180" r="150" fill="#dbeeff" stroke="#5b9bd5" stroke-width="2" />
+              <circle cx="260" cy="200" r="105" fill="#a9d3f5" stroke="#2f75b5" stroke-width="2" />
+              <circle cx="260" cy="220" r="60" fill="#4f8fd1" stroke="#1f4e79" stroke-width="2" />
+              <text x="260" y="60" text-anchor="middle" font-size="22" fill="#1f4e79" font-weight="600">Artificial
+                Intelligence</text>
+              <text x="260" y="120" text-anchor="middle" font-size="18" fill="#1f4e79" font-weight="600">Machine
+                Learning</text>
+              <text x="260" y="185" text-anchor="middle" font-size="15" fill="#ffffff" font-weight="600">Deep</text>
+              <text x="260" y="205" text-anchor="middle" font-size="15" fill="#ffffff" font-weight="600">Learning</text>
+            </svg>
+          </div>
+          <p style="font-size: .6em;">Each ring sits fully inside the one before it — DL is a subset of ML, which is
+            a subset of AI.</p>
+        </section>
+
+        <section class="mini">
+          <h2>Machine Learning in Practice</h2>
+          <p>The simplest possible example: <strong>linear regression</strong> — fit a line through data, then use
+            it to predict.</p>
+          <div class="diagram-wrap">
+            <svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+              <line x1="40" y1="20" x2="40" y2="210" stroke="#333" stroke-width="1.5" />
+              <line x1="40" y1="210" x2="380" y2="210" stroke="#333" stroke-width="1.5" />
+              <text x="210" y="232" text-anchor="middle" font-size="12" fill="#555">input (x)</text>
+              <text x="18" y="115" text-anchor="middle" font-size="12" fill="#555" transform="rotate(-90 18 115)">output
+                (y)</text>
+              <g fill="#2f75b5">
+                <circle cx="70" cy="190" r="4.5" /><circle cx="100" cy="175" r="4.5" /><circle cx="130" cy="150"
+                  r="4.5" /><circle cx="160" cy="160" r="4.5" /><circle cx="190" cy="120" r="4.5" /><circle cx="220"
+                  cy="110" r="4.5" /><circle cx="250" cy="90" r="4.5" /><circle cx="280" cy="95" r="4.5" /><circle
+                  cx="310" cy="60" r="4.5" /><circle cx="340" cy="50" r="4.5" />
+              </g>
+              <line x1="60" y1="200" x2="350" y2="45" stroke="#c0392b" stroke-width="2.5" />
+            </svg>
+          </div>
+          <p style="color: #666;">Dots are past examples; the red line is what the model learned. New input → read
+            off the line → prediction.</p>
+        </section>
+
+        <section class="mini">
+          <h2>Deep Learning — Neural Networks</h2>
+          <p>Many simple units ("neurons"), arranged in layers, each layer feeding the next.</p>
+          <div class="diagram-wrap">
+            <svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+              <text x="70" y="15" text-anchor="middle" font-size="11" fill="#1f4e79" font-weight="600">Input</text>
+              <text x="210" y="15" text-anchor="middle" font-size="11" fill="#1f4e79" font-weight="600">Hidden</text>
+              <text x="345" y="15" text-anchor="middle" font-size="11" fill="#1f4e79" font-weight="600">Output</text>
+              <g stroke="#c7d9ea" stroke-width="0.8">
+                <line x1="70" y1="35" x2="210" y2="25" /><line x1="70" y1="35" x2="210" y2="80" /><line x1="70"
+                  y1="35" x2="210" y2="135" /><line x1="70" y1="35" x2="210" y2="190" /><line x1="70" y1="35"
+                  x2="210" y2="245" />
+                <line x1="70" y1="95" x2="210" y2="25" /><line x1="70" y1="95" x2="210" y2="80" /><line x1="70"
+                  y1="95" x2="210" y2="135" /><line x1="70" y1="95" x2="210" y2="190" /><line x1="70" y1="95"
+                  x2="210" y2="245" />
+                <line x1="70" y1="155" x2="210" y2="25" /><line x1="70" y1="155" x2="210" y2="80" /><line x1="70"
+                  y1="155" x2="210" y2="135" /><line x1="70" y1="155" x2="210" y2="190" /><line x1="70" y1="155"
+                  x2="210" y2="245" />
+                <line x1="70" y1="215" x2="210" y2="25" /><line x1="70" y1="215" x2="210" y2="80" /><line x1="70"
+                  y1="215" x2="210" y2="135" /><line x1="70" y1="215" x2="210" y2="190" /><line x1="70" y1="215"
+                  x2="210" y2="245" />
+              </g>
+              <g stroke="#c7d9ea" stroke-width="0.8">
+                <line x1="210" y1="25" x2="345" y2="90" /><line x1="210" y1="25" x2="345" y2="180" />
+                <line x1="210" y1="80" x2="345" y2="90" /><line x1="210" y1="80" x2="345" y2="180" />
+                <line x1="210" y1="135" x2="345" y2="90" /><line x1="210" y1="135" x2="345" y2="180" />
+                <line x1="210" y1="190" x2="345" y2="90" /><line x1="210" y1="190" x2="345" y2="180" />
+                <line x1="210" y1="245" x2="345" y2="90" /><line x1="210" y1="245" x2="345" y2="180" />
+              </g>
+              <g fill="#dbeeff" stroke="#5b9bd5" stroke-width="1.5">
+                <circle cx="70" cy="35" r="10" /><circle cx="70" cy="95" r="10" /><circle cx="70" cy="155" r="10" />
+                <circle cx="70" cy="215" r="10" />
+              </g>
+              <g fill="#4f8fd1" stroke="#1f4e79" stroke-width="1.5">
+                <circle cx="210" cy="25" r="10" /><circle cx="210" cy="80" r="10" /><circle cx="210" cy="135"
+                  r="10" /><circle cx="210" cy="190" r="10" /><circle cx="210" cy="245" r="10" />
+              </g>
+              <g fill="#1f4e79" stroke="#0d2b47" stroke-width="1.5">
+                <circle cx="345" cy="90" r="10" /><circle cx="345" cy="180" r="10" />
+              </g>
+            </svg>
+          </div>
+          <p style="font-size: .65em; color: #666;">"Deep" just means many hidden layers stacked between input and
+            output.</p>
+        </section>
+
+        <section class="mini">
+          <h2>Transformers — The Real Architecture</h2>
+          <p>From the original 2017 "Attention Is All You Need" paper — the architecture behind ChatGPT and most
+            modern language models.</p>
+          <div class="diagram-wrap" style="max-width: 480px;">
+            <img src="img/ai_slides/transformer.png"
+              alt="Transformer encoder-decoder architecture from Attention Is All You Need"
+              style="width: auto; height: auto; max-height: 420px; max-width: 100%; display: block; margin: 0 auto;"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <svg viewBox="0 0 380 320" xmlns="http://www.w3.org/2000/svg" style="display:none;"
+              class="badge-fallback">
+              <rect x="40" y="10" width="300" height="36" rx="8" fill="#eef3f8" stroke="#2f75b5" stroke-width="2" />
+              <text x="190" y="33" text-anchor="middle" font-size="13" fill="#1f4e79">Input tokens: "The cat sat
+                down"</text>
+
+              <line x1="190" y1="46" x2="190" y2="68" stroke="#555" stroke-width="2" marker-end="url(#tarrow)" />
+
+              <rect x="20" y="70" width="340" height="90" rx="8" fill="#4f8fd1" stroke="#1f4e79" stroke-width="2" />
+              <text x="190" y="90" text-anchor="middle" font-size="12" fill="#fff" font-weight="600">Self-Attention</text>
+              <g>
+                <circle cx="80" cy="130" r="6" fill="#fff" /><circle cx="150" cy="130" r="6" fill="#fff" /><circle
+                  cx="230" cy="130" r="6" fill="#fff" /><circle cx="300" cy="130" r="6" fill="#fff" />
+                <g stroke="#dbeeff" stroke-width="1" opacity="0.9">
+                  <line x1="80" y1="130" x2="150" y2="130" /><line x1="80" y1="130" x2="230" y2="130" /><line
+                    x1="80" y1="130" x2="300" y2="130" />
+                  <line x1="150" y1="130" x2="230" y2="130" /><line x1="150" y1="130" x2="300" y2="130" />
+                  <line x1="230" y1="130" x2="300" y2="130" />
+                </g>
+              </g>
+              <text x="190" y="152" text-anchor="middle" font-size="10" fill="#dbeeff">every word looks at every
+                other word</text>
+
+              <line x1="190" y1="160" x2="190" y2="182" stroke="#555" stroke-width="2" marker-end="url(#tarrow)" />
+
+              <rect x="90" y="184" width="200" height="36" rx="8" fill="#a9d3f5" stroke="#2f75b5" stroke-width="2" />
+              <text x="190" y="207" text-anchor="middle" font-size="12" fill="#1f4e79" font-weight="600">Feed
+                Forward</text>
+
+              <line x1="190" y1="220" x2="190" y2="242" stroke="#555" stroke-width="2" marker-end="url(#tarrow)" />
+
+              <rect x="60" y="244" width="260" height="36" rx="8" fill="#eef3f8" stroke="#2f75b5" stroke-width="2" />
+              <text x="190" y="267" text-anchor="middle" font-size="12" fill="#1f4e79">Output: next-word
+                probabilities</text>
+
+              <text x="190" y="305" text-anchor="middle" font-size="10" fill="#888">this whole stack repeats many
+                times ("layers")</text>
+
+              <defs>
+                <marker id="tarrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L6,3 L0,6 Z" fill="#555" />
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </section>
+      </section>
+
+      <!-- 3. History -->
+      <section>
+        <section>
+          <h1>
+            <span class="text-light">3.</span><br />
+            Where This All Came From
+          </h1>
+        </section>
+
+        <section style="font-size: .85em;">
+          <h2>A Physics Prize... for AI?</h2>
+          <p><strong>2024 Nobel Prize in Physics</strong> — awarded to John Hopfield and Geoffrey Hinton.</p>
+          <blockquote class="citation">
+            "for foundational discoveries and inventions that enable machine learning with artificial neural
+            networks"
+          </blockquote>
+          <p>First time the physics prize recognized this kind of work.</p>
+          <aside class="notes">
+            Quick hook, don't linger. This sets up "the ideas behind today's AI came out of physics."
+          </aside>
+        </section>
+
+        <section class="mini">
+          <h2 style="font-size: 24px !important; margin: 0 0 6px !important;">Two Physicists, Two Key Ideas</h2>
+          <div class="portrait-row" style="gap: 16px !important; margin-top: 4px !important;">
+            <figure style="width: 420px !important;">
+              <img src="img/ai_slides/hopfield.jpg" alt="John Hopfield"
+                style="width: 400px !important; height: 400px !important;"
+                onerror="this.closest('figure').style.display='none'" />
+              <figcaption>Hopfield — Princeton<br />Hopfield network</figcaption>
+            </figure>
+            <figure style="width: 420px !important;">
+              <img src="img/ai_slides/hinton.jpg" alt="Geoffrey Hinton"
+                style="width: 400px !important; height: 400px !important;"
+                onerror="this.closest('figure').style.display='none'" />
+              <figcaption>Hinton — U. Toronto<br />Boltzmann machine / RBM</figcaption>
+            </figure>
+          </div>
+          <aside class="notes">
+            Keep this one brief — it's just an introduction to the two people. The next slides do the actual
+            explaining.
+          </aside>
+        </section>
+
+        <section style="font-size: .82em;">
+          <h2>Spin Glass Theory, Simply</h2>
+          <ul>
+            <li>Originally a physics idea about magnetic materials: tiny magnets ("spins") linked to their
+              neighbors, some pulling together, some pushing apart.</li>
+            <li>There's no single tidy order — the system settles into one of <em>many</em> stable, low-energy
+              configurations depending on where it started.</li>
+          </ul>
+          <aside class="notes">
+            Set up the idea in words first — the visual is on the next slide.
+          </aside>
+        </section>
+
+        <section class="mini">
+          <h2>What Spin Glass Looks Like</h2>
+          <div class="diagram-wrap" style="max-width: 400px;">
+            <img src="img/ai_slides/spin_glass.svg" alt="Spin glass diagram: a grid of atomic spins pointing up or down"
+              style="max-height: 460px; width: auto;" />
+          </div>
+          <p>Each arrow is a tiny magnet ("spin") that can point up or down. Neighbors pull some pairs into
+            agreement and push others apart — the grid settles into one of many possible stable arrangements.
+            Hopfield's insight: treat each arrangement as a stored <strong>memory</strong>.</p>
+        </section>
+
+        <section style="font-size: .82em;">
+          <h2>RBM, Simply</h2>
+          <ul>
+            <li><strong>Boltzmann machine:</strong> like a Hopfield network, but with randomness added, and two
+              kinds of units — <em>visible</em> (input) and <em>hidden</em> (learned features).</li>
+            <li><strong>"Restricted"</strong> = hidden units only connect to visible units, never to each other.
+              That one rule makes it practical to train.</li>
+          </ul>
+          <aside class="notes">
+            Definitions only here — the comparison diagram is on the next slide.
+          </aside>
+        </section>
+
+        <section>
+          <h2 style="font-size: 22px; margin: 0 0 4px;">Same Family, Different Wiring</h2>
+          <div class="diagram-wrap" style="max-width: 500px !important; margin-top: 0 !important;">
+            <svg viewBox="0 0 460 570" xmlns="http://www.w3.org/2000/svg" style="max-height: 610px !important; width: auto;">
+              <!-- Top: Boltzmann / RBM style bipartite graph -->
+              <text x="230" y="15" text-anchor="middle" font-size="13" fill="#1f4e79" font-weight="600">Hidden</text>
+              <circle cx="170" cy="40" r="12" fill="#4f8fd1" stroke="#1f4e79" stroke-width="1.5" />
+              <circle cx="230" cy="40" r="12" fill="#4f8fd1" stroke="#1f4e79" stroke-width="1.5" />
+              <circle cx="290" cy="40" r="12" fill="#4f8fd1" stroke="#1f4e79" stroke-width="1.5" />
+
+              <g stroke="#c7d9ea" stroke-width="1.2">
+                <line x1="170" y1="40" x2="140" y2="135" />
+                <line x1="170" y1="40" x2="200" y2="135" />
+                <line x1="170" y1="40" x2="260" y2="135" />
+                <line x1="170" y1="40" x2="320" y2="135" />
+                <line x1="230" y1="40" x2="140" y2="135" />
+                <line x1="230" y1="40" x2="200" y2="135" />
+                <line x1="230" y1="40" x2="260" y2="135" />
+                <line x1="230" y1="40" x2="320" y2="135" />
+                <line x1="290" y1="40" x2="140" y2="135" />
+                <line x1="290" y1="40" x2="200" y2="135" />
+                <line x1="290" y1="40" x2="260" y2="135" />
+                <line x1="290" y1="40" x2="320" y2="135" />
+              </g>
+
+              <circle cx="140" cy="135" r="12" fill="#eef3f8" stroke="#2f75b5" stroke-width="1.5" />
+              <circle cx="200" cy="135" r="12" fill="#eef3f8" stroke="#2f75b5" stroke-width="1.5" />
+              <circle cx="260" cy="135" r="12" fill="#eef3f8" stroke="#2f75b5" stroke-width="1.5" />
+              <circle cx="320" cy="135" r="12" fill="#eef3f8" stroke="#2f75b5" stroke-width="1.5" />
+              <text x="230" y="168" text-anchor="middle" font-size="13" fill="#1f4e79" font-weight="600">Visible (input)</text>
+              <text x="230" y="200" text-anchor="middle" font-size="16" fill="#333" font-weight="600">Boltzmann Machine</text>
+
+              <!-- Double arrow, pointing down -->
+              <line x1="230" y1="220" x2="230" y2="300" stroke="#8b2e2e" stroke-width="7" />
+              <polygon points="230,220 216,238 244,238" fill="#8b2e2e" />
+              <polygon points="230,300 216,282 244,282" fill="#8b2e2e" />
+
+              <!-- Bottom: Hopfield fully-connected graph -->
+              <g stroke="#333" stroke-width="1.4" opacity="0.55">
+                <line x1="230" y1="325" x2="295" y2="363" />
+                <line x1="230" y1="325" x2="295" y2="438" />
+                <line x1="230" y1="325" x2="230" y2="475" />
+                <line x1="230" y1="325" x2="165" y2="438" />
+                <line x1="230" y1="325" x2="165" y2="363" />
+                <line x1="295" y1="363" x2="295" y2="438" />
+                <line x1="295" y1="363" x2="230" y2="475" />
+                <line x1="295" y1="363" x2="165" y2="438" />
+                <line x1="295" y1="363" x2="165" y2="363" />
+                <line x1="295" y1="438" x2="230" y2="475" />
+                <line x1="295" y1="438" x2="165" y2="438" />
+                <line x1="295" y1="438" x2="165" y2="363" />
+                <line x1="230" y1="475" x2="165" y2="438" />
+                <line x1="230" y1="475" x2="165" y2="363" />
+                <line x1="165" y1="438" x2="165" y2="363" />
+              </g>
+              <circle cx="230" cy="325" r="12" fill="#4f8fd1" stroke="#1f4e79" stroke-width="1.5" />
+              <circle cx="295" cy="363" r="12" fill="#4f8fd1" stroke="#1f4e79" stroke-width="1.5" />
+              <circle cx="295" cy="438" r="12" fill="#4f8fd1" stroke="#1f4e79" stroke-width="1.5" />
+              <circle cx="230" cy="475" r="12" fill="#4f8fd1" stroke="#1f4e79" stroke-width="1.5" />
+              <circle cx="165" cy="438" r="12" fill="#4f8fd1" stroke="#1f4e79" stroke-width="1.5" />
+              <circle cx="165" cy="363" r="12" fill="#4f8fd1" stroke="#1f4e79" stroke-width="1.5" />
+              <text x="230" y="510" text-anchor="middle" font-size="16" fill="#333" font-weight="600">Hopfield Network</text>
+
+              <text x="230" y="545" text-anchor="middle" font-size="13" fill="#666">Different look, same underlying
+                math —</text>
+              <text x="230" y="562" text-anchor="middle" font-size="13" fill="#666">Hinton built one on top of the
+                other.</text>
+            </svg>
+          </div>
+        </section>
+
+        <section style="font-size: .82em;">
+          <h2>Why It Mattered</h2>
+          <p>Finds hidden patterns in data on its own — e.g. learning "edges" or "shapes" in images without being
+            told. Hinton stacked RBMs to pretrain deep networks in 2006 — a turning point that helped ignite the
+            deep learning boom.</p>
+          <div class="callout">
+            Today's models (ChatGPT, etc.) use a different architecture — Transformers. This is about where the
+            <em>ideas</em> came from, not what's literally running under the hood today.
+          </div>
+        </section>
+      </section>
+
+      <!-- 4. How AI works -->
+      <section>
+        <section>
+          <h1>
+            <span class="text-light">4.</span><br />
+            How Today's AI Actually Works
+          </h1>
+        </section>
+
+        <section class="discuss">
+          <h2>Quick Guess</h2>
+          <p class="big-question">How do you think these models actually work?</p>
+          <aside class="notes">
+            Let a couple of guesses land before revealing. ~1-2 min.
+          </aside>
+        </section>
+
+        <section style="font-size: .8em;">
+          <h2>It's Probability, All the Way Down</h2>
+          <ul>
+            <li>Trained on enormous amounts of text.</li>
+            <li>At the core, it's predicting <strong>"what word comes next"</strong> — over and over.</li>
+          </ul>
+          <div class="diagram-wrap">
+            <svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg">
+              <rect x="10" y="70" width="140" height="60" rx="8" fill="#eef3f8" stroke="#2f75b5" stroke-width="2" />
+              <text x="80" y="105" text-anchor="middle" font-size="13" fill="#1f4e79">"The cat sat on the..."</text>
+
+              <path d="M155 100 L205 100" stroke="#555" stroke-width="2" marker-end="url(#arrow)" />
+
+              <rect x="210" y="60" width="110" height="80" rx="8" fill="#4f8fd1" stroke="#1f4e79" stroke-width="2" />
+              <text x="265" y="105" text-anchor="middle" font-size="14" fill="#fff" font-weight="600">Model</text>
+
+              <path d="M325 100 L375 100" stroke="#555" stroke-width="2" marker-end="url(#arrow)" />
+
+              <rect x="380" y="40" width="170" height="120" rx="8" fill="#eef3f8" stroke="#2f75b5" stroke-width="2" />
+              <text x="465" y="60" text-anchor="middle" font-size="11" fill="#1f4e79" font-weight="600">Probabilities</text>
+              <text x="465" y="80" text-anchor="middle" font-size="11" fill="#333">mat — 0.42</text>
+              <text x="465" y="98" text-anchor="middle" font-size="11" fill="#333">roof — 0.11</text>
+              <text x="465" y="116" text-anchor="middle" font-size="11" fill="#333">floor — 0.08</text>
+              <text x="465" y="134" text-anchor="middle" font-size="11" fill="#333">…</text>
+
+              <path d="M555 100 L600 100" stroke="#555" stroke-width="2" marker-end="url(#arrow)" />
+              <text x="620" y="95" text-anchor="middle" font-size="12" fill="#1f4e79" font-weight="600">"mat"</text>
+
+              <path d="M620 130 C 620 175, 300 175, 80 140" stroke="#999" stroke-width="1.5" fill="none"
+                stroke-dasharray="4,3" marker-end="url(#arrow2)" />
+              <text x="350" y="188" text-anchor="middle" font-size="10" fill="#888">repeat, one word at a time</text>
+
+              <defs>
+                <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L6,3 L0,6 Z" fill="#555" />
+                </marker>
+                <marker id="arrow2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L6,3 L0,6 Z" fill="#999" />
+                </marker>
+              </defs>
+            </svg>
+          </div>
+          <aside class="notes">
+            Important nuance to say out loud: the model isn't attaching human "understanding" to words the way a
+            person does — that's a useful simplification, but it's genuinely debated among researchers (the
+            "stochastic parrot" argument has real critics on both sides). Don't state it as settled fact.
+          </aside>
+        </section>
+
+        <section class="mini">
+          <h2>How Image Generation Works</h2>
+          <p>Take <strong>Stable Diffusion</strong> as an example: the model starts from random (Gaussian) noise,
+            then conditions on your prompt to gradually remove that noise, step by step, until an image forms.</p>
+          <div class="diagram-wrap" style="max-width: 700px;">
+            <svg viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="noisePattern" width="10" height="10" patternUnits="userSpaceOnUse">
+                  <rect width="10" height="10" fill="#dbeeff" />
+                  <rect x="0" y="0" width="5" height="5" fill="#4f8fd1" />
+                  <rect x="5" y="5" width="5" height="5" fill="#2f75b5" />
+                  <rect x="5" y="0" width="5" height="5" fill="#f4b400" />
+                  <rect x="0" y="5" width="5" height="5" fill="#c0392b" />
+                </pattern>
+                <radialGradient id="blobGrad" cx="50%" cy="50%" r="55%">
+                  <stop offset="0%" stop-color="#4f8fd1" />
+                  <stop offset="70%" stop-color="#a9d3f5" />
+                  <stop offset="100%" stop-color="#dbeeff" />
+                </radialGradient>
+                <marker id="uparrow" markerWidth="8" markerHeight="8" refX="3" refY="0" orient="auto">
+                  <path d="M0,6 L3,0 L6,6 Z" fill="#8b2e2e" />
+                </marker>
+                <marker id="rightarrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L6,3 L0,6 Z" fill="#555" />
+                </marker>
+              </defs>
+
+              <rect x="10" y="20" width="140" height="120" rx="8" fill="url(#noisePattern)" stroke="#1f4e79"
+                stroke-width="2" />
+              <text x="80" y="158" text-anchor="middle" font-size="12" fill="#333">Random noise</text>
+
+              <line x1="155" y1="80" x2="215" y2="80" stroke="#555" stroke-width="2" marker-end="url(#rightarrow)" />
+
+              <rect x="220" y="20" width="140" height="120" rx="8" fill="#eef3f8" stroke="#1f4e79" stroke-width="2" />
+              <ellipse cx="290" cy="80" rx="45" ry="40" fill="url(#blobGrad)" opacity="0.85" />
+              <text x="290" y="158" text-anchor="middle" font-size="12" fill="#333">Partially denoised</text>
+
+              <line x1="365" y1="80" x2="425" y2="80" stroke="#555" stroke-width="2" marker-end="url(#rightarrow)" />
+
+              <rect x="430" y="20" width="140" height="120" rx="8" fill="#eef3f8" stroke="#1f4e79" stroke-width="2" />
+              <path d="M450,120 L480,75 L505,100 L525,65 L550,120 Z" fill="#4f8fd1" />
+              <circle cx="475" cy="55" r="8" fill="#f4b400" />
+              <text x="500" y="158" text-anchor="middle" font-size="12" fill="#333">Final image</text>
+
+              <rect x="130" y="205" width="360" height="40" rx="8" fill="#fff8e1" stroke="#f4b400" stroke-width="2" />
+              <text x="310" y="230" text-anchor="middle" font-size="13" fill="#333">Prompt: "a cozy cabin in the
+                snow"</text>
+
+              <line x1="200" y1="205" x2="120" y2="150" stroke="#8b2e2e" stroke-width="2"
+                marker-end="url(#uparrow)" />
+              <line x1="310" y1="205" x2="300" y2="150" stroke="#8b2e2e" stroke-width="2"
+                marker-end="url(#uparrow)" />
+              <line x1="420" y1="205" x2="500" y2="150" stroke="#8b2e2e" stroke-width="2"
+                marker-end="url(#uparrow)" />
+            </svg>
+          </div>
+          <p style="font-size: 12px; color: #888;">The prompt steers every step of the denoising process, not just
+            the final result.</p>
+        </section>
+      </section>
+
+      <!-- 5. AI Accomplishments -->
+      <section>
+        <section>
+          <h1>
+            <span class="text-light">5.</span><br />
+            AI Accomplishments
+          </h1>
+        </section>
+
+        <section style="font-size: .8em;">
+          <h2>Chatbots / Text AI</h2>
+          <p>Mainly built on the <strong>Transformer</strong> architecture.</p>
+          <div class="icon-row">
+            <figure>
+              <img src="img/ai_slides/openai.png" alt="ChatGPT" class="real-logo"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+              <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" class="badge-fallback">
+                <circle cx="40" cy="40" r="34" fill="#10a37f" stroke="#0b7a5f" stroke-width="2" />
+                <text x="40" y="49" text-anchor="middle" font-size="22" fill="#fff" font-weight="700">Ch</text>
+              </svg>
+              <figcaption>ChatGPT</figcaption>
+            </figure>
+            <figure>
+              <img src="img/ai_slides/gemini.png" alt="Gemini" class="real-logo"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+              <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" class="badge-fallback">
+                <circle cx="40" cy="40" r="34" fill="#4285f4" stroke="#2a5db0" stroke-width="2" />
+                <text x="40" y="49" text-anchor="middle" font-size="22" fill="#fff" font-weight="700">Ge</text>
+              </svg>
+              <figcaption>Gemini</figcaption>
+            </figure>
+            <figure>
+              <img src="img/ai_slides/grok.png" alt="Grok" class="real-logo"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+              <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" class="badge-fallback">
+                <circle cx="40" cy="40" r="34" fill="#111111" stroke="#000000" stroke-width="2" />
+                <text x="40" y="49" text-anchor="middle" font-size="22" fill="#fff" font-weight="700">Gr</text>
+              </svg>
+              <figcaption>Grok</figcaption>
+            </figure>
+            <figure>
+              <img src="img/ai_slides/claude.jpg" alt="Claude" class="real-logo"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+              <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" class="badge-fallback">
+                <circle cx="40" cy="40" r="34" fill="#d97757" stroke="#a85a3f" stroke-width="2" />
+                <text x="40" y="49" text-anchor="middle" font-size="22" fill="#fff" font-weight="700">Cl</text>
+              </svg>
+              <figcaption>Claude</figcaption>
+            </figure>
+          </div>
+          <aside class="notes">
+            ChatGPT, Gemini, Grok, and Claude now use the real logos you provided (saved to img/ai_slides/ as
+            chatgpt.png, gemini.png, grok.png, claude.png). Perplexity and DeepSeek still fall back to monogram
+            badges until real files are dropped in with those names.
+          </aside>
+        </section>
+
+        <section style="font-size: .8em;">
+          <h2>Image &amp; Video Generators</h2>
+          <p>Mainly built on <strong>Diffusion</strong> models, often paired with <strong>ViT</strong> (Vision
+            Transformer) components.</p>
+          <div class="icon-row">
+            <figure class="showcase">
+              <img src="img/ai_slides/midjourney.jpg" alt="Midjourney example generation" class="real-logo"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+              <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" class="badge-fallback">
+                <circle cx="40" cy="40" r="34" fill="#6c5ce7" stroke="#4d38ad" stroke-width="2" />
+                <text x="40" y="49" text-anchor="middle" font-size="20" fill="#fff" font-weight="700">Mj</text>
+              </svg>
+              <figcaption>Midjourney</figcaption>
+            </figure>
+            <figure class="showcase">
+              <img src="img/ai_slides/dalle.webp" alt="DALL·E example generation" class="real-logo"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+              <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" class="badge-fallback">
+                <circle cx="40" cy="40" r="34" fill="#0d8f6f" stroke="#0a6b53" stroke-width="2" />
+                <text x="40" y="49" text-anchor="middle" font-size="20" fill="#fff" font-weight="700">Da</text>
+              </svg>
+              <figcaption>DALL·E</figcaption>
+            </figure>
+          </div>
+          <p style="font-size: .6em; color: #888;">Earlier approaches like GANs and VAEs paved the way, but
+            diffusion has largely taken over — not going deeper on those here.</p>
+        </section>
+
+        <section style="font-size: .78em;">
+          <h2>Other AI Achievements</h2>
+          <ul>
+            <li><strong>Medicine:</strong> AI-assisted drug discovery and faster, more accurate diagnostic
+              reading of scans.</li>
+            <li><strong>Accessibility:</strong> real-time captioning, screen readers, and tools that help people
+              with disabilities communicate and navigate the world.</li>
+            <li><strong>2024 Nobel Prize in Chemistry:</strong> David Baker ("for computational protein design"),
+              and Demis Hassabis &amp; John Jumper ("for protein structure prediction" — AlphaFold2).</li>
+          </ul>
+        </section>
+      </section>
+
+      <!-- 6. Can AI get better -->
+      <section>
+        <section>
+          <h1>
+            <span class="text-light">6.</span><br />
+            Can AI Keep Getting Better?
+          </h1>
+        </section>
+
+        <section class="discuss">
+          <h2>Discuss</h2>
+          <p class="big-question">Do you think AI just keeps getting smarter from here?</p>
+          <aside class="notes">
+            Open floor, ~2 min. Timebox it — discussion questions run long.
+          </aside>
+        </section>
+
+        <section style="font-size: .85em;">
+          <h2>Probably — But Not Obviously Right Now</h2>
+          <ul>
+            <li><strong>Architecture limits:</strong> today's designs may have ceilings we haven't hit yet.</li>
+            <li><strong>Possible plateau:</strong> gains from just "making it bigger" may be slowing.</li>
+            <li><strong>Running low on data:</strong> fresh, high-quality text to train on isn't infinite.</li>
+          </ul>
+        </section>
+      </section>
+
+      <!-- 6. Dangers -->
+      <section>
+        <section>
+          <h1>
+            <span class="text-light">7.</span><br />
+            The Real Dangers of AI
+          </h1>
+        </section>
+
+        <section class="discuss">
+          <h2>Discuss</h2>
+          <p class="big-question">What worries you about AI, if anything?</p>
+          <aside class="notes">
+            Open floor, ~2 min.
+          </aside>
+        </section>
+
+        <section style="font-size: .8em;">
+          <h2>What's Actually Happening Right Now</h2>
+          <ul>
+            <li><strong>Deepfakes</strong> — realistic fake video/audio of real people.</li>
+            <li><strong>"AI-washing"</strong> — companies overstating AI use for hype or valuation.</li>
+            <li><strong>Misinformation at scale</strong> — generated content flooding feeds.</li>
+            <li><strong>False plagiarism flags</strong> — AI-detection tools disproportionately flagging
+              non-native English speakers' writing as "AI-generated."</li>
+          </ul>
+          <aside class="notes">
+            The last point is the strongest hook for this specific room — it's a real, current controversy and
+            directly relevant to an English-learning audience.
+          </aside>
+        </section>
+      </section>
+
+      <!-- Closing -->
+      <section>
+        <h2>Thank You</h2>
+        <p>Questions so far? We'll dig into a few more — including "can AI destroy us?" and how to prompt AI well —
+          in the Q&amp;A section.</p>
+      </section>
+
+      <!-- 8. Q&A -->
+      <section>
+        <section>
+          <h1>
+            <span class="text-light">8.</span><br />
+            Your Questions
+          </h1>
+        </section>
+
+        <section style="font-size: .78em;">
+          <h2>Does Using AI Deplete Water Resources?</h2>
+          <p style="font-size: .8em; font-style: italic; color: #888;">Asked (in Vietnamese): "có đúng là dùng AI
+            nhiều sẽ làm cạn kiệt tài nguyên nước hay không?"</p>
+          <p><strong>Yes</strong> — for a few concrete reasons:</p>
+          <ul>
+            <li><strong>Direct cooling:</strong> data centers use water-based cooling for hardware and GPUs,
+              similar to air conditioning.</li>
+            <li><strong>Electricity demand:</strong> even without water cooling, AI's power draw is enormous —
+              in places that lean on non-renewable sources for that electricity (like Vietnam), this compounds the
+              resource cost.</li>
+            <li><strong>Water pollution:</strong> general waste and runoff from data center operations
+              themselves.</li>
+          </ul>
+        </section>
+
+        <section style="font-size: .78em;">
+          <h2>Can AI Replace Therapists?</h2>
+          <p>It can offer tips — but it shouldn't be your <strong>sole</strong> source of mental health support.</p>
+          <ul>
+            <li>AI tends to be biased toward agreeing with you — it can miss or downplay warning signs because
+              it's optimized to comfort rather than challenge you. (RLHF — reinforcement learning from human
+              feedback — is a big reason why.)</li>
+            <li>Relying on it here is risky: its information can simply be wrong, and getting it wrong on
+              something this personal can cause real harm.</li>
+          </ul>
+        </section>
+
+        <section style="font-size: .78em;">
+          <h2>How to Use AI Properly</h2>
+          <ul>
+            <li>Don't use it for misinformation, scams, or other bad-faith purposes.</li>
+            <li>Prompt with as much detail as possible — AI is capable, but it needs specifics to give you its
+              best.</li>
+            <li>Avoid sharing personal info, sensitive data, or sensitive guidance requests (ties back to the
+              therapy question).</li>
+            <li>AI is not your friend — don't treat it like one.</li>
+            <li>Like any tool, it cuts both ways: use it with caution.</li>
+          </ul>
+        </section>
+
+        <section style="font-size: .78em;">
+          <h2>Jobs People Wrongly Assume Are AI-Proof</h2>
+          <ul>
+            <li>Screening and review-heavy jobs — e.g. first-pass research review, document/contract review.</li>
+            <li><em>A few more to consider:</em> first-draft translation and copywriting, junior-level coding and
+              code review, diagnostic scan screening in medicine, first-tier customer support.</li>
+          </ul>
+          <aside class="notes">
+            The second bullet is a suggestion, not a settled answer — swap in whichever examples feel most
+            concrete for this room, or cut it if the first bullet is enough to spark discussion.
+          </aside>
+        </section>
+      </section>
+
+      <div class="footer">
+        AI in Plain Terms — The Melon Benchmark
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/plugin/notes/notes.js"></script>
+  <script>
+    Reveal.initialize({
+      controlsLayout: "edges",
+      slideNumber: true,
+      hashOneBasedIndex: true,
+      hash: true,
+      plugins: [RevealNotes],
+    });
+  </script>
+</body>
+
+</html>
